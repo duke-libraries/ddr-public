@@ -5,6 +5,7 @@ gem 'rails', '~> 4.1.6'
 gem 'hydra-head', '~> 7.2.0'
 
 gem 'sqlite3'
+gem 'log4r'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
