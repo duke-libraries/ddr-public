@@ -92,6 +92,9 @@ GEM
       warden (~> 1.2.3)
     devise-guests (0.3.3)
       devise
+    devise-remote-user (0.3.0)
+      devise
+      rails (>= 3.2, < 5.0)
     diff-lcs (1.2.5)
     ebnf (0.3.6)
       haml (~> 4.0)
@@ -103,6 +106,9 @@ GEM
     execjs (2.2.2)
     fastercsv (1.5.5)
     ffi (1.9.6)
+    grouper-rest-client (0.2.7)
+      json (>= 1.5.1)
+      rest-client (>= 1.6.1)
     haml (4.0.5)
       tilt
     hike (1.2.3)
@@ -352,6 +358,8 @@ DEPENDENCIES
   ddr-models!
   devise
   devise-guests (~> 0.3)
+  devise-remote-user (= 0.3.0)
+  grouper-rest-client
   hydra-head (~> 7.2.0)
   jbuilder (~> 2.0)
   jettywrapper
