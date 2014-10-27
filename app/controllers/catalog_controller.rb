@@ -22,6 +22,7 @@ class CatalogController < ApplicationController
     config.index.title_field = Ddr::IndexFields::TITLE
     config.index.display_type_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL
 
+    config.index.thumbnail_method = :thumbnail_image_tag
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
