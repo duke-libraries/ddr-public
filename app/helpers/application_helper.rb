@@ -1,5 +1,10 @@
 module ApplicationHelper
 
+  def thumbnail_image_tag document, image_options = {}
+    src = document.has_thumbnail? ? thumbnail_path(document) : default_thumbnail(document)
+    thumbnail = image_tag(src, :alt => "Thumbnail", :class => "img-thumbnail")
+  end
+
   def default_thumbnail(doc_or_obj)
     if doc_or_obj.has_content?
       default_mime_type_thumbnail(doc_or_obj.content_type)
