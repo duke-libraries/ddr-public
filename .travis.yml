@@ -6,7 +6,7 @@ rvm:
 before_script:
   - "cp config/log4r.yml.sample config/log4r.yml"
 cache: bundler
-script: "bundle exec rake dul_hydra:ci:build"
+script: "bundle exec rake ddr:ci:build"
 notifications:
   email:
     - lib-drs@duke.edu
