@@ -61,26 +61,20 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field solr_name(:creator, :stored_searchable), :label => 'Creator'
-    config.add_index_field solr_name(:date, :stored_searchable), :label => 'Date'
-    config.add_index_field solr_name(:type, :stored_searchable), :label => 'Type'
+    config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
+    config.add_index_field Ddr::IndexFields::PERMANENT_ID, helper_method: 'permalink', label: 'Permalink'
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field solr_name('title', :stored_searchable, type: :string), :label => 'Title:'
-    config.add_show_field solr_name('title_vern', :stored_searchable, type: :string), :label => 'Title:'
-    config.add_show_field solr_name('subtitle', :stored_searchable, type: :string), :label => 'Subtitle:'
-    config.add_show_field solr_name('subtitle_vern', :stored_searchable, type: :string), :label => 'Subtitle:'
-    config.add_show_field solr_name('author', :stored_searchable, type: :string), :label => 'Author:'
-    config.add_show_field solr_name('author_vern', :stored_searchable, type: :string), :label => 'Author:'
-    config.add_show_field solr_name('format', :symbol), :label => 'Format:'
-    config.add_show_field solr_name('url_fulltext_tsim', :stored_searchable, type: :string), :label => 'URL:'
-    config.add_show_field solr_name('url_suppl_tsim', :stored_searchable, type: :string), :label => 'More Information:'
-    config.add_show_field solr_name('language', :stored_searchable, type: :string), :label => 'Language:'
-    config.add_show_field solr_name('published', :stored_searchable, type: :string), :label => 'Published:'
-    config.add_show_field solr_name('published_vern', :stored_searchable, type: :string), :label => 'Published:'
-    config.add_show_field solr_name('lc_callnum', :stored_searchable, type: :string), :label => 'Call number:'
-    config.add_show_field solr_name('isbn', :stored_searchable, type: :string), :label => 'ISBN:'
+    config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
+    config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
+    config.add_show_field solr_name(:format, :symbol), separator: '; ', label:'Format'
+    config.add_show_field solr_name(:language, :stored_searchable), separator: '; ', label: 'Language'
+    config.add_show_field Ddr::IndexFields::PERMANENT_ID, helper_method: 'permalink', label: 'Permalink'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -100,7 +94,11 @@ class CatalogController < ApplicationController
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
 
-    config.add_search_field 'all_fields', :label => 'All Fields'
+    config.add_search_field 'all_fields', :label => 'All Fields' do |field|
+      field.solr_local_parameters = {
+        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::IndexFields::PERMANENT_ID}"
+      }
+    end
 
 
     # Now we see how to over-ride Solr request handler defaults, in this
@@ -118,10 +116,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author') do |field|
+    config.add_search_field('creator') do |field|
       field.solr_local_parameters = {
-        :qf => '$author_qf',
-        :pf => '$author_pf'
+        :qf => solr_name(:creator, :stored_searchable),
+        :pf => ''
       }
     end
 
@@ -141,9 +139,7 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     config.add_sort_field 'score desc, pub_date_dtsi desc, title_tesi asc', :label => 'relevance'
-    config.add_sort_field 'pub_date_dtsi desc, title_tesi asc', :label => 'year'
-    config.add_sort_field 'author_tesi asc, title_tesi asc', :label => 'author'
-    config.add_sort_field 'title_tesi asc, pub_date_dtsi desc', :label => 'title'
+    config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
