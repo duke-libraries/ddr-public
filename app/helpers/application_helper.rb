@@ -39,4 +39,12 @@ module ApplicationHelper
     end
   end
 
+  def permalink options={}
+    link_to Ddr::Models::Base.permalink(options[:value]), Ddr::Models::Base.permalink(options[:value])
+  end
+
+  def collection_list
+    ActiveFedora::Base.where("#{Ddr::IndexFields::ACTIVE_FEDORA_MODEL}:Collection").order("#{Ddr::IndexFields::TITLE} asc")
+  end
+
 end
