@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "catalog/index.html.erb", :type => :feature do
+RSpec.describe "catalog/index.html.erb", :type => :feature do
 
   let(:collection) { Collection.create(title: ["Test Collection"], read_groups: ["public"]) }
   let(:item) { Item.create(title: ["Test Item"]) }
