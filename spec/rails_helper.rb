@@ -24,6 +24,8 @@ require 'rspec/rails'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+DatabaseCleaner.strategy = :truncation
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -47,4 +49,22 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+
+  # Devise helpers
+  config.include Devise::TestHelpers, type: :controller
+
+  # Warden helpers
+  config.include Warden::Test::Helpers, type: :feature
+  Warden.test_mode!
+
+  config.before(:suite) do
+    DatabaseCleaner.clean
+    ActiveFedora::Base.destroy_all
+    Ddr::Models.external_file_store = Dir.mktmpdir
+  end
+  config.after(:suite) do
+    FileUtils.remove_entry_secure Ddr::Models.external_file_store
+  end
+  config.after(:each) { ActiveFedora::Base.destroy_all }
+  config.after(:each, type: :feature) { Warden.test_reset! }
 end

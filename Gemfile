@@ -33,4 +33,5 @@ group :development, :test do
   gem "jettywrapper"
   gem 'factory_girl_rails', '~> 4.4'
   gem 'launchy'
+  gem 'database_cleaner'
 end
