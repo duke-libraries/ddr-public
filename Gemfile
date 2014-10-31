@@ -4,7 +4,7 @@ gem 'rails', '~> 4.1.6'
 
 gem 'hydra-head', '~> 7.2.0'
 
-gem 'ddr-models', github: 'duke-libraries/ddr-models', ref: '00fb5d694061cb98b8e8f9a5e1c71eb98bb3bf41'
+gem 'ddr-models', github: 'duke-libraries/ddr-models', ref: '077872b087fe7842fa59761b00e9f180c7f2e7cb'
 
 gem 'sqlite3'
 gem 'log4r'
@@ -29,5 +29,8 @@ gem 'grouper-rest-client'
 
 group :development, :test do
   gem "rspec-rails"
+  gem 'capybara', '~> 2.0'
   gem "jettywrapper"
+  gem 'factory_girl_rails', '~> 4.4'
+  gem 'launchy'
 end
