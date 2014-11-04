@@ -9,6 +9,8 @@ RSpec.describe "catalog/index.html.erb", :type => :feature do
     item.admin_policy = collection
     collection.items << item
     collection.save!
+    collection.publish!
+    item.publish!
   end
   it "should display the collection facet" do
     visit catalog_index_path

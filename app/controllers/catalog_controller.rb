@@ -10,6 +10,7 @@ class CatalogController < ApplicationController
   before_filter :enforce_show_permissions, :only=>:show
   # This applies appropriate access controls to all solr queries
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
+  CatalogController.solr_search_params_logic += [:include_only_published]
 
 
   configure_blacklight do |config|
@@ -147,6 +148,9 @@ class CatalogController < ApplicationController
     config.spell_max = 5
   end
 
-
+  def include_only_published(solr_parameters, user_parameters)
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:#{Ddr::Workflow::WorkflowState::PUBLISHED}"
+  end
 
 end

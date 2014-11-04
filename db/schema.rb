@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141031123859) do
+ActiveRecord::Schema.define(version: 20141103220713) do
 
   create_table "bookmarks", force: true do |t|
     t.integer  "user_id",       null: false
@@ -82,5 +82,15 @@ ActiveRecord::Schema.define(version: 20141031123859) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "workflow_states", force: true do |t|
+    t.string   "pid"
+    t.string   "workflow_state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "workflow_states", ["pid"], name: "index_workflow_states_on_pid", unique: true
+  add_index "workflow_states", ["workflow_state"], name: "index_workflow_states_on_workflow_state"
 
 end
