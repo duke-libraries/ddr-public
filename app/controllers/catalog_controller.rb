@@ -12,6 +12,8 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   CatalogController.solr_search_params_logic += [:include_only_published]
 
+  helper_method :get_search_results
+  helper_method :configure_blacklight_for_children
 
   configure_blacklight do |config|
     config.default_solr_params = {
@@ -67,6 +69,9 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::IndexFields::PERMANENT_ID, helper_method: 'permalink', label: 'Permalink'
+
+    # partials for show view
+    config.show.partials = [:show_header, :show, :show_children]
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
@@ -151,6 +156,14 @@ class CatalogController < ApplicationController
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:#{Ddr::Workflow::WorkflowState::PUBLISHED}"
+  end
+
+  def configure_blacklight_for_children
+    blacklight_config.configure do |config|
+      config.sort_fields.clear
+      config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
+      config.add_sort_field "#{Ddr::IndexFields::IDENTIFIER} asc", label: "Identifier"
+    end
   end
 
 end

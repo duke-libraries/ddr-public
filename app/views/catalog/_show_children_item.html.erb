@@ -1,0 +1,5 @@
+<h3>Files</h3>
+<% find_children(document, :is_part_of) %>
+<%= render 'sort_and_per_page' %>
+<%= render_document_index %>
+<%= render 'results_pagination' %>
