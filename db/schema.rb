@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141103220713) do
+ActiveRecord::Schema.define(version: 20141110151619) do
 
   create_table "bookmarks", force: true do |t|
     t.integer  "user_id",       null: false
@@ -78,10 +78,17 @@ ActiveRecord::Schema.define(version: 20141103220713) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "guest",                  default: false
+    t.string   "username",               default: "",    null: false
+    t.string   "first_name"
+    t.string   "middle_name"
+    t.string   "nickname"
+    t.string   "last_name"
+    t.string   "display_name"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["email"], name: "index_users_on_email"
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["username"], name: "index_users_on_username", unique: true
 
   create_table "workflow_states", force: true do |t|
     t.string   "pid"

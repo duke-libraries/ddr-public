@@ -1,18 +1,3 @@
-GIT
-  remote: git://github.com/duke-libraries/ddr-models.git
-  revision: 3a0933e7b457e7068061c761529c45218917928e
-  ref: 3a0933e7b457e7068061c761529c45218917928e
-  specs:
-    ddr-models (1.1.0)
-      active-fedora (~> 7.0)
-      clamav
-      ddr-antivirus (~> 1.0.2)
-      hydra-core (~> 7.2)
-      hydra-derivatives
-      hydra-validations
-      noid (~> 0.7)
-      rails (~> 4.1.6)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -91,8 +76,19 @@ GEM
     coffee-script-source (1.8.0)
     daemons (1.1.9)
     database_cleaner (1.3.0)
-    ddr-antivirus (1.0.2)
+    ddr-antivirus (1.2.0)
       activesupport (~> 4.0)
+    ddr-models (1.2.1)
+      active-fedora (~> 7.0)
+      clamav
+      ddr-antivirus (~> 1.2)
+      devise-remote-user
+      grouper-rest-client
+      hydra-core (~> 7.2)
+      hydra-derivatives
+      hydra-validations
+      noid (~> 0.7)
+      rails (~> 4.1.6)
     deprecation (0.1.0)
       activesupport
     devise (3.4.0)
@@ -378,7 +374,7 @@ DEPENDENCIES
   capybara (~> 2.0)
   coffee-rails (~> 4.0.0)
   database_cleaner
-  ddr-models!
+  ddr-models (~> 1.2.1)
   devise
   devise-guests (~> 0.3)
   devise-remote-user (= 0.3.0)
