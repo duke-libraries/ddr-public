@@ -8,5 +8,8 @@ Rails.application.routes.draw do
   end
   
   resources :thumbnail, only: :show, constraints: {id: pid_constraint}
+  
+  # Downloads
+  get 'download/:id(/:datastream_id)' => 'downloads#show', :constraints => {id: pid_constraint}, as: 'download'
 
 end
