@@ -34,3 +34,7 @@ group :development, :test do
   gem 'launchy'
   gem 'database_cleaner'
 end
+
+group :production do
+  gem 'mysql2'
+end

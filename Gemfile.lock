@@ -197,6 +197,7 @@ GEM
     mini_portile (0.6.0)
     minitest (5.4.2)
     multi_json (1.10.1)
+    mysql2 (0.3.17)
     net-http-persistent (2.9.4)
     netrc (0.8.0)
     noid (0.7.1)
@@ -379,6 +380,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   log4r
+  mysql2
   rails (~> 4.1.6)
   rspec-rails
   sass-rails (~> 4.0.3)
