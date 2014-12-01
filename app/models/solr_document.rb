@@ -2,6 +2,7 @@
 class SolrDocument 
 
   include Blacklight::Solr::Document
+  include Ddr::Models::SolrDocument
 
   # self.unique_key = 'id'
   
@@ -17,5 +18,9 @@ class SolrDocument
   # and Blacklight::Solr::Document#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Solr::Document::DublinCore)    
+
+  def published?
+    get(Ddr::IndexFields::WORKFLOW_STATE) == Ddr::Workflow::WorkflowState::PUBLISHED
+  end
 
 end

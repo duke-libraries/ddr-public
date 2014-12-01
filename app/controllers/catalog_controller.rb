@@ -15,6 +15,10 @@ class CatalogController < ApplicationController
   helper_method :get_search_results
   helper_method :configure_blacklight_for_children
 
+  rescue_from CanCan::AccessDenied do |exception|
+    render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
+  end
+
   configure_blacklight do |config|
     config.default_solr_params = {
       :qt => 'search',
