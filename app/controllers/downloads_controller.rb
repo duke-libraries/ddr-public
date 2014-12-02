@@ -1,7 +1,7 @@
 class DownloadsController < ApplicationController
 
   include Hydra::Controller::DownloadBehavior
-  include DdrPublic::Controller::DownloadBehavior
+  include Ddr::Public::Controller::DownloadBehavior
 
   def load_asset
     # XXX Loading instance from solr doesn't work with customized datastream_name (below).

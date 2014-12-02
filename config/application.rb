@@ -11,39 +11,41 @@ require 'log4r/yamlconfigurator'
 require 'log4r/outputter/datefileoutputter'
 include Log4r
 
-module DdrPublic
-  class Application < Rails::Application
+module Ddr
+  module Public
+    class Application < Rails::Application
     
-    config.generators do |g|
-      g.test_framework :rspec, :spec => true
-    end
-
-
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
-
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
-    
-    # assign log4r's logger as Rails' logger
-    log4r_config = YAML.load_file(File.join(File.dirname(__FILE__),"log4r.yml"))
-    YamlConfigurator.decode_yaml(log4r_config['log4r_config'])
-    config.logger = Log4r::Logger[Rails.env]
-
-    # Load environment variable from file
-    # http://railsapps.github.io/rails-environment-variables.html
-    config.before_configuration do
-      env_file = File.join(Rails.root, 'config', 'local_env.yml')
-      if File.exists?(env_file)
-        YAML.load_file(env_file).each { |key, value| ENV[key.to_s] = value }
+      config.generators do |g|
+        g.test_framework :rspec, :spec => true
       end
-    end
 
+
+      # Settings in config/environments/* take precedence over those specified here.
+      # Application configuration should go into files in config/initializers
+      # -- all .rb files in that directory are automatically loaded.
+
+      # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+      # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
+      # config.time_zone = 'Central Time (US & Canada)'
+
+      # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+      # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+      # config.i18n.default_locale = :de
+    
+      # assign log4r's logger as Rails' logger
+      log4r_config = YAML.load_file(File.join(File.dirname(__FILE__),"log4r.yml"))
+      YamlConfigurator.decode_yaml(log4r_config['log4r_config'])
+      config.logger = Log4r::Logger[Rails.env]
+
+      # Load environment variable from file
+      # http://railsapps.github.io/rails-environment-variables.html
+      config.before_configuration do
+        env_file = File.join(Rails.root, 'config', 'local_env.yml')
+        if File.exists?(env_file)
+          YAML.load_file(env_file).each { |key, value| ENV[key.to_s] = value }
+        end
+      end
+
+    end
   end
 end
