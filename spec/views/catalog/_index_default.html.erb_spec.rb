@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'catalog/_show_default.html.erb', type: :view do
+RSpec.describe 'catalog/_index_default.html.erb', type: :view do
 
   let(:document) { SolrDocument.new({
           'id'=>'changeme:10',
@@ -13,15 +13,15 @@ RSpec.describe 'catalog/_show_default.html.erb', type: :view do
 
   before do
     allow(controller).to receive(:current_user).and_return( user )
-    allow(view).to receive(:document_show_fields).and_return( { } )
+    allow(view).to receive(:index_fields).and_return( { } )
   end
 
   context 'content object' do
     let(:user) { User.new(username: 'user1') }
     it "displays the file info for the content" do
-      render partial: "catalog/show_default.html.erb", locals: { document: document }
+      render partial: "catalog/index_default.html.erb", locals: { document: document }
       expect(rendered).to match(/image\/tiff 66\.5 MB/)
     end    
   end
-
+    
 end
