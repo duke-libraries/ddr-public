@@ -26,7 +26,16 @@ ActiveRecord::Migration.maintain_test_schema!
 
 DatabaseCleaner.strategy = :truncation
 
+require "ddr-antivirus"
+Ddr::Antivirus.configure do |config|
+  config.scanner_adapter = :null
+  require "logger"
+  config.logger = Logger.new(File::NULL)
+end
+
 RSpec.configure do |config|
+  config.include ActionDispatch::TestProcess
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

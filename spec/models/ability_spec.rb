@@ -4,18 +4,22 @@ require 'cancan/matchers'
 RSpec.describe Ability, type: :model, abilities: true do
 
   before(:all) do
-    class Publishable < ActiveFedora::Base
+    class TestModel < ActiveFedora::Base
       include Ddr::Models::AccessControllable
+      include Ddr::Models::HasContent
+      include Ddr::Models::HasProperties
+      include Ddr::Models::HasThumbnail
       include Ddr::Models::HasWorkflow
     end
   end
 
-  subject { described_class.new(user) }
   let(:user) { FactoryGirl.create(:user) }
-  
+  subject { described_class.new(user) }
+
   describe "published permissions" do
+
     context "ActiveFedora::Base object" do
-      let(:resource) { Publishable.create }
+      let(:resource) { TestModel.create }
       before do
         resource.read_groups = [ "public" ]
         resource.save!
@@ -37,6 +41,25 @@ RSpec.describe Ability, type: :model, abilities: true do
         let(:resource) { SolrDocument.new("id"=>"test:1", "active_fedora_model_ssi"=>"Publishable", "read_access_group_ssim"=>["public"], "workflow_state_ssi"=>"published") }
         it { is_expected.to be_able_to(:read, resource) }
       end
+    end
+  end
+
+  describe "download permissions" do
+    let(:resource) { TestModel.create }
+    before do
+      resource.publish!
+    end
+    context "read access to object" do
+      before do
+        resource.read_groups = [ "public" ]
+        resource.save!
+      end
+      it { is_expected.to be_able_to(:download, resource) }
+      it { is_expected.to be_able_to(:download, resource.content) }
+    end
+    context "no read access to object" do
+      it { is_expected.to_not be_able_to(:download, resource) }
+      it { is_expected.to_not be_able_to(:download, resource.content) }
     end
   end
 
