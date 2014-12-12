@@ -4,8 +4,7 @@ gem 'rails', '~> 4.1.6'
 
 gem 'hydra-head', '~> 7.2.0'
 
-# gem 'ddr-models', '~> 1.4.0'
-gem 'ddr-models', github: 'duke-libraries/ddr-models', ref: 'c8a0b5d3724feab0bfae4055c9189f93649caa5c'
+gem 'ddr-models', '~> 1.5.0'
 
 gem 'sqlite3'
 gem 'log4r'
