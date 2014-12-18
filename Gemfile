@@ -4,6 +4,7 @@ gem 'rails', '~> 4.1.6'
 
 gem 'hydra-head', '~> 7.2.0'
 
+gem 'ddr-alerts', '~> 0.2.0'
 gem 'ddr-models', '~> 1.5.0'
 
 gem 'sqlite3'

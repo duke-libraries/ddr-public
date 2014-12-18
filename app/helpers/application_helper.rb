@@ -1,5 +1,9 @@
 module ApplicationHelper
 
+  def alert_messages
+    session[:alert_messages] ||= Ddr::Alerts::Message.active.send(Ddr::Public.alert_message_context)
+  end
+
   def thumbnail_image_tag document, image_options = {}
     src = document.has_thumbnail? ? thumbnail_path(document) : default_thumbnail(document)
     thumbnail = image_tag(src, :alt => "Thumbnail", :class => "img-thumbnail")
