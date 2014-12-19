@@ -75,7 +75,7 @@ GEM
     coffee-script-source (1.8.0)
     daemons (1.1.9)
     database_cleaner (1.3.0)
-    ddr-alerts (0.2.0)
+    ddr-alerts (0.3.0)
       rails (~> 4.1.6)
     ddr-antivirus (1.3.0)
       activesupport (~> 4.0)
@@ -371,7 +371,7 @@ DEPENDENCIES
   capybara (~> 2.0)
   coffee-rails (~> 4.0.0)
   database_cleaner
-  ddr-alerts (~> 0.2.0)
+  ddr-alerts (~> 0.3.0)
   ddr-models (~> 1.5.0)
   devise
   devise-remote-user (= 0.3.0)
