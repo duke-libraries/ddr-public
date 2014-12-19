@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def alert_messages
-    session[:alert_messages] ||= Ddr::Alerts::Message.active.send(Ddr::Public.alert_message_context)
+    session[:alert_messages] ||= Ddr::Alerts::Message.active.send(Ddr::Public.alert_message_context).pluck(:message)
   end
 
   def thumbnail_image_tag document, image_options = {}
