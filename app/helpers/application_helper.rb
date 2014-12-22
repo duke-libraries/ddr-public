@@ -44,7 +44,7 @@ module ApplicationHelper
   end
 
   def permalink options={}
-    link_to Ddr::Models::Base.permalink(options[:value]), Ddr::Models::Base.permalink(options[:value])
+    link_to options[:value], options[:value]
   end
 
 end
