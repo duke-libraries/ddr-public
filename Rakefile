@@ -4,3 +4,6 @@
 require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
+
+desc "Run the CI build"
+task :ci => ["ddr_public:ci:build"]
