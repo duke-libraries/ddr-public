@@ -71,7 +71,7 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
-    config.add_index_field Ddr::IndexFields::PERMANENT_ID, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
 
     # partials for show view
     config.show.partials = [:show_header, :show, :show_children]
@@ -84,7 +84,7 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
     config.add_show_field solr_name(:format, :symbol), separator: '; ', label:'Format'
     config.add_show_field solr_name(:language, :stored_searchable), separator: '; ', label: 'Language'
-    config.add_show_field Ddr::IndexFields::PERMANENT_ID, helper_method: 'permalink', label: 'Permalink'
+    config.add_show_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

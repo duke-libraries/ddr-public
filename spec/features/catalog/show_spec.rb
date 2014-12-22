@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe "catalog/show", :type => :feature do
 
   let(:published_collection) { Collection.create(title: ["Collection A"], read_groups: ["public"]) }
-  let(:published_item) { Item.create(title: ["Item 1"]) }
+  let(:published_item_permanent_url) { "http://id.library.duke.edu/ark:/99999/fk4zzz" }
+  let(:published_item) { Item.create(title: ["Item 1"], permanent_url: published_item_permanent_url ) }
   let(:unpublished_collection) { Collection.create(title: ["Collection B"], read_groups: ["public"]) }
   let(:unpublished_item) { Item.create(title: ["Item 2"]) }
   before do
@@ -20,9 +21,10 @@ RSpec.describe "catalog/show", :type => :feature do
     unpublished_collection.save!
     unpublished_item.save!
   end
-  it "should only permit the display of published objects" do
+  it "should display published objects" do
     visit catalog_path(published_item)
     expect(page).to have_text("Item 1")
+    expect(page).to have_link(published_item_permanent_url, href: published_item_permanent_url)
     visit catalog_path(unpublished_item) 
     expect(page).to have_text("The action you wanted to perform was forbidden.")
   end
