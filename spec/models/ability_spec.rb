@@ -44,8 +44,8 @@ RSpec.describe Ability, type: :model, abilities: true do
     end
   end
 
-  describe "download permissions" do
-    let(:resource) { TestModel.create }
+  describe "Component download permissions" do
+    let(:resource) { Component.create }
     before do
       resource.publish!
     end
@@ -54,12 +54,18 @@ RSpec.describe Ability, type: :model, abilities: true do
         resource.read_groups = [ "public" ]
         resource.save!
       end
-      it { is_expected.to be_able_to(:download, resource) }
-      it { is_expected.to be_able_to(:download, resource.content) }
-    end
-    context "no read access to object" do
-      it { is_expected.to_not be_able_to(:download, resource) }
-      it { is_expected.to_not be_able_to(:download, resource.content) }
+      context "downloader role on object" do
+        before do
+          resource.roleAssignments.downloader << user.principal_name
+          resource.save!
+        end
+        it { is_expected.to be_able_to(:download, resource) }
+        it { is_expected.to be_able_to(:download, resource.content) }
+      end
+      context "no downloader role on object" do
+        it { is_expected.to_not be_able_to(:download, resource) }
+        it { is_expected.to_not be_able_to(:download, resource.content) }
+      end
     end
   end
 
