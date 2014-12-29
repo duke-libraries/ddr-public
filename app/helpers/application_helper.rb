@@ -43,8 +43,4 @@ module ApplicationHelper
     end
   end
 
-  def permalink options={}
-    link_to options[:value], options[:value]
-  end
-
 end

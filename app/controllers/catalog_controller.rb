@@ -72,6 +72,9 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
+    config.add_index_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Member of'
 
     # partials for show view
     config.show.partials = [:show_header, :show, :show_children]
@@ -85,6 +88,9 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name(:format, :symbol), separator: '; ', label:'Format'
     config.add_show_field solr_name(:language, :stored_searchable), separator: '; ', label: 'Language'
     config.add_show_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
+    config.add_show_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
+    config.add_show_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Member of'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
