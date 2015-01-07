@@ -12,4 +12,7 @@ Rails.application.routes.draw do
   # Downloads
   get 'download/:id(/:datastream_id)' => 'downloads#show', :constraints => {id: pid_constraint}, as: 'download'
 
+  # Permanent IDs
+  get 'id/*permanent_id' => 'permanent_ids#show'
+
 end
