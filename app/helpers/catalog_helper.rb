@@ -37,7 +37,7 @@ module CatalogHelper
     docs = results.map { |result| SolrDocument.new(result) }
     titles = docs.map(&:title)
     if can? :read, docs.first
-      link_to titles.first, catalog_path(pid)
+      link_to titles.first, url_for_document(docs.first)
     else
       titles.first
     end
