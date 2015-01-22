@@ -9,7 +9,7 @@ RSpec.describe Ability, type: :model, abilities: true do
       include Ddr::Models::HasContent
       include Ddr::Models::HasProperties
       include Ddr::Models::HasThumbnail
-      include Ddr::Models::HasWorkflow
+      include Ddr::Models::HasAdminMetadata
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe Ability, type: :model, abilities: true do
       end
       context "downloader role on object" do
         before do
-          resource.roleAssignments.downloader << user.principal_name
+          resource.roles.downloader << user.principal_name
           resource.save!
         end
         it { is_expected.to be_able_to(:download, resource) }
