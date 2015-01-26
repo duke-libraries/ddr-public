@@ -1,6 +1,7 @@
 <div class="pull-right">
   <% if current_user %>
-    <strong><%= t('dul_hydra.user.welcome.authenticated') %></strong>
+    <strong><%= current_user %></strong>
+    <%= link_to "Logout", destroy_user_session_path, class: "btn btn-primary" %>
   <% else %>
     <strong><%= t('dul_hydra.user.welcome.guest') %></strong>
     <%= link_to t('blacklight.header_links.login'), new_user_session_path, class: "btn btn-primary" %>

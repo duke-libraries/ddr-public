@@ -25,8 +25,6 @@ RSpec.describe "catalog/show", :type => :feature do
     visit catalog_path(published_item)
     expect(page).to have_text("Item 1")
     expect(page).to have_link(published_item_permanent_url, href: published_item_permanent_url)
-    visit catalog_path(unpublished_item) 
-    expect(page).to have_text("The action you wanted to perform was forbidden.")
   end
 
 end

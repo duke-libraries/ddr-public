@@ -20,7 +20,7 @@ class SolrDocument
   use_extension( Blacklight::Solr::Document::DublinCore)    
 
   def published?
-    get(Ddr::IndexFields::WORKFLOW_STATE) == Ddr::Workflow::WorkflowState::PUBLISHED
+    get(Ddr::IndexFields::WORKFLOW_STATE) == "published"
   end
 
 end

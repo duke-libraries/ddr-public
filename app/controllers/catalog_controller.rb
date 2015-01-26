@@ -6,9 +6,9 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
   include Hydra::PolicyAwareAccessControlsEnforcement
-  # These before_filters apply the hydra access controls
-  before_filter :enforce_show_permissions, :only=>:show
-  # This applies appropriate access controls to all solr queries
+
+  before_action :enforce_show_permissions, only: :show
+
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   CatalogController.solr_search_params_logic += [:include_only_published]
 
@@ -16,7 +16,11 @@ class CatalogController < ApplicationController
   helper_method :configure_blacklight_for_children
 
   rescue_from CanCan::AccessDenied do |exception|
-    render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
+    if user_signed_in?
+      forbidden
+    else
+      authenticate_user!
+    end
   end
 
   configure_blacklight do |config|
@@ -76,6 +80,10 @@ class CatalogController < ApplicationController
     config.add_index_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
     config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
     config.add_index_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
+
+    config.default_document_solr_params = {
+      fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published"]
+    }
 
     # partials for show view
     config.show.partials = [:show_header, :show, :show_children]
@@ -166,7 +174,7 @@ class CatalogController < ApplicationController
 
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:#{Ddr::Workflow::WorkflowState::PUBLISHED}"
+      solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:published"
   end
 
   def configure_blacklight_for_children
@@ -175,6 +183,12 @@ class CatalogController < ApplicationController
       config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
       config.add_sort_field "#{Ddr::IndexFields::IDENTIFIER} asc", label: "Identifier"
     end
+  end
+
+  protected
+
+  def forbidden
+    render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
   end
 
 end
