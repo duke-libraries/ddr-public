@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def thumbnail_image_tag document, image_options = {}
-    src = document.has_thumbnail? ? thumbnail_path(document) : default_thumbnail(document)
+    src = document.has_thumbnail? && can?(:read, document) ? thumbnail_path(document) : default_thumbnail(document)
     thumbnail = image_tag(src, :alt => "Thumbnail", :class => "img-thumbnail")
   end
 
