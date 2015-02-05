@@ -1,3 +1,5 @@
+require 'ddr/public/version'
+
 module Ddr
   module Public
 
