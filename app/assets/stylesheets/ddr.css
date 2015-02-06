@@ -11,4 +11,7 @@
 	min-width: 200px;
 	padding-bottom: 0;
 }
+#user-util-collapse a:hover {
+    color: black;
+}
 /* END Blacklight */
