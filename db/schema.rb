@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130220338) do
+ActiveRecord::Schema.define(version: 20150209173540) do
 
   create_table "bookmarks", force: true do |t|
     t.integer  "user_id",       null: false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20150130220338) do
     t.string   "outcome"
     t.text     "detail"
     t.string   "exception"
+    t.string   "user_key"
   end
 
   add_index "events", ["event_date_time"], name: "index_events_on_event_date_time"
