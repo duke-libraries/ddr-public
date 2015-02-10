@@ -17,8 +17,9 @@ module CatalogHelper
   def file_info options={}
     document = options[:document]
     if can? :download, document
-      "#{render_download_link(document: document, label: render_content_type_and_size(document))}
-        #{render_download_icon(document: document)}".html_safe
+      render partial: "download_link_and_icon", locals: {document: document}
+    elsif !user_signed_in? && document.principal_has_role?("registered", :downloader)
+      render partial: "login_to_download", locals: {document: document}
     else
       render_content_type_and_size(document)
     end
@@ -45,7 +46,7 @@ module CatalogHelper
 
   # View helper
   def render_content_type_and_size document
-      "#{document.content_mime_type} #{document.content_size_human}"
+    "#{document.content_mime_type} #{document.content_size_human}"
   end
 
   # View helper
