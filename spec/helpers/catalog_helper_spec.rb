@@ -13,19 +13,43 @@ RSpec.describe CatalogHelper do
             'workflow_state_ssi'=>'published',
             'object_profile_ssm'=>['{"datastreams":{"content":{"dsLabel":"image10.tif","dsVersionID":"content.0","dsCreateDate":"2014-10-22T17:30:02Z","dsState":"A","dsMIME":"image/tiff","dsFormatURI":null,"dsControlGroup":"M","dsSize":69742260,"dsVersionable":true,"dsInfoType":null,"dsLocation":"changeme:10+content+content.0","dsLocationType":"INTERNAL_ID","dsChecksumType":"SHA-256","dsChecksum":"b9eb20b6fb4a27d6bf478bdefb25538bea95740bdf48471ec360d25af622a911"}}}']
             ) }
-    context "user can download file" do
-      before { allow(helper).to receive(:can?).with(:download, document).and_return(true) }
-      it "should return a link to the download path" do
-        expect(helper.file_info({document: document})).to include(link_to("image/tiff #{content_size}", download_path(document['id'])))
+
+    context "user can download the file" do
+      before { allow(helper).to receive(:can?).with(:download, document) { true } }
+      it "should render the download link and icon" do
+        expect(helper).to receive(:render).with(hash_including(partial: "download_link_and_icon"))
+        helper.file_info(document: document)
       end
     end
-    context "user cannot download file" do
-      before { allow(helper).to receive(:can?).with(:download, document).and_return(false) }
-      it "should return the file info but not a link to the download path" do
-        expect(helper.file_info({document: document})).to include("image/tiff #{content_size}")
-        expect(helper.file_info({document: document})).to_not include(link_to("image/tiff #{content_size}", download_path(document['id'])))
+    
+    context "user cannot download the file" do
+      before { allow(helper).to receive(:can?).with(:download, document) { false } }
+      context "and the user is logged in" do
+        before { allow(helper).to receive(:user_signed_in?) { true } }
+        it "should render the content type and size" do
+          expect(helper).to receive(:render_content_type_and_size).with(document)
+          helper.file_info(document: document)
+        end
       end
+      context "and the user is not logged in" do
+        before { allow(helper).to receive(:user_signed_in?) { false } }
+        context "and the 'registered' group has the 'downloader' role" do
+          before { allow(document).to receive(:principal_has_role?).with("registered", :downloader) { true } }
+          it "should render a 'login to download' link" do
+            expect(helper).to receive(:render).with(hash_including(partial: "login_to_download"))
+            helper.file_info(document: document)
+          end
+        end
+        context "and the 'registered' group does NOT have the 'downloader' role" do
+          before { allow(document).to receive(:principal_has_role?).with("registered", :downloader) { false } }
+          it "should render the content type and size" do
+            expect(helper).to receive(:render_content_type_and_size).with(document)
+            helper.file_info(document: document)
+          end
+        end
+      end      
     end
+
   end
 
   describe "#permalink" do
