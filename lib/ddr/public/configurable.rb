@@ -5,9 +5,6 @@ module Ddr
       
       included do
 
-        # Context used in alert message selection
-        mattr_accessor :alert_message_context
-
         # Contact email address
         mattr_accessor :contact_email
 
