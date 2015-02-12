@@ -20,4 +20,8 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  ddr:
+      public:
+          contact:
+              label: "Contact Us"
+              subject: "Duke Digital Repository Email Contact"
