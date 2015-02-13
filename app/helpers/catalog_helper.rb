@@ -56,10 +56,4 @@ module CatalogHelper
     link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
   end
 
-  # View helper
-  def render_download_icon args = {}
-    label = content_tag(:span, "", class: "glyphicon glyphicon-download-alt")
-    render_download_link args.merge(label: label)
-  end
-
 end
