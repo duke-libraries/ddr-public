@@ -20,8 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  ddr:
-      public:
-          contact:
-              label: "Contact Us"
-              subject: "Duke Digital Repository Email Contact"
+    ddr:
+        public:
+            contact:
+                label: "Contact Us"
+                subject: "Duke Digital Repository Email Contact"
+            help:
+                label: "Help"
