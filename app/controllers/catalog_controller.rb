@@ -11,6 +11,7 @@ class CatalogController < ApplicationController
 
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   CatalogController.solr_search_params_logic += [:include_only_published]
+  CatalogController.solr_search_params_logic += [:exclude_master_files]
 
   helper_method :get_search_results
   helper_method :configure_blacklight_for_children
@@ -82,7 +83,7 @@ class CatalogController < ApplicationController
     config.add_index_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
-      fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published"]
+      fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published", "-#{Ddr::IndexFields::FILE_USE}:#{Ddr::Models::HasStructMetadata::FILE_USE_MASTER}"]
     }
 
     # partials for show view
@@ -175,6 +176,11 @@ class CatalogController < ApplicationController
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:published"
+  end
+
+  def exclude_master_files(solr_parameters, user_parameters)
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << "-#{Ddr::IndexFields::FILE_USE}:#{Ddr::Models::HasStructMetadata::FILE_USE_MASTER}"
   end
 
   def configure_blacklight_for_children
