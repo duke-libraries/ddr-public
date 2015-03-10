@@ -86,7 +86,7 @@ class CatalogController < ApplicationController
     }
 
     # partials for show view
-    config.show.partials = [:show_header, :show, :show_children]
+    config.show.partials = [:show_header, :show, :show_license, :show_children]
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
