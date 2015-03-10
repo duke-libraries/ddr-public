@@ -1,0 +1,9 @@
+<% if document.effective_license[:title] %>
+	<h5><%= document.effective_license[:title] %></h5>
+<% end %>
+<% if document.effective_license[:description] %>
+	<div><%= document.effective_license[:description] %></div>
+<% end %>
+<% if document.effective_license[:url] %>
+	<div><%= link_to document.effective_license[:url], document.effective_license[:url] %></div>
+<% end %>
