@@ -16,4 +16,6 @@ Rails.application.routes.draw do
   # Permanent IDs
   get 'id/*permanent_id' => 'permanent_ids#show'
 
+  get '/help', to: redirect(Ddr::Public.help_url)
+
 end

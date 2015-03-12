@@ -1,3 +1,4 @@
 <div class="well well-sm text-center">
-	<small class="text-muted">v<%= Ddr::Public::VERSION %></small>
+	<small class="text-muted">A service of <%= link_to 'Duke University Libraries', 'http://library.duke.edu/' %></small>
+	<div><small><%= link_to t('ddr.public.help.label'), help_path %> | <%= mail_to Ddr::Public.contact_email, t('ddr.public.contact.label'), subject: t('ddr.public.contact.subject') %></small></div>
 </div>

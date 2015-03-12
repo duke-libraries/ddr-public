@@ -11,7 +11,7 @@ RSpec.describe ApplicationHelper do
       context "user can read the document" do
         before { allow(helper).to receive(:can?).with(:read, document).and_return(true) }
         it "returns an image tag for the thumbnail" do
-          expect(helper.thumbnail_image_tag(document)).to eq("<img alt=\"Thumbnail\" class=\"img-thumbnail\" src=\"/thumbnail/changeme:10\" />")
+          expect(helper.thumbnail_image_tag(document)).to eq("<img alt=\"Thumbnail\" class=\"img-thumbnail\" height=\"100\" src=\"/thumbnail/changeme:10\" width=\"100\" />")
         end
       end
       context "user cannot read the document" do

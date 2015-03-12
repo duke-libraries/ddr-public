@@ -288,7 +288,7 @@ GEM
     rdf-turtle (1.1.5)
       ebnf (~> 0.3, >= 0.3.6)
       rdf (~> 1.1, >= 1.1.4)
-    rdf-vocab (0.4.0)
+    rdf-vocab (0.5.0)
       linkeddata
     rdf-xsd (1.1.2)
       rdf (~> 1.1)

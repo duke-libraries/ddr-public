@@ -8,6 +8,9 @@ module Ddr
         # Contact email address
         mattr_accessor :contact_email
 
+        # Help URL
+        mattr_accessor :help_url
+
       end
 
       module ClassMethods
