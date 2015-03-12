@@ -97,10 +97,10 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
-    (Ddr::Metadata::Vocabulary.term_names(RDF::DC) - [ :title, :creator, :date, :type ]).each do |term_name|
+    (Ddr::Vocab::Vocabulary.term_names(RDF::DC) - [ :title, :creator, :date, :type ]).each do |term_name|
       config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
     end
-    Ddr::Metadata::Vocabulary.term_names(Ddr::Metadata::DukeTerms).each do |term_name|
+    Ddr::Vocab::Vocabulary.term_names(Ddr::Vocab::DukeTerms).each do |term_name|
       config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
     end
     config.add_show_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
