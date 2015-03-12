@@ -1,3 +1,4 @@
 en:
   blacklight:
-    application_name: 'Blacklight'
+    application_name: 'Duke Digital Repository'
+    welcome: 'Welcome to Duke Digital Repository'

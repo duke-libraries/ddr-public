@@ -1,0 +1,8 @@
+<h3>Files</h3>
+<% find_children(document, :is_part_of) %>
+<div id="sortAndPerPage" class="clearfix">
+	<div class="search-widgets pull-right">
+		<%= render 'sort_widget' %>
+	</div>
+</div>
+<%= render_document_index %>

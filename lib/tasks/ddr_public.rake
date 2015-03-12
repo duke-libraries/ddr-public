@@ -1,4 +1,4 @@
-namespace :ddr do
+namespace :ddr_public do
   
   namespace :config do
     desc "Copy sample config files"
@@ -12,7 +12,7 @@ namespace :ddr do
 
   namespace :ci do
     desc "Prepare for CI build"
-    task :prepare => ['ddr:config:samples', 'db:test:prepare', 'jetty:clean', 'jetty:config'] do
+    task :prepare => ['ddr_public:config:samples', 'db:test:prepare', 'jetty:clean', 'jetty:config'] do
     end
 
     desc "CI build"

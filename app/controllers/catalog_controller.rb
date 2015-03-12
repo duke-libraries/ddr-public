@@ -6,11 +6,22 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
   include Hydra::PolicyAwareAccessControlsEnforcement
-  # These before_filters apply the hydra access controls
-  before_filter :enforce_show_permissions, :only=>:show
-  # This applies appropriate access controls to all solr queries
-  CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
 
+  before_action :enforce_show_permissions, only: :show
+
+  CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
+  CatalogController.solr_search_params_logic += [:include_only_published]
+
+  helper_method :get_search_results
+  helper_method :configure_blacklight_for_children
+
+  rescue_from CanCan::AccessDenied do |exception|
+    if user_signed_in?
+      forbidden
+    else
+      authenticate_user!
+    end
+  end
 
   configure_blacklight do |config|
     config.default_solr_params = {
@@ -22,6 +33,7 @@ class CatalogController < ApplicationController
     config.index.title_field = Ddr::IndexFields::TITLE
     config.index.display_type_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL
 
+    config.index.thumbnail_method = :thumbnail_image_tag
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
@@ -42,13 +54,14 @@ class CatalogController < ApplicationController
     #
     # :show may be set to false if you don't want the facet to be drawn in the
     # facet bar
-    config.add_facet_field solr_name('object_type', :facetable), :label => 'Format'
-    config.add_facet_field solr_name('pub_date', :facetable), :label => 'Publication Year'
-    config.add_facet_field solr_name('subject_topic', :facetable), :label => 'Topic', :limit => 20
-    config.add_facet_field solr_name('language', :facetable), :label => 'Language', :limit => true
-    config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
-    config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
-    config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
+    # config.add_facet_field solr_name('object_type', :facetable), :label => 'Format'
+    # config.add_facet_field solr_name('pub_date', :facetable), :label => 'Publication Year'
+    # config.add_facet_field solr_name('subject_topic', :facetable), :label => 'Topic', :limit => 20
+    # config.add_facet_field solr_name('language', :facetable), :label => 'Language', :limit => true
+    # config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
+    # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
+    # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
+    config.add_facet_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, label: 'Collection', helper_method: 'collection_title'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -57,35 +70,41 @@ class CatalogController < ApplicationController
     #use this instead if you don't want to query facets marked :show=>false
     #config.default_solr_params[:'facet.field'] = config.facet_fields.select{ |k, v| v[:show] != false}.keys
 
-
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field solr_name('title', :stored_searchable, type: :string), :label => 'Title:'
-    config.add_index_field solr_name('title_vern', :stored_searchable, type: :string), :label => 'Title:'
-    config.add_index_field solr_name('author', :stored_searchable, type: :string), :label => 'Author:'
-    config.add_index_field solr_name('author_vern', :stored_searchable, type: :string), :label => 'Author:'
-    config.add_index_field solr_name('format', :symbol), :label => 'Format:'
-    config.add_index_field solr_name('language', :stored_searchable, type: :string), :label => 'Language:'
-    config.add_index_field solr_name('published', :stored_searchable, type: :string), :label => 'Published:'
-    config.add_index_field solr_name('published_vern', :stored_searchable, type: :string), :label => 'Published:'
-    config.add_index_field solr_name('lc_callnum', :stored_searchable, type: :string), :label => 'Call number:'
+    config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
+    config.add_index_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
+    config.add_index_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
+
+    config.default_document_solr_params = {
+      fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published"]
+    }
+
+    # partials for show view
+    config.show.partials = [:show_header, :show, :show_license, :show_children]
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field solr_name('title', :stored_searchable, type: :string), :label => 'Title:'
-    config.add_show_field solr_name('title_vern', :stored_searchable, type: :string), :label => 'Title:'
-    config.add_show_field solr_name('subtitle', :stored_searchable, type: :string), :label => 'Subtitle:'
-    config.add_show_field solr_name('subtitle_vern', :stored_searchable, type: :string), :label => 'Subtitle:'
-    config.add_show_field solr_name('author', :stored_searchable, type: :string), :label => 'Author:'
-    config.add_show_field solr_name('author_vern', :stored_searchable, type: :string), :label => 'Author:'
-    config.add_show_field solr_name('format', :symbol), :label => 'Format:'
-    config.add_show_field solr_name('url_fulltext_tsim', :stored_searchable, type: :string), :label => 'URL:'
-    config.add_show_field solr_name('url_suppl_tsim', :stored_searchable, type: :string), :label => 'More Information:'
-    config.add_show_field solr_name('language', :stored_searchable, type: :string), :label => 'Language:'
-    config.add_show_field solr_name('published', :stored_searchable, type: :string), :label => 'Published:'
-    config.add_show_field solr_name('published_vern', :stored_searchable, type: :string), :label => 'Published:'
-    config.add_show_field solr_name('lc_callnum', :stored_searchable, type: :string), :label => 'Call number:'
-    config.add_show_field solr_name('isbn', :stored_searchable, type: :string), :label => 'ISBN:'
+    config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
+    config.add_show_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
+    config.add_show_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
+    config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
+    (Ddr::Metadata::Vocabulary.term_names(RDF::DC) - [ :title, :creator, :date, :type ]).each do |term_name|
+      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
+    end
+    Ddr::Metadata::Vocabulary.term_names(Ddr::Metadata::DukeTerms).each do |term_name|
+      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
+    end
+    config.add_show_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -105,7 +124,11 @@ class CatalogController < ApplicationController
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
 
-    config.add_search_field 'all_fields', :label => 'All Fields'
+    config.add_search_field 'all_fields', :label => 'All Fields' do |field|
+      field.solr_local_parameters = {
+        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::IndexFields::PERMANENT_ID}"
+      }
+    end
 
 
     # Now we see how to over-ride Solr request handler defaults, in this
@@ -123,10 +146,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author') do |field|
+    config.add_search_field('creator') do |field|
       field.solr_local_parameters = {
-        :qf => '$author_qf',
-        :pf => '$author_pf'
+        :qf => solr_name(:creator, :stored_searchable),
+        :pf => ''
       }
     end
 
@@ -146,15 +169,30 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     config.add_sort_field 'score desc, pub_date_dtsi desc, title_tesi asc', :label => 'relevance'
-    config.add_sort_field 'pub_date_dtsi desc, title_tesi asc', :label => 'year'
-    config.add_sort_field 'author_tesi asc, title_tesi asc', :label => 'author'
-    config.add_sort_field 'title_tesi asc, pub_date_dtsi desc', :label => 'title'
+    config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
   end
 
+  def include_only_published(solr_parameters, user_parameters)
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:published"
+  end
 
+  def configure_blacklight_for_children
+    blacklight_config.configure do |config|
+      config.sort_fields.clear
+      config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
+      config.add_sort_field "#{Ddr::IndexFields::IDENTIFIER} asc", label: "Identifier"
+    end
+  end
+
+  protected
+
+  def forbidden
+    render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
+  end
 
 end
