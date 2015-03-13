@@ -29,27 +29,4 @@ RSpec.describe "catalog/show", :type => :feature do
     end
   end
 
-  describe "do not show masters" do
-    let(:master_component) { Component.create(
-                                title: [ "Master Component"],
-                                read_groups: [ "public" ],
-                                file_use: Ddr::Models::HasStructMetadata::FILE_USE_MASTER) }
-    let(:reference_component) { Component.create(
-                                title: [ "Reference Component" ],
-                                read_groups: [ "public" ],
-                                file_use: Ddr::Models::HasStructMetadata::FILE_USE_REFERENCE) }
-    before do
-      master_component.publish!
-      reference_component.publish!
-    end
-    it "should not display master objects" do
-      visit catalog_path(master_component)
-      expect(page.status_code).to eq(404)
-    end
-    it "should display reference objects" do
-      visit catalog_path(reference_component)
-      expect(page).to have_text("Reference Component")
-    end
-  end
-
 end
