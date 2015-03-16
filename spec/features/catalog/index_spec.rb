@@ -28,29 +28,4 @@ RSpec.describe "catalog/index", :type => :feature do
     end
   end
 
-  describe "search results" do
-    describe "exclude master file" do
-      let(:master_component) { Component.create(
-                                  title: [ "Master Component"],
-                                  read_groups: [ "public" ],
-                                  file_use: Ddr::Models::HasStructMetadata::FILE_USE_MASTER) }
-      let(:reference_component) { Component.create(
-                                  title: [ "Reference Component" ],
-                                  read_groups: [ "public" ],
-                                  file_use: Ddr::Models::HasStructMetadata::FILE_USE_REFERENCE) }
-      before do
-        master_component.publish!
-        reference_component.publish!
-        visit catalog_index_path
-        click_button "Search"
-      end
-      it "should not include master objects" do
-        expect(page).to_not have_link("Master Component")
-      end
-      it "should include reference objects" do
-        expect(page).to have_link("Reference Component")
-      end
-    end
-  end
-
 end
