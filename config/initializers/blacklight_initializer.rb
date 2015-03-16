@@ -5,3 +5,4 @@
 
 # Blacklight.secret_key = '4bc03661616d67eba839210d8bfd5157967e190a2238f6b61d52d4a5748eb642c3bede898c254960656c3af61a9fad2b3e964e616267143e071b5143fc0bbe83'
 
+Blacklight::Configuration.default_values[:http_method] = :post
