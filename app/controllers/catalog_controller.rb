@@ -88,6 +88,14 @@ class CatalogController < ApplicationController
     # partials for show view
     config.show.partials = [:show_header, :show, :show_license, :show_children]
 
+    # deactivate certain tools
+    config.show.document_actions.delete(:email)
+    config.show.document_actions.delete(:sms)
+    config.show.document_actions.delete(:citation)
+    config.show.document_actions.delete(:refworks)
+    config.show.document_actions.delete(:endnote)
+    config.show.document_actions.delete(:librarian_view)
+
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
