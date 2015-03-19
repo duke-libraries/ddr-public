@@ -182,6 +182,9 @@ class CatalogController < ApplicationController
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+
+    # Maximum number of results to show per page
+    config.max_per_page = 999
   end
 
   def include_only_published(solr_parameters, user_parameters)
