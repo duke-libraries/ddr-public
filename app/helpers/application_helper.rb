@@ -65,4 +65,8 @@ module ApplicationHelper
     end
   end
 
+  def staff_url(doc_or_obj)
+    "#{Ddr::Public.staff_app_url}id/#{doc_or_obj.permanent_id}"
+  end
+
 end
