@@ -1,18 +1,19 @@
 class PermanentIdsController < ApplicationController
 
+  include Blacklight::Catalog
+
   def show
-    redirect_to catalog_path(resolve_id)
-  end
-
-  protected
-
-  def resolve_id
     permanent_id = params.require(:permanent_id)
-    results = ActiveFedora::Base.find(Ddr::IndexFields::PERMANENT_ID => permanent_id)
-    if results.empty?
-      raise ActiveFedora::ObjectNotFoundError, "Object having permanent_id \"#{permanent_id}\" was not found." 
+    response = query_solr(Ddr::IndexFields::PERMANENT_ID => permanent_id, :rows => 1)    
+    if response.total == 0
+      render :not_found, status: 404 and return
     end
-    results.first
+    @document = response.documents.first
+    if @document.published?
+      redirect_to catalog_path(@document)
+    else
+      render :not_published, status: 403
+    end
   end
 
 end
