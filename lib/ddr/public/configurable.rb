@@ -11,6 +11,10 @@ module Ddr
         # Help URL
         mattr_accessor :help_url
 
+        mattr_accessor :staff_app_url do
+          ENV["STAFF_APP_URL"] || "https://ddr.lib.duke.edu/"
+        end
+
       end
 
       module ClassMethods

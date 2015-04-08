@@ -72,7 +72,9 @@ RSpec.configure do |config|
     Ddr::Models.external_file_store = Dir.mktmpdir
   end
   config.after(:suite) do
-    FileUtils.remove_entry_secure Ddr::Models.external_file_store
+    if Dir.exists?(Ddr::Models.external_file_store)
+      FileUtils.remove_entry_secure Ddr::Models.external_file_store
+    end
   end
   config.after(:each) { ActiveFedora::Base.destroy_all }
   config.after(:each, type: :feature) { Warden.test_reset! }
