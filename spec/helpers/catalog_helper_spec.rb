@@ -34,14 +34,14 @@ RSpec.describe CatalogHelper do
       context "and the user is not logged in" do
         before { allow(helper).to receive(:user_signed_in?) { false } }
         context "and the 'registered' group has the 'downloader' role" do
-          before { allow(document).to receive(:principal_has_role?).with(["registered", Ddr::Auth::RemoteGroupService::AFFILIATION_GROUP_MAP.values].flatten, :downloader) { true } }
+          before { allow(document).to receive(:principal_has_role?).with(["registered", Ddr::Auth::Affiliation.groups].flatten, :downloader) { true } }
           it "should render a 'login to download' link" do
             expect(helper).to receive(:render).with(hash_including(partial: "login_to_download"))
             helper.file_info(document: document)
           end
         end
         context "and the 'registered' group does NOT have the 'downloader' role" do
-          before { allow(document).to receive(:principal_has_role?).with(["registered", Ddr::Auth::RemoteGroupService::AFFILIATION_GROUP_MAP.values].flatten, :downloader) { false } }
+          before { allow(document).to receive(:principal_has_role?).with(["registered", Ddr::Auth::Affiliation.groups].flatten, :downloader) { false } }
           it "should render the content type and size" do
             expect(helper).to receive(:render_content_type_and_size).with(document)
             helper.file_info(document: document)
