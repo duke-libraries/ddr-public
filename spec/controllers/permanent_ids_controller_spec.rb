@@ -3,19 +3,26 @@ require "rails_helper"
 RSpec.describe PermanentIdsController do
   describe "#show" do
     describe "when the object does not exist" do
+      before { get :show, permanent_id: "ark:/99999/fk4yyyyy" }
       it "should render a 404 not found response" do
-        get :show, permanent_id: "ark:/99999/fkyyyyy"
         expect(response.response_code).to eq(404)
+      end
+      it "should render the 404.html template" do
+        expect(response).to render_template(file: "#{Rails.root}/public/404.html")
       end
     end
     describe "when the object exists" do
       let(:obj) { Item.new(permanent_id: "ark:/99999/fk4zzzzz") }
       describe "when the object is not published" do
-        before { obj.save! }
-        it "should render the not_published template" do
+        before do
+          obj.save!
           get :show, permanent_id: "ark:/99999/fk4zzzzz"
+        end
+        it "should be forbidden" do
           expect(response.response_code).to eq(403)
-          expect(response).to render_template(:not_published)
+        end
+        it "should render the not_published template" do
+          expect(response).to render_template(file: "#{Rails.root}/public/not_published.html")
         end
       end
       describe "when the object is published" do
