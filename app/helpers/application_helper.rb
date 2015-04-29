@@ -23,7 +23,7 @@ module ApplicationHelper
   end
 
   def alert_messages
-    session[:alert_messages] ||= Ddr::Alerts::Message.active.pluck(:message)
+    Ddr::Alerts::Message.active.pluck(:message)
   end
 
   def thumbnail_image_tag document, image_options = {}
