@@ -13,6 +13,10 @@ RSpec.describe PermanentIdsController do
     end
     describe "when the object exists" do
       let(:obj) { Item.new(permanent_id: "ark:/99999/fk4zzzzz") }
+      after do
+        obj.datastreams['adminMetadata'].delete
+        obj.save
+      end
       describe "when the object is not published" do
         before do
           obj.save!
