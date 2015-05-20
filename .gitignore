@@ -23,6 +23,9 @@
 # Except for these ...
 !/config/predicate_mappings.yml
 
+# Ignore certain translation files
+/config/locales/admin_set.yml
+
 # Environment configs
 /config/environments/*.rb
 
