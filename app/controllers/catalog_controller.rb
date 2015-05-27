@@ -62,7 +62,6 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
     config.add_facet_field Ddr::IndexFields::ADMIN_SET, label: 'Collection Group', helper_method: 'admin_set_full_name', limit: 9999
-    config.add_facet_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, label: 'Collection', helper_method: 'collection_title', limit: 9999
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
