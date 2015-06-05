@@ -83,7 +83,7 @@ GEM
       rails (~> 4.1.6)
     ddr-antivirus (1.3.2)
       activesupport (~> 4.0)
-    ddr-models (1.15.0)
+    ddr-models (1.16.0)
       active-fedora (~> 7.0)
       ddr-antivirus (~> 1.3.1)
       devise (~> 3.4)
@@ -127,7 +127,7 @@ GEM
       rest-client (>= 1.6.1)
     haml (4.0.6)
       tilt
-    hashie (3.4.1)
+    hashie (3.4.2)
     hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
@@ -282,7 +282,7 @@ GEM
     rdf-turtle (1.1.5)
       ebnf (~> 0.3, >= 0.3.6)
       rdf (~> 1.1, >= 1.1.4)
-    rdf-vocab (0.8.2)
+    rdf-vocab (0.8.3)
       rdf (~> 1.1, >= 1.1.10)
     rdf-xsd (1.1.2)
       rdf (~> 1.1)
@@ -404,7 +404,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (~> 1.15.0)
+  ddr-models (~> 1.16.0)
   devise
   factory_girl_rails (~> 4.4)
   hydra-head (~> 7.2.0)

@@ -38,10 +38,12 @@ RSpec.describe "catalog/index", :type => :feature do
       published_collection_a.publish!
       published_item_4.publish!
     end
-    it "should display the admin set facet with the admin sets containing published collections in title order" do
+    it "should display the admin set and collection facets for published objects with entries in title order" do
       visit catalog_index_path
       expect("RST Admin Set").to appear_before("XYZ Admin Set")
       expect(page).to_not have_link("UVW Admin Set")
+      expect(published_collection_a.title_display).to appear_before(published_collection_c.title_display)
+      expect(page).to_not have_link("Collection B")
     end
   end
 
