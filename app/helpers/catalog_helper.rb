@@ -1,6 +1,12 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
 
+  # Facet field view helper
+  # Also used in custom sort for collection facet
+  def collection_title collection_internal_uri
+    collections[collection_internal_uri]
+  end
+
   # View helper
   def find_children document, relationship
     configure_blacklight_for_children
@@ -49,6 +55,20 @@ module CatalogHelper
     return unless args[:document]
     label = args.fetch(:label, "Download")
     link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
+  end
+
+  private
+
+  def collections
+    @collections ||=
+      begin
+        response, docs = get_search_results(q: "active_fedora_model_ssi:Collection",
+                                            fl: "internal_uri_ssi,title_ssi",
+                                            rows: 9999)
+        docs.each_with_object({}) do |doc, memo|
+          memo[doc["internal_uri_ssi"]] = doc["title_ssi"]
+        end
+      end
   end
 
 end
