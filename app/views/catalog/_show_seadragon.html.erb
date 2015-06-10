@@ -1,0 +1,28 @@
+<div class="modal fade" id="seadragon-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">	
+		<button type="button" id="seadragon-close" class="btn" data-toggle="tooltip" data-placement="left" title="Close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+		
+		<div id="seadragon-buttons">
+			<button id="btn-zoom-in" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="Zoom In" aria-label="Zoom In"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button><br/>
+			<button id="btn-zoom-out" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="Zoom Out" aria-label="Zoom Out"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button><br/>
+			<button id="btn-full-page" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="Fit on Page" aria-label="Reset"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button><br/>
+			<button id="btn-fullscreen" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="View Fullscreen" aria-label="Fullscreen"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>		
+		</div>
+
+		
+	<%= openseadragon_picture_tag iiif_image_info_path(@document_list.first.multires_image_file_path), { data: { 
+			openseadragon: { 
+				preserveViewport: true, 
+				visibilityRatio: 1, 
+				zoomInButton: "btn-zoom-in",
+		    	zoomOutButton: "btn-zoom-out",
+		    	homeButton: "btn-full-page",
+		    	fullPageButton: "btn-fullscreen",
+			}
+		}
+	} %>
+
+    </div>
+  </div>
+</div>

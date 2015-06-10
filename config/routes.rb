@@ -17,5 +17,8 @@ Rails.application.routes.draw do
   get 'id/*permanent_id' => 'permanent_ids#show'
 
   get '/help', to: redirect(Ddr::Public.help_url)
+  
+  # Static Pages
+  get '/styleguide' => 'pages#styleguide'
 
 end

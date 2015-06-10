@@ -7,6 +7,12 @@ module CatalogHelper
     collections[collection_internal_uri]
   end
 
+  # TODO: I can almost use this to get what I need to get the first child's thumbnail
+  # For the index view. But the params need to be adjusted because either the  specified
+  # controller or the facet filter breaks the query.
+  # also, this method changes the value of @response that in turn messes up the paging 
+  # on the index view.
+
   # View helper
   def find_children document, relationship
     configure_blacklight_for_children

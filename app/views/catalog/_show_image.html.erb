@@ -1,0 +1,23 @@
+<%# default partial to display solr document fields in catalog show view -%>
+<% find_children(@document, :is_part_of) %>
+
+<%# TODO: Find a smarter way to get the image path for item (1st component path) vs. component. Better to do in the controller or helpers? %>
+<% if @document.multires_image_file_path %>
+  <div class="image-display">
+	<a href="#" class="imageviewer-open" data-toggle="modal" data-target="#seadragon-modal">
+		<%= iiif_image_tag(@document.multires_image_file_path, {:size => '!850,850', :alt => 'image'}) %>
+	</a>
+  </div>
+
+<% elsif @document_list.first && @document_list.first.multires_image_file_path %>
+  <div class="image-display">
+	<a href="#" data-toggle="modal" data-target="#seadragon-modal">
+		<%= iiif_image_tag(@document_list.first.multires_image_file_path, {:size => '!850,850', :alt => 'image'}) %>
+	</a>
+  </div>
+
+  <%= render partial: "show_seadragon" %>
+
+<% end %>
+
+<%= render partial: "show_default", locals: {document: document} %>

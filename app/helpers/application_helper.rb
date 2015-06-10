@@ -81,4 +81,21 @@ module ApplicationHelper
     "#{Ddr::Public.staff_app_url}id/#{doc_or_obj.permanent_id}"
   end
 
+  # Build IIIF image tags for image files served by IIP Image Server
+
+  def iiif_image_path(filepath,options)
+    size = options[:size] ? options[:size] : 'full'
+    region = options[:region] ? options[:region] : 'full'
+    url = "#{Ddr::Models.image_server_url}?IIIF=#{filepath}/#{region}/#{size}/0/default.jpg"
+  end
+  
+  def iiif_image_info_path(filepath)
+    url = "#{Ddr::Models.image_server_url}?IIIF=#{filepath}/info.json"    
+  end
+
+  def iiif_image_tag(filepath,options)
+    url = iiif_image_path(filepath,options)
+    image_tag url, :alt => options[:alt].presence, :class => options[:class].presence
+  end
+
 end
