@@ -24,6 +24,11 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+          config.view.gallery.partials = [:index_header, :index]
+
+          config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
+          config.show.partials.insert(1, :openseadragon)
+
     config.default_solr_params = {
       :qt => 'search',
       :rows => 10
@@ -31,7 +36,9 @@ class CatalogController < ApplicationController
 
     # solr field configuration for search results/index views
     config.index.title_field = Ddr::IndexFields::TITLE
-    config.index.display_type_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL
+    config.index.active_fedora_model_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL
+    config.index.display_type_field = 'format'
+    config.index.collection_name_field = 'collection'
 
     config.index.thumbnail_method = :thumbnail_image_tag
 

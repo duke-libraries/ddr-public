@@ -1,17 +1,45 @@
-/* BEGIN Blacklight */
-.navbar-inverse {
-    background-color: #ffffff;
-    border-color: #ffffff;
-}
+/* BEGIN Blacklight Overrides */
+
 #header-navbar {
-	padding-top: 8px;
+	padding: 10px 0;
+	margin-bottom: 0;
 }
 #header-navbar .navbar-brand { 
-	min-height: 42px;
-	min-width: 200px;
+	min-height: 52px;
+	min-width: 375px;
 	padding-bottom: 0;
+	background-size: contain;
+	background-repeat: no-repeat;
 }
-#user-util-collapse a:hover {
-    color: black;
+
+#header-navbar .navbar-form { 
+	float:left;
+	margin-left: 20px;
+}
+
+#header-navbar .search_q { 
+	width:17em;
+}
+
+#main-container {
+	padding: 20px;
+	background-color: #fff;
+}
+
+body.blacklight-catalog-show #content {
+	border-right: 2px solid #eee;
+}
+
+.facet_limit-active .panel-heading.collapse-toggle .panel-title:after {
+  color: #fff;
 }
 /* END Blacklight */
+
+.image-display {
+	margin-bottom:15px;
+}
+
+.image-display img {
+	max-width:100%;
+}
+

@@ -7,6 +7,7 @@ gem 'devise' # must be explicitly required
 gem 'ddr-models', '~> 1.16.0'
 
 gem 'log4r'
+gem 'bootstrap-sass', '~> 3.3.4'
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
@@ -14,6 +15,10 @@ gem 'therubyracer',  platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
+gem 'bootswatch-rails'
+gem 'font-awesome-sass'
+gem 'openseadragon', '~> 0.2.0'
+gem 'blacklight-gallery'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 

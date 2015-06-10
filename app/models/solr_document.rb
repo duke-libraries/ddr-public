@@ -2,6 +2,8 @@
 class SolrDocument 
 
   include Blacklight::Solr::Document
+  include Blacklight::Gallery::OpenseadragonSolrDocument
+
   include Ddr::Models::SolrDocument
 
   # self.unique_key = 'id'
@@ -22,5 +24,20 @@ class SolrDocument
   def published?
     get(Ddr::IndexFields::WORKFLOW_STATE) == "published"
   end
+
+
+  # Stub value for format and collection that drive partial selection
+  # for item display. Eventually these values will be in each Solr Document.
+  def initialize(source_doc={}, response=nil)
+      super
+      unless source_doc.has_key?('format')
+        source_doc['format'] = 'image'
+      end
+      unless source_doc.has_key?('collection')
+        source_doc['collection'] = 'blake'
+      end     
+  end
+
+
 
 end
