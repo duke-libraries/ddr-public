@@ -5,7 +5,6 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
-  include Hydra::PolicyAwareAccessControlsEnforcement
 
   before_action :enforce_show_permissions, only: :show
 
