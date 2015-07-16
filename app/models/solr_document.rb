@@ -25,6 +25,9 @@ class SolrDocument
     get(Ddr::IndexFields::WORKFLOW_STATE) == "published"
   end
 
+  def abstract
+    get("abstract_tesim")
+  end
 
   # Stub value for format and collection that drive partial selection
   # for item display. Eventually these values will be in each Solr Document.

@@ -59,6 +59,12 @@ h1 {
 	color: $gray-darker;
 }
 
+h1,h2,h3,h4,h5,h6 {
+	a:link {
+		text-decoration: none;
+	}
+}
+
 // Tables =====================================================================
 
 table,
@@ -218,3 +224,6 @@ ul:not([class])>*:before {
 	font-size: 33%;
 }
 
+// Type Variants (Duke Custom) ==================================================
+
+.strong { font-weight: bold; }
