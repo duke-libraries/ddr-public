@@ -4,6 +4,10 @@ Rails.application.routes.draw do
 
   blacklight_for :catalog
 
+  get 'digital_collections/:id/details', :to => 'digital_collections#details', :as => 'details'
+  get '/digital_collections/about', to: 'digital_collections#about', as: 'about_digital_collections'
+  resources :digital_collections, only: [:index, :show]
+
   def pid_constraint
       /[a-zA-Z0-9\-_]+:[a-zA-Z0-9\-_]+/
   end

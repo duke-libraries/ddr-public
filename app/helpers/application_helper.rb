@@ -98,4 +98,15 @@ module ApplicationHelper
     image_tag url, :alt => options[:alt].presence, :class => options[:class].presence
   end
 
+  def url_for_document doc, options = {}
+    if respond_to?(:blacklight_config) and
+        blacklight_config.show.route
+      route = blacklight_config.show.route.merge(action: :show, id: doc).merge(options)
+      route[:controller] = controller_name if route[:controller] == :current
+      route
+    else
+      doc
+    end
+  end
+
 end

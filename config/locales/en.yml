@@ -28,3 +28,7 @@ en:
             help:
                 label: "Help"
             license_title: "Copyright & Use"
+            portal:
+                digital_collections:
+                    title: "Duke Digital Collections"
+                    about: "Digitized historic photographs, advertisements, texts & more from Duke's unique library collections."
