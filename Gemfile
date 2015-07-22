@@ -4,7 +4,7 @@ gem 'rails', '~> 4.1.6'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.0.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.0.0.pre.5'
+gem 'ddr-models', '2.0.0.rc1'
 
 gem 'log4r'
 gem 'sass-rails', '~> 4.0.3'
