@@ -2,6 +2,23 @@
 	<%= render :partial => 'show_tools' %>
 <% end %>
 
+<% if @document.research_help %>
+	<%= render partial: "show_research_help" %>
+<% end %>
+
+<% if @document.active_fedora_model == 'Item' %>
+<div class="text-muted text-uppercase small strong">Collection</div>
+  <h4><%= render_document_show_field_value @document, field: Ddr::IndexFields::IS_MEMBER_OF_COLLECTION %></h4>
+  <p><%= truncate((parent_abstract @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]), :length => 180, :separator => ' ') %></p>
+<hr/>
+  <div class="license">
+      <p><%= license_title(@document.effective_license) %></p>
+      <% unless @document.effective_license[:description].blank? %>
+        <p class="text-muted small"><%= truncate(@document.effective_license[:description], :length => 125, :separator => ' ') %></p>
+      <% end %>
+  </div>
+<% end %>
+
 <% unless @document.more_like_this.empty? %>
   <div class="panel panel-default">
     <div class="panel-heading">More Like This</div>

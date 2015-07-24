@@ -20,5 +20,6 @@ Rails.application.routes.draw do
   
   # Static Pages
   get '/styleguide' => 'pages#styleguide'
+  get '/copyright' => 'pages#copyright', :as => 'copyright'
 
 end

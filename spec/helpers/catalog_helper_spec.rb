@@ -52,6 +52,52 @@ RSpec.describe CatalogHelper do
 
   end
 
+  describe "#research_help_title" do
+    context "item has a research help name and url" do
+      let(:research_help) do
+        {
+          :name => "Rubenstein Library",
+          :url => "http://library.duke.edu/rubenstein/"
+        }
+      end
+      it "should return a link to a research help page" do
+        expect(helper.research_help_title(research_help)).to include (link_to(research_help[:name], research_help[:url]))
+      end  
+    end
+    context "item has neither a research help name nor url" do
+      let(:research_help) do
+        {}
+      end
+      it "should not return a title nor a link" do
+        expect(helper.research_help_title(research_help)).to be_nil
+      end
+    end
+  end
+
+  describe "#license_title" do
+    let(:effective_license) do 
+      {
+        :title => "License Title", 
+        :url => "http://copyrighturl"
+      }
+    end
+    context "item has both a license title and url" do
+      it "should return a link to the license information" do
+        expect(helper.license_title(effective_license)).to include (link_to(effective_license[:title], effective_license[:url]))
+      end
+    end
+    context "item has a url to a license but not a title" do
+      it "should return the default title as a link" do
+        expect(helper.license_title({:url => "http://copyrighturl"})).to include (link_to("Copyright & Use", "http://copyrighturl"))
+      end
+    end
+    context "item does not have a license url" do
+      it "should return the title as a link to a default copyright page" do
+        expect(helper.license_title({:url => nil, :title => "Copyright"})).to include (link_to("Copyright", copyright_path))
+      end
+    end
+  end
+
   describe "#permalink" do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',
@@ -63,6 +109,20 @@ RSpec.describe CatalogHelper do
             ) }
     it "should return a link to the permanent URL" do
       expect(helper.permalink({value: permanent_url})).to include(link_to(permanent_url, permanent_url))
+    end
+  end
+
+  describe "#parent_abstract" do
+    let(:parent_pid) { "changeme:7" }
+    let(:parent_abstract_text) { "The photographs represent the work of Michael Francis Blake from the 1910s to his death in 1934." }
+    let(:solr_response) do
+      [{"system_create_dtsi"=>"2014-12-29T15:04:39Z", "abstract_tesim" => ["The photographs represent the work of Michael Francis Blake from the 1910s to his death in 1934."],"system_modified_dtsi"=>"2014-12-29T15:05:45Z", "object_state_ssi"=>"A", "active_fedora_model_ssi"=>"Collection", "id"=>"changeme:7", "object_profile_ssm"=>["{\"datastreams\":{\"DC\":{\"dsLabel\":\"Dublin Core Record for this object\",\"dsVersionID\":\"DC1.0\",\"dsCreateDate\":\"2014-12-29T15:04:39Z\",\"dsState\":\"A\",\"dsMIME\":\"text/xml\",\"dsFormatURI\":\"http://www.openarchives.org/OAI/2.0/oai_dc/\",\"dsControlGroup\":\"X\",\"dsSize\":341,\"dsVersionable\":true,\"dsInfoType\":null,\"dsLocation\":\"changeme:7+DC+DC1.0\",\"dsLocationType\":null,\"dsChecksumType\":\"SHA-256\",\"dsChecksum\":\"4518d3ab15500ded46df576126d48dd7e2fad416b464113b82a0d8a43bbd6aa4\"},\"RELS-EXT\":{\"dsLabel\":\"Fedora Object-to-Object Relationship Metadata\",\"dsVersionID\":\"RELS-EXT.0\",\"dsCreateDate\":\"2014-12-29T15:04:40Z\",\"dsState\":\"A\",\"dsMIME\":\"application/rdf+xml\",\"dsFormatURI\":null,\"dsControlGroup\":\"X\",\"dsSize\":285,\"dsVersionable\":true,\"dsInfoType\":null,\"dsLocation\":\"changeme:7+RELS-EXT+RELS-EXT.0\",\"dsLocationType\":null,\"dsChecksumType\":\"SHA-256\",\"dsChecksum\":\"f5b739d40dc56888b3e89dbd4543d06c91b70dfd27ad463205cb608d0c32866d\"},\"descMetadata\":{\"dsLabel\":\"Descriptive Metadata for this object\",\"dsVersionID\":\"descMetadata.0\",\"dsCreateDate\":\"2014-12-29T15:04:41Z\",\"dsState\":\"A\",\"dsMIME\":\"application/n-triples\",\"dsFormatURI\":null,\"dsControlGroup\":\"M\",\"dsSize\":80,\"dsVersionable\":true,\"dsInfoType\":null,\"dsLocation\":\"changeme:7+descMetadata+descMetadata.0\",\"dsLocationType\":\"INTERNAL_ID\",\"dsChecksumType\":\"SHA-256\",\"dsChecksum\":\"a1170c2842024cbf4377fec0a1f03ae9d76922211f5731a95e3de391dfc8d8f6\"},\"rightsMetadata\":{\"dsLabel\":null,\"dsVersionID\":\"rightsMetadata.1\",\"dsCreateDate\":\"2014-12-29T15:05:45Z\",\"dsState\":\"A\",\"dsMIME\":\"text/xml\",\"dsFormatURI\":null,\"dsControlGroup\":\"M\",\"dsSize\":548,\"dsVersionable\":true,\"dsInfoType\":null,\"dsLocation\":\"changeme:7+rightsMetadata+rightsMetadata.1\",\"dsLocationType\":\"INTERNAL_ID\",\"dsChecksumType\":\"SHA-256\",\"dsChecksum\":\"6c4ce7152212ee16dcccfd1afe8ce3b9a04bd9869702374a20686777572c92dc\"},\"properties\":{},\"thumbnail\":{},\"roleAssignments\":{},\"defaultRights\":{}},\"objLabel\":null,\"objOwnerId\":\"fedoraAdmin\",\"objModels\":[\"info:fedora/afmodel:Collection\",\"info:fedora/fedora-system:FedoraObject-3.0\"],\"objCreateDate\":\"2014-12-29T15:04:39Z\",\"objLastModDate\":\"2014-12-29T15:04:41Z\",\"objDissIndexViewURL\":\"http://localhost:8983/fedora/objects/changeme%3A7/methods/fedora-system%3A3/viewMethodIndex\",\"objItemIndexViewURL\":\"http://localhost:8983/fedora/objects/changeme%3A7/methods/fedora-system%3A3/viewItemIndex\",\"objState\":\"A\"}"], "title_tesim"=>["Test Collection"], "read_access_group_ssim"=>["public"], "has_model_ssim"=>["info:fedora/afmodel:Collection"], "title_ssi"=>"Test Collection", "internal_uri_ssi"=>"info:fedora/changeme:7", "_version_"=>1488836934102941696, "timestamp"=>"2014-12-29T15:05:45.37Z"}] 
+    end
+    before { allow(ActiveFedora::SolrService).to receive(:query).and_return(solr_response) }
+    context "parent has an abstract" do
+      it "should return the parent abstract" do
+        expect(helper.parent_abstract([ "info:fedora/#{parent_pid}" ])).to include (parent_abstract_text)
+      end
     end
   end
 

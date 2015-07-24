@@ -51,6 +51,16 @@ module CatalogHelper
     end
   end
 
+  def parent_abstract uri
+    pid = ActiveFedora::Base.pid_from_uri(uri.first)
+    query = ActiveFedora::SolrService.construct_query_for_pids([pid])
+    results = ActiveFedora::SolrService.query(query)
+    docs = results.map { |result| SolrDocument.new(result) }
+    unless docs.first.abstract.blank?
+      docs.first.abstract
+    end
+  end
+
   # View helper
   def render_content_type_and_size document
     "#{document.content_mime_type} #{document.content_size_human}"
@@ -62,6 +72,27 @@ module CatalogHelper
     label = args.fetch(:label, "Download")
     link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
   end
+
+
+  # View helper
+  def research_help_title research_help
+    unless research_help[:name].blank?
+      link_to_if(research_help[:url], research_help[:name], research_help[:url])     
+    end
+  end
+
+
+  # View helper
+  def license_title effective_license
+    if effective_license[:title].blank?
+      effective_license[:title] = t("ddr.public.license_title")
+    end
+    if effective_license[:url].blank?
+      link_to effective_license[:title], copyright_path
+    else
+      link_to effective_license[:title], effective_license[:url]
+    end
+  end 
 
   private
 
