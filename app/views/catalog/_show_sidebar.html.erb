@@ -9,7 +9,7 @@
 <% if @document.active_fedora_model == 'Item' %>
 <div class="text-muted text-uppercase small strong">Collection</div>
   <h4><%= render_document_show_field_value @document, field: Ddr::IndexFields::IS_MEMBER_OF_COLLECTION %></h4>
-  <p><%= truncate((parent_abstract @document["is_member_of_collection_ssim"]), :length => 180, :separator => ' ') %></p>
+  <p><%= truncate((parent_abstract @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]), :length => 180, :separator => ' ') %></p>
 <hr/>
   <div class="license">
       <p><%= license_title(@document.effective_license) %></p>
