@@ -5,7 +5,6 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
-  include Hydra::PolicyAwareAccessControlsEnforcement
 
   before_action :enforce_show_permissions, only: :show
 
@@ -204,7 +203,7 @@ class CatalogController < ApplicationController
     blacklight_config.configure do |config|
       config.sort_fields.clear
       config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
-      config.add_sort_field "#{Ddr::IndexFields::IDENTIFIER} asc", label: "Identifier"
+      config.add_sort_field "#{Ddr::IndexFields::LOCAL_ID} asc", label: "Local ID"
     end
   end
 

@@ -11,6 +11,7 @@ RSpec.describe CatalogHelper do
             'active_fedora_model_ssi'=>'Component',
             'content_size_human_ssim'=>content_size,
             'workflow_state_ssi'=>'published',
+            Ddr::IndexFields::ACCESS_ROLE=>"{}",
             'object_profile_ssm'=>['{"datastreams":{"content":{"dsLabel":"image10.tif","dsVersionID":"content.0","dsCreateDate":"2014-10-22T17:30:02Z","dsState":"A","dsMIME":"image/tiff","dsFormatURI":null,"dsControlGroup":"M","dsSize":69742260,"dsVersionable":true,"dsInfoType":null,"dsLocation":"changeme:10+content+content.0","dsLocationType":"INTERNAL_ID","dsChecksumType":"SHA-256","dsChecksum":"b9eb20b6fb4a27d6bf478bdefb25538bea95740bdf48471ec360d25af622a911"}}}']
             ) }
 
@@ -32,16 +33,19 @@ RSpec.describe CatalogHelper do
         end
       end
       context "and the user is not logged in" do
-        before { allow(helper).to receive(:user_signed_in?) { false } }
+        let(:role_set) { Ddr::Auth::Roles::DetachedRoleSet.new }
+        before do
+          allow(helper).to receive(:user_signed_in?) { false }
+          allow(document).to receive(:roles) { role_set }
+        end
         context "and the 'registered' group has the 'downloader' role" do
-          before { allow(document).to receive(:principal_has_role?).with(["registered", Ddr::Auth::Affiliation.groups].flatten, :downloader) { true } }
+          before { role_set.grant type: "Downloader", agent: "registered" }
           it "should render a 'login to download' link" do
             expect(helper).to receive(:render).with(hash_including(partial: "login_to_download"))
             helper.file_info(document: document)
           end
         end
         context "and the 'registered' group does NOT have the 'downloader' role" do
-          before { allow(document).to receive(:principal_has_role?).with(["registered", Ddr::Auth::Affiliation.groups].flatten, :downloader) { false } }
           it "should render the content type and size" do
             expect(helper).to receive(:render_content_type_and_size).with(document)
             helper.file_info(document: document)

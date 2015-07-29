@@ -25,7 +25,7 @@ module CatalogHelper
     document = options[:document]
     if can? :download, document
       render partial: "download_link_and_icon", locals: {document: document}
-    elsif !user_signed_in? && document.principal_has_role?(["registered", Ddr::Auth::Affiliation.groups].flatten, :downloader)
+    elsif document.effective_permissions([Ddr::Auth::Groups::REGISTERED]).include?(:download)
       render partial: "login_to_download", locals: {document: document}
     else
       render_content_type_and_size(document)

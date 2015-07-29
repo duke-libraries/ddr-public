@@ -8,12 +8,7 @@ class PermanentIdsController < ApplicationController
     if response.total == 0
       render file: "#{Rails.root}/public/404", layout: false, status: 404
     else
-      @document = response.documents.first
-      if @document.published?
-        redirect_to catalog_path(@document)
-      else
-        render file: "#{Rails.root}/public/not_published", layout: false, status: 403
-      end
+      redirect_to catalog_path(response.documents.first)
     end
   end
 
