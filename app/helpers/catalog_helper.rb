@@ -92,7 +92,15 @@ module CatalogHelper
     else
       link_to effective_license[:title], effective_license[:url]
     end
-  end 
+  end
+
+  def find_collection_results response
+    collection_uris = response.facet_counts['facet_fields']['collection_facet_sim'].select.each_with_index { |str, i| i.even? }
+    pids = collection_uris.map { |uri| ActiveFedora::Base.pid_from_uri(uri) }
+    query = ActiveFedora::SolrService.construct_query_for_pids(pids)
+    results = ActiveFedora::SolrService.query(query)
+    docs = results.map { |result| SolrDocument.new(result) }
+  end
 
   private
 
