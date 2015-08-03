@@ -1,17 +1,16 @@
 <%# default partial to display solr document fields in catalog show view -%>
 <% find_children(@document, :is_part_of) %>
+	
+<% if is_item?(@document) %>
+	<% if image_item_tilesources(@document, @document_list) %>
+		<%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(@document, @document_list), imagecount: image_item_tilesources(@document, @document_list).length } %>	
+	<% end %>
 
-<%# TODO: Find a smarter way to get the image path for item (1st component path) vs. component. Better to do in the controller or helpers? %>
-
-<%# Component View %>
-<% if @document.multires_image_file_path %>
-  <%= render partial: "show_image_derivative", locals: { image_path: @document.multires_image_file_path } %>
-  <%= render partial: "show_seadragon", locals: { image_path: @document.multires_image_file_path } %>
-
-<%# Item View %>
-<% elsif @document_list.first && @document_list.first.multires_image_file_path %>
-  <%= render partial: "show_image_derivative", locals: { image_path: @document_list.first.multires_image_file_path } %>
-  <%= render partial: "show_seadragon", locals: { image_path: @document_list.first.multires_image_file_path } %>
+<% elsif is_component?(@document) %>
+	<% if @document.multires_image_file_path %>
+		<%= render partial: "show_seadragon", locals: { aspectratio: image_component_aspectratio(@document) } %>
+	<% end %>
 <% end %>
+
 
 <%= render partial: "show_default", locals: {document: document} %>

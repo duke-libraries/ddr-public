@@ -1,6 +1,24 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
 
+  # Predicate methods for object types
+  def is_item? document
+    document[:active_fedora_model_ssi] == "Item"
+  end
+  
+  def is_component? document
+    document[:active_fedora_model_ssi] == "Component"
+  end
+  
+  def is_collection? document
+    document[:active_fedora_model_ssi] == "Collection"
+  end 
+  
+  def is_multi_image? document, document_list
+    image_item_tilesources(document, document_list).length > 1
+  end
+       
+
   # Facet field view helper
   # Also used in custom sort for collection facet
   def collection_title collection_internal_uri

@@ -97,5 +97,68 @@ module ApplicationHelper
     url = iiif_image_path(filepath,options)
     image_tag url, :alt => options[:alt].presence, :class => options[:class].presence
   end
+  
+  
+  
+  # STRUCTURAL METADATA HELPERS
+  # ===========================
+  
+  # Get an array of component pids for any item, sorted by the 
+  # order indicated in the default struct_map. This is complicated
+  # with nesting possible; we have to deal with arrays of hashes
+  # with arrays for values, etc... 
+
+  def sorted_pids(document)
+    
+    if document.struct_map
+      
+      # Sort the divs in the structmap by the ORDER attribute.
+      pids = document.struct_map["divs"].sort_by { |h| h["order"] }
+    
+      # Make an array of pids from the structmap div fptr. Assumes only one fptr per div.
+      sorted_pids = pids.map { |item| item["fptrs"].first }
+      
+    end
+
+  end
+
+  def image_item_tilesources(document, doclist)
+    # For an item page with multi-res image(s), get an array of image component info.json URLs.
+    # Iterate over an array of component pids sorted by struct_map order. Retrieve each's respective 
+    # ptif path and from that get the info.json path. Create a new array with those info.json paths.
+    
+    components = doclist.map { |doc| { file: doc.multires_image_file_path, id: doc.id } }
+    sources = []
+    
+    sorted_pids(document).each { |item|
+      c = components.detect { |h| h[:id] == item } 
+      sources.push(iiif_image_info_path(c[:file]))     
+    }
+
+    sources
+
+  end
+  
+  def image_item_aspectratio(document, doclist)
+    # Get the width / height ratio of the first multires component's image
+    urls = image_item_tilesources(document, doclist)
+    imagedata = JSON.load(open('http:'+urls.first))
+    aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
+  end
+  
+  def image_component_tilesource(document)
+    # For a single component object that has a multi-res image, get the info.json path.   
+    source = iiif_image_info_path(document.multires_image_file_path)
+  end  
+ 
+  def image_component_aspectratio(document)
+  # Get the width / height ratio of the multi-res component's image  
+    url = iiif_image_info_path(document.multires_image_file_path)
+    imagedata = JSON.load(open('http:'+url))
+    aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
+  end
+  
+
+  
 
 end
