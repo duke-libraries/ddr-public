@@ -1,0 +1,8 @@
+<% if @response.first_page? %>
+  <% document_list = find_collection_results @response %>
+  <h4>Matching Collections</h4>
+  <div id="documents" class="row gallery">
+    <!-- This uses the default gallery view. We probably want something different. -->
+    <%= render_gallery_collection document_list %>
+  </div>
+<%- end %>
