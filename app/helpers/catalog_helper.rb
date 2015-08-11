@@ -25,17 +25,41 @@ module CatalogHelper
     collections[collection_internal_uri]
   end
 
-  # TODO: I can almost use this to get what I need to get the first child's thumbnail
-  # For the index view. But the params need to be adjusted because either the  specified
-  # controller or the facet filter breaks the query.
-  # also, this method changes the value of @response that in turn messes up the paging 
-  # on the index view.
+  def render_thumbnail_tag_from_multires_image document, size, counter = nil
+    if document.multires_image_file_path.blank?
+      response, document_list = find_components(document)
+      first_child = document_list.first
+      if first_child.multires_image_file_path.blank?
+        render_thumbnail_tag(document, {}, :counter => counter)
+      else
+        multires_image_thumbnail_tag(document, first_child.multires_image_file_path, size, counter)
+      end
+    else
+      multires_image_thumbnail_tag(document, document.multires_image_file_path, size, counter)
+    end
+  end
 
-  # View helper
-  def find_children document, relationship
+  def multires_image_thumbnail_tag document, multires_image_file_path, size, counter
+    image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
+    link_to_document document, image_tag, :counter => counter
+  end
+
+  def find_components document
+    response, document_list = find_children(document)
+    if document.active_fedora_model == 'Collection'
+      response, document_list = find_children(document_list.first)
+    end
+    return response, document_list
+  end
+
+  def find_children document, relationship = nil, params = {}
     configure_blacklight_for_children
+    relationship ||= find_relationship(document)
+
     query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::IndexFields::INTERNAL_URI]]])
-    @response, @document_list = get_search_results(params.merge(rows: 999999), {q: query})
+    response, document_list = get_search_results(params.merge(rows: 99999), {q: query}) # allow params
+
+    return response, document_list
   end
 
   # Index / Show field view helper
@@ -113,6 +137,16 @@ module CatalogHelper
   end 
 
   private
+
+  def find_relationship document
+    if document.active_fedora_model == 'Item'
+      relationship = :is_part_of
+    elsif document.active_fedora_model == 'Collection'
+      relationship = :is_member_of_collection
+    else
+      return
+    end
+  end
 
   def collections
     @collections ||=

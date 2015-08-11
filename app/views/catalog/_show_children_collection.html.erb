@@ -1,5 +1,5 @@
 <h3>Items</h3>
-<% find_children(document, :is_member_of_collection) %>
+<% @response, @document_list = find_children(@document, :is_member_of_collection, params) %>
 <%= render 'sort_and_per_page' %>
 <%= render_document_index %>
 <%= render 'results_pagination' %>

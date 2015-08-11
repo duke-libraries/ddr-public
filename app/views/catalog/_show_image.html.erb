@@ -1,5 +1,6 @@
 <%# default partial to display solr document fields in catalog show view -%>
-<% find_children(@document, :is_part_of) %>
+
+<% @response, @document_list = find_children(@document, :is_part_of, params) %>
 	
 <% if is_item?(@document) %>
 	<% if image_item_tilesources(@document, @document_list) %>
