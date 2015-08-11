@@ -23,6 +23,7 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+    config.show.route = {}
           config.view.gallery.partials = [:index_header, :index]
 
           config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
@@ -205,6 +206,24 @@ class CatalogController < ApplicationController
       config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
       config.add_sort_field "#{Ddr::IndexFields::LOCAL_ID} asc", label: "Local ID"
     end
+  end
+
+  # For portal scoping
+  def get_internal_uris_from_collection_identifiers opts = {} # opts[:collection_identifiers => []]
+    @internal_uris = []
+    response, document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::IDENTIFIER_ALL, :boolean_operator => "OR", :values => opts[:collection_identifiers]})})
+    document_list.each do |doc|
+      @internal_uris << doc.internal_uri
+    end
+  end
+
+  # For portal scoping
+  def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
+    solr_parameter_value = ""
+    opts[:values].each do |value|
+      solr_parameter_value << opts[:solr_field] + ":\"" + value + "\" " + opts[:boolean_operator] + " "
+    end
+    solr_parameter_value.gsub(/\sOR\s$/, "")
   end
 
   protected
