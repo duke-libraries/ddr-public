@@ -58,4 +58,20 @@ RSpec.describe ApplicationHelper do
     end
   end
 
+  describe "#sorted_pids" do
+    context "object has structural metadata" do
+      let(:document) { SolrDocument.new({
+        'id'=>'changeme:100',
+"struct_maps_ssi"=>"{\"default\":{\"type\":\"default\",\"divs\":[{\"order\":\"2\",\"fptrs\":[\"changeme:9\"],\"divs\":[]},{\"order\":\"1\",\"fptrs\":[\"changeme:10\"],\"divs\":[]}]}}"
+         }) }
+      it "should sort the pids in a structmap by order attribute" do
+        expect(helper.sorted_pids(document)).to eq(["changeme:10", "changeme:9"])
+      end
+    end
+  end
+  
+  
+  #describe "#image_item_tilesources" do
+  # make a dummy solr doc & dummy doclist. test that lookup works
+  #end
 end

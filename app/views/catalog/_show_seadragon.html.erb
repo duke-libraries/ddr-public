@@ -1,28 +1,183 @@
-<div class="modal fade" id="seadragon-modal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">	
-		<button type="button" id="seadragon-close" class="btn" data-toggle="tooltip" data-placement="left" title="Close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-		
-		<div id="seadragon-buttons">
-			<button id="btn-zoom-in" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="Zoom In" aria-label="Zoom In"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button><br/>
-			<button id="btn-zoom-out" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="Zoom Out" aria-label="Zoom Out"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button><br/>
-			<button id="btn-full-page" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="Fit on Page" aria-label="Reset"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button><br/>
-			<button id="btn-fullscreen" type="button" class="btn" data-toggle="tooltip" data-placement="right" title="View Fullscreen" aria-label="Fullscreen"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>		
+<%# This partial works for any combo of multi-image, single-image, item object or component object. 
+We may want to refactor into separate partials. %>
+
+<div class="seadragon-wrapper">
+
+	<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+	    <div id="image-count">
+		  <button class="btn"><%= imagecount %> images</button>	
 		</div>
-
+	<% end %>
+	
+	<div id="image-toolbar">
+	  <div id="image-toolbar-inner">
 		
-	<%= openseadragon_picture_tag iiif_image_info_path(image_path), { data: { 
-			openseadragon: { 
-				preserveViewport: true, 
-				visibilityRatio: 1, 
-				zoomInButton: "btn-zoom-in",
-		    	zoomOutButton: "btn-zoom-out",
-		    	homeButton: "btn-full-page",
-		    	fullPageButton: "btn-fullscreen",
-			}
-		}
-	} %>
-
-    </div>
-  </div>
+		<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+			<div class="multi-image-nav">
+				<button id="btn-prev" class="seadragon-prevnext btn" type="button" data-toggle="tooltip" data-placement="bottom" title="Prev" aria-label="Prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+				<button id="btn-next" class="seadragon-prevnext btn" type="button" data-toggle="tooltip" data-placement="bottom" title="Next" aria-label="Next" style="margin-right: 10px;"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+				<div class="page-indicator">
+					<form class="form-inline" id="page-jumper" style="display:inline;">
+					    <input type="text" class="form-control" style="width: 3em; padding: 0 0.8em; background: black; border: none; text-align: center; color: white;" id="page-jumper-text" placeholder="1">
+					</form>
+					<span> of <%= imagecount %></span>
+				</div>
+			</div>
+		<% end %>
+		
+		<button id="btn-zoom-in" type="button" class="btn" data-toggle="tooltip" data-placement="bottom" title="Zoom In" aria-label="Zoom In"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+		<button id="btn-zoom-out" type="button" class="btn" data-toggle="tooltip" data-placement="bottom" title="Zoom Out" aria-label="Zoom Out"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+		<button id="btn-full-page" type="button" class="btn" data-toggle="tooltip" data-placement="bottom" title="Fit on Page" aria-label="Reset"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+		<button id="btn-fullscreen" type="button" class="btn" data-toggle="tooltip" data-placement="bottom" title="View Fullscreen" aria-label="Fullscreen"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>
+		<button id="btn-fullscreen-close" type="button" class="btn" data-toggle="tooltip" data-placement="bottom" title="Close Fullscreen" aria-label="Close Fullscreen"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>			
+	  </div>	
+	</div>
+	
+	<%# The aspect ratio of the first image determines how tall to make the open seadragon container. %>
+    <div id="image-content" style="height: <%= 838 / aspectratio %>px; width:auto; " class="openseadragon"></div>
 </div>
+
+<%# TODO: Evaluate whether this openseadragon instantiation can be moved to assets/javascripts %>
+<script type="text/javascript">
+$(document).ready(function(e){
+
+   var viewer = OpenSeadragon({
+        id:             "image-content",
+        prefixUrl:      "/assets/openseadragon/",
+		showNavigator: true,
+		autoHideControls: false, // do this manually for more fine-grained control
+		controlsFadeDelay: 0,
+		controlsFadeLength: 1000, 		
+		navigatorPosition: 'BOTTOM_RIGHT',
+		defaultZoomLevel: 0,
+		minZoomImageRatio: 0.5,
+		maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
+		 		
+		<% if is_item?(@document) %>
+	      tileSources:   <%= image_item_tilesources(@document, @document_list).to_json.html_safe %>,		
+		<% elsif is_component?(@document) %>
+		  tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
+		<% end %>
+		<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+	        sequenceMode: true,
+        	showReferenceStrip:  true,
+	    	referenceStripScroll: 'vertical',
+			referenceStripPosition: 'BOTTOM_LEFT',
+			referenceStripHeight: 300,
+			previousButton: "btn-prev",
+			nextButton: "btn-next",			
+		<% end %>
+		zoomInButton: "btn-zoom-in",
+    	zoomOutButton: "btn-zoom-out",
+    	homeButton: "btn-full-page",
+    	fullPageButton: "btn-fullscreen"
+
+    });	
+
+	// When the initial page loads OR the current page has changed
+	viewer.addHandler("page", function (data) { 
+		
+		// Update the page info indicator to show current page number
+		$("#page-jumper-text").val( parseInt(data.page) + 1 );
+		$("#page-jumper-text").attr("placeholder",( parseInt(data.page) + 1 ));
+		$("#page-jumper-text").blur();
+	});
+	
+	// When a seadragon tilesource has opened...
+	viewer.addHandler("open", function (data) {
+		
+		currentpage = viewer.currentPage();
+
+		if(currentpage == 0){ // it's the initial load
+			$('.referencestrip').css({ 'visibility':'hidden','opacity':0 });
+			$('div.navigator').css({ 'visibility':'hidden','opacity':0 });				
+		};
+		
+		// Get the zoom level when the page opens. If 1, it's a landscape image that needs no matting.
+		// If < 1, zoom out slightly to give matting on top/bottom so we don't
+		// just have two black bars on left/right.
+		
+		zoomlevel = viewer.viewport.getZoom();
+
+		if(zoomlevel < 1){
+			
+			// Zoom immediately to 90% of the expected zoom. 'true' means immediately do it w/o animating.
+			viewer.viewport.zoomTo(zoomlevel*.90,null,true); 
+		
+		}
+
+		$('.navigator').css({ 'visibility':'hidden','opacity':0 });
+		
+	});
+
+	<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+		viewer.addControl("image-count",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
+	<% end %>
+	
+	// Add the entire image nav toolbar as a seadragon control. This preserves it in full-screen view.
+	viewer.addControl("image-toolbar",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
+
+
+	// When the zoom has changed...
+	viewer.addHandler("zoom", function (data) { 
+		
+		// ...make the navigator image visible (hidden by default)
+		$('.navigator').css({ 'visibility':'visible','opacity':0.9 });	
+	});	
+	
+	// When a user enters the seadragon container area...
+	viewer.addHandler("container-enter", function () { 
+
+		// ...make the nav toolbar and thumbnail strip visible
+		$('#image-toolbar').css({ 'visibility':'visible','opacity':1 });
+		$('.referencestrip').css({ 'visibility':'visible','opacity':0.9 });
+		$('.openseadragon-container #image-count').css({ 'opacity':0,'visibility':'hidden', 'display':'none' });		
+	
+	});	
+	
+	// When a user exits the seadragon container area...
+	viewer.addHandler("container-exit", function () { // When the zoom or pan has changed
+		
+		// ...hide the nav toolbar, thumbnail strip, and navigator again
+		$('#image-toolbar').css({ 'visibility':'hidden','opacity':0 });
+		$('.referencestrip').css({ 'visibility':'hidden','opacity':0 });
+		$('.navigator').css({ 'visibility':'hidden','opacity':0 });		
+	});	
+	
+	// When the pan has changed...
+	viewer.addHandler("pan", function () { 
+		
+		// ...show the navigator
+		$('.navigator').css({ 'visibility':'visible','opacity':0.9 });
+	});	
+	
+
+	viewer.addHandler("home", function () { 
+		// Possible to customize the home/fit on page button behavior.
+		// console.log(JSON.stringify(viewer, null, '\t'));
+	});	
+	
+	
+	// Page jump form: erase value of current page when this box is selected 
+	// It remains in the placeholder attribute
+	$('#page-jumper-text').focus(function(e){ 
+		e.preventDefault();
+		$(this).val('');	
+	});
+	
+	// Page jump form submission: jump to the page a user entered
+	$('form#page-jumper').submit(function(e){ 
+		e.preventDefault();
+		viewer.goToPage($('#page-jumper-text').val() - 1);
+	});
+	
+	$('#btn-fullscreen-close').click(function(e){ 
+		e.preventDefault();
+		viewer.setFullScreen(false);
+	});	
+	
+
+});
+ 
+</script>
+
