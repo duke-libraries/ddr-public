@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209172411) do
+ActiveRecord::Schema.define(version: 20150724210841) do
 
   create_table "bookmarks", force: true do |t|
     t.integer  "user_id",       null: false
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20150209172411) do
     t.string   "summary"
     t.string   "outcome"
     t.text     "detail"
-    t.string   "exception"
+    t.text     "exception",       limit: 65535
     t.string   "user_key"
   end
 
