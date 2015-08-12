@@ -62,10 +62,10 @@ RSpec.describe ApplicationHelper do
     context "object has structural metadata" do
       let(:document) { SolrDocument.new({
         'id'=>'changeme:100',
-"struct_maps_ssi"=>"{\"default\":{\"type\":\"default\",\"divs\":[{\"order\":\"2\",\"fptrs\":[\"changeme:9\"],\"divs\":[]},{\"order\":\"1\",\"fptrs\":[\"changeme:10\"],\"divs\":[]}]}}"
+"struct_maps_ssi"=>"{\"default\":{\"type\":\"default\",\"divs\":[{\"order\":\"9\",\"fptrs\":[\"changeme:99\"],\"divs\":[]},{\"order\":\"10\",\"fptrs\":[\"changeme:100\"],\"divs\":[]}]}}"
          }) }
       it "should sort the pids in a structmap by order attribute" do
-        expect(helper.sorted_pids(document)).to eq(["changeme:10", "changeme:9"])
+        expect(helper.sorted_pids(document)).to eq(["changeme:99", "changeme:100"])
       end
     end
   end

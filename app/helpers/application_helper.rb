@@ -113,7 +113,7 @@ module ApplicationHelper
     if document.struct_map
       
       # Sort the divs in the structmap by the ORDER attribute.
-      pids = document.struct_map["divs"].sort_by { |h| h["order"] }
+      pids = document.struct_map["divs"].sort_by { |h| h["order"].to_i }
     
       # Make an array of pids from the structmap div fptr. Assumes only one fptr per div.
       sorted_pids = pids.map { |item| item["fptrs"].first }
