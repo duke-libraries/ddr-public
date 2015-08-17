@@ -39,17 +39,41 @@
 		transition: visibility .75s, opacity .75s;
 		
 		& #image-toolbar-inner {
+		    visibility: visible; 
+			display: inline-block;
 	        padding: 5px;
+			position: relative;
+			-moz-user-select: none;
+			-khtml-user-select: none;
+			-webkit-user-select: none;
+			-o-user-select: none;
+			user-select: none;
+			
 		}			
 		& .multi-image-nav {
 			margin-left: 100px; 
 			margin-right: 20px; 
 			display: inline; 
 		}
+		
+		& .zoom-nav {
+			display: inline; 
+		}
+		
+		& #page-jumper-text {
+			width: 3em; 
+			padding: 0 0.8em; 
+			background: black; 
+			border: none; 
+			text-align: center; 
+			color: white;
+		}
+				
 		& .page-indicator {
 			color: white;
 			display: inline;
-			position: relative; 
+			position: relative;
+			top: -1px; 
 		}
 	}
 	
@@ -83,17 +107,30 @@
 	& .btn {
 		color: $gray-light;
 		background-color: #000;
-		margin-bottom: 3px;	
+		margin-bottom: 3px;
+		margin-right: 3px;	
+		padding: 0;
 		
+		& .btn-wrapper {
+			// This fixes http://getbootstrap.com/javascript/#markup-1 where bad things happen when
+			// the btn becomes disabled or when the tooltip activates.		
+			margin: 0;
+			display: inline-block;
+			padding:10px 18px;			
+		}		
 		&:hover {
 			color: $gray-lighter;
 			background-color: #111;
 		}	
 	}
+		
+	& #btn-next {
+		margin-right: 10px;
+	}	
 	
 	& #btn-fullscreen-close {
 		z-index: 1200; 
-		position: absolute;
+		position: fixed;
 		right: 20px;
 		top: 5px;
 		display: none;
