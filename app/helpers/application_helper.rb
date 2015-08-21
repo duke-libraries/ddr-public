@@ -122,22 +122,32 @@ module ApplicationHelper
 
   end
 
-  def image_item_tilesources(document, doclist)
-    # For an item page with multi-res image(s), get an array of image component info.json URLs.
+  def multi_image_sorted_paths(document, doclist)
+    # For an item page with multi-res image(s), get an array of image component multires image URLs.
     # Iterate over an array of component pids sorted by struct_map order. Retrieve each's respective 
-    # ptif path and from that get the info.json path. Create a new array with those info.json paths.
+    # ptif path. Create a new array with those paths.
     
     components = doclist.map { |doc| { file: doc.multires_image_file_path, id: doc.id } }
-    sources = []
+    paths = []
     
     sorted_pids(document).each { |item|
       c = components.detect { |h| h[:id] == item } 
-      sources.push(iiif_image_info_path(c[:file]))     
+      paths.push((c[:file]))     
     }
 
-    sources
-
+    paths    
   end
+
+  def image_item_tilesources(document, doclist)
+    paths = multi_image_sorted_paths(document, doclist)
+    sources = []
+    paths.each { |item|
+      sources.push(iiif_image_info_path(item))
+    }
+    sources
+  end
+  
+    
   
   def image_item_aspectratio(document, doclist)
     # Get the width / height ratio of the first multires component's image

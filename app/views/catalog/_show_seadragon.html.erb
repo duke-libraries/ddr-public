@@ -36,7 +36,7 @@ We may want to refactor into separate partials. %>
 	</div>
 	
 	<%# The aspect ratio of the first image determines how tall to make the open seadragon container. %>
-    <div id="image-content" style="height: <%= 838 / aspectratio %>px; width:auto; " class="openseadragon"></div>
+    <div id="image-content" style="height: <%= 838 / aspectratio %>px; width:auto;" class="openseadragon"></div>
 </div>
 
 <%# TODO: Evaluate whether this openseadragon instantiation can be moved to assets/javascripts %>
@@ -76,13 +76,24 @@ $(document).ready(function(e){
 
     });	
 
-	// When the initial page loads OR the current page has changed
+	// When the current page has changed
 	viewer.addHandler("page", function (data) { 
 		
 		// Update the page info indicator to show current page number
 		$("#page-jumper-text").val( parseInt(data.page) + 1 );
 		$("#page-jumper-text").attr("placeholder",( parseInt(data.page) + 1 ));
 		$("#page-jumper-text").blur();
+		
+		// Get currently-viewed multires image path matching position in
+		// structmap array w/index of page currently viewed
+		currentpagepath = pagepaths[ parseInt(data.page) ];
+		
+		// Update the download options to refer to the currently viewed page		
+		$('#item-options .download-link').each(function(){
+			this.href = this.href.replace(/IIIF=(.*)ptif/,"IIIF=" + currentpagepath);
+		});
+		
+		
 	});
 	
 	// When a seadragon tilesource has opened...

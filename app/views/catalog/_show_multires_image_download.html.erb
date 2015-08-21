@@ -1,0 +1,25 @@
+<% if is_item?(@document) %>
+<div id="item-options">
+
+	<ul class="nav nav-pills item-options">
+	  <li class="dropdown">
+	    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+	      <span class="glyphicon glyphicon-save"></span> Download <span class="caret"></span>
+	    </a>
+	
+	    <ul class="dropdown-menu">
+	      <li><%= link_to ("Small JPG " + content_tag(:span, "400px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!400,400'}), class: "download-link", id: "download-small", download: "" %></li>
+	      <li><%= link_to ("Medium JPG " + content_tag(:span, "800px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!800,800'}), class: "download-link", id: "download-med", download: "" %></li>	
+	      <li><%= link_to ("Large JPG " + content_tag(:span, "1200px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!1200,1200'}), class: "download-link", id: "download-lrg", download: "" %></li>	
+	      <li><%= link_to ("Full-Res JPG " + content_tag(:span, "Lots of px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {}), class: "download-link", id: "download-full", download: "" %></li>
+
+		<% if is_multi_image?(@document, @document_list) %>	
+		  <li class="divider" role="separator"></li>
+		  <li class="dropdown-header"><span class="text-muted">Options are for the image currently displayed.</span></li>
+		<% end %>
+		
+	    </ul>
+	  </li>
+	</ul>
+</div>
+<% end %>

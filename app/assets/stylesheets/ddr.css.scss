@@ -43,3 +43,16 @@ body.blacklight-catalog-show #content {
 	max-width:100%;
 }
 
+
+/* ------------- 
+ITEM DISPLAY
+---------------- */
+
+.nav.item-options {
+	& > li > a {
+		color: $gray-light;
+		text-transform: uppercase;
+	}
+}
+
+
