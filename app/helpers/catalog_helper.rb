@@ -26,30 +26,27 @@ module CatalogHelper
   end
 
   def render_thumbnail_tag_from_multires_image document, size, counter = nil
-    if document.multires_image_file_path.blank?
-      response, document_list = find_components(document)
-      first_child = document_list.first
-      if first_child.multires_image_file_path.blank?
-        render_thumbnail_tag(document, {}, :counter => counter)
-      else
-        multires_image_thumbnail_tag(document, first_child.multires_image_file_path, size, counter)
-      end
+    if is_component?(document)
+      choose_thumbnail document, document.multires_image_file_path, size, counter = nil
+    elsif is_item?(document)
+      response, document_list = find_children(document)
+      choose_thumbnail document, document_list.first.multires_image_file_path, size, counter = nil
+    elsif is_collection?(document)
+      response, documents = find_children(document)
+      response, document_list = find_children(documents.first)
+      choose_thumbnail document, document_list.first.multires_image_file_path, size, counter = nil
     else
-      multires_image_thumbnail_tag(document, document.multires_image_file_path, size, counter)
+      render_thumbnail_tag(document, {}, :counter => counter)
     end
   end
 
-  def multires_image_thumbnail_tag document, multires_image_file_path, size, counter
-    image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
-    link_to_document document, image_tag, :counter => counter
-  end
-
-  def find_components document
-    response, document_list = find_children(document)
-    if document.active_fedora_model == 'Collection'
-      response, document_list = find_children(document_list.first)
+  def choose_thumbnail document, multires_image_file_path, size, counter
+    unless multires_image_file_path.blank?
+      image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
+      link_to_document document, image_tag, :counter => counter
+    else
+      render_thumbnail_tag(document, {}, :counter => counter)
     end
-    return response, document_list
   end
 
   def find_children document, relationship = nil, params = {}
