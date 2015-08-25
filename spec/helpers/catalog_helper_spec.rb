@@ -60,35 +60,17 @@ RSpec.describe CatalogHelper do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',
             ) }
-    context "document has a multires image" do 
-      it "should receive a message from multires_image_thumbnail_tag" do
-        multires_image_thumbnail_tag = double("multires_image_thumbnail_tag")
-        allow(document).to receive(:multires_image_file_path).and_return ("path/to/image/")
-        expect(helper).to receive(:multires_image_thumbnail_tag)
+    context "document is a component" do 
+      it "should receive a message from choose_thumbnail" do
+        choose_thumbnail = double("choose_thumbnail")
+        is_component = double("is_component?")
+        allow(helper).to receive(:is_component?).and_return (true)
+        allow(helper).to receive(:choose_thumbnail).and_return ("path/to/image/")
+        expect(helper).to receive(:choose_thumbnail)
         helper.render_thumbnail_tag_from_multires_image(document, "100")
       end
     end
-    context "document and its children do not have a multires image" do
-      let(:first_child) { SolrDocument.new(
-            'id'=>'changeme:10',
-            ) }
-      let(:document_list) { SolrDocument.new(
-            'id'=>'changeme:10',
-            ) }
-      it "should receive a message from render_thumbnail_tag" do
-        render_thumbnail_tag = double("render thumbnail tag")
-        find_components = double("find components")
-        first = double("first")
-        allow(document).to receive(:multires_image_file_path).and_return ("")
-        allow(helper).to receive(:find_components).and_return ([[], document_list])
-        allow(document_list).to receive(:first)
-        allow(first_child).to receive(:multires_image_file_path).and_return ("")
-        expect(helper).to receive(:render_thumbnail_tag)
-        helper.render_thumbnail_tag(document, "100")
-      end
-    end
   end
-
 
   describe "#research_help_title" do
     context "item has a research help name and url" do
