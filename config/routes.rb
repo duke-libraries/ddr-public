@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   
   # Downloads
   get 'download/:id(/:datastream_id)' => 'downloads#show', constraints: {id: pid_constraint}, as: 'download'
+  post 'download/images/:id' => 'catalog#zip_images'
 
   # Permanent IDs
   get 'id/*permanent_id' => 'permanent_ids#show'

@@ -138,6 +138,33 @@ module ApplicationHelper
     paths    
   end
 
+  def multi_image_sorted_derivative_paths(document, doclist, options)
+    # For an item page with multi-res image(s), get an array of absolute URLs to JPG 
+    # derivatives for each page, sorted by struct_map order. Accept image server 
+    # options to customize sizes, especially for download.
+    
+    ptifs = multi_image_sorted_paths(document, doclist)  
+    derivs = []
+  
+    ptifs.each { |image| 
+      d = iiif_image_path(image,options)
+      derivs.push(d)
+    }
+    
+    derivs  
+     
+  end
+  
+  # This helper is used for the multi-image ZIP downloading feature. 
+  # TO-DO: find a better way to do this.
+  def array_to_delimited_str(array)
+    s = ""
+    array.each { |item|
+      s << item+"||"
+    }
+    s
+  end
+
   def image_item_tilesources(document, doclist)
     paths = multi_image_sorted_paths(document, doclist)
     sources = []

@@ -19,6 +19,7 @@ gem 'bootswatch-rails'
 gem 'font-awesome-sass'
 gem 'openseadragon', '~> 0.2.0'
 gem 'blacklight-gallery'
+gem 'rubyzip', '~> 1.1.7'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
