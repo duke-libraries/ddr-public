@@ -89,7 +89,7 @@ $(document).ready(function(e){
 		currentpagepath = pagepaths[ parseInt(data.page) ];
 		
 		// Update the download options to refer to the currently viewed page		
-		$('#item-options .download-link').each(function(){
+		$('#item-options .download-link-single').each(function(){
 			this.href = this.href.replace(/IIIF=(.*)ptif/,"IIIF=" + currentpagepath);
 		});
 		

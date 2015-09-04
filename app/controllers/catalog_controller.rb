@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
+require 'zip'
 
 class CatalogController < ApplicationController
 
@@ -224,6 +225,47 @@ class CatalogController < ApplicationController
       solr_parameter_value << opts[:solr_field] + ":\"" + value + "\" " + opts[:boolean_operator] + " "
     end
     solr_parameter_value.gsub(/\sOR\s$/, "")
+  end
+
+  
+  def zip_images 
+    
+    # TO-DO: make the image_list param a real array or hash instead of delimited string
+    image_list = params[:image_list].split('||')
+    itemid = params[:itemid]
+    
+  
+    # Combination of these techniques:
+    #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
+    #   https://github.com/rubyzip/rubyzip#basic-zip-archive-creation
+         
+    t = Tempfile.new("temp-ddr-#{Time.now.utc}")
+    Zip::OutputStream.open(t.path) do |z|
+      image_list.each_with_index do |item, index|
+        title = item.to_s
+        z.put_next_entry("#{index+1}.jpg")
+        
+        # TODO: use DPC ID for the component filename OR extract the ptif path basename.
+        
+        url1 = "http:" + item
+        url1_data = open(url1)
+        z.print IO.read(url1_data)
+        
+        # TODO: update a progress bar to indicate status.
+        # TODO: write a test for this feature.
+
+    end
+
+
+      send_file t.path, :type => 'application/zip',
+                                   :disposition => 'attachment',
+                                   :filename => itemid+".zip"
+
+            t.close
+    end  
+     
+ 
+
   end
 
   protected
