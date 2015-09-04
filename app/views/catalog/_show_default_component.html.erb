@@ -1,0 +1,6 @@
+<% if @document.multires_image_file_path %>
+  <noscript><%= render partial: "show_image_derivative", locals: { image_path: @document.multires_image_file_path } %></noscript>
+  <%= render partial: "show_seadragon", locals: { aspectratio: image_component_aspectratio(@document) } %>
+<%- end %>
+
+<%= render partial: "show_default", locals: {document: document} %>

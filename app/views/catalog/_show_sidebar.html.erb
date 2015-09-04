@@ -3,19 +3,16 @@
 <% end %>
 
 <% if @document.research_help %>
-	<%= render partial: "show_research_help" %>
+	<% render partial: "show_research_help", locals: { document: @document } %>
 <% end %>
 
 <% if @document.active_fedora_model == 'Item' %>
 <div class="text-muted text-uppercase small strong">Collection</div>
-  <h4><%= render_document_show_field_value @document, field: Ddr::IndexFields::IS_MEMBER_OF_COLLECTION %></h4>
-  <p><%= truncate((parent_abstract @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]), :length => 180, :separator => ' ') %></p>
+  <h4><%= descendant_of({:value => @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]}) %></h4>
+  <p><%= truncate((abstract_from_uri @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]), :length => 180, :separator => ' ') %></p>
 <hr/>
   <div class="license">
-      <p><%= license_title(@document.effective_license) %></p>
-      <% unless @document.effective_license[:description].blank? %>
-        <p class="text-muted small"><%= truncate(@document.effective_license[:description], :length => 125, :separator => ' ') %></p>
-      <% end %>
+    <%= render partial: 'show_license_default', locals: { document: @document } %>
   </div>
 <% end %>
 

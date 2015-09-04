@@ -9,9 +9,7 @@
  * compiled file so the styles you add here take precedence over styles defined in any styles
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
- *
-
- */
+*/
 
 @import 'bootstrap-sprockets';
 $logo_image: 'ddr/dul-ddr-logo.png'; 
@@ -23,4 +21,5 @@ $logo_image: 'ddr/dul-ddr-logo.png';
 @import 'font-awesome-sprockets';
 @import 'font-awesome';
 @import 'blacklight_gallery';
+@import 'blacklight_range_limit';
 @import 'ddr';

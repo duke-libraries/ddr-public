@@ -1,0 +1,43 @@
+<%# default partial to display solr document fields in catalog show view -%>
+<% @response, @document_list = find_children(@document, :is_part_of, params) %>
+
+
+<%# --------------------------- %>
+<%#   Multi-Page / Multi-Image  %>
+<%# --------------------------- %>
+
+<% if is_multi_image?(@document, @document_list) %>
+
+  <%# For search engine indexing & graceful degradation, %>
+  <%# show the first image in <img> and make links to the rest %>   
+  <noscript>          
+    <%= render partial: "show_image_derivative", locals: { image_path: @document_list.first.multires_image_file_path } %> 
+
+    <h3>Images for this Item</h3>
+    <ul>
+      <% multi_image_sorted_paths(@document, @document_list).each do |path| %>
+        <li><%= link_to File.basename(path, File.extname(path)), iiif_image_path(path, {:size => '!850,850'}) %></li>
+      <% end %>
+    </ul>
+  </noscript>
+  
+  <%# Make the array of page image paths accessible to JS for use by the download buttons %>
+  <%= javascript_tag do %>
+    var pagepaths = <%= raw multi_image_sorted_paths(@document, @document_list).to_json %>;
+  <% end %>
+  
+<% end %>
+
+
+<%# ------------------------------------ %>
+<%#   Multi-Res (Has One or More PTIFs)  %>
+<%# ------------------------------------ %>
+
+<% if image_item_tilesources(@document, @document_list) %>
+  
+  <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(@document, @document_list), imagecount: image_item_tilesources(@document, @document_list).length } %> 
+  <%= render partial: "show_multires_image_download", locals: { image_path: multi_image_sorted_paths(@document, @document_list).first, imagecount: image_item_tilesources(@document, @document_list).length } %>
+  
+<% end %>
+
+<%= render partial: "show_default", locals: {document: document} %>

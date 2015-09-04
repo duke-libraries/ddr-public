@@ -27,12 +27,12 @@ ActiveRecord::Migration.maintain_test_schema!
 
 DatabaseCleaner.strategy = :truncation
 
-require "ddr-antivirus"
-Ddr::Antivirus.configure do |config|
-  config.scanner_adapter = :null
-  require "logger"
-  config.logger = Logger.new(File::NULL)
-end
+# require "ddr-antivirus"
+# Ddr::Antivirus.configure do |config|
+#   config.scanner_adapter = :null
+#   require "logger"
+#   config.logger = Logger.new(File::NULL)
+# end
 
 RSpec.configure do |config|
   config.include ActionDispatch::TestProcess

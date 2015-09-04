@@ -1,0 +1,13 @@
+<h1><%= t("ddr.public.portal.#{controller_name}.title", :default => t('blacklight.welcome')) %></h1>
+<% unless has_search_parameters? %>
+  <% if @collection_showcase_document_list %>
+    <!-- TODO: This should be moved to a helper -->
+    <% @collection_showcase_document_list.each do |doc| %>
+      <% if doc.multires_image_file_path %>
+        <% image_tag = iiif_image_tag(doc.multires_image_file_path, {:size => '!300,300', :alt => 'Thumbnail', :class => 'img-thumbnail'}) %>
+        <% document_link = document_from_uri(doc['is_part_of_ssim'].first) %>
+        <%= link_to_document document_link, image_tag %>
+      <%-end %>
+    <%- end %>
+  <%- end %>
+<%- end %>
