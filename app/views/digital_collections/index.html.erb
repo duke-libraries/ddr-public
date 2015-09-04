@@ -1,0 +1,25 @@
+<div id="home-branding" class="col-sm-12">
+  <!-- Could have two branding templates -->
+  <!-- One for the collection portal page -->
+  <!-- And one for the search results page and/or show pages -->
+  <!-- Select one or the other using the has_search_parameters? check as below -->
+  <%= render 'home_showcase' %>
+</div>
+
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <% if @parent_collections_uris.length == 1 %>
+    <% document = document_from_uri(@parent_collections_uris.first) %>
+    <%= render partial: 'show_research_help', locals: { document: document }  %>
+    <%= render partial: 'show_license_default', locals: { document: document } %>
+  <% end %>
+  <%= render 'search_sidebar' %>
+</div>
+
+<div id="content" class="col-md-9 col-sm-8">
+  <% unless has_search_parameters? %>
+    <%# if there are no input/search related params, display the "home" partial -%>
+    <%= render 'home' %>
+  <% else %>
+    <%= render 'search_results' %>
+  <% end %>
+</div>

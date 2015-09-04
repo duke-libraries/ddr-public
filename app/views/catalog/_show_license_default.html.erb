@@ -1,9 +1,4 @@
-<% if document.effective_license[:title] %>
-	<strong><%= document.effective_license[:title] %></strong>
-<% end %>
-<% if document.effective_license[:description] %>
-	<div><%= document.effective_license[:description] %></div>
-<% end %>
-<% if document.effective_license[:url] %>
-	<div><%= link_to document.effective_license[:url], document.effective_license[:url] %></div>
+<p><%= license_title(document.effective_license) %></p>
+<% unless document.effective_license[:description].blank? %>
+  <p class="text-muted small"><%= truncate(document.effective_license[:description], :length => 125, :separator => ' ') %></p>
 <% end %>

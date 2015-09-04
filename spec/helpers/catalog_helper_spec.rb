@@ -132,7 +132,7 @@ RSpec.describe CatalogHelper do
     end
   end
 
-  describe "#parent_abstract" do
+  describe "#abstract_from_uri" do
     let(:parent_pid) { "changeme:7" }
     let(:parent_abstract_text) { "The photographs represent the work of Michael Francis Blake from the 1910s to his death in 1934." }
     let(:solr_response) do
@@ -141,7 +141,7 @@ RSpec.describe CatalogHelper do
     before { allow(ActiveFedora::SolrService).to receive(:query).and_return(solr_response) }
     context "parent has an abstract" do
       it "should return the parent abstract" do
-        expect(helper.parent_abstract([ "info:fedora/#{parent_pid}" ])).to include (parent_abstract_text)
+        expect(helper.abstract_from_uri([ "info:fedora/#{parent_pid}" ])).to include (parent_abstract_text)
       end
     end
   end
@@ -154,17 +154,20 @@ RSpec.describe CatalogHelper do
     end
     let(:document) { SolrDocument.new(solr_response[0]) }
     before { allow(ActiveFedora::SolrService).to receive(:query).and_return(solr_response) }
+    before { link_to_document = double("link_to_document") }
+    before { allow(helper).to receive(:link_to_document) }
     context "user can read parent" do
       before { allow(helper).to receive(:can?).with(:read, an_instance_of(SolrDocument)).and_return(true) }
       it "should have a link to the parent" do
-        expect(helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])).to include(link_to(parent_title, catalog_path(parent_pid)))
+        expect(helper).to receive(:link_to_document)
+        helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])
       end
     end
     context "user cannot read parent" do
       before { allow(helper).to receive(:can?).with(:read, an_instance_of(SolrDocument)).and_return(false) }
       it "should display the parent title but not have a link to the parent" do
-        expect(helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])).to include(parent_title)
-        expect(helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])).to_not include(link_to(parent_title, catalog_path(parent_pid)))
+        expect(helper).to_not receive(:link_to_document)
+        helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])
       end
     end
   end

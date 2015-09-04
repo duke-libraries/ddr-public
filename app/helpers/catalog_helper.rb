@@ -16,8 +16,7 @@ module CatalogHelper
   
   def is_multi_image? document, document_list
     image_item_tilesources(document, document_list).length > 1
-  end
-       
+  end       
 
   # Facet field view helper
   # Also used in custom sort for collection facet
@@ -84,20 +83,39 @@ module CatalogHelper
     docs = results.map { |result| SolrDocument.new(result) }
     titles = docs.map(&:title)
     if can? :read, docs.first
-      link_to titles.first, url_for_document(docs.first)
+      link_to_document(docs.first)
     else
       titles.first
     end
   end
 
-  def parent_abstract uri
-    pid = ActiveFedora::Base.pid_from_uri(uri.first)
+  def abstract_from_uri uri
+    document = document_from_uri(uri.first)
+    unless document.abstract.blank?
+      document.abstract
+    end
+  end
+
+  def local_id_from_uri uri
+    document = document_from_uri(uri.first)
+    unless document.identifier.blank?
+      document.identifier.first
+    end
+  end
+
+  def admin_set_from_uri uri
+    document = document_from_uri(uri.first)
+    unless document[Ddr::IndexFields::ADMIN_SET].blank?
+      document[Ddr::IndexFields::ADMIN_SET]
+    end
+  end    
+
+  def document_from_uri uri
+    pid = ActiveFedora::Base.pid_from_uri(uri)
     query = ActiveFedora::SolrService.construct_query_for_pids([pid])
     results = ActiveFedora::SolrService.query(query)
-    docs = results.map { |result| SolrDocument.new(result) }
-    unless docs.first.abstract.blank?
-      docs.first.abstract
-    end
+    document_list = results.map { |result| SolrDocument.new(result) }
+    document_list.first
   end
 
   # View helper
@@ -134,11 +152,15 @@ module CatalogHelper
   end
 
   def find_collection_results response
-    collection_uris = response.facet_counts['facet_fields']['collection_facet_sim'].select.each_with_index { |str, i| i.even? }
-    pids = collection_uris.map { |uri| ActiveFedora::Base.pid_from_uri(uri) }
-    query = ActiveFedora::SolrService.construct_query_for_pids(pids)
-    results = ActiveFedora::SolrService.query(query)
-    docs = results.map { |result| SolrDocument.new(result) }
+    if response.facet_counts['facet_fields'].has_key?('collection_facet_sim')
+      collection_uris = response.facet_counts['facet_fields']['collection_facet_sim'].select.each_with_index { |str, i| i.even? }
+      pids = collection_uris.map { |uri| ActiveFedora::Base.pid_from_uri(uri) }
+      query = ActiveFedora::SolrService.construct_query_for_pids(pids)
+      results = ActiveFedora::SolrService.query(query)
+      docs = results.map { |result| SolrDocument.new(result) }
+    else
+      docs = []
+    end
   end
 
   private

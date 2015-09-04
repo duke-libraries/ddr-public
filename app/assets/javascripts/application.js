@@ -18,4 +18,6 @@
 // Required by Blacklight
 //= require blacklight/blacklight
 //= require blacklight_gallery
+//= require blacklight_range_limit
 //= require_tree .
+

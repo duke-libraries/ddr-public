@@ -36,10 +36,9 @@ class CatalogController < ApplicationController
     }
 
     # solr field configuration for search results/index views
-    config.index.title_field = Ddr::IndexFields::TITLE
-    config.index.active_fedora_model_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL
-    config.index.display_type_field = 'format'
-    config.index.collection_name_field = 'collection'
+    config.index.title_field = Ddr::IndexFields::TITLE.to_s
+    config.index.active_fedora_model_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL.to_s
+    config.index.display_type_field = Ddr::IndexFields::DISPLAY_FORMAT.to_s
 
     config.index.thumbnail_method = :thumbnail_image_tag
 
@@ -69,8 +68,8 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
-    config.add_facet_field Ddr::IndexFields::ADMIN_SET_FACET, label: 'Collection Group', helper_method: 'admin_set_full_name', limit: 9999
-    config.add_facet_field Ddr::IndexFields::COLLECTION_FACET, label: 'Collection', helper_method: 'collection_title', limit: 9999
+    config.add_facet_field Ddr::IndexFields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', limit: 9999
+    config.add_facet_field Ddr::IndexFields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 9999
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -84,11 +83,11 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
-    config.add_index_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
-    config.add_index_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
-    config.add_index_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
-    config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
-    config.add_index_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::IndexFields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::IndexFields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
+    config.add_index_field Ddr::IndexFields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::IndexFields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
       fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published"]
@@ -108,8 +107,8 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
-    config.add_show_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
-    config.add_show_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
+    config.add_show_field Ddr::IndexFields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_show_field Ddr::IndexFields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
@@ -119,9 +118,9 @@ class CatalogController < ApplicationController
     Ddr::Vocab::Vocabulary.term_names(Ddr::Vocab::DukeTerms).each do |term_name|
       config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
     end
-    config.add_show_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
-    config.add_show_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
-    config.add_show_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::IndexFields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::IndexFields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -206,15 +205,6 @@ class CatalogController < ApplicationController
       config.sort_fields.clear
       config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
       config.add_sort_field "#{Ddr::IndexFields::LOCAL_ID} asc", label: "Local ID"
-    end
-  end
-
-  # For portal scoping
-  def get_internal_uris_from_collection_identifiers opts = {} # opts[:collection_identifiers => []]
-    @internal_uris = []
-    response, document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::IDENTIFIER_ALL, :boolean_operator => "OR", :values => opts[:collection_identifiers]})})
-    document_list.each do |doc|
-      @internal_uris << doc.internal_uri
     end
   end
 

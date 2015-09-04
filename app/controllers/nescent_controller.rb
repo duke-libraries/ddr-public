@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class DigitalCollectionsController < CatalogController
+class NescentController < CatalogController
 
   include Ddr::Public::Controller::PortalControllerConfig
 
