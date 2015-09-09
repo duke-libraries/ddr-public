@@ -179,7 +179,7 @@ module ApplicationHelper
   def image_item_aspectratio(document, doclist)
     # Get the width / height ratio of the first multires component's image
     urls = image_item_tilesources(document, doclist)
-    imagedata = JSON.load(open('http:'+urls.first))
+    imagedata = JSON.load(open(urls.first))
     aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
   
@@ -191,7 +191,7 @@ module ApplicationHelper
   def image_component_aspectratio(document)
   # Get the width / height ratio of the multi-res component's image  
     url = iiif_image_info_path(document.multires_image_file_path)
-    imagedata = JSON.load(open('http:'+url))
+    imagedata = JSON.load(open(url))
     aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
   
