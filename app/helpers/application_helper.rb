@@ -130,10 +130,17 @@ module ApplicationHelper
     components = doclist.map { |doc| { file: doc.multires_image_file_path, id: doc.id } }
     paths = []
     
-    sorted_pids(document).each { |item|
-      c = components.detect { |h| h[:id] == item } 
-      paths.push((c[:file]))     
-    }
+    if document.struct_map
+      sorted_pids(document).each { |item|
+        c = components.detect { |h| h[:id] == item } 
+        paths.push((c[:file]))     
+      }
+    else
+      # If no struct_map present, render components in native order
+      components.each { |item|
+        paths.push(item[:file])
+      }
+    end
 
     paths    
   end
