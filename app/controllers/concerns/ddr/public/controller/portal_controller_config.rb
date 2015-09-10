@@ -17,7 +17,7 @@ module Ddr
         def set_showcase_images_before_filter
           if portals_and_collections[controller_name]['showcase_images']
             slideshow_identifiers = portals_and_collections[controller_name]['showcase_images']
-            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => 'identifier_tesim', :boolean_operator => "OR", :values => slideshow_identifiers})})
+            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => slideshow_identifiers})})
           end
         end
 
