@@ -31,16 +31,14 @@ module BlacklightHelper
 
   def filter_values_for_document(doc_or_obj)
     document_type = doc_or_obj[Ddr::IndexFields::ACTIVE_FEDORA_MODEL].downcase.to_sym
-
+    local_id = ""
+    admin_set = ""
     if document_type == :collection
-      local_id = doc_or_obj.identifier.first
+      local_id = doc_or_obj.local_id if doc_or_obj.local_id
       admin_set = doc_or_obj[Ddr::IndexFields::ADMIN_SET]
     elsif document_type == :item or document_type == :component
       local_id = local_id_from_uri(doc_or_obj['is_governed_by_ssim'])
       admin_set = admin_set_from_uri(doc_or_obj['is_governed_by_ssim'])
-    else
-      local_id = ""
-      admin_set = ""
     end
     [local_id, admin_set]
   end
