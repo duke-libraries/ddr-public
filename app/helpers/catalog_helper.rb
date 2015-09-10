@@ -98,8 +98,8 @@ module CatalogHelper
 
   def local_id_from_uri uri
     document = document_from_uri(uri.first)
-    unless document.identifier.blank?
-      document.identifier.first
+    unless document.local_id.blank?
+      document.local_id
     end
   end
 
