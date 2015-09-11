@@ -15,7 +15,7 @@ class SolrDocument
   SolrDocument.use_extension( Blacklight::Solr::Document::Sms )
 
   # DublinCore uses the semantic field mappings below to assemble an OAI-compliant Dublin Core document
-  # Semantic mappings of solr stored fields. Fields may be multi or
+  # Semantic mappingsgs of solr stored fields. Fields may be multi or
   # single valued. See Blacklight::Solr::Document::ExtendableClassMethods#field_semantics
   # and Blacklight::Solr::Document#to_semantic_values
   # Recommendation: Use field names from Dublin Core
@@ -27,6 +27,10 @@ class SolrDocument
 
   def abstract
     get("abstract_tesim")
+  end
+
+  def description
+    get("description_tesim")
   end
 
   # Stub value for format and collection that drive partial selection

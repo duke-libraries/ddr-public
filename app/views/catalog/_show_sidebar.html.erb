@@ -2,15 +2,17 @@
 	<%= render :partial => 'show_tools' %>
 <% end %>
 
-<% if @document.research_help %>
-	<% render partial: "show_research_help", locals: { document: @document } %>
+<% if @collection_document %>
+  <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
 <% end %>
 
+
 <% if @document.active_fedora_model == 'Item' %>
-<div class="text-muted text-uppercase small strong">Collection</div>
-  <h4><%= descendant_of({:value => @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]}) %></h4>
-  <p><%= truncate((abstract_from_uri @document[Ddr::IndexFields::IS_MEMBER_OF_COLLECTION]), :length => 180, :separator => ' ') %></p>
-<hr/>
+    
+    <% if @collection_document %>
+      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>
+    <% end %>
+    <hr/>
   <div class="license">
     <%= render partial: 'show_license_default', locals: { document: @document } %>
   </div>
