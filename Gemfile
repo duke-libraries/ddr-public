@@ -20,7 +20,7 @@ gem 'font-awesome-sass'
 gem 'openseadragon', '~> 0.2.0'
 gem 'blacklight-gallery'
 gem 'rubyzip', '~> 1.1.7'
-gem 'blacklight_range_limit'
+gem 'blacklight_range_limit', '5.0.4'
 
 
 gem 'sdoc', '~> 0.4.0', group: :doc

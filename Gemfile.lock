@@ -79,7 +79,7 @@ GEM
       bootstrap-sass (~> 3.0)
       openseadragon (>= 0.2.0)
       rails
-    blacklight_range_limit (5.1.0)
+    blacklight_range_limit (5.0.4)
       blacklight (>= 5.0.0.pre4, < 6)
       jquery-rails
       rails (>= 3.0, < 5.0)
@@ -421,7 +421,7 @@ PLATFORMS
 
 DEPENDENCIES
   blacklight-gallery
-  blacklight_range_limit
+  blacklight_range_limit (= 5.0.4)
   bootstrap-sass (~> 3.3.4)
   bootswatch-rails
   capybara (~> 2.0)
