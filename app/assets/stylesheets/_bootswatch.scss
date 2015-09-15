@@ -234,3 +234,11 @@ ul:not([class])>*:before {
 // Type Variants (Duke Custom) ==================================================
 
 .strong { font-weight: bold; }
+
+
+// Grid Variants (Duke Custom) ==================================================
+
+.no-gutter > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}

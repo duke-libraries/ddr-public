@@ -45,7 +45,96 @@ body.blacklight-catalog-show #content {
 
 
 /* ------------- 
-ITEM DISPLAY
+PORTAL DISPLAY
+---------------- */
+
+.showcase-wrapper {
+  margin: -20px -20px 20px -20px;
+}
+
+
+
+.collection-start {
+  background-color: rgba(0,0,0,0.8);
+  color: white;
+  padding: 30px !important;
+  height: 500px;
+  
+  & h1 {
+    color: white;
+  }
+  
+  & a {
+    color: white;
+
+  }
+  
+  & .more-link {
+    font-weight: bold;
+  }
+  
+  & form.search-query-form {
+    padding-left: 0;
+  }
+  & select {
+    display: none !important;
+  }
+  & .browse-all {
+    margin-top: 10px;
+  }
+  
+}
+
+.collection-showcase {
+  background-color: #666;
+  height: 500px; 
+  background-repeat: no-repeat; 
+  background-position: 50% 50%; 
+}
+
+a.showcase-item-wrap, a.highlight-item-wrap {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+}
+
+.showcase-item-caption, .highlight-item-caption {
+  display: none;
+  position: absolute; 
+  bottom: 0; 
+  color: white; 
+  padding: 20px 20px 20px 20px; 
+  background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.4)); 
+  width:100%; 
+  z-index: 90;
+  min-height: 500px;
+}
+
+
+.collection-highlight {
+  width: 25%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+  border-right: 5px solid rgba(255,255,255,0);
+  border-right: 5px solid white;  
+  border-bottom: 5px solid rgba(255,255,255,0);
+  border-bottom: 5px solid white;  
+  float: left;
+  position: relative;
+  height: 210px;
+
+}
+
+.highlight-item-caption {
+  min-height: 150px;
+}
+
+
+/* ------------- 
+  ITEM DISPLAY
 ---------------- */
 
 .nav.item-options {
@@ -55,10 +144,27 @@ ITEM DISPLAY
 	}
 }
 
-/* Blacklight Range Filter Overrides */
-.slider-handle {
-  background-color: #a1b70d;
-  background-image: none;
+
+/* ------------- 
+    FACETS
+---------------- */
+
+
+.top-panel-heading.panel-heading {
+  padding-left: 0;
 }
+
+
+/* Blacklight Range Filter Overrides */
+.range_limit {
+  & .slider-handle {
+    background-color: #a1b70d;
+    background-image: none;
+  }
+  & input.range_begin, input.range_end {
+      font-size: 15px;
+  }
+}
+
 
 

@@ -1,7 +1,5 @@
 <% if @parent_collections_uris.length == 1 %>
-
   <% document = document_from_uri(@parent_collections_uris.first) %>
-
   <h3 id="info">Item Info</h3>
   <dl>
     <% document_show_fields(document).each do |field_name, field| -%>

@@ -57,6 +57,10 @@ module CatalogHelper
 
     return response, document_list
   end
+  
+  def item_count pid
+    Item.where("is_governed_by_ssim"=>"info:fedora/#{pid}").count
+  end
 
   # Index / Show field view helper
   def file_info options={}
@@ -117,6 +121,8 @@ module CatalogHelper
     document_list = results.map { |result| SolrDocument.new(result) }
     document_list.first
   end
+
+
 
   # View helper
   def render_content_type_and_size document

@@ -199,6 +199,11 @@ class CatalogController < ApplicationController
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:published"
   end
+  
+  def exclude_components(solr_parameters, user_parameters)
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << "-#{Ddr::IndexFields::ACTIVE_FEDORA_MODEL}:Component"
+  end  
 
   def configure_blacklight_for_children
     blacklight_config.configure do |config|

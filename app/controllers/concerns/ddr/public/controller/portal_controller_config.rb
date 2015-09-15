@@ -7,6 +7,7 @@ module Ddr
           
         def self.included(base)
           base.before_filter :set_showcase_images_before_filter, only: [:index, :facet]
+          base.before_filter :set_highlight_images_before_filter, only: [:index, :facet]          
           base.before_filter :get_document_uris_from_admin_sets_and_local_ids
 
           base.solr_search_params_logic += [:include_only_specified_records]
@@ -15,11 +16,18 @@ module Ddr
         private
 
         def set_showcase_images_before_filter
-          if portals_and_collections[controller_name]['showcase_images']
-            slideshow_identifiers = portals_and_collections[controller_name]['showcase_images']
-            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => slideshow_identifiers})})
+          if portals_and_collections[controller_name]['showcase'] && portals_and_collections[controller_name]['showcase']['local_ids'] 
+            showcase_ids = portals_and_collections[controller_name]['showcase']['local_ids']
+            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => showcase_ids})})
           end
         end
+        
+        def set_highlight_images_before_filter
+          if portals_and_collections[controller_name]['highlight'] && portals_and_collections[controller_name]['highlight']['local_ids']
+            highlight_ids = portals_and_collections[controller_name]['highlight']['local_ids']
+            response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})})
+          end
+        end        
 
         def include_only_specified_records(solr_parameters, user_parameters)
           if @parent_collections_uris
@@ -41,6 +49,9 @@ module Ddr
           @parent_collections_uris ||= []
           response, document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => opts[:field], :boolean_operator => "OR", :values => opts[:config_values]})})
           @parent_collections_uris = document_list.map { |document| document.internal_uri}
+          if document_list.length == 1
+            @collection_document = document_list.first
+          end
         end
 
         def portals_and_collections

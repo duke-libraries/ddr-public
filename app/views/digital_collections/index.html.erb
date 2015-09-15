@@ -3,14 +3,21 @@
   <!-- One for the collection portal page -->
   <!-- And one for the search results page and/or show pages -->
   <!-- Select one or the other using the has_search_parameters? check as below -->
-  <%= render 'home_showcase' %>
+  <% if @collection_document %>
+    <%= render 'home_showcase' %>
+  <% else %>
+    <h1><%= t("ddr.public.portal.#{controller_name}.title") %></h1>
+  <% end %>
+  
 </div>
 
 <div id="sidebar" class="col-md-3 col-sm-4">
-  <% if @parent_collections_uris.length == 1 %>
-    <% document = document_from_uri(@parent_collections_uris.first) %>
-    <%= render partial: 'show_research_help', locals: { document: document }  %>
-    <%= render partial: 'show_license_default', locals: { document: document } %>
+  <% if @collection_document %>
+    <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
+    <% if has_search_parameters? %>
+      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %> 
+    <% end %>
+    <%= render partial: 'show_license_default', locals: { document: @collection_document } %>
   <% end %>
   <%= render 'search_sidebar' %>
 </div>
