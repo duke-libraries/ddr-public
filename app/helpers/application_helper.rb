@@ -181,12 +181,13 @@ module ApplicationHelper
     sources
   end
   
-    
-  
   def image_item_aspectratio(document, doclist)
     # Get the width / height ratio of the first multires component's image
     urls = image_item_tilesources(document, doclist)
-    imagedata = JSON.load(open(urls.first))
+    
+    # Circumvent https error despite valid SSL cert
+    imagedata = JSON.load(open(urls.first, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
+    
     aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
   
