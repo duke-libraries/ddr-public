@@ -242,7 +242,7 @@ class CatalogController < ApplicationController
         
         # TODO: use DPC ID for the component filename OR extract the ptif path basename.
         
-        url1 = "http:" + item
+        url1 = item
         url1_data = open(url1)
         z.print IO.read(url1_data)
         
