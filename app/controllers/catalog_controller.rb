@@ -243,7 +243,7 @@ class CatalogController < ApplicationController
         # TODO: use DPC ID for the component filename OR extract the ptif path basename.
         
         url1 = item
-        url1_data = open(url1)
+        url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
         z.print IO.read(url1_data)
         
         # TODO: update a progress bar to indicate status.
