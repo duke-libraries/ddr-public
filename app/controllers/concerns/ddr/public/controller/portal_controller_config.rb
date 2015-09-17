@@ -18,14 +18,14 @@ module Ddr
         def set_showcase_images_before_filter
           if portals_and_collections[controller_name]['showcase'] && portals_and_collections[controller_name]['showcase']['local_ids'] 
             showcase_ids = portals_and_collections[controller_name]['showcase']['local_ids']
-            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => showcase_ids})})
+            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => showcase_ids})}, :rows => 40)
           end
         end
         
         def set_highlight_images_before_filter
           if portals_and_collections[controller_name]['highlight'] && portals_and_collections[controller_name]['highlight']['local_ids']
             highlight_ids = portals_and_collections[controller_name]['highlight']['local_ids']
-            response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})})
+            response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})}, :rows => 40)
           end
         end        
 
