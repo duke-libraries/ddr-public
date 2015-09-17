@@ -14,10 +14,10 @@ class WdukesonsController < DigitalCollectionsController
       :assumed_boundaries => [1889, 1935],
       :segments => true    
     }    
-    config.add_facet_field Ddr::IndexFields::SERIES_FACET.to_s, label: "Series", sort: 'index', limit: 5
+    config.add_facet_field Ddr::IndexFields::SERIES_FACET.to_s, label: "Series"
     config.add_facet_field Ddr::IndexFields::PUBLISHER_FACET.to_s, label: "Publisher"
     config.add_facet_field Ddr::IndexFields::SPATIAL_FACET.to_s, label: "Location"
-    config.add_facet_field Ddr::IndexFields::BOX_NUMBER_FACET.to_s, label: "Box Number"
+    config.add_facet_field Ddr::IndexFields::BOX_NUMBER_FACET.to_s, sort: 'index', label: "Box Number"
   end
 
 end
