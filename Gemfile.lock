@@ -136,6 +136,8 @@ GEM
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     fastercsv (1.5.5)
+    fastimage (1.7.0)
+      addressable (~> 2.3, >= 2.3.5)
     ffi (1.9.6)
     font-awesome-sass (4.3.2.1)
       sass (~> 3.2)
@@ -241,6 +243,10 @@ GEM
       rails (> 3.2.0)
     orderly (0.0.2)
     orm_adapter (0.5.0)
+    pdf-core (0.6.0)
+    prawn (2.0.2)
+      pdf-core (~> 0.6.0)
+      ttfunk (~> 1.4.0)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -400,6 +406,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
+    ttfunk (1.4.0)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -431,6 +438,7 @@ DEPENDENCIES
   ddr-models!
   devise
   factory_girl_rails (~> 4.4)
+  fastimage
   font-awesome-sass
   hydra-head (~> 7.2.0)
   jbuilder (~> 2.0)
@@ -441,6 +449,7 @@ DEPENDENCIES
   mysql2
   openseadragon (~> 0.2.0)
   orderly
+  prawn
   rails (~> 4.1.6)
   rspec-rails (~> 3.0)
   rubyzip (~> 1.1.7)

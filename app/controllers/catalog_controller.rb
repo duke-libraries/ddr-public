@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
 require 'zip'
+require 'fastimage'
 
 class CatalogController < ApplicationController
 
@@ -249,7 +250,7 @@ class CatalogController < ApplicationController
         # TODO: update a progress bar to indicate status.
         # TODO: write a test for this feature.
 
-    end
+      end
 
 
       send_file t.path, :type => 'application/zip',
@@ -258,10 +259,58 @@ class CatalogController < ApplicationController
 
             t.close
     end  
-     
- 
-
   end
+
+  def pdf_images
+    image_list = params[:image_list].split('||')
+    itemid = params[:itemid]
+
+
+    # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size. 
+    # Let's use 1000 on long side.
+    
+    pdf = Prawn::Document.new({ :margin => 0, :skip_page_creation => true })               
+
+    image_list.each_with_index do | file, index |
+
+      # New document, A4 paper, landscaped
+      # pdf = Prawn::Document.new(:page_size => "A4", :page_layout => :landscape)
+
+  
+      image_size = FastImage.size(file) # returns [w,h]
+  
+      image_w = image_size[0]
+      image_h = image_size[1]
+  
+      # aspect ratio (w/h)
+      image_r = image_w.to_f / image_h.to_f
+
+      if image_r >= 1 # landscape
+        pg_w = 1000
+        pg_h = 1000 / image_r
+      else
+        pg_w = 1000 * image_r
+        pg_h = 1000
+      end
+      
+      # For small-derivative source image: PDF page will be full-size
+      if image_w < 1000 && image_h < 1000
+        pg_w = image_w.to_i
+        pg_h = image_h.to_i      
+      end
+      
+      # Note: keep layout => :portrait even for landscape images else they don't render correctly
+      pdf.start_new_page(:size => [pg_w, pg_h], :layout => :portrait, :margin => 0)
+      y_pos = pdf.cursor   # Record the top y value (y=0 is the bottom of the page)
+      pdf.image open(file), :at => [0, y_pos], :fit => [pg_w, pg_h]  
+        
+    end
+    
+    
+    send_data pdf.render, filename: itemid+'.pdf', type: 'application/pdf'
+    
+  end
+
 
   protected
 

@@ -21,7 +21,8 @@ gem 'openseadragon', '~> 0.2.0'
 gem 'blacklight-gallery'
 gem 'rubyzip', '~> 1.1.7'
 gem 'blacklight_range_limit', '5.0.4'
-
+gem 'prawn'
+gem 'fastimage'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 

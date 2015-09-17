@@ -10,12 +10,15 @@
 	    <ul class="dropdown-menu">
 		<% if is_multi_image?(@document, @document_list) %>				
 		  <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
-
-
+	
+	
 			<!-- This works but it's hacky: push the array of paths into a delimited concatenated string, split later.
 			Had to use button_to to make a form to pass array of JPGs as a POST request (too long for 
 			URL string in GET). 
 			 -->
+			 		  
+      <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document, @document_list, {:size => 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
+
 			<li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document, @document_list, {:size => 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>				
 			</li>
 			

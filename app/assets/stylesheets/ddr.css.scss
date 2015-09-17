@@ -142,6 +142,11 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 		color: $gray-light;
 		text-transform: uppercase;
 	}
+	
+	& .dropdown-menu .btn-link {
+	  padding-top: 0;
+	  padding-bottom: 0;
+	}
 }
 
 
