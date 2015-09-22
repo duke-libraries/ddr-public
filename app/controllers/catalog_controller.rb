@@ -302,7 +302,7 @@ class CatalogController < ApplicationController
       # Note: keep layout => :portrait even for landscape images else they don't render correctly
       pdf.start_new_page(:size => [pg_w, pg_h], :layout => :portrait, :margin => 0)
       y_pos = pdf.cursor   # Record the top y value (y=0 is the bottom of the page)
-      pdf.image open(file), :at => [0, y_pos], :fit => [pg_w, pg_h]  
+      pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]  
         
     end
     
