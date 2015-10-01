@@ -4,7 +4,7 @@ RSpec.describe PermanentIdsController do
 
   describe "#show" do
     let!(:permanent_id) { "ark:/99999/fk4yyyyy" }
-    let!(:query_params) { {q: "#{Ddr::IndexFields::PERMANENT_ID}:\"#{permanent_id}\"", rows: 1} }
+    let!(:query_params) { {q: "#{Ddr::Index::Fields::PERMANENT_ID}:\"#{permanent_id}\"", rows: 1} }
 
     describe "when the object does not exist" do
       before do

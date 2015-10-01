@@ -52,7 +52,7 @@ module CatalogHelper
     configure_blacklight_for_children
     relationship ||= find_relationship(document)
 
-    query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::IndexFields::INTERNAL_URI]]])
+    query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::Index::Fields::INTERNAL_URI]]])
     response, document_list = get_search_results(params.merge(rows: 99999), {q: query}) # allow params
 
     return response, document_list
@@ -109,8 +109,8 @@ module CatalogHelper
 
   def admin_set_from_uri uri
     document = document_from_uri(uri.first)
-    unless document[Ddr::IndexFields::ADMIN_SET].blank?
-      document[Ddr::IndexFields::ADMIN_SET]
+    unless document[Ddr::Index::Fields::ADMIN_SET].blank?
+      document[Ddr::Index::Fields::ADMIN_SET]
     end
   end    
 
@@ -144,18 +144,6 @@ module CatalogHelper
     end
   end
 
-
-  # View helper
-  def license_title effective_license
-    if effective_license[:title].blank?
-      effective_license[:title] = t("ddr.public.license_title")
-    end
-    if effective_license[:url].blank?
-      link_to effective_license[:title], copyright_path
-    else
-      link_to effective_license[:title], effective_license[:url]
-    end
-  end
 
   def find_collection_results response
     if response.facet_counts['facet_fields'].has_key?('collection_facet_sim')

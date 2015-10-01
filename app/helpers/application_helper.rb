@@ -3,10 +3,10 @@ module ApplicationHelper
   # Overrides corresponding method in Blacklight::FacetsHelperBehavior
   def render_facet_limit_list(paginator, solr_field, wrapping_element=:li)
     case solr_field
-    when Ddr::IndexFields::ADMIN_SET_FACET
+    when Ddr::Index::Fields::ADMIN_SET_FACET
       # apply custom sort for 'admin set' facet
       items = admin_set_facet_sort(paginator.items)
-    when Ddr::IndexFields::COLLECTION_FACET
+    when Ddr::Index::Fields::COLLECTION_FACET
       # apply custom sort for 'Collection' facet
       items = collection_facet_sort(paginator.items)
     else

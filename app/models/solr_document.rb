@@ -22,7 +22,7 @@ class SolrDocument
   use_extension( Blacklight::Solr::Document::DublinCore)    
 
   def published?
-    get(Ddr::IndexFields::WORKFLOW_STATE) == "published"
+    get(Ddr::Index::Fields::WORKFLOW_STATE) == "published"
   end
 
   def abstract
