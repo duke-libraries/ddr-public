@@ -8,7 +8,7 @@ class BlakeController < DigitalCollectionsController
 
   configure_blacklight do |config|
     config.facet_fields.clear
-    config.add_facet_field Ddr::IndexFields::TYPE_FACET.to_s, label: "Type", collapse: false, sort: 'index'
+    config.add_facet_field Ddr::Index::Fields::TYPE_FACET.to_s, label: "Type", collapse: false, sort: 'index'
   end
 
 end

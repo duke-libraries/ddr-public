@@ -37,9 +37,9 @@ class CatalogController < ApplicationController
     }
 
     # solr field configuration for search results/index views
-    config.index.title_field = Ddr::IndexFields::TITLE.to_s
-    config.index.active_fedora_model_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL.to_s
-    config.index.display_type_field = Ddr::IndexFields::DISPLAY_FORMAT.to_s
+    config.index.title_field = Ddr::Index::Fields::TITLE.to_s
+    config.index.active_fedora_model_field = Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s
+    config.index.display_type_field = Ddr::Index::Fields::DISPLAY_FORMAT.to_s
 
     config.index.thumbnail_method = :thumbnail_image_tag
 
@@ -69,8 +69,8 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
-    config.add_facet_field Ddr::IndexFields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', limit: 9999
-    config.add_facet_field Ddr::IndexFields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 9999
+    config.add_facet_field Ddr::Index::Fields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', limit: 9999
+    config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 9999
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -84,18 +84,18 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
-    config.add_index_field Ddr::IndexFields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
-    config.add_index_field Ddr::IndexFields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
-    config.add_index_field Ddr::IndexFields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
-    config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
-    config.add_index_field Ddr::IndexFields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
+    config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
-      fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published"]
+      fq: ["#{Ddr::Index::Fields::WORKFLOW_STATE}:published"]
     }
 
     # partials for show view
-    config.show.partials = [:show_header, :show, :show_license, :show_children]
+    config.show.partials = [:show_header, :show, :show_children]
 
     # deactivate certain tools
     config.show.document_actions.delete(:email)
@@ -108,8 +108,8 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
-    config.add_show_field Ddr::IndexFields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
-    config.add_show_field Ddr::IndexFields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
+    config.add_show_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_show_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
@@ -119,9 +119,9 @@ class CatalogController < ApplicationController
     Ddr::Vocab::Vocabulary.term_names(Ddr::Vocab::DukeTerms).each do |term_name|
       config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
     end
-    config.add_show_field Ddr::IndexFields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
-    config.add_show_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
-    config.add_show_field Ddr::IndexFields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -143,7 +143,7 @@ class CatalogController < ApplicationController
 
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
-        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::IndexFields::PERMANENT_ID}"
+        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
       }
     end
 
@@ -186,7 +186,7 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     config.add_sort_field 'score desc, pub_date_dtsi desc, title_tesi asc', :label => 'relevance'
-    config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", :label => 'title'
+    config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
@@ -198,19 +198,19 @@ class CatalogController < ApplicationController
 
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:published"
+      solr_parameters[:fq] << "#{Ddr::Index::Fields::WORKFLOW_STATE}:published"
   end
   
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "-#{Ddr::IndexFields::ACTIVE_FEDORA_MODEL}:Component"
+      solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
   end  
 
   def configure_blacklight_for_children
     blacklight_config.configure do |config|
       config.sort_fields.clear
-      config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
-      config.add_sort_field "#{Ddr::IndexFields::LOCAL_ID} asc", label: "Local ID"
+      config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", label: "Title"
+      config.add_sort_field "#{Ddr::Index::Fields::LOCAL_ID} asc", label: "Local ID"
     end
   end
 

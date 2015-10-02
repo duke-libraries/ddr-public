@@ -18,30 +18,30 @@ module Ddr
         def set_showcase_images_before_filter
           if portals_and_collections[controller_name]['showcase'] && portals_and_collections[controller_name]['showcase']['local_ids'] 
             showcase_ids = portals_and_collections[controller_name]['showcase']['local_ids']
-            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => showcase_ids})}, :rows => 40)
+            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => showcase_ids})}, :rows => 40)
           end
         end
         
         def set_highlight_images_before_filter
           if portals_and_collections[controller_name]['highlight'] && portals_and_collections[controller_name]['highlight']['local_ids']
             highlight_ids = portals_and_collections[controller_name]['highlight']['local_ids']
-            response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::IndexFields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})}, :rows => 40)
+            response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})}, :rows => 40)
           end
         end        
 
         def include_only_specified_records(solr_parameters, user_parameters)
           if @parent_collections_uris
             solr_parameters[:fq] ||= []
-            solr_parameters[:fq] << construct_solr_parameter_value({:solr_field => Ddr::IndexFields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collections_uris})
+            solr_parameters[:fq] << construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collections_uris})
           end
         end
 
         def get_document_uris_from_admin_sets_and_local_ids
           if portals_and_collections[controller_name]['include']['admin_sets']
-            get_document_uris({:field => Ddr::IndexFields::ADMIN_SET, :config_values => portals_and_collections[controller_name]['include']['admin_sets']})
+            get_document_uris({:field => Ddr::Index::Fields::ADMIN_SET, :config_values => portals_and_collections[controller_name]['include']['admin_sets']})
           end
           if portals_and_collections[controller_name]['include']['local_ids']
-            get_document_uris({:field => Ddr::IndexFields::IDENTIFIER_ALL, :config_values => portals_and_collections[controller_name]['include']['local_ids']})
+            get_document_uris({:field => Ddr::Index::Fields::IDENTIFIER_ALL, :config_values => portals_and_collections[controller_name]['include']['local_ids']})
           end
         end
 

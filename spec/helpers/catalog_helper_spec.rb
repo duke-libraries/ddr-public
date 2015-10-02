@@ -11,7 +11,7 @@ RSpec.describe CatalogHelper do
             'active_fedora_model_ssi'=>'Component',
             'content_size_human_ssim'=>content_size,
             'workflow_state_ssi'=>'published',
-            Ddr::IndexFields::ACCESS_ROLE=>"{}",
+            Ddr::Index::Fields::ACCESS_ROLE=>"{}",
             'object_profile_ssm'=>['{"datastreams":{"content":{"dsLabel":"image10.tif","dsVersionID":"content.0","dsCreateDate":"2014-10-22T17:30:02Z","dsState":"A","dsMIME":"image/tiff","dsFormatURI":null,"dsControlGroup":"M","dsSize":69742260,"dsVersionable":true,"dsInfoType":null,"dsLocation":"changeme:10+content+content.0","dsLocationType":"INTERNAL_ID","dsChecksumType":"SHA-256","dsChecksum":"b9eb20b6fb4a27d6bf478bdefb25538bea95740bdf48471ec360d25af622a911"}}}']
             ) }
 
@@ -90,30 +90,6 @@ RSpec.describe CatalogHelper do
       end
       it "should not return a title nor a link" do
         expect(helper.research_help_title(research_help)).to be_nil
-      end
-    end
-  end
-
-  describe "#license_title" do
-    let(:effective_license) do 
-      {
-        :title => "License Title", 
-        :url => "http://copyrighturl"
-      }
-    end
-    context "item has both a license title and url" do
-      it "should return a link to the license information" do
-        expect(helper.license_title(effective_license)).to include (link_to(effective_license[:title], effective_license[:url]))
-      end
-    end
-    context "item has a url to a license but not a title" do
-      it "should return the default title as a link" do
-        expect(helper.license_title({:url => "http://copyrighturl"})).to include (link_to("Copyright & Use", "http://copyrighturl"))
-      end
-    end
-    context "item does not have a license url" do
-      it "should return the title as a link to a default copyright page" do
-        expect(helper.license_title({:url => nil, :title => "Copyright"})).to include (link_to("Copyright", copyright_path))
       end
     end
   end

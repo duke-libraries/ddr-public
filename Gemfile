@@ -4,7 +4,7 @@ gem 'rails', '~> 4.1.6'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.0.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', :git => 'https://github.com/duke-libraries/ddr-models.git', :ref => 'cc493479e84893ee1683d43be2ece0b3591b175a'
+gem 'ddr-models', '2.1.0.rc2'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'

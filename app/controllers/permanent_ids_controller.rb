@@ -4,7 +4,7 @@ class PermanentIdsController < ApplicationController
 
   def show
     permanent_id = params.require(:permanent_id)
-    response = query_solr(q: "#{Ddr::IndexFields::PERMANENT_ID}:\"#{permanent_id}\"", rows: 1)
+    response = query_solr(q: "#{Ddr::Index::Fields::PERMANENT_ID}:\"#{permanent_id}\"", rows: 1)
     if response.total == 0
       render file: "#{Rails.root}/public/404", layout: false, status: 404
     else
