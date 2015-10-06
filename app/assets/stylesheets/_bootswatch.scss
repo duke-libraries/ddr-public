@@ -239,6 +239,23 @@ ul:not([class])>*:before {
 // Grid Variants (Duke Custom) ==================================================
 
 .no-gutter > [class*='col-'] {
-    padding-right:0;
-    padding-left:0;
+  padding-right:0;
+  padding-left:0;
+}
+
+
+.buffer-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.buffer-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.buffer-bottom-30 {
+  margin-bottom: 30px;
+}
+
+.buffer-bottom-40 {
+  margin-bottom: 40px;
 }

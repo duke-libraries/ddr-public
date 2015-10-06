@@ -1,7 +1,6 @@
 <% unless document.research_help.blank? %>
-	<div class="text-muted text-uppercase small strong">Research Help</div>
-
-	<h4><%= research_help_title(document.research_help) %></h4>
+<div class="buffer-bottom-30">
+	<h4><span class="contact-devil-logo"></span><%= research_help_title(document.research_help) %></h4>
 
 	<% if document.research_help.ask || document.research_help.email || document.research_help.phone %>
 
@@ -10,10 +9,7 @@
 
 		   <ul class="dropdown-menu" aria-labelledby="dLabel">
 				<% if document.research_help.ask %>
-					<li><a href="<%= document.research_help.ask %>" class="small text-muted"><span class="glyphicon glyphicon-comment text-muted" aria-hidden="true"></span> Ask a Question</a></li>
-				<% end %>
-				<% if document.research_help.email %>
-					<li><a href="mailto:<%= document.research_help.email %>" class="small text-muted"><span class="glyphicon glyphicon-envelope text-muted" aria-hidden="true"></span> <%= document.research_help.email %></a></li>
+					<li><a href="<%= document.research_help.ask %>?&amp;referrer=<%= request.original_url %>" class="small text-muted"><span class="glyphicon glyphicon-comment text-muted" aria-hidden="true"></span> Ask a Question</a></li>
 				<% end %>
 				<% if document.research_help.phone %>
 					<li><a href="tel:+1-<%= document.research_help.phone %>" class="small text-uppercase text-muted"><span class="glyphicon glyphicon-earphone text-muted" aria-hidden="true"></span> <%= document.research_help.phone %></a></li>
@@ -24,6 +20,5 @@
 
 	<% end %>
 
-
-	<hr/>
+</div>
 <%- end %>
