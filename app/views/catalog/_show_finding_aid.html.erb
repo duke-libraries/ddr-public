@@ -1,5 +1,6 @@
 <% unless document.finding_aid.blank? %>
-  <div class="text-muted text-uppercase small strong">Finding Aid</div>
-  <p><%= link_to document.finding_aid.title, document.finding_aid.url %><p>
-  <hr />
+  <div class="buffer-bottom-40">
+    <div class="text-muted text-uppercase small strong">Source Collection</div>
+    <p class="small"><%= link_to document.finding_aid.title, document.finding_aid.url %><p>
+  </div>
 <% end %>

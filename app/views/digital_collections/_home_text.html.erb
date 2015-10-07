@@ -6,3 +6,9 @@
 <% else %>
   <p><%= t("ddr.public.portal.#{controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.") %></p>  
 <% end %>
+
+
+
+
+
+  <%= render partial: 'show_finding_aid', locals: { document: @collection_document } %>

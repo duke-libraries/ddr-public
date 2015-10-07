@@ -14,11 +14,13 @@
 <div id="sidebar" class="col-md-3 col-sm-4">
   <% if @collection_document %>
     <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
+    
     <% if has_search_parameters? %>
-      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %> 
+      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>     
     <% end %>
-    <%= render partial: 'show_finding_aid', locals: { document: @collection_document } %>
-    <%= render partial: 'show_license_default', locals: { document: @collection_document } %>
+    
+
+
   <% end %>
   <%= render 'search_sidebar' %>
 </div>
