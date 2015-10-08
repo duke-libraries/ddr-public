@@ -47,16 +47,42 @@ RSpec.describe BlacklightHelper do
 
   describe "#select_action_for_collection" do
     context "controller_type_name is 'collections'" do
-      let (:controller_type_name) { "collections" }
+      let(:controller_type_name) { "collections" }
       it "should return :index" do
         expect(helper.select_action_for_collection(controller_type_name)).to eq(:index)
       end
     end
     context "controller_type_name is 'portals'" do
-      let (:controller_type_name) { "portals" }
+      let(:controller_type_name) { "portals" }
       it "should return doc_or_obj" do
         expect(helper.select_action_for_collection(controller_type_name)).to eq(:show)
       end
     end
   end
+
+  describe "#select_document_id" do
+    let(:action) { :show }
+    context "document is an item without a local_id" do
+      let(:doc_or_obj) { SolrDocument.new(SolrDocument.new(
+          'id'=>'changeme:10',
+          'active_fedora_model_ssi'=>'Item',
+          ) ) }
+      it "should return the pid as the document id" do
+        expect(helper.select_document_id(action, doc_or_obj)).to eq(doc_or_obj)
+      end
+    end
+    context "document is an item with a local_id and part of dc admin_set" do
+      let(:local_id) { 'dscsi04067' }
+      let(:doc_or_obj) { SolrDocument.new(SolrDocument.new(
+          'id'=>'changeme:10',
+          'active_fedora_model_ssi'=>'Item',
+          'local_id_ssi'=> local_id,
+          'admin_set_ssi'=>'dc'
+          ) ) }
+      it "should return the local_id as the document id" do
+        expect(helper.select_document_id(action, doc_or_obj)).to eq(local_id)
+      end
+    end
+  end
+
 end
