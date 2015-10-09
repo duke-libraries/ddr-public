@@ -9,6 +9,7 @@ module Ddr
           base.before_filter :set_showcase_images_before_filter, only: [:index, :facet]
           base.before_filter :set_highlight_images_before_filter, only: [:index, :facet]          
           base.before_filter :get_document_uris_from_admin_sets_and_local_ids
+          base.before_filter :search_scope_options
 
           base.solr_search_params_logic += [:include_only_specified_records]
         end
@@ -27,7 +28,7 @@ module Ddr
             highlight_ids = portals_and_collections[controller_name]['highlight']['local_ids']
             response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})}, :rows => 40)
           end
-        end        
+        end
 
         def include_only_specified_records(solr_parameters, user_parameters)
           if @parent_collections_uris
@@ -35,6 +36,21 @@ module Ddr
             solr_parameters[:fq] << construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collections_uris})
           end
         end
+
+        def search_scope_options
+          @search_scopes = []
+          @search_scopes << :search_action_url
+          portals_and_collections.each do |portal_controller_name, value|
+            if value['include']['collections'].present?
+               if value['include']['collections'].include? controller_name
+                 @search_scopes << portal_controller_name.to_sym   
+               end
+            end
+          end
+          @search_scopes << :catalog_index_url
+        end
+
+
 
         def get_document_uris_from_admin_sets_and_local_ids
           if portals_and_collections[controller_name]['include']['admin_sets']

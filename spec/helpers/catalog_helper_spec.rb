@@ -94,6 +94,34 @@ RSpec.describe CatalogHelper do
     end
   end
 
+  describe "#search_scope_dropdown" do
+    let(:current_search_scope_options) do
+      [nil]
+    end
+    let(:search_scopes) do
+      {:search_action_url => ["This Collection", "http://localhost:3000/dc/wdukesons"],
+       :digital_collections => ["Digital Collections", "http://localhost:3000/dc"],
+       :catalog_index_url => ["Digital Repository", "http://localhost:3000/catalog"]}
+    end
+    before {all_search_scopes = double("all_search_scopes")}
+    before {allow(helper).to receive(:all_search_scopes).and_return(search_scopes)}
+    context "search scopes is defined" do
+      let(:current_search_scopes) do
+        [:search_action_url, :digital_collections, :catalog_index_url]
+      end
+      it "should render the partial for the scope dropdown" do
+        expect(helper).to receive(:render).with(partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options})
+        helper.search_scope_dropdown(current_search_scopes: current_search_scopes)
+      end
+    end
+    context "search scopes is not defined" do
+      it "should not render the partial" do
+        expect(helper).not_to receive(:render).with(partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options})
+        helper.search_scope_dropdown()
+      end
+    end
+  end
+
   describe "#permalink" do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',

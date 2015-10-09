@@ -69,6 +69,7 @@ GEM
     bootstrap-sass (3.3.4.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
+    bootstrap-select-rails (1.6.3)
     bootswatch-rails (3.2.4)
       railties (>= 3.1)
     builder (3.2.2)
@@ -93,9 +94,9 @@ GEM
     ddr-alerts (1.0.0)
       rails (~> 4.1.6)
     ddr-antivirus (2.0.0)
-    ddr-aux-client (1.2.1)
+    ddr-aux-client (1.2.2)
       hashie (~> 3.4)
-    ddr-models (2.1.0.rc2)
+    ddr-models (2.1.0)
       active-fedora (~> 7.0)
       cancancan (~> 1.12)
       ddr-antivirus (= 2.0.0)
@@ -428,12 +429,13 @@ DEPENDENCIES
   blacklight-gallery
   blacklight_range_limit (= 5.0.4)
   bootstrap-sass (~> 3.3.4)
+  bootstrap-select-rails
   bootswatch-rails
   capybara (~> 2.0)
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.1.0.rc2)
+  ddr-models (= 2.1.0)
   devise
   factory_girl_rails (~> 4.4)
   fastimage
