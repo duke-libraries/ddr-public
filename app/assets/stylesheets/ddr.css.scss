@@ -180,5 +180,72 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   }
 }
 
+/* ------------------ 
+    SEARCH RESULTS
+--------------------- */
 
+#documents.gallery { // Grid view
+
+  & .img-thumbnail {
+    padding: 0;
+    border: none;
+  }
+
+  // Override flexbox styles from the blacklight_gallery plugin
+  // to improve alignment
+   
+  justify-content: flex-start; 
+
+  
+  & .document { 
+    flex: none; 
+    -webkit-box-flex: none;
+    -webkit-flex: none;
+    -moz-box-flex: none;
+    -ms-flex: none;
+
+    min-width: auto;
+  }
+  
+  & h3.index_title { 
+    font-size: 18px;
+    margin-top: 8px;
+  }
+  
+  .extra-result-see-more {
+    display:none;
+    
+    & a {
+      border: 1px solid #ddd;
+      padding: 20px;
+      font-size: 18px;
+      display: block;
+      
+    }
+    
+  }
+    
+} 
+
+/* ----------------------- 
+    RESPONSIVE SYTLES
+-------------------------- */
+
+
+@media (max-width: $screen-sm) {
+
+  #facets .top-panel-heading {
+    padding: 20px; 
+  }
+  
+  .facets-toggle {
+      background-color: #ddd;
+  }
+}
+
+@media (min-width: $screen-md-min) { 
+  #documents.gallery .document.extra-result-see-more {
+    display:block;
+  }
+}
 
