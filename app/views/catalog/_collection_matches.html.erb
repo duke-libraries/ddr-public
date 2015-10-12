@@ -5,7 +5,7 @@
       <h4>Matching Collections</h4>
       <div id="documents" class="row gallery horizontal-gallery">
         <!-- This uses the default gallery view. We probably want something different. -->
-          <%= render_gallery_collection document_list %>
+          <%= render_gallery_collection document_list[0..2] %>
       </div>
     </div>
   <%- end %>

@@ -33,8 +33,12 @@ class CatalogController < ApplicationController
 
     config.default_solr_params = {
       :qt => 'search',
-      :rows => 10
+      :rows => 20
     }
+    
+    config.per_page = [10,20,50,100]
+    config.default_per_page = 20
+    config.max_per_page = 100
 
     # solr field configuration for search results/index views
     config.index.title_field = Ddr::Index::Fields::TITLE.to_s
