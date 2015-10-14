@@ -170,6 +170,39 @@ module CatalogHelper
       docs = []
     end
   end
+  
+
+  def get_blog_posts slug
+    if Rails.application.config.portal_controllers['collections'][slug] && Rails.application.config.portal_controllers['collections'][slug]['blog_posts']
+      
+        # NOTE: This URL has to be https. We get this data from Wordpress via the JSON API plugin.
+        # We had to revise the query_images() function in json-api/models/attachment.php to
+        # cirumvent a bug where image data was not rendering when hitting the API via https. 
+
+        blog_posts = JSON.parse(open(Rails.application.config.portal_controllers['collections'][slug]['blog_posts'],{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
+      
+    end
+  end
+  
+  def blog_post_thumb post
+    
+    # If a post has a selected "featured image", use that.
+    if post['thumbnail_images'] && post['thumbnail_images']['thumbnail']
+      post['thumbnail_images']['thumbnail']['url']
+      
+    # If a post has no selected "featured image", but does have an image in it, use the first image's thumb
+    elsif post['attachments'] && post['attachments'][0] && post['attachments'][0]['images'] && post['attachments'][0]['images']['thumbnail']
+      post['attachments'][0]['images']['thumbnail']['url']
+      
+    # If imageless, use a generic thumb
+    else
+      image_path('ddr/devillogo-150-square.jpg')
+    end
+    
+  end
+  
+  
+
 
   private
 

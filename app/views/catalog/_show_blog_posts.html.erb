@@ -1,0 +1,33 @@
+<% @blog_posts = get_blog_posts(document.local_id) %>
+
+<% if @blog_posts && @blog_posts['posts'] %>
+
+  <hr/>
+
+  <div id="blog-posts">
+    <h3><a href="http://blogs.library.duke.edu/bitstreams/">From Our Blog</a></h3>
+
+
+    <% if @blog_posts['posts'].length > 2 %>
+
+      <%= render partial: 'show_blog_post_feature', locals: { post: @blog_posts['posts'].first } %>
+
+      <div class="row blog-secondary">
+        <% @blog_posts['posts'].drop(1)[0..3].each do |post| %>
+          <%= render partial: 'show_blog_post_secondary', locals: { post: post } %>
+        <% end %>
+      </div>
+    
+      <% if @blog_posts['posts'].length > 5 %>
+        <div><%= link_to 'More Posts About This Collection', 'http://blogs.library.duke.edu/bitstreams/tag/'+@blog_posts['tag']['slug']+'/', { class: 'small text-muted'} %></div>
+      <% end %>
+    
+    <% else %>
+      <% @blog_posts['posts'].each do |post| %>
+        <%= render partial: 'show_blog_post_feature', locals: { post: post } %>
+      <% end %>
+    <% end %>
+
+  </div>
+  
+<% end %>
