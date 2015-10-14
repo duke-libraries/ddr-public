@@ -4,7 +4,7 @@ gem 'rails', '~> 4.1.6'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.0.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.1.0.rc2'
+gem 'ddr-models', '2.1.0'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -23,6 +23,7 @@ gem 'rubyzip', '~> 1.1.7'
 gem 'blacklight_range_limit', '5.0.4'
 gem 'prawn'
 gem 'fastimage'
+gem 'bootstrap-select-rails'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 

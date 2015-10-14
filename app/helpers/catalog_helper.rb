@@ -144,6 +144,20 @@ module CatalogHelper
     end
   end
 
+  # View helper
+  def search_scope_dropdown current_search_scopes = nil
+    all_search_scopes = all_search_scopes()
+
+    if current_search_scopes.present?
+      current_search_scope_options = []
+      current_search_scopes.each do |scope_name|
+        current_search_scope_options << all_search_scopes[scope_name]
+      end
+      render partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options}
+    end
+
+  end
+
 
   def find_collection_results response
     if response.facet_counts['facet_fields'].has_key?('collection_facet_sim')
@@ -158,6 +172,12 @@ module CatalogHelper
   end
 
   private
+
+  def all_search_scopes
+    {:search_action_url => ["This Collection", search_action_url],
+     :digital_collections => ["Digital Collections", digital_collections_url],
+     :catalog_index_url => ["Digital Repository", catalog_index_url]}
+  end
 
   def find_relationship document
     if document.active_fedora_model == 'Item'

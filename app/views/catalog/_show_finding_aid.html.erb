@@ -1,6 +1,11 @@
 <% unless document.finding_aid.blank? %>
   <div class="buffer-bottom-40">
     <div class="text-muted text-uppercase small strong">Source Collection</div>
-    <p class="small"><%= link_to document.finding_aid.title, document.finding_aid.url %><p>
+    <% begin %>
+      <p class="small"><%= link_to document.finding_aid.title, document.finding_aid.url %><p>
+    <% rescue OpenURI::HTTPError => e %>
+      <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
+      <p class="small"><%= link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/" %><p>
+    <% end %>
   </div>
 <% end %>
