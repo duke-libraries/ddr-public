@@ -6,8 +6,8 @@ module Ddr
         extend ActiveSupport::Concern
           
         def self.included(base)
-          base.before_filter :set_showcase_images_before_filter, only: [:index, :facet]
-          base.before_filter :set_highlight_images_before_filter, only: [:index, :facet]          
+          base.before_filter :showcase_image_document_list, only: [:index, :facet]
+          base.before_filter :highlight_image_document_list, only: [:index, :facet]          
           base.before_filter :get_document_uris_from_admin_sets_and_local_ids
           base.before_filter :search_scope_options
 
@@ -16,17 +16,20 @@ module Ddr
 
         private
 
-        def set_showcase_images_before_filter
-          if portals_and_collections[controller_name]['showcase'] && portals_and_collections[controller_name]['showcase']['local_ids'] 
-            showcase_ids = portals_and_collections[controller_name]['showcase']['local_ids']
-            response, @collection_showcase_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => showcase_ids})}, :rows => 40)
-          end
+        def showcase_image_document_list
+          @collection_showcase_document_list = get_document_list_from_configuration("showcase")
         end
         
-        def set_highlight_images_before_filter
+        def highlight_image_document_list
+          @collection_highlight_document_list = get_document_list_from_configuration("highlight")
+        end
+
+        def get_document_list_from_configuration config_field
           if portals_and_collections[controller_name]['highlight'] && portals_and_collections[controller_name]['highlight']['local_ids']
             highlight_ids = portals_and_collections[controller_name]['highlight']['local_ids']
-            response, @collection_highlight_document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids})}, :rows => 40)
+            query = {:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, :values => ["Component"]} ) + " AND (" + construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids}) + ")"}
+            response, document_list = get_search_results(query, :rows => 40)
+            document_list
           end
         end
 
@@ -49,8 +52,6 @@ module Ddr
           end
           @search_scopes << :catalog_index_url
         end
-
-
 
         def get_document_uris_from_admin_sets_and_local_ids
           if portals_and_collections[controller_name]['include']['admin_sets']

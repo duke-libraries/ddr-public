@@ -10,7 +10,6 @@
               Browse all <strong><%= number_with_delimiter(item_count(@collection_document.id)) %></strong> Items
             <% end %>
       </div>
-      
       <% if @collection_showcase_document_list %>
         <% @collection_showcase_document_list.sample(2).each_with_index do |doc, index| %>
           <% if doc.multires_image_file_path %>

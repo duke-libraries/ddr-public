@@ -222,9 +222,16 @@ class CatalogController < ApplicationController
   def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
     solr_parameter_value = ""
     opts[:values].each do |value|
-      solr_parameter_value << opts[:solr_field] + ":\"" + value + "\" " + opts[:boolean_operator] + " "
+      segment = opts[:solr_field] + ":\"" + value + "\""
+      if opts[:boolean_operator].present?
+        segment << " " + opts[:boolean_operator] + " "
+      end
+      solr_parameter_value << segment
     end
-    solr_parameter_value.gsub(/\sOR\s$/, "")
+    if opts[:boolean_operator].present?
+      solr_parameter_value.gsub!(/\s#{Regexp.escape opts[:boolean_operator]}\s$/, "")
+    end
+    solr_parameter_value
   end
 
   
