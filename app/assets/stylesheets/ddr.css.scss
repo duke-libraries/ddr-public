@@ -232,6 +232,13 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 }
 
 
+#source-collection.well {
+  margin-top: 30px;
+  & h3 {
+    margin-top: 10px;
+  }
+}
+
 #blog-posts {
   & .blog-post-feature {
     margin-bottom: 30px;
@@ -283,6 +290,11 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 	  padding-top: 0;
 	  padding-bottom: 0;
 	}
+}
+
+.collection-guide-icon {
+  margin-right: 10px;
+  opacity: 0.6;
 }
 
 

@@ -96,11 +96,11 @@ GEM
     ddr-antivirus (2.0.0)
     ddr-aux-client (1.2.2)
       hashie (~> 3.4)
-    ddr-models (2.1.0)
+    ddr-models (2.2.0)
       active-fedora (~> 7.0)
       cancancan (~> 1.12)
       ddr-antivirus (= 2.0.0)
-      ddr-aux-client (~> 1.2, >= 1.2.1)
+      ddr-aux-client (~> 1.2, >= 1.2.2)
       devise (~> 3.4)
       ezid-client (~> 1.1, >= 1.1.1)
       grouper-rest-client
@@ -307,7 +307,7 @@ GEM
     rdf-turtle (1.1.5)
       ebnf (~> 0.3, >= 0.3.6)
       rdf (~> 1.1, >= 1.1.4)
-    rdf-vocab (0.8.5)
+    rdf-vocab (0.8.6)
       rdf (~> 1.1, >= 1.1.10)
     rdf-xsd (1.1.2)
       rdf (~> 1.1)
@@ -435,7 +435,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.1.0)
+  ddr-models (= 2.2.0)
   devise
   factory_girl_rails (~> 4.4)
   fastimage
