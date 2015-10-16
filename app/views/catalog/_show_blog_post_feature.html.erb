@@ -1,0 +1,12 @@
+<div class="media blog-post-feature">
+  <div class="media-left">
+    <a href="<%= post['url'] %>">
+      <img class="media-object" src="<%= blog_post_thumb(post) %>" alt="featured image">
+    </a>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading"><%= link_to(post['title'].html_safe, post['url']) %></h4>
+    <p class="small text-muted">by <%= link_to(post['author']['name'], "http://blogs.library.duke.edu/bitstreams/author/"+post['author']['slug']+"/") %> <span class="post-time-ago"><%= distance_of_time_in_words(DateTime.parse(post['date']), Time.now) %> ago</span></p>
+    <p><%= post['excerpt'].html_safe %></p>
+  </div>
+</div>

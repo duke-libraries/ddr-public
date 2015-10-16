@@ -142,6 +142,43 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 }
 
 
+#blog-posts {
+  & .blog-post-feature {
+    margin-bottom: 30px;
+    
+    & img {
+      width: 150px;
+      background-color: #ddd;
+      margin-right: 10px;
+    }
+    
+    & .more-link {
+      display: none; // out-of-box excerpt link is too long
+    }
+    
+    & .post-time-ago {
+      margin-left: 0.8em;
+    }
+  }
+  
+  & .blog-secondary {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row wrap;
+    
+    & img.media-object {
+      width: 75px;
+    }
+  }
+  
+  & .blog-post-secondary {
+    margin-bottom: 20px; 
+  }
+}
+
 /* ------------- 
   ITEM DISPLAY
 ---------------- */
