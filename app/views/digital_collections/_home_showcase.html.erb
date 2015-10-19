@@ -3,8 +3,8 @@
   <div class="container-fluid showcase-wrapper">
     <div class="row no-gutter">
       <div class="col-md-4 collection-start">
-        <h1><%= t("ddr.public.portal.#{controller_name}.title", :default => @collection_document.title) %></h1>
-        <p><%= @collection_document.abstract %> <%= link_to raw("More &raquo;"), { anchor: "about"}, class: "more-link" %></p>
+        <h1 id="collection-title"><%= t("ddr.public.portal.#{controller_name}.title", :default => @collection_document.title) %></h1>
+        <p class="collection-abstract"><%= @collection_document.abstract %> <%= link_to raw("More &raquo;"), { anchor: "about"}, class: "more-link" %></p>
                         
             <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
               Browse all <strong><%= number_with_delimiter(item_count(@collection_document.id)) %></strong> Items
