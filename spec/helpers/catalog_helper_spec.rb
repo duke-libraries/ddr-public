@@ -121,8 +121,7 @@ RSpec.describe CatalogHelper do
       end
     end
   end
-  
-  
+    
   describe "#blog_post_thumb" do
     context "blog post has a featured image thumb" do
       let(:post) { { "url"=>"https:\/\/blogs.library.duke.edu\/bitstreams\/2014\/10\/24\/collection-announcement\/", "title"=>"Announcing My New Digital Collection", "excerpt"=>"<p>We have just launched an amazing new collection. &hellip; <\/p>\n", "date"=>"2014-10-24 16:29:48", "author"=>{ "slug"=>"abc123duke-edu", "name"=>"John Doe" }, "attachments"=>[ { "url"=>"IMAG0327.jpg", "images"=>{ "thumbnail"=>{ "url"=>"IMAG0327-150x150.jpg" } } } ], "thumbnail"=>"dscsi033030010.jpg", "thumbnail_images"=>{ "thumbnail"=>{ "url"=>"dscsi033030010-150x150.jpg" } } } }

@@ -1,6 +1,6 @@
 <%= render partial: "home_highlights" %>
 
-<h3 id="about">About the Collection</h3>
+<h3 id="about">About the Digital Collection</h3>
 <% if @collection_document && @collection_document.description %>
   <p><%= @collection_document.description %></p>
 <% else %>
@@ -8,9 +8,7 @@
 <% end %>
 
 
-
-
 <% if @collection_document %>
-  <%= render partial: 'show_finding_aid', locals: { document: @collection_document } %>
+  <%= render partial: 'show_finding_aid_full', locals: { document: @collection_document } %>
   <%= render partial: 'show_blog_posts', locals: { document: @collection_document } %>  
 <% end %>

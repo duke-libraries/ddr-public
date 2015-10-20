@@ -157,7 +157,23 @@ module CatalogHelper
     end
 
   end
-
+  
+  def finding_aid_popover finding_aid
+    popover = ''
+    if finding_aid.collection_title
+      popover << '<h4>' + finding_aid.collection_title + faid_date_span(finding_aid) + '</h4>'
+    end
+    if finding_aid.collection_number || finding_aid.extent
+      popover << '<p class="small text-muted">' + faid_collno_and_extent(finding_aid) + '</p><hr/>'
+    end
+    if finding_aid.abstract
+      popover << '<p class="small">' + finding_aid.abstract.truncate(250, separator: ' ') + '</p>'
+    end
+    if finding_aid.repository
+      popover << '<div class="small well well-sm">View this item in person at:<br/>' + finding_aid.repository + '</div>'
+    end
+    return popover
+  end
 
   def find_collection_results response
     if response.facet_counts['facet_fields'].has_key?('collection_facet_sim')
@@ -232,6 +248,25 @@ module CatalogHelper
           memo[doc["internal_uri_ssi"]] = doc["title_ssi"]
         end
       end
+  end
+  
+  def faid_date_span finding_aid
+    if finding_aid.collection_date_span
+      return ' <span class="small text-muted">'+ finding_aid.collection_date_span+'</span>'
+    end
+  end
+  
+  def faid_collno_and_extent finding_aid  
+    section = ''
+    section << '<p class="small text-muted">'
+    if finding_aid.collection_number
+      section << 'Collection #' + finding_aid.collection_number
+    end
+    if finding_aid.extent
+      section << '<br/>' + finding_aid.extent
+    end
+    section << '</p>'
+    return section  
   end
 
 end
