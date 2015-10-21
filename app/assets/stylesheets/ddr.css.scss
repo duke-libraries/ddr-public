@@ -57,6 +57,11 @@ a.navbar-dul {
       -ms-flex-grow: 1;	  
   	  flex-grow: 1;
   	  width: auto;
+  	  
+  	  // Hide Digital Collections as a search scope until there are more published collections.
+  	  & ul.selectpicker li a[data-normalized-text*="Digital Collections"] {
+        display: none;
+      }
 	  }
 
 	  & input#q {
@@ -66,6 +71,9 @@ a.navbar-dul {
       -ms-flex-grow: 1;	  
   	  flex-grow: 1;
 	  }
+	  
+
+	  
 	}
 }
 
