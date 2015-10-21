@@ -25,8 +25,8 @@ module Ddr
         end
 
         def get_document_list_from_configuration config_field
-          if portals_and_collections[controller_name]['highlight'] && portals_and_collections[controller_name]['highlight']['local_ids']
-            highlight_ids = portals_and_collections[controller_name]['highlight']['local_ids']
+          if portals_and_collections[controller_name][config_field] && portals_and_collections[controller_name][config_field]['local_ids']
+            highlight_ids = portals_and_collections[controller_name][config_field]['local_ids']
             query = {:q => construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, :values => ["Component"]} ) + " AND (" + construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::LOCAL_ID, :boolean_operator => "OR", :values => highlight_ids}) + ")"}
             response, document_list = get_search_results(query, :rows => 40)
             document_list
