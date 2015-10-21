@@ -14,18 +14,20 @@ module BlacklightHelper
   def document_or_object_url(doc_or_obj)
     controllers_and_actions ||= portal_controllers_and_actions()
 
+    controller_name ||= "catalog"
+
     document_type = doc_or_obj[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL].downcase.to_sym
 
     local_id, admin_set = filter_values_for_document(doc_or_obj)
 
     if controllers_and_actions.has_key?(local_id)
       id = select_document_id(controllers_and_actions[local_id][document_type][0][:action], doc_or_obj)
-      url_for controller: controllers_and_actions[local_id][document_type][0][:controller], action: controllers_and_actions[local_id][document_type][0][:action], id: id
+      url_for controller: controllers_and_actions[local_id][document_type][0][:controller], action: controllers_and_actions[local_id][document_type][0][:action], id: id, only_path: true
     elsif controllers_and_actions.has_key?(admin_set)
       id = select_document_id(controllers_and_actions[admin_set][document_type][0][:action], doc_or_obj)
-      url_for controller: controllers_and_actions[admin_set][document_type][0][:controller], action: controllers_and_actions[admin_set][document_type][0][:action], id: id
+      url_for controller: controllers_and_actions[admin_set][document_type][0][:controller], action: controllers_and_actions[admin_set][document_type][0][:action], id: id, only_path: true
     else
-      url_for controller: controller_name, action: "show", id: doc_or_obj
+      url_for controller: controller_name, action: "show", id: doc_or_obj, only_path: true
     end
   end
 

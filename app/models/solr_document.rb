@@ -33,18 +33,4 @@ class SolrDocument
     get("description_tesim")
   end
 
-  # Stub value for format and collection that drive partial selection
-  # for item display. Eventually these values will be in each Solr Document.
-  # def initialize(source_doc={}, response=nil)
-  #     super
-  #     unless source_doc.has_key?('format')
-  #       source_doc['format'] = 'image'
-  #     end
-  #     unless source_doc.has_key?('collection')
-  #       source_doc['collection'] = 'blake'
-  #     end     
-  # end
-
-
-
 end
