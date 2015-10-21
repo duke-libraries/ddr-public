@@ -7,11 +7,12 @@ module Ddr
           
         def self.included(base)
           base.before_filter :showcase_image_document_list, only: [:index, :facet]
-          base.before_filter :highlight_image_document_list, only: [:index, :facet]          
+          base.before_filter :highlight_image_document_list, only: [:index, :facet]
           base.before_filter :get_document_uris_from_admin_sets_and_local_ids
           base.before_filter :search_scope_options
+          base.before_filter :portal_alert
 
-          base.solr_search_params_logic += [:include_only_specified_records]
+          base.solr_search_params_logic += [:include_only_specified_records]   
         end
 
         private
@@ -51,6 +52,12 @@ module Ddr
             end
           end
           @search_scopes << :catalog_index_url
+        end
+        
+        def portal_alert
+          if portals_and_collections[controller_name]['alert']
+            @portal_alert_message = portals_and_collections[controller_name]['alert'].to_s
+          end
         end
 
         def get_document_uris_from_admin_sets_and_local_ids
