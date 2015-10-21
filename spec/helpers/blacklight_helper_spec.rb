@@ -62,6 +62,7 @@ RSpec.describe BlacklightHelper do
 
   describe "#select_document_id" do
     let(:action) { :show }
+    before { allow(helper).to receive(:admin_set_from_uri).and_return ("dc") }
     context "document is an item without a local_id" do
       let(:doc_or_obj) { SolrDocument.new(SolrDocument.new(
           'id'=>'changeme:10',

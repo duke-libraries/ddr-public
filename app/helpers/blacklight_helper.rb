@@ -52,11 +52,11 @@ module BlacklightHelper
   end
 
   def select_document_id(action, doc_or_obj)
+    admin_set = admin_set_from_uri(doc_or_obj['is_governed_by_ssim'])
     if action == :index
       nil
     elsif (doc_or_obj.local_id.present? and 
-      doc_or_obj[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == "Item" and 
-      doc_or_obj[Ddr::Index::Fields::ADMIN_SET] == "dc")
+      doc_or_obj[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == "Item" and admin_set == "dc")
         doc_or_obj.local_id
     else
       doc_or_obj
