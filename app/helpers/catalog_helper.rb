@@ -23,30 +23,35 @@ module CatalogHelper
   def collection_title collection_internal_uri
     collections[collection_internal_uri]
   end
-
-  def render_thumbnail_tag_from_multires_image document, size, counter = nil
-    if is_component?(document)
-      choose_thumbnail document, document.multires_image_file_path, size, counter = nil
-    elsif is_item?(document)
-      response, document_list = find_children(document)
-      choose_thumbnail document, document_list.first.multires_image_file_path, size, counter = nil
-    elsif is_collection?(document)
-      response, documents = find_children(document)
-      response, document_list = find_children(documents.first)
-      choose_thumbnail document, document_list.first.multires_image_file_path, size, counter = nil
+  
+  def render_thumbnail_link document, size, counter = nil
+    path = multires_thumbnail_path(document)
+    if path.present?
+      thumbnail_link_to_document(document, path, size, counter)
     else
       render_thumbnail_tag(document, {}, :counter => counter)
+    end 
+  end
+
+  def multires_thumbnail_path(document)
+    thumbnail_path = nil
+    if document.multires_image_file_paths.present?
+      thumbnail_path = document.multires_image_file_paths.first
+    elsif document.multires_image_file_path.present?
+      thumbnail_path = document.multires_image_file_path
+    else
+      response, child_documents = find_children(document)
+      if child_documents.present?
+        multires_thumbnail_path(child_documents.first)
+      end
     end
   end
 
-  def choose_thumbnail document, multires_image_file_path, size, counter
-    unless multires_image_file_path.blank?
-      image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
-      link_to_document document, image_tag, :counter => counter
-    else
-      render_thumbnail_tag(document, {}, :counter => counter)
-    end
+  def thumbnail_link_to_document(document, multires_image_file_path, size, counter)
+    image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
+    link_to_document document, image_tag, :counter => counter
   end
+
 
   def find_children document, relationship = nil, params = {}
     configure_blacklight_for_children
