@@ -16,10 +16,12 @@
   <div class="finding_aid">
     <%= render partial: 'show_finding_aid', locals: { document: @document } %>
   </div>
-  <div class="license">
-    <%= render partial: 'show_license_default', locals: { document: @document } %>
-  </div>
+
 <% end %>
+
+<div class="license">
+  <%= render partial: 'show_license_default', locals: { document: @document } %>
+</div>
 
 <% unless @document.more_like_this.empty? %>
   <div class="panel panel-default">
