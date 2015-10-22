@@ -1,0 +1,20 @@
+<% unless document.finding_aid.blank? %>
+  <div class="buffer-bottom-40">
+    <div class="text-muted text-uppercase small strong">Source Collection</div>
+    <% begin %>
+      <%# TO-DO: refactor the popover html into a helper to account for any missing elements and simplify the view %>
+      
+      <%= link_to document.finding_aid.collection_title, document.finding_aid.url, { data: { 
+        toggle: 'popover', 
+        placement: 'left', 
+        html: true, 
+        title: ''+image_tag("ddr/archival-box.png", :class=>"collection-guide-icon")+'Source Collection Guide', 
+        content: finding_aid_popover(document.finding_aid)
+      }} %>
+
+    <% rescue OpenURI::HTTPError => e %>
+      <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
+      <p class="small"><%= link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/" %><p>
+    <% end %>
+  </div>
+<% end %>

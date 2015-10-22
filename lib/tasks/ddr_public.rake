@@ -26,4 +26,36 @@ namespace :ddr_public do
     end
   end
 
+  namespace :document_urls do
+    desc "Given a collection pid, generates a list of pids and corresponding URLs"
+    task :list, [:collection_pid] => :environment do |t, args|
+      include ApplicationHelper
+      include CatalogHelper
+      include BlacklightHelper
+
+      include Rails.application.routes.url_helpers
+
+      collection = Collection.find(args.collection_pid)
+      url_for_document_from_pid(collection.pid)
+
+      collection.items(response_format: :solr).each do |item_doc|
+        item = Item.find(item_doc["id"])
+        url_for_document_from_pid(i=item.pid)
+
+        item.components(response_format: :solr).each do |component_doc|
+          component = Component.find(component_doc["id"])
+          url_for_document_from_pid(component.pid)
+        end
+
+      end
+
+    end
+
+    def url_for_document_from_pid pid
+      solr_doc = SolrDocument.find(pid)
+      puts pid + "," + document_or_object_url(solr_doc)
+    end
+
+  end
+
 end

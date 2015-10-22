@@ -1,4 +1,4 @@
-<h4><%= t('blacklight.welcome') %></h4>
-<p>&nbsp;</p>
-<p>Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.</p>
+<h1><%= t("ddr.public.portal.#{controller_name}.title", :default => t('blacklight.welcome')) %></h1>
+<p><%= t("ddr.public.portal.#{controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.") %></p>
+
 <p>For further information or assistance please contact <%= mail_to Ddr::Public.contact_email, Ddr::Public.contact_email, subject: t('ddr.public.contact.subject') %></div></p>

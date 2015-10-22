@@ -2,6 +2,27 @@
 	<%= render :partial => 'show_tools' %>
 <% end %>
 
+<% if @collection_document %>
+  <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
+<% end %>
+
+
+<% if @document.active_fedora_model == 'Item' %>
+    
+    <% if @collection_document %>
+      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>
+    <% end %>
+
+  <div class="finding_aid">
+    <%= render partial: 'show_finding_aid', locals: { document: @document } %>
+  </div>
+
+<% end %>
+
+<div class="license">
+  <%= render partial: 'show_license_default', locals: { document: @document } %>
+</div>
+
 <% unless @document.more_like_this.empty? %>
   <div class="panel panel-default">
     <div class="panel-heading">More Like This</div>

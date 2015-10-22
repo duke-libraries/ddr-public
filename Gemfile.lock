@@ -44,7 +44,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.6)
     arel (5.0.1.20140414130214)
-    autoprefixer-rails (5.0.0.2)
+    autoprefixer-rails (5.1.11)
       execjs
       json
     bcrypt (3.1.9)
@@ -55,11 +55,23 @@ GEM
       nokogiri (~> 1.6)
       rails (>= 3.2.6, < 5)
       rsolr (~> 1.0.6)
+    blacklight-gallery (0.3.0)
+      blacklight (~> 5.0)
+      bootstrap-sass (~> 3.0)
+      openseadragon (>= 0.2.0)
+      rails
+    blacklight_range_limit (5.0.4)
+      blacklight (>= 5.0.0.pre4, < 6)
+      jquery-rails
+      rails (>= 3.0, < 5.0)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
-    bootstrap-sass (3.3.3)
+    bootstrap-sass (3.3.4.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
+    bootstrap-select-rails (1.6.3)
+    bootswatch-rails (3.2.4)
+      railties (>= 3.1)
     builder (3.2.2)
     cancancan (1.12.0)
     capybara (2.4.4)
@@ -81,12 +93,14 @@ GEM
     database_cleaner (1.4.0)
     ddr-alerts (1.0.0)
       rails (~> 4.1.6)
-    ddr-antivirus (1.3.2)
-      activesupport (~> 4.0)
-    ddr-models (2.0.0)
+    ddr-antivirus (2.0.0)
+    ddr-aux-client (1.2.2)
+      hashie (~> 3.4)
+    ddr-models (2.2.0)
       active-fedora (~> 7.0)
       cancancan (~> 1.12)
-      ddr-antivirus (~> 1.3.1)
+      ddr-antivirus (= 2.0.0)
+      ddr-aux-client (~> 1.2, >= 1.2.2)
       devise (~> 3.4)
       ezid-client (~> 1.1, >= 1.1.1)
       grouper-rest-client
@@ -114,7 +128,7 @@ GEM
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
-    execjs (2.2.2)
+    execjs (2.5.2)
     ezid-client (1.1.1)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -122,7 +136,11 @@ GEM
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     fastercsv (1.5.5)
+    fastimage (1.7.0)
+      addressable (~> 2.3, >= 2.3.5)
     ffi (1.9.6)
+    font-awesome-sass (4.3.2.1)
+      sass (~> 3.2)
     grouper-rest-client (0.2.7)
       json (>= 1.5.1)
       rest-client (>= 1.6.1)
@@ -221,8 +239,14 @@ GEM
       rack (~> 1.0)
     omniauth-shibboleth (1.2.1)
       omniauth (>= 1.0.0)
+    openseadragon (0.2.0)
+      rails (> 3.2.0)
     orderly (0.0.2)
     orm_adapter (0.5.0)
+    pdf-core (0.6.0)
+    prawn (2.0.2)
+      pdf-core (~> 0.6.0)
+      ttfunk (~> 1.4.0)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -283,7 +307,7 @@ GEM
     rdf-turtle (1.1.5)
       ebnf (~> 0.3, >= 0.3.6)
       rdf (~> 1.1, >= 1.1.4)
-    rdf-vocab (0.8.4)
+    rdf-vocab (0.8.6)
       rdf (~> 1.1, >= 1.1.10)
     rdf-xsd (1.1.2)
       rdf (~> 1.1)
@@ -332,6 +356,7 @@ GEM
       mime-types
       nokogiri
       rest-client
+    rubyzip (1.1.7)
     sass (3.2.19)
     sass-rails (4.0.5)
       railties (>= 4.0.0, < 5.0)
@@ -362,7 +387,6 @@ GEM
     sparql-client (1.1.3.1)
       net-http-persistent (~> 2.9)
       rdf (~> 1.1)
-    spring (1.2.0)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -381,6 +405,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
+    ttfunk (1.4.0)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -401,13 +426,20 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  blacklight-gallery
+  blacklight_range_limit (= 5.0.4)
+  bootstrap-sass (~> 3.3.4)
+  bootstrap-select-rails
+  bootswatch-rails
   capybara (~> 2.0)
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.0.0)
+  ddr-models (= 2.2.0)
   devise
   factory_girl_rails (~> 4.4)
+  fastimage
+  font-awesome-sass
   hydra-head (~> 7.2.0)
   jbuilder (~> 2.0)
   jettywrapper (~> 1.8)
@@ -415,16 +447,18 @@ DEPENDENCIES
   launchy
   log4r
   mysql2
+  openseadragon (~> 0.2.0)
   orderly
+  prawn
   rails (~> 4.1.6)
   rspec-rails (~> 3.0)
+  rubyzip (~> 1.1.7)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
-  spring
   sqlite3
   therubyracer
   turbolinks
   uglifier (>= 1.3.0)
 
 BUNDLED WITH
-   1.10.5
+   1.10.6

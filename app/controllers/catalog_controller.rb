@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
+require 'zip'
+require 'fastimage'
 
 class CatalogController < ApplicationController
 
@@ -23,14 +25,25 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+    config.show.route = {}
+          config.view.gallery.partials = [:index_header, :index]
+
+          config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
+          config.show.partials.insert(1, :openseadragon)
+
     config.default_solr_params = {
       :qt => 'search',
-      :rows => 10
+      :rows => 20
     }
+    
+    config.per_page = [10,20,50,100]
+    config.default_per_page = 20
+    config.max_per_page = 100
 
     # solr field configuration for search results/index views
-    config.index.title_field = Ddr::IndexFields::TITLE
-    config.index.display_type_field = Ddr::IndexFields::ACTIVE_FEDORA_MODEL
+    config.index.title_field = Ddr::Index::Fields::TITLE.to_s
+    config.index.active_fedora_model_field = Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s
+    config.index.display_type_field = Ddr::Index::Fields::DISPLAY_FORMAT.to_s
 
     config.index.thumbnail_method = :thumbnail_image_tag
 
@@ -60,8 +73,8 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
-    config.add_facet_field Ddr::IndexFields::ADMIN_SET_FACET, label: 'Collection Group', helper_method: 'admin_set_full_name', limit: 9999
-    config.add_facet_field Ddr::IndexFields::COLLECTION_FACET, label: 'Collection', helper_method: 'collection_title', limit: 9999
+    config.add_facet_field Ddr::Index::Fields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', collapse: false, limit: 5
+    config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 5
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -75,18 +88,18 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
-    config.add_index_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
-    config.add_index_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
-    config.add_index_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
-    config.add_index_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
-    config.add_index_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
+    config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
-      fq: ["#{Ddr::IndexFields::WORKFLOW_STATE}:published"]
+      fq: ["#{Ddr::Index::Fields::WORKFLOW_STATE}:published"]
     }
 
     # partials for show view
-    config.show.partials = [:show_header, :show, :show_license, :show_children]
+    config.show.partials = [:show_header, :show, :show_children]
 
     # deactivate certain tools
     config.show.document_actions.delete(:email)
@@ -99,8 +112,8 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
-    config.add_show_field Ddr::IndexFields::PERMANENT_URL, helper_method: 'permalink', label: 'Permalink'
-    config.add_show_field Ddr::IndexFields::MEDIA_TYPE, helper_method: 'file_info', label: 'File'
+    config.add_show_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_show_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
@@ -110,9 +123,9 @@ class CatalogController < ApplicationController
     Ddr::Vocab::Vocabulary.term_names(Ddr::Vocab::DukeTerms).each do |term_name|
       config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
     end
-    config.add_show_field Ddr::IndexFields::IS_PART_OF, helper_method: 'descendant_of', label: 'Part of'
-    config.add_show_field Ddr::IndexFields::IS_MEMBER_OF_COLLECTION, helper_method: 'descendant_of', label: 'Collection'
-    config.add_show_field Ddr::IndexFields::COLLECTION_URI, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -134,7 +147,7 @@ class CatalogController < ApplicationController
 
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
-        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::IndexFields::PERMANENT_ID}"
+        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
       }
     end
 
@@ -177,7 +190,7 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     config.add_sort_field 'score desc, pub_date_dtsi desc, title_tesi asc', :label => 'relevance'
-    config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", :label => 'title'
+    config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
@@ -189,16 +202,126 @@ class CatalogController < ApplicationController
 
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "#{Ddr::IndexFields::WORKFLOW_STATE}:published"
+      solr_parameters[:fq] << "#{Ddr::Index::Fields::WORKFLOW_STATE}:published"
   end
+  
+  def exclude_components(solr_parameters, user_parameters)
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
+  end  
 
   def configure_blacklight_for_children
     blacklight_config.configure do |config|
       config.sort_fields.clear
-      config.add_sort_field "#{Ddr::IndexFields::TITLE} asc", label: "Title"
-      config.add_sort_field "#{Ddr::IndexFields::LOCAL_ID} asc", label: "Local ID"
+      config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", label: "Title"
+      config.add_sort_field "#{Ddr::Index::Fields::LOCAL_ID} asc", label: "Local ID"
     end
   end
+
+  # For portal scoping
+  def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
+    solr_parameter_value = ""
+    opts[:values].each do |value|
+      segment = opts[:solr_field] + ":\"" + value + "\""
+      if opts[:boolean_operator].present?
+        segment << " " + opts[:boolean_operator] + " "
+      end
+      solr_parameter_value << segment
+    end
+    if opts[:boolean_operator].present?
+      solr_parameter_value.gsub!(/\s#{Regexp.escape opts[:boolean_operator]}\s$/, "")
+    end
+    solr_parameter_value
+  end
+
+  
+  def zip_images 
+    
+    # TO-DO: make the image_list param a real array or hash instead of delimited string
+    image_list = params[:image_list].split('||')
+    itemid = params[:itemid]
+    
+  
+    # Combination of these techniques:
+    #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
+    #   https://github.com/rubyzip/rubyzip#basic-zip-archive-creation
+         
+    t = Tempfile.new("temp-ddr-#{Time.now.utc}")
+    Zip::OutputStream.open(t.path) do |z|
+      image_list.each_with_index do |item, index|
+        title = item.to_s
+        z.put_next_entry("#{index+1}.jpg")
+        
+        # TODO: use DPC ID for the component filename OR extract the ptif path basename.
+        
+        url1 = item
+        url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
+        z.print IO.read(url1_data)
+        
+        # TODO: update a progress bar to indicate status.
+        # TODO: write a test for this feature.
+
+      end
+
+
+      send_file t.path, :type => 'application/zip',
+                                   :disposition => 'attachment',
+                                   :filename => itemid+".zip"
+
+            t.close
+    end  
+  end
+
+  def pdf_images
+    image_list = params[:image_list].split('||')
+    itemid = params[:itemid]
+
+
+    # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size. 
+    # Let's use 1000 on long side.
+    
+    pdf = Prawn::Document.new({ :margin => 0, :skip_page_creation => true })               
+
+    image_list.each_with_index do | file, index |
+
+      # New document, A4 paper, landscaped
+      # pdf = Prawn::Document.new(:page_size => "A4", :page_layout => :landscape)
+
+  
+      image_size = FastImage.size(file) # returns [w,h]
+  
+      image_w = image_size[0]
+      image_h = image_size[1]
+  
+      # aspect ratio (w/h)
+      image_r = image_w.to_f / image_h.to_f
+
+      if image_r >= 1 # landscape
+        pg_w = 1000
+        pg_h = 1000 / image_r
+      else
+        pg_w = 1000 * image_r
+        pg_h = 1000
+      end
+      
+      # For small-derivative source image: PDF page will be full-size
+      if image_w < 1000 && image_h < 1000
+        pg_w = image_w.to_i
+        pg_h = image_h.to_i      
+      end
+      
+      # Note: keep layout => :portrait even for landscape images else they don't render correctly
+      pdf.start_new_page(:size => [pg_w, pg_h], :layout => :portrait, :margin => 0)
+      y_pos = pdf.cursor   # Record the top y value (y=0 is the bottom of the page)
+      pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]  
+        
+    end
+    
+    
+    send_data pdf.render, filename: itemid+'.pdf', type: 'application/pdf'
+    
+  end
+
 
   protected
 

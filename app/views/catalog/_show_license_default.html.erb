@@ -1,9 +1,6 @@
-<% if document.effective_license[:title] %>
-	<h5><%= document.effective_license[:title] %></h5>
-<% end %>
-<% if document.effective_license[:description] %>
-	<div><%= document.effective_license[:description] %></div>
-<% end %>
-<% if document.effective_license[:url] %>
-	<div><%= link_to document.effective_license[:url], document.effective_license[:url] %></div>
+<% if document.effective_license.present? %>
+  <div class="buffer-bottom-40">
+    <div class="text-muted text-uppercase small strong">Copyright &amp; Use</div>
+    <p class="small text-muted"><%= document.effective_license.terms.html_safe %><p>
+  </div>
 <% end %>

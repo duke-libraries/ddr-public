@@ -1,0 +1,411 @@
+#header-navbar {
+	padding: 10px 0;
+	margin-bottom: 0;
+}
+
+#logo-col {
+  @media (min-width: $screen-sm) {
+   padding: 0;
+  }  
+}
+
+#search-col {
+  @media (max-width: $screen-sm) {
+   margin-top: 10px;
+  }
+  @media (min-width: $screen-sm) {
+   padding: 0;
+  }  
+}
+
+img.navbar-logo {
+  height: 44px;
+  @media (max-width: $screen-md) {
+    height: 40px;
+  }
+}
+
+a.navbar-dul {
+  margin-right: 15px;
+}
+
+#header-navbar .navbar-form { 
+	padding: 0;
+	margin: 0;
+	
+	& .input-group {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+	  
+	  -moz-box-direction: row;
+    -webkit-box-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction: row;
+    -ms-flexbox-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+	  
+	  	  
+	  & .input-group-btn {
+  	  -moz-box-grow: 1;
+      -webkit-flex-grow: 1;
+      -ms-flex-grow: 1;	  
+  	  flex-grow: 1;
+  	  width: auto;
+  	  
+  	  // Hide Digital Collections as a search scope until there are more published collections.
+  	  & ul.selectpicker li a[data-normalized-text*="Digital Collections"] {
+        display: none;
+      }
+	  }
+
+	  & input#q {
+	
+  	  -moz-box-grow: 1;
+      -webkit-flex-grow: 1;
+      -ms-flex-grow: 1;	  
+  	  flex-grow: 1;
+	  }
+	  
+
+	  
+	}
+}
+
+#mobile-menu button {
+  background-color: transparent;
+  position: absolute; 
+  right: 0px;
+  padding: 14px;
+  margin: 0;
+  display: block;
+  z-index: 999;
+  border: 1px solid transparent;
+  border-radius: 0; 
+  &:hover {
+   background-color: #032051;
+  }
+  @media (max-width: $screen-sm) {
+   right: 15px;
+  }  
+  @media (min-width: $screen-md) {
+   display: none;
+  } 
+}
+
+#user-col {
+  font-size: 90%;
+  @media (max-width: $screen-md) {
+   padding: 0;
+  }  
+}
+
+
+#main-container {
+	padding: 20px;
+	background-color: #fff;
+}
+
+body.blacklight-catalog-show #content {
+	border-right: 2px solid #eee;
+}
+
+
+.alert.portal-alert {
+  margin-bottom: 0;
+}
+
+
+.facet_limit-active .panel-heading.collapse-toggle .panel-title:after {
+  color: #fff;
+}
+
+
+.image-display {
+	margin-bottom:15px;
+}
+
+.image-display img {
+	max-width:100%;
+}
+
+.contact-devil-logo {
+  background-image: image-url('ddr/devillogo-60pct-60.png');
+  height: 80px;
+  background-position: 40% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  float: right;
+  width: 50px;
+}
+
+/* ------------- 
+ PORTAL DISPLAY
+---------------- */
+
+.showcase-wrapper {
+  margin: -21px -20px 20px -20px;
+}
+
+
+
+.collection-start {
+  background-color: rgba(0,0,0,0.8);
+  color: white;
+  padding: 30px !important;
+  height: 500px;
+  overflow: auto;
+  @media (max-width: $screen-md) {
+    height: auto; 
+  }
+  
+  & h1#collection-title {
+    color: white;
+    margin-top: 0;
+    @media (max-width: $screen-lg) {
+      font-size: 36px; 
+    }
+  }
+  
+  & .collection-abstract {
+    color: $gray-lighter;
+  }
+  
+  & a {
+    color: white;
+  }
+  
+  & .more-link {
+    font-weight: bold;
+  }
+  
+
+  & .browse-all {
+    margin-top: 10px;
+  }
+  
+}
+
+.collection-showcase {
+  background-color: #666;
+  height: 500px; 
+  background-repeat: no-repeat; 
+  background-position: 50% 50%; 
+}
+
+#collection-showcase-1 {
+  @media (max-width: $screen-sm) {
+    display:none; // Just show one showcase item on smallest screens 
+  }  
+}
+
+a.showcase-item-wrap, a.highlight-item-wrap {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+}
+
+.showcase-item-caption, .highlight-item-caption {
+  display: none;
+  position: absolute; 
+  bottom: 0; 
+  color: white; 
+  padding: 20px 20px 20px 20px; 
+  background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.4)); 
+  width:100%; 
+  z-index: 90;
+  min-height: 500px;
+}
+
+
+.collection-highlight {
+  width: 25%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+  border-right: 5px solid rgba(255,255,255,0);
+  border-right: 5px solid white;  
+  border-bottom: 5px solid rgba(255,255,255,0);
+  border-bottom: 5px solid white;  
+  float: left;
+  position: relative;
+  height: 210px;
+
+}
+
+.highlight-item-caption {
+  min-height: 150px;
+}
+
+
+#source-collection.well {
+  margin-top: 30px;
+  & h3 {
+    margin-top: 10px;
+  }
+}
+
+#blog-posts {
+  & .blog-post-feature {
+    margin-bottom: 30px;
+    
+    & img {
+      width: 150px;
+      background-color: #ddd;
+      margin-right: 10px;
+    }
+    
+    & .more-link {
+      display: none; // out-of-box excerpt link is too long
+    }
+    
+    & .post-time-ago {
+      margin-left: 0.8em;
+    }
+  }
+  
+  & .blog-secondary {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row wrap;
+    
+    & img.media-object {
+      width: 75px;
+    }
+  }
+  
+  & .blog-post-secondary {
+    margin-bottom: 20px; 
+  }
+}
+
+/* ------------- 
+  ITEM DISPLAY
+---------------- */
+
+.show-document .page_links {
+  display: none;
+}
+
+.nav.item-options {
+	& > li > a {
+		color: $gray-light;
+		text-transform: uppercase;
+	}
+	
+	& .dropdown-menu .btn-link {
+	  padding-top: 0;
+	  padding-bottom: 0;
+	}
+}
+
+.collection-guide-icon {
+  margin-right: 10px;
+  opacity: 0.6;
+}
+
+
+/* ------------- 
+    FACETS
+---------------- */
+
+#facets {
+
+  & .top-panel-heading.panel-heading {
+    padding-left: 0;
+    @media (min-width: $screen-sm) {
+      border: none;
+    }
+    @media (max-width: $screen-sm) {
+      padding: 15px; 
+    }
+  }
+
+  & .facets-toggle {
+      background-color: #ddd;
+      @media (min-width: $screen-sm) {
+        display: none;
+      } 
+  }
+
+   // override default screen-md facet styles
+   & .collapse#facet-panel-collapse {
+      @media (min-width: $screen-sm) {
+        display: block !important;
+        height: auto !important;
+        padding-bottom: 0;
+        overflow: visible !important;
+      }
+  }
+
+
+  /* Blacklight Range Filter Overrides */
+  & .range_limit {
+    & .slider-handle {
+      background-color: #a1b70d;
+      background-image: none;
+    }
+    & input.range_begin, input.range_end {
+        font-size: 15px;
+    }
+  }
+}
+
+
+/* ------------------ 
+    SEARCH RESULTS
+--------------------- */
+
+#documents.gallery { // Grid view
+
+  & .img-thumbnail {
+    padding: 0;
+    border: none;
+  }
+
+  // Override flexbox styles from the blacklight_gallery plugin
+  // to improve alignment
+   
+  justify-content: flex-start; 
+
+  
+  & .document { 
+    flex: none; 
+    -webkit-box-flex: none;
+    -webkit-flex: none;
+    -moz-box-flex: none;
+    -ms-flex: none;
+
+    min-width: auto;
+  }
+  
+  & h3.index_title { 
+    font-size: 18px;
+    margin-top: 8px;
+  }
+  
+  & .extra-result-see-more {
+    display: none;
+    @media (min-width: $screen-md-min) { 
+      display: block;
+    }
+    
+    & a {
+      border: 1px solid #ddd;
+      padding: 20px;
+      font-size: 18px;
+      display: block;
+      
+    }
+    
+  }
+    
+} 

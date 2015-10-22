@@ -1,0 +1,37 @@
+<% unless has_search_parameters? %>
+
+  <div class="container-fluid showcase-wrapper">
+    <div class="row no-gutter">
+      <div class="col-md-4 collection-start">
+        <h1 id="collection-title"><%= t("ddr.public.portal.#{controller_name}.title", :default => @collection_document.title) %></h1>
+        <p class="collection-abstract"><%= @collection_document.abstract %> <%= link_to raw("More &raquo;"), { anchor: "about"}, class: "more-link" %></p>
+                        
+            <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
+              Browse all <strong><%= number_with_delimiter(item_count(@collection_document.id)) %></strong> Items
+            <% end %>
+      </div>
+      <% if @collection_showcase_document_list %>
+        <% @collection_showcase_document_list.sample(2).each_with_index do |doc, index| %>
+          <% if doc.multires_image_file_path %>
+            <div class="col-md-4 col-sm-6 collection-showcase" id="collection-showcase-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_path, {:size => '390,', :region => 'pct:5,5,90,90' }) %>);">
+              <% item = document_from_uri(doc['is_part_of_ssim'].first) %>
+
+              <%= link_to_document item, "", :class => "showcase-item-wrap", :id => "showcase-item-link-"+index.to_s, data: { toggle: "fade-element", target_id: "showcase-item-caption-"+index.to_s } %>                 
+
+              <div class="showcase-item-caption" id="showcase-item-caption-<%= index %>">
+                <div style="position: absolute; bottom: 10px;"><small><%= item.title.truncate(50, separator: ' ') %> <small class="text-muted"><%= item.local_id %></small></small></div>
+              </div>
+
+            </div>
+          <%-end %>
+        <%- end %>
+      <% end %>
+
+
+    
+
+    </div>
+  </div>
+  
+
+<%- end %>

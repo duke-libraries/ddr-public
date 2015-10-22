@@ -1,0 +1,42 @@
+defaults: &defaults
+  collections:
+    blake:
+      include:
+        local_ids:
+          - blake
+      showcase_images:
+        - mfb099
+        - mfb098
+    wdukesons:
+      include:
+        local_ids:
+          - wdukesons
+      showcase_images:
+        - dscsi040010110
+        - dscsi040010130
+  portals:
+    digital_collections:
+      include:
+        collections:
+          - blake
+          - wdukesons
+        local_ids:
+          - vica
+    advertising:
+      include:
+        local_ids:
+          - wdukesons
+          - vica
+    nescent:
+      include:
+        admin_sets:
+          - nescent
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

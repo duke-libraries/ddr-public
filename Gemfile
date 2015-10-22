@@ -4,20 +4,28 @@ gem 'rails', '~> 4.1.6'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.0.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.0.0'
+gem 'ddr-models', '2.2.0'
 
 gem 'log4r'
+gem 'bootstrap-sass', '~> 3.3.4'
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
-gem 'therubyracer',  platforms: :ruby
+gem 'therubyracer',  platforms: :ruby, group: :production
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
+gem 'bootswatch-rails'
+gem 'font-awesome-sass'
+gem 'openseadragon', '~> 0.2.0'
+gem 'blacklight-gallery'
+gem 'rubyzip', '~> 1.1.7'
+gem 'blacklight_range_limit', '5.0.4'
+gem 'prawn'
+gem 'fastimage'
+gem 'bootstrap-select-rails'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
-
-gem 'spring', group: :development
 
 group :development, :test do
   gem 'sqlite3'

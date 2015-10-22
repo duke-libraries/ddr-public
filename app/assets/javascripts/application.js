@@ -11,9 +11,14 @@
 // about supported directives.
 //
 //= require jquery
+//= require bootstrap-sprockets
+//= require bootstrap-select
 //= require jquery_ujs
 //= require turbolinks
 //
 // Required by Blacklight
 //= require blacklight/blacklight
+//= require blacklight_gallery
+//= require blacklight_range_limit
 //= require_tree .
+
