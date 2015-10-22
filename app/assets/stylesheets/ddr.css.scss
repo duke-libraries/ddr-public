@@ -291,6 +291,10 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   ITEM DISPLAY
 ---------------- */
 
+.blacklight-catalog-show .page_links {
+  display: none;
+}
+
 .nav.item-options {
 	& > li > a {
 		color: $gray-light;
