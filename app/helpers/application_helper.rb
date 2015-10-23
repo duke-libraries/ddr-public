@@ -199,12 +199,9 @@ module ApplicationHelper
   def image_component_aspectratio(document)
   # Get the width / height ratio of the multi-res component's image  
     url = iiif_image_info_path(document.multires_image_file_path)
-    imagedata = JSON.load(open(url))
+    imagedata = JSON.load(open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
     aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
-  
-
-  
 
   def url_for_document doc, options = {}
     if respond_to?(:blacklight_config) and

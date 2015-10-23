@@ -356,6 +356,9 @@ a.showcase-item-wrap, a.highlight-item-wrap {
     & input.range_begin, input.range_end {
         font-size: 15px;
     }
+    & .missing {
+      display: none;
+    }
   }
 }
 
