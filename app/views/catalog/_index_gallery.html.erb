@@ -1,6 +1,6 @@
 <div class="document col-xs-12 col-sm-6 col-md-4">
   <div>
-      <%= render_thumbnail_tag_from_multires_image(document, "!350,350", document_counter_with_offset(document_counter)) %>
+      <%= render_thumbnail_link(document, "!350,350", document_counter_with_offset(document_counter)) %>
     <div class="caption"><%= render_document_partials document, blacklight_config.view_config(:gallery).partials, :document_counter => document_counter %>
     </div>
   </div>
