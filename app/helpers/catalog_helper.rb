@@ -98,6 +98,57 @@ module CatalogHelper
     end
   end
 
+  # Index / Show field view helper
+  def year_ranges options={}
+    ranges = []
+    years = []
+    year_values = options[:value].first.split(";")
+    year_values.each do |year_value|
+      year_value.strip!
+      if year_value.match(/^\d{4}$/)
+        years << year_value
+      else
+        ranges << year_value
+      end
+    end
+    if years.count > 1
+      years.sort!
+      ranges << years.first + "-" + years.last
+    else
+      ranges << years.first
+    end
+    ranges.sort!
+    ranges.join("; ")
+  end
+
+  # Index / Show field view helper
+  def source_collection options={}
+    begin
+      
+      link_to options[:document].finding_aid.collection_title, options[:document].finding_aid.url, { data: { 
+        toggle: 'popover', 
+        placement: options[:placement] ? options[:placement] : 'top', 
+        html: true, 
+        title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide', 
+        content: finding_aid_popover(options[:document].finding_aid)
+      }}
+
+    rescue OpenURI::HTTPError => e
+      Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+      fallback_link = link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/"
+      "<p class='small'>" + fallback_link + "</p>"
+    end
+  end
+
+  # Index / Show field view helper
+  def language_display options={}
+    display = []
+    options[:value].each do |language_code|
+      display << t("ddr.language_codes.#{language_code}", :default => language_code)
+    end
+    display.join("; ")
+  end
+
   def abstract_from_uri uri
     document = document_from_uri(uri.first)
     unless document.abstract.blank?
