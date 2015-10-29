@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/duke-libraries/blacklight_range_limit.git
+  revision: 4ba79093184b73ceef5ff87a6249bd72bd1a172c
+  branch: patch-controller-override
+  specs:
+    blacklight_range_limit (5.0.4)
+      blacklight (>= 5.0.0.pre4, < 6)
+      jquery-rails
+      rails (>= 3.0, < 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -60,10 +70,6 @@ GEM
       bootstrap-sass (~> 3.0)
       openseadragon (>= 0.2.0)
       rails
-    blacklight_range_limit (5.0.4)
-      blacklight (>= 5.0.0.pre4, < 6)
-      jquery-rails
-      rails (>= 3.0, < 5.0)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
     bootstrap-sass (3.3.4.1)
@@ -425,7 +431,7 @@ PLATFORMS
 
 DEPENDENCIES
   blacklight-gallery
-  blacklight_range_limit (= 5.0.4)
+  blacklight_range_limit!
   bootstrap-sass (~> 3.3.4)
   bootstrap-select-rails
   bootswatch-rails

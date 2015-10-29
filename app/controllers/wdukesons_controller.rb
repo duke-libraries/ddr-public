@@ -11,7 +11,8 @@ class WdukesonsController < DigitalCollectionsController
     config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: "Browse", show: false
     config.add_facet_field Ddr::Index::Fields::SERIES_FACET.to_s, label: "Card Series", collapse: false, limit: 5
     config.add_facet_field Ddr::Index::Fields::YEAR_FACET.to_s, label: 'Year', collapse: false, limit: 9999, :range => {
-      :segments => false    
+      :num_segments => 6,
+      :segments => true
     }    
     config.add_facet_field Ddr::Index::Fields::TYPE_FACET.to_s, label: "Type", limit: 5    
     config.add_facet_field Ddr::Index::Fields::PUBLISHER_FACET.to_s, label: "Publisher", limit: 5
