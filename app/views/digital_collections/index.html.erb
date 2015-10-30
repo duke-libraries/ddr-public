@@ -6,9 +6,8 @@
   <% if @collection_document %>
     <%= render 'home_showcase' %>
   <% else %>
-    <h1><%= t("ddr.public.portal.#{controller_name}.title") %></h1>
+    <h1><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1>
   <% end %>
-  
 </div>
 
 <div id="sidebar" class="col-md-3 col-sm-4">
@@ -31,9 +30,8 @@
     <%= render 'home' %>
     
     <%# set the html title for collection portal page -%>
-    <%= content_for :page_title, t("ddr.public.portal.#{controller_name}.title", :default => t('blacklight.welcome'))+" - Duke Libraries" %>
-    
-    
+    <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))+" - Duke Libraries" %>
+      
   <% else %>
     <%= render 'search_results' %>
   <% end %>

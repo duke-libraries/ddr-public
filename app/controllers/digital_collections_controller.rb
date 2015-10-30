@@ -1,7 +1,9 @@
-# -*- encoding : utf-8 -*-
+# # -*- encoding : utf-8 -*-
+
 class DigitalCollectionsController < CatalogController
+  include Ddr::Public::Controller::Portal
   
-  include Ddr::Public::Controller::PortalControllerConfig
+  # This enables us to use a .rb template to render json for the media action
   ActionView::Template.register_template_handler(:rb, :source.to_proc)
   
   # This has to run after get_pid_from_params_id
@@ -12,8 +14,20 @@ class DigitalCollectionsController < CatalogController
   before_action :get_pid_from_params_id, only: [:show, :media]
   before_action :enforce_show_permissions, only: :show
 
-  def about
-    render 'about'
+  def index
+    super
+    showcase_documents
+    highlight_documents
+    collection_document
+    blog_posts_url
+    alert_message
+    search_scopes
+  end
+
+  def show
+    super
+    collection_document
+    search_scopes
   end
 
   def media
@@ -21,8 +35,6 @@ class DigitalCollectionsController < CatalogController
   end
 
   configure_blacklight do |config|
-    config.facet_fields.clear
-    config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 9999, collapse: false 
     config.view.gallery.default = true
   end
 
