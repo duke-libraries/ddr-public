@@ -430,6 +430,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  autoprefixer-rails
   blacklight-gallery
   blacklight_range_limit!
   bootstrap-sass (~> 3.3.4)

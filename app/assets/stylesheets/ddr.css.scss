@@ -23,6 +23,9 @@ img.navbar-logo {
   @media (max-width: $screen-md) {
     height: 40px;
   }
+  @media (max-width: $screen-xs) {
+    height: 32px;
+  }
 }
 
 a.navbar-dul {
@@ -34,27 +37,23 @@ a.navbar-dul {
 	margin: 0;
 	
 	& .input-group {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
-	  
-	  -moz-box-direction: row;
-    -webkit-box-direction: row;
-    -webkit-box-orient: horizontal;
-    -webkit-flex-direction: row;
-    -ms-flexbox-direction: row;
-    -ms-flex-direction: row;
     flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    align-content: flex-start;
 	  
 	  	  
-	  & .input-group-btn {
-  	  -moz-box-grow: 1;
-      -webkit-flex-grow: 1;
-      -ms-flex-grow: 1;	  
-  	  flex-grow: 1;
-  	  width: auto;
+	  & .input-group-btn.scope-btn {
+	    display: table-cell;
+      flex: 0 0 auto;
+      width: auto;
+
+      & button.selectpicker {
+        @media (max-width: $screen-sm) {
+         font-size: 13px;
+        }
+      }
   	  
   	  // Hide Digital Collections as a search scope until there are more published collections.
   	  & ul.selectpicker li a[data-normalized-text*="Digital Collections"] {
@@ -63,14 +62,17 @@ a.navbar-dul {
 	  }
 
 	  & input#q {
-	
-  	  -moz-box-grow: 1;
-      -webkit-flex-grow: 1;
-      -ms-flex-grow: 1;	  
-  	  flex-grow: 1;
+	    display: block;
+      flex: 1 1 auto;
+      width: 50px;
+      height: 44px;
 	  }
 	  
-
+	  & .input-group-btn.submit-btn {
+	    display: block;
+      flex: 0 0 auto;
+      width: auto;
+	  }
 	  
 	}
 }
@@ -90,7 +92,10 @@ a.navbar-dul {
   }
   @media (max-width: $screen-sm) {
    right: 15px;
-  }  
+  }
+  @media (max-width: $screen-xs) {
+   top: -2px;
+  }
   @media (min-width: $screen-md) {
    display: none;
   } 
@@ -270,10 +275,6 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   }
   
   & .blog-secondary {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-flow: row wrap;
     
@@ -369,27 +370,35 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
 #documents.gallery { // Grid view
 
+  &:before, &:after {
+    content: none; // this fixes Safari gallery wrap bug, ddr-public github issue #205
+  }
+
+  // Override flexbox styles from the blacklight_gallery plugin
+  // to improve alignment; also use autoprefixer instead of the plugin's
+  // explicit prefixes.
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start; 
+  align-items: flex-start;
+  align-content: flex-start;
+
+
+  & .document { 
+
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    min-width: auto;
+  }
+  
   & .img-thumbnail {
     padding: 0;
     border: none;
   }
 
-  // Override flexbox styles from the blacklight_gallery plugin
-  // to improve alignment
-   
-  justify-content: flex-start; 
-
-  
-  & .document { 
-    flex: none; 
-    -webkit-box-flex: none;
-    -webkit-flex: none;
-    -moz-box-flex: none;
-    -ms-flex: none;
-
-    min-width: auto;
-  }
-  
   & h3.index_title { 
     font-size: 18px;
     margin-top: 8px;
