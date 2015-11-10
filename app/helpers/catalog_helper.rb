@@ -114,7 +114,7 @@ module CatalogHelper
     if years.count > 1
       years.sort!
       ranges << years.first + "-" + years.last
-    else
+    elsif years.count == 1
       ranges << years.first
     end
     ranges.sort!
