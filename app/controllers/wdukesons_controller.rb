@@ -41,6 +41,18 @@ class WdukesonsController < DigitalCollectionsController
     config.add_show_field solr_name(:box_number, :stored_searchable), separator: "; ", label: "Box Number"
     config.add_show_field solr_name(:extent, :stored_searchable), separator: "; ", label: "Extent"
 
+    # Set Index metadata
+    config.index_fields.clear
+    config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_index_field solr_name(:date, :stored_searchable), separator: "; ", helper_method: "year_ranges", label: "Year"
+    config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
+    config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
+    config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
+    config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
+
+
   end
 
 end
