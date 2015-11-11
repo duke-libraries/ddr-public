@@ -114,7 +114,7 @@ module CatalogHelper
     if years.count > 1
       years.sort!
       ranges << years.first + "-" + years.last
-    else
+    elsif years.count == 1
       ranges << years.first
     end
     ranges.sort!
@@ -246,13 +246,18 @@ module CatalogHelper
 
   def get_blog_posts slug
     if Rails.application.config.portal_controllers['collections'][slug] && Rails.application.config.portal_controllers['collections'][slug]['blog_posts']
-      
+
         # NOTE: This URL has to be https. We get this data from Wordpress via the JSON API plugin.
         # We had to revise the query_images() function in json-api/models/attachment.php to
         # cirumvent a bug where image data was not rendering when hitting the API via https. 
 
-        blog_posts = JSON.parse(open(Rails.application.config.portal_controllers['collections'][slug]['blog_posts'],{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
-      
+        begin
+          blog_posts = JSON.parse(open(Rails.application.config.portal_controllers['collections'][slug]['blog_posts'],{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
+        rescue OpenURI::HTTPError => e
+          Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+          fallback_link = link_to "See All Blog Posts", "http://blogs.library.duke.edu/bitstreams"
+          "<p class='small'>" + fallback_link + "</p>"
+        end
     end
   end
   

@@ -36,6 +36,7 @@ class CatalogController < ApplicationController
       :qt => 'search',
       :rows => 20,
       :qf => ["id",
+              "title_tesim",
               "creator_tesim",
               "subject_tesim",
               "type_tesim",
