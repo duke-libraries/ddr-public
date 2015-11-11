@@ -31,9 +31,24 @@ class CatalogController < ApplicationController
           config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
           config.show.partials.insert(1, :openseadragon)
 
+    # TODO: Should the qf be set in the solr config?
     config.default_solr_params = {
       :qt => 'search',
-      :rows => 20
+      :rows => 20,
+      :qf => ["id",
+              "title_tesim",
+              "creator_tesim",
+              "subject_tesim",
+              "type_tesim",
+              "publisher_tesim",
+              "series_tesim",
+              "description_tesim",
+              "abstract_tesim",
+              Ddr::Index::Fields::YEAR_FACET,
+              "spatial_tesim",
+              Ddr::Index::Fields::LOCAL_ID,
+              "identifier_tesim",
+              Ddr::Index::Fields::PERMANENT_ID].join(' ')
     }
     
     config.per_page = [10,20,50,100]
