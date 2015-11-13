@@ -26,36 +26,119 @@ namespace :ddr_public do
     end
   end
 
-  namespace :document_urls do
-    desc "Given a collection pid, generates a list of pids and corresponding URLs"
-    task :list, [:collection_pid] => :environment do |t, args|
-      include ApplicationHelper
-      include CatalogHelper
-      include BlacklightHelper
+  namespace :sitemap do
+    desc "Generate an XML sitemap index"
+    task :index do
+      files = []
+      sitemap_file_paths = Dir.glob(File.join(Rails.root, 'public', 'sitemaps', "{[!repository]}*.xml"))
+      
+      sitemap_file_paths.each do |sitemap_file_path|
+        files << File.basename(sitemap_file_path)
+      end
 
-      include Rails.application.routes.url_helpers
+      sitemap_builder = Nokogiri::XML::Builder.new do |xml|
+        xml.sitemapindex "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9" do
+          files.each do |file|
+            xml.sitemap do
+              xml.loc "#{ENV['ROOT_URL']}/sitemaps/" + file
+              xml.lastmod File.mtime(File.join(Rails.root, 'public', 'sitemaps', file)).strftime("%Y-%m-%dT%H:%M:%S%:z")
+            end
+          end
+        end
+      end
+
+      write_sitemap_to_file(File.join(Rails.root, 'public', 'sitemaps', "repository.xml"), sitemap_builder)
+
+    end
+
+
+    desc "Generate an XML sitemap for a collection. Takes a collection pid as an argument."
+    task :generate, [:collection_pid] => :environment do |t, args|
 
       collection = Collection.find(args.collection_pid)
-      url_for_document_from_pid(collection.pid)
+
+      sitemap_filename = collection.local_id
+      
+      urls = []
+      urls << full_document_url(collection.pid)
 
       collection.items(response_format: :solr).each do |item_doc|
         item = Item.find(item_doc["id"])
-        url_for_document_from_pid(i=item.pid)
+        urls << full_document_url(item.pid)
+      end
+
+      sitemap_builder = Nokogiri::XML::Builder.new do |xml|
+        xml.urlset "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9" do
+          urls.each do |url|
+            xml.url do
+              xml.loc url
+            end
+          end
+        end
+      end
+
+      write_sitemap_to_file(File.join(Rails.root, 'public', 'sitemaps', "#{sitemap_filename}.xml"), sitemap_builder)
+
+    end
+
+    def full_document_url pid
+      solr_doc = SolrDocument.find(pid)
+      "#{ENV['ROOT_URL']}" + document_url(solr_doc)
+    end
+
+    def write_sitemap_to_file(filepath, builder)
+      File.open(filepath, 'w') do |fh|
+        fh.puts builder.to_xml
+      end
+      if File.size(filepath) > 10485760
+        puts 'WARNING sitemap is over 10MB limit: ' + filepath
+      end
+      puts "Sitemap generated: " + filepath
+    end
+
+  end
+
+
+  namespace :document_urls do
+    desc "Given a collection pid, generates a list of pids and corresponding URLs"
+    task :list, [:collection_pid] => :environment do |t, args|
+
+      collection = Collection.find(args.collection_pid)
+      pid_to_url_mapping(collection.pid)
+
+      collection.items(response_format: :solr).each do |item_doc|
+        item = Item.find(item_doc["id"])
+        pid_to_url_mapping(item.pid)
 
         item.components(response_format: :solr).each do |component_doc|
           component = Component.find(component_doc["id"])
-          url_for_document_from_pid(component.pid)
+          pid_to_url_mapping(component.pid)
         end
 
       end
 
     end
 
-    def url_for_document_from_pid pid
+    def pid_to_url_mapping pid
       solr_doc = SolrDocument.find(pid)
-      puts pid + "," + document_or_object_url(solr_doc)
+      puts pid + "," + document_url(solr_doc)
     end
 
+  end
+
+
+  def document_url(solr_doc)
+    include ApplicationHelper
+    include CatalogHelper
+    include BlacklightHelper
+
+    include Rails.application.routes.url_helpers
+
+    document_or_object_url(solr_doc)
+  end
+
+  Rake::Task["ddr_public:sitemap:generate"].enhance do
+    Rake::Task["ddr_public:sitemap:index"].invoke
   end
 
 end
