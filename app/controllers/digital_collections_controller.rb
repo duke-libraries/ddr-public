@@ -2,17 +2,22 @@
 class DigitalCollectionsController < CatalogController
   
   include Ddr::Public::Controller::PortalControllerConfig
+  ActionView::Template.register_template_handler(:rb, :source.to_proc)
   
   # This has to run after get_pid_from_params_id
   # So we're skipping the filter inherited from
   # CatalogController.
   skip_filter :enforce_show_permissions, only: :show
   
-  before_action :get_pid_from_params_id, only: :show
+  before_action :get_pid_from_params_id, only: [:show, :tilesources]
   before_action :enforce_show_permissions, only: :show
 
   def about
     render 'about'
+  end
+
+  def tilesources
+    @document = SolrDocument.find(params[:id])
   end
 
   configure_blacklight do |config|
