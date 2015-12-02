@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       get "#{collection_controller_name}/range_limit", :to => "#{collection_controller_name}#range_limit"
       get "#{collection_controller_name}/facet/:id", to: "#{collection_controller_name}#facet", as: "#{collection_controller_name}_facet"
       get "#{collection_controller_name}/about", to: "#{collection_controller_name}#about", as: "about_#{collection_controller_name}"
-      get "#{collection_controller_name}/:id/tilesources", :to => "#{collection_controller_name}#tilesources"
+      get "#{collection_controller_name}/:id/media", :to => "#{collection_controller_name}#media"
       get "#{collection_controller_name}/:id", to: "#{collection_controller_name}#show"
       get "#{collection_controller_name}", to: "#{collection_controller_name}#index"
     end

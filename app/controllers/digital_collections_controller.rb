@@ -9,14 +9,14 @@ class DigitalCollectionsController < CatalogController
   # CatalogController.
   skip_filter :enforce_show_permissions, only: :show
   
-  before_action :get_pid_from_params_id, only: [:show, :tilesources]
+  before_action :get_pid_from_params_id, only: [:show, :media]
   before_action :enforce_show_permissions, only: :show
 
   def about
     render 'about'
   end
 
-  def tilesources
+  def media
     @document = SolrDocument.find(params[:id])
   end
 
