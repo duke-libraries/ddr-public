@@ -40,6 +40,10 @@
 
 /public/assets
 
+# Ddr-portals
+/ddr-portals
+/app/views/ddr-portals/*
+
 .sass-cache
 
 .ruby-gemset

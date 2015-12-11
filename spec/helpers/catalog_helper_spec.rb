@@ -60,19 +60,16 @@ RSpec.describe CatalogHelper do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',
             ) }
-    before { thumbnail_link_to_document = double("thumbnail_link_to_document") }
-    before { multires_thumbnail_path = double("multires_thumbnail_path") }
-    before { render_thumbnail_tag = double("render_thumbnail_tag") }
     context "document or its children have a multires image" do 
       it "should receive a message from thumbnail_link_to_document" do
-        allow(helper).to receive(:multires_thumbnail_path).and_return ("path/to/image/")
+        allow(helper).to receive(:thumbnail_multires_image_file_path).and_return ("path/to/image/")
         expect(helper).to receive(:thumbnail_link_to_document)
         helper.render_thumbnail_link(document, "100")
       end
     end
     context "document and its children do not have a multires image" do 
       it "should receive a message from render_thumbnail_tag" do
-        allow(helper).to receive(:multires_thumbnail_path).and_return (nil)
+        allow(helper).to receive(:thumbnail_multires_image_file_path).and_return (nil)
         expect(helper).to receive(:render_thumbnail_tag)
         helper.render_thumbnail_link(document, "100")
       end

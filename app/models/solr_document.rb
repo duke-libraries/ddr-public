@@ -33,4 +33,48 @@ class SolrDocument
     get("description_tesim")
   end
 
+  def public_controller
+    public_controller = effective_configs.try(:[] , 'controller')
+    public_controller ||= 'catalog'
+  end
+
+  def public_collection
+    effective_configs.try(:[] , 'collection')
+  end
+
+  def public_action
+    if Rails.application.config.portal['portals']['collection_local_id'][self.local_id]
+      "index"
+    else
+      "show"
+    end
+  end
+
+  def public_id
+    if self.parent && collection_pid_configuration.try(:[], 'item_id_field') == 'local_id' && self.active_fedora_model != "Component"
+      public_id = self.local_id ? self.local_id : self.id
+    else
+      public_id = self.id unless Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], self.local_id)
+    end
+  end
+  
+
+  private
+
+  def effective_configs
+    applied_configs = collection_pid_configuration()
+    applied_configs ||= admin_set_configuration()
+  end
+
+  def admin_set_configuration
+    admin_set = SolrDocument.find(self.admin_policy_pid).admin_set
+    Rails.application.config.portal.try(:[], 'portals').try(:[], 'admin_sets').try(:[], admin_set)
+  end
+
+  def collection_pid_configuration
+    local_id = SolrDocument.find(self.admin_policy_pid).local_id
+    Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
+  end
+
+
 end

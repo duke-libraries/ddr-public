@@ -4,7 +4,7 @@
 <% if @collection_document && @collection_document.description %>
   <p><%= @collection_document.description %></p>
 <% else %>
-  <p><%= t("ddr.public.portal.#{controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.") %></p>  
+  <p><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.") %></p>  
 <% end %>
 
 
