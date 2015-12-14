@@ -30,8 +30,11 @@
     <%= render 'home' %>
     
     <%# set the html title for collection portal page -%>
-    <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))+" - Duke Libraries" %>
-      
+    <% if @collection_document %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) + " - Duke Libraries" %>
+    <% else %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+    <% end %>
   <% else %>
     <%= render 'search_results' %>
   <% end %>
