@@ -121,7 +121,7 @@ module Ddr
                 :separator => show_field['separator'],
                 :label => show_field['label'],
                 :helper_method => show_field['helper_method'],
-                :link_to_search => show_field['link_to_search']
+                :link_to_search => if show_field['link_to_search'] then eval(show_field['link_to_search']) end
             end
           end
         end
