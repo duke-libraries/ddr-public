@@ -126,14 +126,18 @@ module ApplicationHelper
     # For an item page with multi-res image(s), get an array of image component multires image URLs.
     # Iterate over an array of component pids sorted by struct_map order. Retrieve each's respective 
     # ptif path. Create a new array with those paths.
-    
+
     components = doclist.map { |doc| { file: doc.multires_image_file_path, id: doc.id } }
     paths = []
     
     if document.struct_map
       sorted_pids(document).each { |item|
-        c = components.detect { |h| h[:id] == item } 
-        paths.push((c[:file]))     
+        c = components.detect { |h| h[:id] == item }
+        if c[:file].blank?
+          Rails.logger.error "Component #{ item } is missing a multires_image_file_path"
+        else
+          paths.push((c[:file]))
+        end
       }
     else
       # If no struct_map present, render components in native order
