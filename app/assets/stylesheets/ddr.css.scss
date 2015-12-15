@@ -347,6 +347,12 @@ a.showcase-item-wrap, a.highlight-item-wrap {
         overflow: visible !important;
       }
   }
+  
+  // override default BL wrap https://github.com/duke-libraries/ddr-public/issues/232
+  & .facet-label {
+    word-break: normal;
+    hyphens: none;
+  }
 
 
   /* Blacklight Range Filter Overrides */
