@@ -161,7 +161,7 @@ namespace :ddr_public do
   # http://www.apache.org/licenses/LICENSE-2.0
   namespace :ddr_portals do
     
-    DDR_PORTALS_REPO = "git@github.com:duke-libraries/ddr-portals.git"
+    DDR_PORTALS_REPO = "https://github.com/duke-libraries/ddr-portals.git"
     DDR_PORTALS_PATH = Rails.root.join('ddr-portals')
     GITFILE = "#{DDR_PORTALS_PATH}/.git"
     PORTAL_VIEW_PATH = Rails.root.join('app','views','ddr-portals')
