@@ -452,6 +452,7 @@ DEPENDENCIES
   launchy
   log4r
   mysql2
+  nokogiri
   openseadragon (~> 0.2.0)
   orderly
   prawn

@@ -30,7 +30,19 @@
 /config/environments/*.rb
 
 # Pre-compiled assets
+
+# Ddr-portals
+/ddr-portals
+/app/views/ddr-portals/*
+
+# Sitemaps
+/public/sitemaps/*
+
 /public/assets
+
+# Ddr-portals
+/ddr-portals
+/app/views/ddr-portals/*
 
 .sass-cache
 

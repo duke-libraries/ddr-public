@@ -4,20 +4,12 @@ Rails.application.routes.draw do
 
   blacklight_for :catalog
 
-  scope 'dc' do
-    Rails.application.config.portal_controllers['portals']['digital_collections']['include']['collections'].each do |collection_controller_name|
-      get "#{collection_controller_name}/range_limit", :to => "#{collection_controller_name}#range_limit"
-      get "#{collection_controller_name}/facet/:id", to: "#{collection_controller_name}#facet", as: "#{collection_controller_name}_facet"
-      get "#{collection_controller_name}/about", to: "#{collection_controller_name}#about", as: "about_#{collection_controller_name}"
-      get "#{collection_controller_name}/:id", to: "#{collection_controller_name}#show"
-      get "#{collection_controller_name}", to: "#{collection_controller_name}#index"
-    end
-  end
-  
-  get 'dc/about', to: 'digital_collections#about', as: 'about_digital_collections'
-  resources :digital_collections, path: 'dc', only: [:index, :show]
-
-  resources :nescent, only: [:index, :show]
+  get "dc/range_limit/", to: "digital_collections#range_limit"
+  get "dc/facet/:id", to: "digital_collections#facet", as: "digital_collections_facet"
+  get "dc/:collection/:id/media", :to => "digital_collections#media"
+  get "dc/:collection/:id", to: "digital_collections#show"
+  get "dc/:collection", to: "digital_collections#index", as: "digital_collections"
+  get "dc" => "digital_collections#index"
 
   def pid_constraint
       /[a-zA-Z0-9\-_]+:[a-zA-Z0-9\-_]+/

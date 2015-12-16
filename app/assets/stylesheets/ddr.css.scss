@@ -199,6 +199,7 @@ body.blacklight-catalog-show #content {
   height: 500px; 
   background-repeat: no-repeat; 
   background-position: 50% 50%; 
+  background-size: cover;
 }
 
 #collection-showcase-1 {
@@ -345,6 +346,12 @@ a.showcase-item-wrap, a.highlight-item-wrap {
         padding-bottom: 0;
         overflow: visible !important;
       }
+  }
+  
+  // override default BL wrap https://github.com/duke-libraries/ddr-public/issues/232
+  & .facet-label {
+    word-break: normal;
+    hyphens: none;
   }
 
 

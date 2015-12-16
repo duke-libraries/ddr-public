@@ -2,6 +2,8 @@ language: ruby
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libclamav6 libclamav-dev clamav
+  - gem update --system 2.4.3
+  - gem --version
 rvm:
   - 2.1
 before_script:

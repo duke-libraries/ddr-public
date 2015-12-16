@@ -24,6 +24,7 @@ gem "blacklight_range_limit", :git => 'https://github.com/duke-libraries/blackli
 gem 'prawn'
 gem 'fastimage'
 gem 'bootstrap-select-rails'
+gem 'nokogiri'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 

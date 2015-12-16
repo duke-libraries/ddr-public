@@ -16,7 +16,9 @@
     <h3>Images for this Item</h3>
     <ul>
       <% multi_image_sorted_paths(@document, @document_list).each do |path| %>
-        <li><%= link_to File.basename(path, File.extname(path)), iiif_image_path(path, {:size => '!850,850'}) %></li>
+        <% unless path.blank? %>
+          <li><%= link_to File.basename(path, File.extname(path)), iiif_image_path(path, {:size => '!850,850'}) %></li>
+        <% end %>
       <% end %>
     </ul>
   </noscript>

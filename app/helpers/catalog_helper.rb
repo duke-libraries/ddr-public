@@ -25,25 +25,21 @@ module CatalogHelper
   end
   
   def render_thumbnail_link document, size, counter = nil
-    path = multires_thumbnail_path(document)
-    if path.present?
-      thumbnail_link_to_document(document, path, size, counter)
+    if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
+      thumbnail_link_to_document(document, thumbnail_multires_image_file_path, size, counter)
     else
       render_thumbnail_tag(document, {}, :counter => counter)
     end 
   end
 
-  def multires_thumbnail_path(document)
-    thumbnail_path = nil
-    if document.multires_image_file_paths.present?
-      thumbnail_path = document.multires_image_file_paths.first
+  def thumbnail_multires_image_file_path(document)
+    if thumbnail_local_id = Rails.application.config.portal.try(:[] , 'portals').try(:[] , 'collection_local_id').try(:[] , document.local_id).try(:[] , 'thumbnail_image')
+      response, thumbnail_documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{thumbnail_local_id}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
+      thumbnail_documents.first.multires_image_file_paths.first
     elsif document.multires_image_file_path.present?
-      thumbnail_path = document.multires_image_file_path
-    else
-      response, child_documents = find_children(document)
-      if child_documents.present?
-        multires_thumbnail_path(child_documents.first)
-      end
+      document.multires_image_file_path
+    elsif document.multires_image_file_paths.present?
+      document.multires_image_file_paths.first
     end
   end
 
@@ -51,7 +47,6 @@ module CatalogHelper
     image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
     link_to_document document, image_tag, :counter => counter
   end
-
 
   def find_children document, relationship = nil, params = {}
     configure_blacklight_for_children
@@ -243,21 +238,18 @@ module CatalogHelper
     end
   end
   
-
-  def get_blog_posts slug
-    if Rails.application.config.portal_controllers['collections'][slug] && Rails.application.config.portal_controllers['collections'][slug]['blog_posts']
-
-        # NOTE: This URL has to be https. We get this data from Wordpress via the JSON API plugin.
-        # We had to revise the query_images() function in json-api/models/attachment.php to
-        # cirumvent a bug where image data was not rendering when hitting the API via https. 
-
-        begin
-          blog_posts = JSON.parse(open(Rails.application.config.portal_controllers['collections'][slug]['blog_posts'],{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
-        rescue OpenURI::HTTPError => e
-          Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
-          fallback_link = link_to "See All Blog Posts", "http://blogs.library.duke.edu/bitstreams"
-          "<p class='small'>" + fallback_link + "</p>"
-        end
+  def get_blog_posts blog_url
+    if blog_url.present?
+      # NOTE: This URL has to be https. We get this data from Wordpress via the JSON API plugin.
+      # We had to revise the query_images() function in json-api/models/attachment.php to
+      # cirumvent a bug where image data was not rendering when hitting the API via https. 
+      begin
+        blog_posts = JSON.parse(open(blog_url,{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
+      rescue OpenURI::HTTPError => e
+        Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+        fallback_link = link_to "See All Blog Posts", "http://blogs.library.duke.edu/bitstreams"
+        "<p class='small'>" + fallback_link + "</p>"
+      end
     end
   end
   
@@ -285,7 +277,6 @@ module CatalogHelper
 
   def all_search_scopes
     {:search_action_url => ["This Collection", search_action_url],
-     :digital_collections => ["Digital Collections", digital_collections_url],
      :catalog_index_url => ["Digital Repository", catalog_index_url]}
   end
 
