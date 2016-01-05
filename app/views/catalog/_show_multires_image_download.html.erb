@@ -8,7 +8,8 @@
 	    </a>
 	
 	    <ul class="dropdown-menu">
-		<% if is_multi_image?(@document, @document_list) %>				
+		<% if is_multi_image?(@document) %>
+			<% ptifs = @document.multires_image_file_paths %>
 		  <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
 	
 	
@@ -17,9 +18,9 @@
 			URL string in GET). 
 			 -->
 			 		  
-      <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document, @document_list, {:size => 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
+      <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
 
-			<li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document, @document_list, {:size => 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>				
+			<li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>				
 			</li>
 			
 			<!-- TO-DO: add options for resolution beyond full. Style the button/link to resemble the other links in the menu -->
@@ -33,7 +34,7 @@
 	      <li><%= link_to ("Large JPG " + content_tag(:span, "1,200px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!1200,1200'}), class: "download-link-single", id: "download-lrg", download: "" %></li>	
 	      <li><%= link_to ("Full-Res JPG " + content_tag(:span, "Original Resolution", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {}), class: "download-link-single", id: "download-full", download: "" %></li>
 
-		<% if is_multi_image?(@document, @document_list) %>	
+		<% if is_multi_image?(@document) %>	
 		  <li class="divider" role="separator"></li>
 		<li role="presentation" class="disabled"><a href="#">Please be patient with high-res and bulk downloads.</a></li>
 		<% end %>

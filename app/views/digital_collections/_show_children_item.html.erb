@@ -1,13 +1,1 @@
-<!-- For now, hide the component section for digital collections items -->
-<!-- but render it anyway for troubleshooting purposes -->
-
-<div style="display: none;">
-  <h3>Files</h3>
-  <% @response, @document_list = find_children(@document, :is_part_of, params) %>
-  <div id="sortAndPerPage" class="clearfix">
-  	<div class="search-widgets pull-right">
-  		<%= render 'sort_widget' %>
-  	</div>
-  </div>
-  <%= render_document_index %>
-</div>
+<!-- Do not show item children in digital collections -->

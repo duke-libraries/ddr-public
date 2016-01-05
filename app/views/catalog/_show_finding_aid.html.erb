@@ -1,6 +1,8 @@
-<% unless document.finding_aid.blank? %>
-  <div class="buffer-bottom-40">
-    <div class="text-muted text-uppercase small strong">Source Collection</div>
-      <%= source_collection({ :document => document, :placement => 'left' })  %>
-  </div>
+<% cache("finding_aid_brief_#{params[:collection]}", expires_in: 7.days) do %>
+  <% unless document.finding_aid.blank? %>
+    <div class="buffer-bottom-40">
+      <div class="text-muted text-uppercase small strong">Source Collection</div>
+        <%= source_collection({ :document => document, :placement => 'left' })  %>
+    </div>
+  <% end %>
 <% end %>

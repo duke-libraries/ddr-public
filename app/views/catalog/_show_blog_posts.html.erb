@@ -1,32 +1,34 @@
-<% @blog_posts = get_blog_posts(@blog_post_url) %>
+<% cache("blog_posts_#{params[:collection]}", expires_in: 1.day) do %>
+  <% @blog_posts = get_blog_posts(@blog_post_url) %>
 
-<% if @blog_posts && @blog_posts['posts'] %>
-
-
-  <div id="blog-posts">
-    <h3><a href="http://blogs.library.duke.edu/bitstreams/">From Our Blog</a></h3>
+  <% if @blog_posts && @blog_posts['posts'] %>
 
 
-    <% if @blog_posts['posts'].length > 2 %>
+    <div id="blog-posts">
+      <h3><a href="http://blogs.library.duke.edu/bitstreams/">From Our Blog</a></h3>
 
-      <%= render partial: 'show_blog_post_feature', locals: { post: @blog_posts['posts'].first } %>
 
-      <div class="row blog-secondary">
-        <% @blog_posts['posts'].drop(1)[0..3].each do |post| %>
-          <%= render partial: 'show_blog_post_secondary', locals: { post: post } %>
+      <% if @blog_posts['posts'].length > 2 %>
+
+        <%= render partial: 'show_blog_post_feature', locals: { post: @blog_posts['posts'].first } %>
+
+        <div class="row blog-secondary">
+          <% @blog_posts['posts'].drop(1)[0..3].each do |post| %>
+            <%= render partial: 'show_blog_post_secondary', locals: { post: post } %>
+          <% end %>
+        </div>
+      
+        <% if @blog_posts['posts'].length > 5 %>
+          <div><%= link_to 'More Posts About This Collection', 'http://blogs.library.duke.edu/bitstreams/tag/'+@blog_posts['tag']['slug']+'/', { class: 'small text-muted'} %></div>
         <% end %>
-      </div>
-    
-      <% if @blog_posts['posts'].length > 5 %>
-        <div><%= link_to 'More Posts About This Collection', 'http://blogs.library.duke.edu/bitstreams/tag/'+@blog_posts['tag']['slug']+'/', { class: 'small text-muted'} %></div>
+      
+      <% else %>
+        <% @blog_posts['posts'].each do |post| %>
+          <%= render partial: 'show_blog_post_feature', locals: { post: post } %>
+        <% end %>
       <% end %>
-    
-    <% else %>
-      <% @blog_posts['posts'].each do |post| %>
-        <%= render partial: 'show_blog_post_feature', locals: { post: post } %>
-      <% end %>
-    <% end %>
 
-  </div>
-  
+    </div>
+    
+  <% end %>
 <% end %>
