@@ -226,16 +226,9 @@ module CatalogHelper
     return popover
   end
 
-  def find_collection_results response
-    if response.facet_counts['facet_fields'].has_key?('collection_facet_sim')
-      collection_uris = response.facet_counts['facet_fields']['collection_facet_sim'].select.each_with_index { |str, i| i.even? }
-      pids = collection_uris.map { |uri| ActiveFedora::Base.pid_from_uri(uri) }
-      query = ActiveFedora::SolrService.construct_query_for_pids(pids)
-      results = ActiveFedora::SolrService.query(query)
-      docs = results.map { |result| SolrDocument.new(result) }
-    else
-      docs = []
-    end
+  def find_collection_results
+    response, document_list = get_search_results(add_facet_params('active_fedora_model_ssi', 'Collection'))
+    document_list
   end
   
   def get_blog_posts blog_url
