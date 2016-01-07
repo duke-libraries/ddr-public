@@ -108,6 +108,17 @@ a.navbar-dul {
   }
 }
 
+#main-flashes {
+  margin-top: -20px;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: 20px;
+
+  & .alert {
+    margin-bottom: 0;
+  }
+}
+
 
 #main-container {
   padding: 20px;
@@ -116,11 +127,6 @@ a.navbar-dul {
 
 body.blacklight-catalog-show #content {
   border-right: 2px solid #eee;
-}
-
-
-.alert.portal-alert {
-  margin-bottom: 0;
 }
 
 
