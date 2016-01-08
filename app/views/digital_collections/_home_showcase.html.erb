@@ -1,5 +1,4 @@
 <% unless has_search_parameters? %>
-
   <div class="container-fluid showcase-wrapper">
     <div class="row no-gutter">
       <div class="col-md-4 collection-start">
@@ -11,19 +10,23 @@
             <% end %>
       </div>
       <% if @showcase_documents %>
-        <% @showcase_documents.sample(2).each_with_index do |doc, index| %>
-          <% if doc.multires_image_file_paths.first %>
-            <div class="col-md-4 col-sm-6 collection-showcase" id="collection-showcase-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '390,', :region => 'pct:5,5,90,90' }) %>);">
-
-              <%= link_to_document doc, "", :class => "showcase-item-wrap", :id => "showcase-item-link-"+index.to_s, data: { toggle: "fade-element", target_id: "showcase-item-caption-"+index.to_s } %>                 
-
-              <div class="showcase-item-caption" id="showcase-item-caption-<%= index %>">
-                <div style="position: absolute; bottom: 10px;"><small><%= doc.title.truncate(50, separator: ' ') %> <small class="text-muted"><%= doc.local_id %></small></small></div>
-              </div>
-
-            </div>
-          <%-end %>
+        
+        <% if @showcase_layout == 'portrait' %>
+          <% @showcase_documents.sample(2).each_with_index do |doc, index| %>
+            <% if doc.multires_image_file_paths.first %>
+              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '390,', region: 'pct:5,5,90,90', sizeclass: 'col-md-4 col-sm-6', captionlength: 50 } %>
+            <%- end %>
+          <%- end %>
         <%- end %>
+
+        <% if @showcase_layout == 'landscape' %>
+          <% @showcase_documents.sample(1).each_with_index do |doc, index| %>
+            <% if doc.multires_image_file_paths.first %>
+              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '780,', region: 'pct:5,5,90,90', sizeclass: 'col-md-8 col-sm-12', captionlength: 100 } %>
+            <%- end %>
+          <%- end %>
+        <%- end %>
+        
       <% end %>
 
 
