@@ -155,8 +155,6 @@ body.blacklight-catalog-show #content {
   margin: -21px -20px 20px -20px;
 }
 
-
-
 .collection-start {
   background-color: rgba(0,0,0,0.8);
   color: white;
@@ -226,8 +224,11 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   width:100%;
   z-index: 90;
   min-height: 500px;
+  & .item-caption-inner {
+    position: absolute; 
+    bottom: 10px;
+  }
 }
-
 
 .collection-highlight {
   width: 25%;

@@ -8,7 +8,7 @@
             <%= link_to_document doc, "", :class => "highlight-item-wrap", :id => "showcase-item-link-"+index.to_s, data: { toggle: "fade-element", target_id: "highlight-item-caption-"+index.to_s } %>                 
 
             <div class="highlight-item-caption" id="highlight-item-caption-<%= index %>">
-              <div style="position: absolute; bottom: 10px;"><small><%= doc.title.truncate(50, separator: ' ') %> <small class="text-muted"><%= doc.local_id %></small></small></div>
+              <div class="item-caption-inner"><small><%= doc.title.truncate(50, separator: ' ') %> <small class="text-muted"><%= doc.local_id %></small></small></div>
             </div>
 
           </div>
