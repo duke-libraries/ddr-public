@@ -110,7 +110,7 @@ GEM
     ddr-alerts (1.0.0)
       rails (~> 4.1.6)
     ddr-antivirus (2.1.1)
-    ddr-models (2.4.0)
+    ddr-models (2.4.1)
       active-fedora (~> 7.0)
       activeresource
       cancancan (~> 1.12)
@@ -242,7 +242,7 @@ GEM
     multi_json (1.10.1)
     mysql2 (0.3.17)
     net-http-persistent (2.9.4)
-    net-ldap (0.12.1)
+    net-ldap (0.13.0)
     netrc (0.10.2)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
@@ -462,7 +462,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.4.0)
+  ddr-models (= 2.4.1)
   devise
   factory_girl_rails (~> 4.4)
   fastimage
