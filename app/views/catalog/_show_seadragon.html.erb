@@ -35,166 +35,160 @@ We may want to refactor into separate partials. %>
 	  </div>	
 	</div>
 	
-	<%# The aspect ratio of the first image determines how tall to make the open seadragon container. %>
-    <div id="image-content" style="height: <%= 838 / aspectratio %>px; width:auto;" class="openseadragon"></div>
+	<%# The aspect ratio of the first image determines how tall to make the open seadragon container. But don't make it shorter than 400px else problematic for mixed-orientation items & button display %>
+    <div id="image-content" style="height: <%= [400,(838 / aspectratio)].max %>px; width:auto;" class="openseadragon"></div>
 </div>
 
 <%# TODO: Evaluate whether this openseadragon instantiation can be moved to assets/javascripts %>
 <script type="text/javascript">
 $(document).ready(function(e){
 
-   var viewer = OpenSeadragon({
-        id:             "image-content",
-        prefixUrl:      "/assets/openseadragon/",
-		showNavigator: true,
-		autoHideControls: false, // do this manually for more fine-grained control
-		controlsFadeDelay: 0,
-		controlsFadeLength: 1000, 		
-		navigatorPosition: 'BOTTOM_RIGHT',
-		defaultZoomLevel: 0,
-		minZoomImageRatio: 0.5,
-		maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
-		 		
-		<% if is_item?(@document) %>
-	      tileSources:   <%= image_item_tilesources(@document.multires_image_file_paths).to_json.html_safe %>,		
-		<% elsif is_component?(@document) %>
-		  tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
-		<% end %>
-		<% if is_item?(@document) && is_multi_image?(@document) %>
-	        sequenceMode: true,
-        	showReferenceStrip:  true,
-	    	referenceStripScroll: 'vertical',
-			referenceStripPosition: 'BOTTOM_LEFT',
-			referenceStripHeight: 300,
-			previousButton: "btn-prev",
-			nextButton: "btn-next",			
-		<% end %>
-		zoomInButton: "btn-zoom-in",
-    	zoomOutButton: "btn-zoom-out",
-    	homeButton: "btn-full-page",
-    	fullPageButton: "btn-fullscreen"
+  var viewer = OpenSeadragon({
+    id:             "image-content",
+    prefixUrl:      "/assets/openseadragon/",
+    showNavigator: true,
+    autoHideControls: false, // do this manually for more fine-grained control
+    controlsFadeDelay: 0,
+    controlsFadeLength: 1000,
+    navigatorPosition: 'BOTTOM_RIGHT',
+    defaultZoomLevel: 0,
+    minZoomImageRatio: 0.5,
+    maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
 
-    });	
+  <% if is_item?(@document) %>
+    tileSources:   <%= image_item_tilesources(@document.multires_image_file_paths).to_json.html_safe %>,		
+  <% elsif is_component?(@document) %>
+    tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
+  <% end %>
+  <% if is_item?(@document) && is_multi_image?(@document) %>
+    sequenceMode: true,
+    showReferenceStrip:  true,
+    referenceStripScroll: 'vertical',
+    referenceStripPosition: 'BOTTOM_LEFT',
+    referenceStripHeight: 300,
+    previousButton: "btn-prev",
+    nextButton: "btn-next",
+  <% end %>
+    zoomInButton: "btn-zoom-in",
+    zoomOutButton: "btn-zoom-out",
+    homeButton: "btn-full-page",
+    fullPageButton: "btn-fullscreen"
+    });
 
-	// When the current page has changed
-	viewer.addHandler("page", function (data) { 
-		
-		// Update the page info indicator to show current page number
-		$("#page-jumper-text").val( parseInt(data.page) + 1 );
-		$("#page-jumper-text").attr("placeholder",( parseInt(data.page) + 1 ));
-		$("#page-jumper-text").blur();
-		
-		// Get currently-viewed multires image path matching position in
-		// structmap array w/index of page currently viewed
-		currentpagepath = pagepaths[ parseInt(data.page) ];
-		
-		// Update the download options to refer to the currently viewed page		
-		$('#item-options .download-link-single').each(function(){
-			this.href = this.href.replace(/IIIF=(.*)ptif/,"IIIF=" + currentpagepath);
-		});
-		
-		
-	});
-	
-	// When a seadragon tilesource has opened...
-	viewer.addHandler("open", function (data) {
-		
-		currentpage = viewer.currentPage();
-		
-		// Get the zoom level when the page opens. If 1, it's a landscape image that needs no matting.
-		// If < 1, zoom out slightly to give matting on top/bottom so we don't
-		// just have two black bars on left/right.
-		
-		zoomlevel = viewer.viewport.getZoom();
+  // When the current page has changed
+  viewer.addHandler("page", function (data) { 
 
-		if(zoomlevel < 1){
-			
-			// Zoom immediately to 90% of the expected zoom. 'true' means immediately do it w/o animating.
-			viewer.viewport.zoomTo(zoomlevel*.90,null,true); 
-		
-		}
+    // Update the page info indicator to show current page number
+    $("#page-jumper-text").val( parseInt(data.page) + 1 );
+    $("#page-jumper-text").attr("placeholder",( parseInt(data.page) + 1 ));
+    $("#page-jumper-text").blur();
 
-		$('.navigator').css({ 'visibility':'hidden','opacity':0 });
-		
-	});
+    // Get currently-viewed multires image path matching position in
+    // structmap array w/index of page currently viewed
+    currentpagepath = pagepaths[ parseInt(data.page) ];
 
-	<% if is_item?(@document) && is_multi_image?(@document) %>
-		viewer.addControl("image-count",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
-	<% end %>
-	
-	// Add the entire image nav toolbar as a seadragon control. This preserves it in full-screen view.
-	viewer.addControl("image-toolbar",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
+    // Update the download options to refer to the currently viewed page		
+    $('#item-options .download-link-single').each(function(){
+      this.href = this.href.replace(/IIIF=(.*)ptif/,"IIIF=" + currentpagepath);
+    });
 
+  });
 
-	// When the zoom has changed...
-	viewer.addHandler("zoom", function (data) { 
-		
-		// ...make the navigator image visible (hidden by default)
-		$('.navigator').css({ 'visibility':'visible','opacity':0.9 });	
-	});	
-	
-	// When a user enters the seadragon container area...
-	viewer.addHandler("container-enter", function () { 
+  // When a seadragon tilesource has opened...
+  viewer.addHandler("open", function (data) {
 
-		// ...make the nav toolbar and thumbnail strip visible
-		$('#image-toolbar').css({ 'visibility':'visible','opacity':1 });
-		$('.referencestrip').css({ 'visibility':'visible','opacity':0.9 });
-		$('.openseadragon-container #image-count').css({ 'opacity':0,'visibility':'hidden', 'display':'none' });		
-	
-	});	
-	
-	// When a user exits the seadragon container area...
-	viewer.addHandler("container-exit", function () { // When the zoom or pan has changed
-		
-		// ...hide the nav toolbar, thumbnail strip, and navigator again
-		$('#image-toolbar').css({ 'visibility':'hidden','opacity':0 });
-		$('.referencestrip').css({ 'visibility':'hidden','opacity':0 });
-		$('.navigator').css({ 'visibility':'hidden','opacity':0 });		
-	});	
-	
-	// When the pan has changed...
-	viewer.addHandler("pan", function () { 
-		
-		// ...show the navigator
-		$('.navigator').css({ 'visibility':'visible','opacity':0.9 });
-	});	
-	
+    currentpage = viewer.currentPage();
 
-	viewer.addHandler("home", function () { 
-		// Possible to customize the home/fit on page button behavior.
-		// console.log(JSON.stringify(viewer, null, '\t'));
-	});	
+    // Get the zoom level when the page opens. If 1, it's a landscape image that needs no matting.
+    // If < 1, zoom out slightly to give matting on top/bottom so we don't
+    // just have two black bars on left/right.
+
+    zoomlevel = viewer.viewport.getZoom();
+
+    if(zoomlevel < 1){
+
+      // Zoom immediately to 90% of the expected zoom. 'true' means immediately do it w/o animating.
+      viewer.viewport.zoomTo(zoomlevel*.90,null,true); 
+
+    }
+
+    $('.navigator').css({ 'visibility':'hidden','opacity':0 });
+
+  });
+
+  <% if is_item?(@document) && is_multi_image?(@document) %>
+    viewer.addControl("image-count",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
+  <% end %>
+
+  // Add the entire image nav toolbar as a seadragon control. This preserves it in full-screen view.
+  viewer.addControl("image-toolbar",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
+
+  // When the zoom has changed...
+  viewer.addHandler("zoom", function (data) { 
+
+    // ...make the navigator image visible (hidden by default)
+    $('.navigator').css({ 'visibility':'visible','opacity':0.9 });	
+  });
+
+  // When a user enters the seadragon container area...
+  viewer.addHandler("container-enter", function () { 
+
+    // ...make the nav toolbar and thumbnail strip visible
+    $('#image-toolbar').css({ 'visibility':'visible','opacity':1 });
+    $('.referencestrip').css({ 'visibility':'visible','opacity':0.9 });
+    $('.openseadragon-container #image-count').css({ 'opacity':0,'visibility':'hidden', 'display':'none' });		
+
+  });	
+
+  // When a user exits the seadragon container area...
+  viewer.addHandler("container-exit", function () { // When the zoom or pan has changed
+
+    // ...hide the nav toolbar, thumbnail strip, and navigator again
+    $('#image-toolbar').css({ 'visibility':'hidden','opacity':0 });
+    $('.referencestrip').css({ 'visibility':'hidden','opacity':0 });
+    $('.navigator').css({ 'visibility':'hidden','opacity':0 });		
+  });
+
+  // When the pan has changed...
+  viewer.addHandler("pan", function () { 
+
+    // ...show the navigator
+    $('.navigator').css({ 'visibility':'visible','opacity':0.9 });
+  });
 
 
-	$('#image-toolbar-inner').click(function(e){
-		// Prevent clicks on a disabled prev or next button from zooming the image behind it
-		e.preventDefault();
-		e.stopPropagation();
-	});
-	
-	
-	// Page jump form: erase value of current page when this box is selected 
-	// It remains in the placeholder attribute
-	$('#page-jumper-text').focus(function(e){ 
-		e.preventDefault();
-		$(this).val('');	
-	});
-	
-	// Page jump form submission: jump to the page a user entered
-	$('form#page-jumper').submit(function(e){ 
-		e.preventDefault();
-		viewer.goToPage($('#page-jumper-text').val() - 1);
-	});
-	
+  viewer.addHandler("home", function () { 
+    // Possible to customize the home/fit on page button behavior.
+    // console.log(JSON.stringify(viewer, null, '\t'));
+  });
 
-	
-	$('#btn-fullscreen-close').click(function(e){ 
-		e.preventDefault();
-		viewer.setFullScreen(false);
-	});	
-	
+
+  $('#image-toolbar-inner').click(function(e){
+    // Prevent clicks on a disabled prev or next button from zooming the image behind it
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+
+  // Page jump form: erase value of current page when this box is selected 
+  // It remains in the placeholder attribute
+  $('#page-jumper-text').focus(function(e){ 
+    e.preventDefault();
+    $(this).val('');
+  });
+
+  // Page jump form submission: jump to the page a user entered
+  $('form#page-jumper').submit(function(e){ 
+    e.preventDefault();
+    viewer.goToPage($('#page-jumper-text').val() - 1);
+  });
+
+  $('#btn-fullscreen-close').click(function(e){ 
+    e.preventDefault();
+    viewer.setFullScreen(false);
+  });
+
 
 });
  
 </script>
-
