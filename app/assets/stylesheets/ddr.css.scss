@@ -382,7 +382,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
     SEARCH RESULTS
 --------------------- */
 
-#documents.gallery { // Grid view
+#documents.gallery, #collections.gallery { // Grid view
 
   &:before, &:after {
     content: none; // this fixes Safari gallery wrap bug, ddr-public github issue #205
@@ -421,6 +421,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
   & .extra-result-see-more {
     display: none;
+    
     @media (min-width: $screen-md-min) {
       display: block;
     }
@@ -430,60 +431,38 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       padding: 20px;
       font-size: 18px;
       display: block;
-
     }
 
   }
 
 }
 
+
+/* Special style overrides for collections results section */
+
 .collection-matches-container h4 {
   margin-top: 0;
   margin-bottom: 18px;
 }
 
-#collections.gallery { // Grid view
 
-  &:before, &:after {
-      content: none; // this fixes Safari gallery wrap bug, ddr-public github issue #205
-    }
+#collections.gallery { 
 
-    // Override flexbox styles from the blacklight_gallery plugin
-    // to improve alignment; also use autoprefixer instead of the plugin's
-    // explicit prefixes.
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    align-content: flex-start;
-
-
-    & .document {
-
-      flex-grow: 0;
-      flex-shrink: 0;
-      flex-basis: auto;
-      min-width: auto;
-
-      & .thumbnail-wrapper {
-        border: 1px solid #e3e3e3;
-        padding: 20px 20px 10px 20px;
-        background: #eee;
+    & .thumbnail-wrapper {
+      border: 1px solid #e3e3e3;
+      padding: 20px 20px 10px 20px;
+      background: #eee;
 
       & .caption {
       text-align: center;
-
+      line-height: 0.6em;
+      
         & dl {
         display: none;
+        }
       }
 
-      }
-
-      }
-
-      & .thumbnail-wrapper > a {
+      & > a {
         display: block;
         overflow: hidden;
         max-height: 150px;
@@ -492,19 +471,22 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
     }
 
+    & .highlight {
+      & .thumbnail-wrapper > a {
+        max-height: 350px;
+      }
+    }
+
     & .img-thumbnail {
-      padding: 0;
-      border: none;
-    width: 100%;
+      width: 100%;
     }
 
     & h3.index_title {
-    margin-top: 4px;
       width: 100%;
-      line-height: .6;
+    }
 
     & a {
-    color: #567cba;
+      color: #567cba;
       font-size: 16px;
       font-weight: bold;
     }
@@ -513,22 +495,5 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       display: none;
     }
 
-    }
-
-    & .extra-result-see-more {
-      display: none;
-      @media (min-width: $screen-md-min) {
-        display: block;
-      }
-
-      & a {
-        border: 1px solid #ddd;
-        padding: 20px;
-        font-size: 18px;
-        display: block;
-
-      }
-
-    }
 
   }

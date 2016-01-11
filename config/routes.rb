@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get "dc/range_limit/", to: "digital_collections#range_limit"
   get "dc/facet/:id", to: "digital_collections#facet", as: "digital_collections_facet"
+  get "dc/:collection/featured", to: "digital_collections#featured", as: "featured_items"
   get "dc/:collection/:id/media", :to => "digital_collections#media"
   get "dc/:collection/:id", to: "digital_collections#show"
   get "dc/:collection", to: "digital_collections#index", as: "digital_collections"
