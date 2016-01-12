@@ -34,6 +34,11 @@ module Ddr
           @highlight_documents ||= image_documents('highlight_images')
         end
 
+        def max_download
+          @max_download ||= portal_config.try(:[], 'restrictions').try(:[], 'max_download')
+        end
+
+
         def blog_posts_url
           @blog_post_url ||= portal_config.try(:[], 'blog_posts')
         end
