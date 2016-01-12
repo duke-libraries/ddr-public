@@ -31,6 +31,7 @@ class DigitalCollectionsController < CatalogController
     super
     collection_document
     search_scopes
+    max_download
   end
 
   def media
