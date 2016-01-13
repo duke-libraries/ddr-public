@@ -16,10 +16,13 @@ class DigitalCollectionsController < CatalogController
 
   def index
     super
-    showcase_documents
-    highlight_documents
+    unless has_search_parameters?
+      showcase_documents
+      showcase_layout
+      highlight_documents
+      blog_posts_url
+    end
     collection_document
-    blog_posts_url
     alert_message
     search_scopes
   end

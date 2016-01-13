@@ -108,54 +108,13 @@ module ApplicationHelper
   # with nesting possible; we have to deal with arrays of hashes
   # with arrays for values, etc... 
 
-  def sorted_pids(document)
-    
-    if document.struct_map
-      
-      # Sort the divs in the structmap by the ORDER attribute.
-      pids = document.struct_map["divs"].sort_by { |h| h["order"].to_i }
-    
-      # Make an array of pids from the structmap div fptr. Assumes only one fptr per div.
-      sorted_pids = pids.map { |item| item["fptrs"].first }
-      
-    end
 
-  end
-
-  def multi_image_sorted_paths(document, doclist)
-    # For an item page with multi-res image(s), get an array of image component multires image URLs.
-    # Iterate over an array of component pids sorted by struct_map order. Retrieve each's respective 
-    # ptif path. Create a new array with those paths.
-
-    components = doclist.map { |doc| { file: doc.multires_image_file_path, id: doc.id } }
-    paths = []
-    
-    if document.struct_map
-      sorted_pids(document).each { |item|
-        c = components.detect { |h| h[:id] == item }
-        if c[:file].blank?
-          Rails.logger.error "Component #{ item } is missing a multires_image_file_path"
-        else
-          paths.push((c[:file]))
-        end
-      }
-    else
-      # If no struct_map present, render components in native order
-      components.each { |item|
-        paths.push(item[:file])
-      }
-    end
-
-    paths    
-  end
-
-  def multi_image_sorted_derivative_paths(document, doclist, options)
+  def multi_image_sorted_derivative_paths(ptifs, options)
     # For an item page with multi-res image(s), get an array of absolute URLs to JPG 
     # derivatives for each page, sorted by struct_map order. Accept image server 
     # options to customize sizes, especially for download.
     
-    ptifs = multi_image_sorted_paths(document, doclist)  
-    derivs = []
+    derivs ||= []
   
     ptifs.each { |image| 
       d = iiif_image_path(image,options)
@@ -176,35 +135,34 @@ module ApplicationHelper
     s
   end
 
-  def image_item_tilesources(document, doclist)
-    paths = multi_image_sorted_paths(document, doclist)
-    sources = []
+  def image_item_tilesources(paths)
+    sources ||= []
     paths.each { |item|
       sources.push(iiif_image_info_path(item))
     }
     sources
   end
   
-  def image_item_aspectratio(document, doclist)
+  def image_item_aspectratio(paths)
     # Get the width / height ratio of the first multires component's image
-    urls = image_item_tilesources(document, doclist)
+    urls = image_item_tilesources(paths)
     
     # Circumvent https error despite valid SSL cert
-    imagedata = JSON.load(open(urls.first, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
+    imagedata ||= JSON.load(open(urls.first, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
     
-    aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
+    aspectratio ||= (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
   
   def image_component_tilesource(document)
     # For a single component object that has a multi-res image, get the info.json path.   
-    source = iiif_image_info_path(document.multires_image_file_path)
+    source ||= iiif_image_info_path(document.multires_image_file_path)
   end  
  
   def image_component_aspectratio(document)
   # Get the width / height ratio of the multi-res component's image  
     url = iiif_image_info_path(document.multires_image_file_path)
-    imagedata = JSON.load(open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
-    aspectratio = (imagedata['width'].to_f/imagedata['height'].to_f)    
+    imagedata ||= JSON.load(open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
+    aspectratio ||= (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
 
   def url_for_document doc, options = {}

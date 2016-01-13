@@ -25,6 +25,10 @@ module Ddr
         def showcase_documents
           @showcase_documents ||= image_documents('showcase_images')
         end
+        
+        def showcase_layout
+          @showcase_layout ||= portal_config.try(:[], 'showcase_images').try(:[], 'layout')
+        end
 
         def highlight_documents
           @highlight_documents ||= image_documents('highlight_images')

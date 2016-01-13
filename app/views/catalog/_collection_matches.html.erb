@@ -1,10 +1,22 @@
+<!-- TODO: Some of this should be moved to a helper probably -->
 <% if @response.first_page? %>
-  <% document_list = find_collection_results @response %>
-  <% unless document_list.blank? %>
-    <div class="collection-matches-container">
-      <h4>Matching Collections</h4>
-      <div id="documents" class="row gallery horizontal-gallery">
-        <!-- This uses the default gallery view. We probably want something different. -->
+  <% document_list = find_collection_results %>
+  <% fedora_model = params.try(:[], 'f').try(:[], 'active_fedora_model_ssi') || [] %>
+  <% if document_list.length == @document_list.length %>
+    <% doc_list_match = document_list.map { |doc| doc.id } == @document_list.map { |doc| doc.id } %>
+  <% else %>
+    <% doc_list_match = false %>
+  <% end %>
+  <% unless document_list.blank? or fedora_model.include? 'Collection' or doc_list_match %>
+    <div class="collection-matches-container well">
+
+      <% if document_list.length > 3 %>
+        <%- path = add_facet_params_and_redirect('active_fedora_model_ssi', 'Collection') %>
+        <h4><%= link_to "Matching Collections (#{document_list.length}) &raquo;".html_safe, path %></h4>
+      <% else %>
+        <h4>Matching Collections (<%= document_list.length %>)</h4>
+      <% end %>
+      <div id="collections" class="row gallery horizontal-gallery">
           <%= render_gallery_collection document_list[0..2] %>
       </div>
     </div>

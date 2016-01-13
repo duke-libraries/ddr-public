@@ -1,12 +1,12 @@
 #header-navbar {
-	padding: 10px 0;
-	margin-bottom: 0;
+  padding: 10px 0;
+  margin-bottom: 0;
 }
 
 #logo-col {
   @media (min-width: $screen-sm) {
    padding: 0;
-  }  
+  }
 }
 
 #search-col {
@@ -15,7 +15,7 @@
   }
   @media (min-width: $screen-sm) {
    padding: 0;
-  }  
+  }
 }
 
 img.navbar-logo {
@@ -32,20 +32,20 @@ a.navbar-dul {
   margin-right: 15px;
 }
 
-#header-navbar .navbar-form { 
-	padding: 0;
-	margin: 0;
-	
-	& .input-group {
+#header-navbar .navbar-form {
+  padding: 0;
+  margin: 0;
+
+  & .input-group {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: flex-start;
     align-content: flex-start;
-	  
-	  	  
-	  & .input-group-btn.scope-btn {
-	    display: table-cell;
+
+
+    & .input-group-btn.scope-btn {
+      display: table-cell;
       flex: 0 0 auto;
       width: auto;
 
@@ -54,39 +54,39 @@ a.navbar-dul {
          font-size: 13px;
         }
       }
-  	  
-  	  // Hide Digital Collections as a search scope until there are more published collections.
-  	  & ul.selectpicker li a[data-normalized-text*="Digital Collections"] {
+
+      // Hide Digital Collections as a search scope until there are more published collections.
+      & ul.selectpicker li a[data-normalized-text*="Digital Collections"] {
         display: none;
       }
-	  }
+    }
 
-	  & input#q {
-	    display: block;
+    & input#q {
+      display: block;
       flex: 1 1 auto;
       width: 50px;
       height: 44px;
-	  }
-	  
-	  & .input-group-btn.submit-btn {
-	    display: block;
+    }
+
+    & .input-group-btn.submit-btn {
+      display: block;
       flex: 0 0 auto;
       width: auto;
-	  }
-	  
-	}
+    }
+
+  }
 }
 
 #mobile-menu button {
   background-color: transparent;
-  position: absolute; 
+  position: absolute;
   right: 0px;
   padding: 14px;
   margin: 0;
   display: block;
   z-index: 999;
   border: 1px solid transparent;
-  border-radius: 0; 
+  border-radius: 0;
   &:hover {
    background-color: #032051;
   }
@@ -98,29 +98,35 @@ a.navbar-dul {
   }
   @media (min-width: $screen-md) {
    display: none;
-  } 
+  }
 }
 
 #user-col {
   font-size: 90%;
   @media (max-width: $screen-md) {
    padding: 0;
-  }  
+  }
+}
+
+#main-flashes {
+  margin-top: -20px;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: 20px;
+
+  & .alert {
+    margin-bottom: 0;
+  }
 }
 
 
 #main-container {
-	padding: 20px;
-	background-color: #fff;
+  padding: 20px;
+  background-color: #fff;
 }
 
 body.blacklight-catalog-show #content {
-	border-right: 2px solid #eee;
-}
-
-
-.alert.portal-alert {
-  margin-bottom: 0;
+  border-right: 2px solid #eee;
 }
 
 
@@ -130,11 +136,11 @@ body.blacklight-catalog-show #content {
 
 
 .image-display {
-	margin-bottom:15px;
+  margin-bottom:15px;
 }
 
 .image-display img {
-	max-width:100%;
+  max-width:100%;
 }
 
 .contact-devil-logo {
@@ -147,15 +153,13 @@ body.blacklight-catalog-show #content {
   width: 50px;
 }
 
-/* ------------- 
+/* -------------
  PORTAL DISPLAY
 ---------------- */
 
 .showcase-wrapper {
   margin: -21px -20px 20px -20px;
 }
-
-
 
 .collection-start {
   background-color: rgba(0,0,0,0.8);
@@ -164,48 +168,48 @@ body.blacklight-catalog-show #content {
   height: 500px;
   overflow: auto;
   @media (max-width: $screen-md) {
-    height: auto; 
+    height: auto;
   }
-  
+
   & h1#collection-title {
     color: white;
     margin-top: 0;
     @media (max-width: $screen-lg) {
-      font-size: 36px; 
+      font-size: 36px;
     }
   }
-  
+
   & .collection-abstract {
     color: $gray-lighter;
   }
-  
+
   & a {
     color: white;
   }
-  
+
   & .more-link {
     font-weight: bold;
   }
-  
+
 
   & .browse-all {
     margin-top: 10px;
   }
-  
+
 }
 
 .collection-showcase {
   background-color: #666;
-  height: 500px; 
-  background-repeat: no-repeat; 
-  background-position: 50% 50%; 
+  height: 500px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
   background-size: cover;
 }
 
 #collection-showcase-1 {
   @media (max-width: $screen-sm) {
-    display:none; // Just show one showcase item on smallest screens 
-  }  
+    display:none; // Just show one showcase item on smallest screens
+  }
 }
 
 a.showcase-item-wrap, a.highlight-item-wrap {
@@ -218,16 +222,19 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
 .showcase-item-caption, .highlight-item-caption {
   display: none;
-  position: absolute; 
-  bottom: 0; 
-  color: white; 
-  padding: 20px 20px 20px 20px; 
-  background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.4)); 
-  width:100%; 
+  position: absolute;
+  bottom: 0;
+  color: white;
+  padding: 20px 20px 20px 20px;
+  background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.4));
+  width:100%;
   z-index: 90;
   min-height: 500px;
+  & .item-caption-inner {
+    position: absolute; 
+    bottom: 10px;
+  }
 }
-
 
 .collection-highlight {
   width: 25%;
@@ -235,9 +242,9 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   background-position: 50% 50%;
   background-size: cover;
   border-right: 5px solid rgba(255,255,255,0);
-  border-right: 5px solid white;  
+  border-right: 5px solid white;
   border-bottom: 5px solid rgba(255,255,255,0);
-  border-bottom: 5px solid white;  
+  border-bottom: 5px solid white;
   float: left;
   position: relative;
   height: 210px;
@@ -259,37 +266,37 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 #blog-posts {
   & .blog-post-feature {
     margin-bottom: 30px;
-    
+
     & img {
       width: 150px;
       background-color: #ddd;
       margin-right: 10px;
     }
-    
+
     & .more-link {
       display: none; // out-of-box excerpt link is too long
     }
-    
+
     & .post-time-ago {
       margin-left: 0.8em;
     }
   }
-  
+
   & .blog-secondary {
     display: flex;
     flex-flow: row wrap;
-    
+
     & img.media-object {
       width: 75px;
     }
   }
-  
+
   & .blog-post-secondary {
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
   }
 }
 
-/* ------------- 
+/* -------------
   ITEM DISPLAY
 ---------------- */
 
@@ -298,15 +305,15 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 }
 
 .nav.item-options {
-	& > li > a {
-		color: $gray-light;
-		text-transform: uppercase;
-	}
-	
-	& .dropdown-menu .btn-link {
-	  padding-top: 0;
-	  padding-bottom: 0;
-	}
+  & > li > a {
+    color: $gray-light;
+    text-transform: uppercase;
+  }
+
+  & .dropdown-menu .btn-link {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 .collection-guide-icon {
@@ -315,7 +322,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 }
 
 
-/* ------------- 
+/* -------------
     FACETS
 ---------------- */
 
@@ -327,7 +334,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       border: none;
     }
     @media (max-width: $screen-sm) {
-      padding: 15px; 
+      padding: 15px;
     }
   }
 
@@ -335,7 +342,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       background-color: #ddd;
       @media (min-width: $screen-sm) {
         display: none;
-      } 
+      }
   }
 
    // override default screen-md facet styles
@@ -347,7 +354,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
         overflow: visible !important;
       }
   }
-  
+
   // override default BL wrap https://github.com/duke-libraries/ddr-public/issues/232
   & .facet-label {
     word-break: normal;
@@ -371,7 +378,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 }
 
 
-/* ------------------ 
+/* ------------------
     SEARCH RESULTS
 --------------------- */
 
@@ -388,43 +395,140 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: flex-start;
   align-content: flex-start;
 
 
-  & .document { 
+  & .document {
 
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: auto;
     min-width: auto;
+
   }
-  
+
   & .img-thumbnail {
     padding: 0;
     border: none;
   }
 
-  & h3.index_title { 
+  & h3.index_title {
     font-size: 18px;
     margin-top: 8px;
   }
-  
+
   & .extra-result-see-more {
     display: none;
-    @media (min-width: $screen-md-min) { 
+    @media (min-width: $screen-md-min) {
       display: block;
     }
-    
+
     & a {
       border: 1px solid #ddd;
       padding: 20px;
       font-size: 18px;
       display: block;
-      
+
     }
-    
+
   }
-    
-} 
+
+}
+
+.collection-matches-container h4 {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+#collections.gallery { // Grid view
+
+  &:before, &:after {
+      content: none; // this fixes Safari gallery wrap bug, ddr-public github issue #205
+    }
+
+    // Override flexbox styles from the blacklight_gallery plugin
+    // to improve alignment; also use autoprefixer instead of the plugin's
+    // explicit prefixes.
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+
+
+    & .document {
+
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: auto;
+      min-width: auto;
+
+      & .thumbnail-wrapper {
+        border: 1px solid #e3e3e3;
+        padding: 20px 20px 10px 20px;
+        background: #eee;
+
+      & .caption {
+      text-align: center;
+
+        & dl {
+        display: none;
+      }
+
+      }
+
+      }
+
+      & .thumbnail-wrapper > a {
+        display: block;
+        overflow: hidden;
+        max-height: 150px;
+        border: 6px solid #fafafa;
+      }
+
+    }
+
+    & .img-thumbnail {
+      padding: 0;
+      border: none;
+    width: 100%;
+    }
+
+    & h3.index_title {
+    margin-top: 4px;
+      width: 100%;
+      line-height: .6;
+
+    & a {
+    color: #567cba;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    & .document-counter {
+      display: none;
+    }
+
+    }
+
+    & .extra-result-see-more {
+      display: none;
+      @media (min-width: $screen-md-min) {
+        display: block;
+      }
+
+      & a {
+        border: 1px solid #ddd;
+        padding: 20px;
+        font-size: 18px;
+        display: block;
+
+      }
+
+    }
+
+  }

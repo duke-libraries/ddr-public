@@ -78,21 +78,14 @@ RSpec.describe CatalogHelper do
 
   describe "#research_help_title" do
     context "item has a research help name and url" do
-      let(:research_help) do
-        {
-          :name => "Rubenstein Library",
-          :url => "http://library.duke.edu/rubenstein/"
-        }
-      end
       it "should return a link to a research help page" do
-        expect(helper.research_help_title(research_help)).to include (link_to(research_help[:name], research_help[:url]))
+        research_help = double("research_help", :name => "Rubenstein", :url => "http://library.duke.edu/rubenstein")
+        expect(helper.research_help_title(research_help)).to include (link_to(research_help.name, research_help.name))
       end  
     end
     context "item has neither a research help name nor url" do
-      let(:research_help) do
-        {}
-      end
       it "should not return a title nor a link" do
+        research_help = double("research_help", :name => nil, :url => "http://library.duke.edu/rubenstein")
         expect(helper.research_help_title(research_help)).to be_nil
       end
     end

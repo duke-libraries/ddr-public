@@ -3,7 +3,7 @@ We may want to refactor into separate partials. %>
 
 <div class="seadragon-wrapper">
 
-	<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+	<% if is_item?(@document) && is_multi_image?(@document) %>
 	    <div id="image-count">
 		  <button class="btn"><span class="btn-wrapper"><%= imagecount %> images</span></button>	
 		</div>
@@ -12,7 +12,7 @@ We may want to refactor into separate partials. %>
 	<div id="image-toolbar">
 	  <div id="image-toolbar-inner">
 		
-		<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+		<% if is_item?(@document) && is_multi_image?(@document) %>
 			<div class="multi-image-nav">
 				<button id="btn-prev" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Prev" aria-label="Prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></span></button>
 				<button id="btn-next" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Next" aria-label="Next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></button>
@@ -56,11 +56,11 @@ $(document).ready(function(e){
 		maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
 		 		
 		<% if is_item?(@document) %>
-	      tileSources:   <%= image_item_tilesources(@document, @document_list).to_json.html_safe %>,		
+	      tileSources:   <%= image_item_tilesources(@document.multires_image_file_paths).to_json.html_safe %>,		
 		<% elsif is_component?(@document) %>
 		  tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
 		<% end %>
-		<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+		<% if is_item?(@document) && is_multi_image?(@document) %>
 	        sequenceMode: true,
         	showReferenceStrip:  true,
 	    	referenceStripScroll: 'vertical',
@@ -118,7 +118,7 @@ $(document).ready(function(e){
 		
 	});
 
-	<% if is_item?(@document) && is_multi_image?(@document, @document_list) %>
+	<% if is_item?(@document) && is_multi_image?(@document) %>
 		viewer.addControl("image-count",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
 	<% end %>
 	

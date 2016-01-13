@@ -1,3 +1,4 @@
+
 <div id="home-branding" class="col-sm-12">
   <!-- Could have two branding templates -->
   <!-- One for the collection portal page -->
@@ -11,6 +12,7 @@
 </div>
 
 <div id="sidebar" class="col-md-3 col-sm-4">
+  
   <% if @collection_document %>
     <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
     
@@ -18,9 +20,8 @@
       <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>     
     <% end %>
     
-
-
   <% end %>
+
   <%= render 'search_sidebar' %>
 </div>
 
