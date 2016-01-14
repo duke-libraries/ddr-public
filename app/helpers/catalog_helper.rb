@@ -191,7 +191,7 @@ module CatalogHelper
   # View helper
   def research_help_title research_help
     unless research_help.name.blank?
-      link_to_if(research_help.url, research_help.name, research_help.name)
+      link_to_if(research_help.url, research_help.name, research_help.url)
     end
   end
 
