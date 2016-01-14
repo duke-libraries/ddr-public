@@ -56,7 +56,7 @@ $(document).ready(function(e){
     maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
 
   <% if is_item?(@document) %>
-    tileSources:   <%= image_item_tilesources(@document.multires_image_file_paths).to_json.html_safe %>,		
+    tileSources:   <%= image_item_tilesources(@document_multires_image_file_paths).to_json.html_safe %>,		
   <% elsif is_component?(@document) %>
     tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
   <% end %>

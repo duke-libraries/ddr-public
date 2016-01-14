@@ -12,11 +12,11 @@ module CatalogHelper
   
   def is_collection? document
     document[:active_fedora_model_ssi] == "Collection"
-  end 
+  end
   
   def is_multi_image? document
     document.multires_image_file_paths.length > 1
-  end       
+  end
 
   # Facet field view helper
   # Also used in custom sort for collection facet
