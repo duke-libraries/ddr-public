@@ -227,7 +227,7 @@ module CatalogHelper
   end
 
   def find_collection_results
-    response, document_list = get_search_results(add_facet_params('active_fedora_model_ssi', 'Collection'))
+    response, document_list = get_search_results(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection', params.merge({rows: 21})))
     document_list
   end
   
