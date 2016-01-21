@@ -43,6 +43,12 @@ class DigitalCollectionsController < CatalogController
     config.view.gallery.default = true
   end
 
+  def featured
+    collection_document
+    showcase_documents
+    highlight_documents
+  end
+
   private
 
   def multires_image_file_paths

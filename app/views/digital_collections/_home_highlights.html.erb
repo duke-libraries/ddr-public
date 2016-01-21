@@ -1,20 +1,27 @@
-<% if @highlight_documents %>
+<% unless @highlight_documents.empty? and @showcase_documents.empty? %>
   <div class="row">
     <div class="col-md-12">
-      <% @highlight_documents.sample(8).each_with_index do |doc, index| %>
-        <% if doc.multires_image_file_paths.first %>
-          <div class="collection-highlight" id="collection-highlight-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '!500,500', :region => 'pct:5,5,90,90' }) %>);">
+      <% unless @highlight_documents.empty? %>
+        <% @highlight_documents.sample(8).each_with_index do |doc, index| %>
+          <% if doc.multires_image_file_paths.first %>
+            <div class="collection-highlight" id="collection-highlight-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '!500,500', :region => 'pct:5,5,90,90' }) %>);">
 
-            <%= link_to_document doc, "", :class => "highlight-item-wrap", :id => "showcase-item-link-"+index.to_s, data: { toggle: "fade-element", target_id: "highlight-item-caption-"+index.to_s } %>                 
+              <%= link_to_document doc, "", :class => "highlight-item-wrap", :id => "showcase-item-link-"+index.to_s, data: { toggle: "fade-element", target_id: "highlight-item-caption-"+index.to_s } %>                 
 
-            <div class="highlight-item-caption" id="highlight-item-caption-<%= index %>">
-              <div class="item-caption-inner"><small><%= doc.title.truncate(50, separator: ' ') %> <small class="text-muted"><%= doc.local_id %></small></small></div>
+              <div class="highlight-item-caption" id="highlight-item-caption-<%= index %>">
+                <div class="item-caption-inner"><small><%= doc.title.truncate(50, separator: ' ') %> <small class="text-muted"><%= doc.local_id %></small></small></div>
+              </div>
+
             </div>
-
-          </div>
-        <%-end %>
+          <%-end %>
+        <%- end %>
       <%- end %>
+      <div class="col-md-12">
+        <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path %></p>
+      </div>
     </div>
   </div>
 
 <%- end %>
+
+
