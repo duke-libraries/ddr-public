@@ -3,6 +3,9 @@
     <div class="buffer-bottom-40">
       <div class="text-muted text-uppercase small strong">Source Collection</div>
         <%= source_collection({ :document => document, :placement => 'left' })  %>
+        <% unless document.aspace_id.blank? %>
+          <p><a href="<%= document.finding_aid.url %>#aspace_<%= document.aspace_id %>" class="text-muted small">View Item in Context</a></p>        
+        <% end %>
     </div>
   <% end %>
 <% end %>
