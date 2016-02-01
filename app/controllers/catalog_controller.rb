@@ -217,6 +217,11 @@ class CatalogController < ApplicationController
     config.max_per_page = 999
   end
 
+  def show
+    super
+    multires_image_file_paths
+  end
+
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "#{Ddr::Index::Fields::WORKFLOW_STATE}:published"
@@ -233,6 +238,10 @@ class CatalogController < ApplicationController
       config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", label: "Title"
       config.add_sort_field "#{Ddr::Index::Fields::LOCAL_ID} asc", label: "Local ID"
     end
+  end
+
+  def multires_image_file_paths
+    @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
   end
 
   # For portal scoping
