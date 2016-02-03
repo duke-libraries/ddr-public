@@ -141,7 +141,7 @@ module CatalogHelper
   end
 
   def interval_date_format date
-    "#{apply_if_approximate(date.from)}#{apply_if_interval_unspecified_yeat(date.from)} to #{apply_if_interval_unspecified_yeat(date.to)}"
+    "#{apply_if_approximate(date.from)}#{apply_if_interval_unspecified_year(date.from)} to #{apply_if_interval_unspecified_year(date.to)}"
   end
 
   def one_of_set_date_format dates
