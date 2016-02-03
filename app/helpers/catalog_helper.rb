@@ -32,15 +32,31 @@ module CatalogHelper
     end 
   end
 
-  def thumbnail_multires_image_file_path(document)
-    if thumbnail_local_id = Rails.application.config.portal.try(:[] , 'portals').try(:[] , 'collection_local_id').try(:[] , document.local_id).try(:[] , 'thumbnail_image')
+  def collection_thumbnail_local_id(document)
+    Rails.application.config.portal.try(:[] , 'portals').try(:[] , 'collection_local_id').try(:[] , document.local_id).try(:[] , 'thumbnail_image')
+  end
+
+  def collection_thumbnail_item_documents(document)
+    thumbnail_documents = []
+    if thumbnail_local_id = collection_thumbnail_local_id(document)
       response, thumbnail_documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{thumbnail_local_id}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
-      thumbnail_documents.first.multires_image_file_paths.first
-    elsif document.multires_image_file_path.present?
-      document.multires_image_file_path
-    elsif document.multires_image_file_paths.present?
-      document.multires_image_file_paths.first
     end
+    thumbnail_documents
+  end
+
+  def thumbnail_multires_image_file_path(document)
+    multires_thumbnail_path = nil
+    collection_item_documents = collection_thumbnail_item_documents(document)
+
+    if collection_thumbnail_local_id(document) and collection_item_documents.length > 0
+      multires_thumbnail_path = collection_item_documents.first.multires_image_file_paths.first
+    elsif document.multires_image_file_path.present?
+      multires_thumbnail_path = document.multires_image_file_path
+    elsif document.multires_image_file_paths.present?
+      multires_thumbnail_path = document.multires_image_file_paths.first
+    end
+
+    multires_thumbnail_path
   end
 
   def thumbnail_link_to_document(document, multires_image_file_path, size, counter)
