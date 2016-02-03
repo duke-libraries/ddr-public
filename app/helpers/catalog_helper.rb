@@ -116,6 +116,118 @@ module CatalogHelper
     ranges.join("; ")
   end
 
+  def season_date_format date
+    "#{apply_if_approximate(date)}#{date.season} #{date.year}"
+  end
+
+  def simple_date_format date
+    "#{apply_if_approximate(date)}#{apply_if_date_unspecified_year(date)}"
+  end
+
+  def interval_date_format date
+    "#{apply_if_approximate(date.from)}#{apply_if_interval_unspecified_yeat(date.from)} to #{apply_if_interval_unspecified_yeat(date.to)}"
+  end
+
+  def one_of_set_date_format dates
+    display = []
+    dates.entries.each do |date|
+      display << simple_date_format(date)
+    end
+    display.to_sentence(last_word_connector: ' or ', two_words_connector: ' or ')
+  end
+
+  def apply_if_approximate date
+    if date.respond_to? :approximate?
+      if date.approximate?
+        "circa "
+      end
+    end
+  end
+
+  def apply_if_date_unspecified_year date
+    display = date_precision(date)
+    if date.respond_to? :unspecified?
+      if date.unspecified? :year
+        year_substitute = date.year_precision.edtf.gsub(/u/, 'x')
+        display.gsub!("#{date.year}", year_substitute)
+      end
+    end
+    display
+  end
+
+  def apply_if_interval_unspecified_year date
+    display = date_precision(date)
+    if date.respond_to? :unspecified?
+      if date.unspecified? :year
+        display << "s"
+      end
+    end
+    display
+  end
+
+  def masked_precision_date_format date
+    "#{date.begin.year}s"
+  end
+
+  def day_precision_format date
+    date.strftime('%B %d, %Y')
+  end
+
+  def month_precision_format date
+    date.strftime('%B %Y')
+  end
+
+  def year_precision_format date
+    date.strftime('%Y')
+  end
+
+  def parse_edtf_date date
+    Date.edtf(date)
+  end
+
+  def display_edtf_date options={}
+    if date = parse_edtf_date(options[:value].first)
+      format_edtf_date_by_type(date)
+    else
+      options[:value].first
+    end
+  end
+
+  def format_edtf_date_by_type date
+    case
+    when date.respond_to?(:season)
+      case
+      when date.season? # Season
+        season_date_format(date)
+      else  # ISO Date
+        simple_date_format(date)
+      end
+    when date.respond_to?(:from) # Interval Date '1981/1991'
+      interval_date_format(date)
+    when date.respond_to?(:begin) # Masked Precision Date '192x'
+      masked_precision_date_format(date)
+    when date.respond_to?(:choice) # One of a Set
+      one_of_set_date_format(date)
+    else
+      date
+    end
+  end
+
+  def date_precision date
+    if date.respond_to? :precision
+      case date.precision
+      when :day
+        day_precision_format(date)
+      when :month
+        month_precision_format(date)
+      when :year
+        year_precision_format(date)
+      end
+    else
+      date
+    end
+  end
+
   # Index / Show field view helper
   def source_collection options={}
     begin

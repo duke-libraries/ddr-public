@@ -32,7 +32,6 @@ class DigitalCollectionsController < CatalogController
     collection_document
     search_scopes
     max_download
-    multires_image_file_paths
   end
 
   def media
@@ -50,10 +49,6 @@ class DigitalCollectionsController < CatalogController
   end
 
   private
-
-  def multires_image_file_paths
-    @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
-  end
 
   def get_pid_from_params_id
     query_result = ActiveFedora::SolrService.query("#{Ddr::Index::Fields::LOCAL_ID}:\"#{params[:id]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:\"Item\"", rows: 1).first
