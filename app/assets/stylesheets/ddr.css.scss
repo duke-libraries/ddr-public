@@ -231,7 +231,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   z-index: 90;
   min-height: 500px;
   & .item-caption-inner {
-    position: absolute; 
+    position: absolute;
     bottom: 10px;
   }
 }
@@ -495,5 +495,25 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       display: none;
     }
 
+
+  }
+
+
+  /* ------------------------
+      Bootstrap Enhancements
+  --------------------------- */
+
+  .well {
+
+      & .caption {
+        padding-top: 10px;
+
+        & p {
+          text-align: center;
+          line-height: 1.2em;
+          color:  #666;
+        }
+
+      }
 
   }
