@@ -107,7 +107,8 @@ module CatalogHelper
       render partial: "search_scope_dropdown", locals: {active_search_scope_options: active_search_scopes}
     end
   end
-  
+
+  # View helper
   def finding_aid_popover finding_aid
     popover = ''
     if finding_aid.collection_title
@@ -161,6 +162,26 @@ module CatalogHelper
     end
     
   end
+
+  # DPLA Feed document helper
+  def thumbnail_url document
+    if multires_thumbnail_image_file_path = multires_thumbnail_image_file_path(document)
+      iiif_image_path(multires_thumbnail_image_file_path, {size: '!300,300'})
+    else
+      url_for controller: :thumbnail, action: :show, id: document.id, only_path: false
+    end
+  end
+
+  # DPLA Feed document helper
+  def source_collection_title document
+    document.try(:finding_aid).try(:collection_title)
+  end
+
+  # DPLA Feed document helper
+  def research_help_name document
+    document.try(:research_help).try(:name)
+  end
+  
 
   def derivative_urls options={}
     derivative_urls = []
