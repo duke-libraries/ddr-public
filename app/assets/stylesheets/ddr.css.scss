@@ -377,6 +377,10 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   }
 }
 
+.facet_pagination .prev_next_links .disabled { 
+  display: none;
+}
+
 
 /* ------------------
     SEARCH RESULTS
