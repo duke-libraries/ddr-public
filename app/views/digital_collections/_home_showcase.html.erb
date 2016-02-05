@@ -14,7 +14,7 @@
         <% if @showcase_layout == 'portrait' %>
           <% @showcase_documents.sample(2).each_with_index do |doc, index| %>
             <% if doc.multires_image_file_paths.first %>
-              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '390,', region: 'pct:5,5,90,90', sizeclass: 'col-md-4 col-sm-6', captionlength: 50 } %>
+              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '600,', region: 'pct:5,5,90,90', sizeclass: 'col-md-4 col-sm-6', captionlength: 50 } %>
             <%- end %>
           <%- end %>
         <%- end %>
@@ -22,7 +22,7 @@
         <% if @showcase_layout == 'landscape' %>
           <% @showcase_documents.sample(1).each_with_index do |doc, index| %>
             <% if doc.multires_image_file_paths.first %>
-              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '780,', region: 'pct:5,5,90,90', sizeclass: 'col-md-8 col-sm-12', captionlength: 100 } %>
+              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '1200,', region: 'pct:5,5,90,90', sizeclass: 'col-md-8 col-sm-12', captionlength: 100 } %>
             <%- end %>
           <%- end %>
         <%- end %>
