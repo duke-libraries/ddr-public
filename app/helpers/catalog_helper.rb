@@ -64,6 +64,25 @@ module CatalogHelper
     link_to_document document, image_tag, :counter => counter
   end
 
+  def item_image_embed options={}
+    image_tag = ""
+    response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
+    unless documents.empty?
+      multires_image_file_path = documents.first.multires_image_file_paths.first
+      image_tag = iiif_image_tag(multires_image_file_path, {:size => options[:size], :alt => documents.first.title, :class => options[:class]})
+    end
+    image_tag
+  end
+
+  def item_title_link options={}
+    link = ""
+    response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
+    unless documents.empty?
+      link = link_to_document(documents.first)
+    end
+    link
+  end
+
   def find_children document, relationship = nil, params = {}
     configure_blacklight_for_children
     relationship ||= find_relationship(document)
