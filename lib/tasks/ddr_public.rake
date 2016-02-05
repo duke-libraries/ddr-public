@@ -165,6 +165,7 @@ namespace :ddr_public do
     DDR_PORTALS_PATH = Rails.root.join('ddr-portals')
     GITFILE = "#{DDR_PORTALS_PATH}/.git"
     PORTAL_VIEW_PATH = Rails.root.join('app','views','ddr-portals')
+    PORTAL_IMAGES_PATH = Rails.root.join('app', 'assets', 'images', 'ddr-portals')
 
     file GITFILE do
       sh "git clone #{DDR_PORTALS_REPO} #{DDR_PORTALS_PATH}"
@@ -189,6 +190,9 @@ namespace :ddr_public do
         
         dir = set_repo_path + "/views"
         sh "ln -s #{dir} #{PORTAL_VIEW_PATH}/#{setname}" if File.directory?(dir)
+
+        dir = set_repo_path + "/assets/images"
+        sh "ln -s #{dir} #{PORTAL_IMAGES_PATH}/#{setname}" if File.directory?(dir)
 
       end
     end
