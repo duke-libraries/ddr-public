@@ -20,6 +20,7 @@ class DigitalCollectionsController < CatalogController
       showcase_documents
       showcase_layout
       highlight_documents
+      highlight_count
       blog_posts_url
     end
     collection_document
