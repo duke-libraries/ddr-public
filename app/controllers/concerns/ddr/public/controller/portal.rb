@@ -34,6 +34,10 @@ module Ddr
           @highlight_documents ||= image_documents('highlight_images')
         end
 
+        def highlight_count
+          @highlight_count ||= portal_config.try(:[], 'highlight_images').try(:[], 'display')
+        end
+
         def max_download
           @max_download ||= portal_config.try(:[], 'restrictions').try(:[], 'max_download')
         end
