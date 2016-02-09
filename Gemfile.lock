@@ -8,6 +8,15 @@ GIT
       jquery-rails
       rails (>= 3.0, < 5.0)
 
+GIT
+  remote: https://github.com/duke-libraries/edtf-humanize
+  revision: 7cb95b76afb6e6adf82ddf22b052d053ac6b0ddc
+  branch: master
+  specs:
+    edtf-humanize (0.0.1)
+      edtf (~> 2.3)
+      rails (~> 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -466,7 +475,7 @@ DEPENDENCIES
   ddr-alerts (~> 1.0.0)
   ddr-models (= 2.4.1)
   devise
-  edtf
+  edtf-humanize!
   factory_girl_rails (~> 4.4)
   fastimage
   font-awesome-sass

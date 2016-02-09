@@ -154,137 +154,13 @@ module CatalogHelper
 
   # Index / Show field view helper
   def display_edtf_date options={}
-    if date = parse_edtf_date(options[:value].first)
-      format_edtf_date_by_type(date)
+    if date = Date.edtf(options[:value].first)
+      date.humanize
     else
       options[:value].first
     end
   end
-
-  def parse_edtf_date date
-    Date.edtf(date)
-  end
-
-  def format_edtf_date_by_type date
-    case
-    when date.respond_to?(:season)
-      case
-      when date.season?
-        season_date_format(date)         # EDTF Season '1981-23'
-      else
-        simple_date_format(date)         # ISO 8601 Date
-      end
-    when date.respond_to?(:from)
-      interval_date_format(date)         # EDTF Interval '1981/1991'
-    when date.respond_to?(:begin)  
-      masked_precision_date_format(date) # EDTF Masked Precision '192x'
-    when date.respond_to?(:choice)
-      one_of_set_date_format(date)       # EDTF Set '[1981,1983,1984]'
-    else
-      date
-    end
-  end
-
-  def date_precision date
-    if date.respond_to? :precision
-      case date.precision
-      when :day                     # 2010-10-25
-        day_precision_format(date)
-      when :month                   # 2010-10
-        month_precision_format(date)
-      when :year                    # 2010
-        year_precision_format(date)
-      end
-    else
-      date
-    end
-  end
-
-  # 1990s
-  def masked_precision_date_format date
-    "#{date.begin.year}s"
-  end
-
-  # October 5, 1995
-  def day_precision_format date
-    date.strftime('%B %d, %Y')
-  end
-
-  # October 1995
-  def month_precision_format date
-    date.strftime('%B %Y')
-  end
   
-  # 1995
-  def year_precision_format date
-    date.strftime('%Y')
-  end
-
-  # summer 1995
-  def season_date_format date
-    "#{apply_if_approximate(date)}#{date.season} #{date.year}#{apply_if_uncertain(date)}"
-  end
-
-  # October 10, 1995
-  def simple_date_format date
-    "#{apply_if_approximate(date)}#{apply_if_date_unspecified_year(date)}#{apply_if_uncertain(date)}"
-  end
-
-  # October 10, 1995 to October 15, 1995
-  def interval_date_format date
-    "#{apply_if_approximate(date.from)}#{apply_if_interval_unspecified_year(date.from)} to #{apply_if_interval_unspecified_year(date.to)}#{apply_if_uncertain(date.to)}"
-  end
-
-  # 1990, 1991 or 1992
-  def one_of_set_date_format dates
-    display = []
-    dates.entries.each do |date|
-      display << simple_date_format(date)
-    end
-    display.to_sentence(last_word_connector: ' or ', two_words_connector: ' or ')
-  end
-  
-  # '1990~' => circa 1990
-  def apply_if_approximate date
-    if date.respond_to? :approximate?
-      if date.approximate?
-        "circa "
-      end
-    end
-  end
-
-  # '1990?' => 1990?
-  def apply_if_uncertain date
-    if date.respond_to? :uncertain?
-      if date.uncertain?
-        "?"
-      end
-    end
-  end
-
-  # '198u' => 198x
-  def apply_if_date_unspecified_year date
-    display = date_precision(date)
-    if date.respond_to? :unspecified?
-      if date.unspecified? :year
-        year_substitute = date.year_precision.edtf.gsub(/u/, 'x')
-        display.gsub!("#{date.year}", year_substitute)
-      end
-    end
-    display
-  end
-  
-  # '198u/199u' => 1980s to 1990s
-  def apply_if_interval_unspecified_year date
-    display = date_precision(date)
-    if date.respond_to? :unspecified?
-      if date.unspecified? :year
-        display << "s"
-      end
-    end
-    display
-  end
-
 
   # Index / Show field view helper
   def source_collection options={}
