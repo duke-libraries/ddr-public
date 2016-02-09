@@ -192,14 +192,20 @@ namespace :ddr_public do
         sh "ln -s #{dir} #{PORTAL_VIEW_PATH}/#{setname}" if File.directory?(dir)
 
         dir = set_repo_path + "/assets/images"
-        sh "ln -s #{dir} #{PORTAL_IMAGES_PATH}/#{setname}" if File.directory?(dir)
+        sh "cp -r #{dir} #{PORTAL_IMAGES_PATH}/#{setname}" if File.directory?(dir)
+
+        if Rails.env.production?
+          Rake::Task["assets:precompile"]
+        end
 
       end
     end
 
-    desc "Clean all view symlinks without removing the git repository"
-    task :clean_links => [PORTAL_VIEW_PATH] do
+    desc "Clean all view symlinks and image directories without removing the git repository"
+    task :clean_links => [PORTAL_VIEW_PATH, PORTAL_IMAGES_PATH] do
       sh "find #{PORTAL_VIEW_PATH} -type l -exec rm {} \\;"
+      sh "rm -rf #{PORTAL_IMAGES_PATH}"
+      sh "mkdir #{PORTAL_IMAGES_PATH}"
     end
 
     desc "Clean all portal-specific views, including the repository"
