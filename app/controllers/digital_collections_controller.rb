@@ -40,6 +40,7 @@ class DigitalCollectionsController < CatalogController
   end
 
   def about
+    search_scopes
     collection_document
   end
 
@@ -48,6 +49,7 @@ class DigitalCollectionsController < CatalogController
   end
 
   def featured
+    search_scopes
     collection_document
     showcase_documents
     highlight_documents
