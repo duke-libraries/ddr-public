@@ -1,6 +1,6 @@
-json_response = {}
+response = {}
 
 sources = image_item_tilesources(@document.multires_image_file_paths)
-json_response['tilesources'] = sources
+response['tilesources'] = sources
 
-json_response.to_json
+response.to_json
