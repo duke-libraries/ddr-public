@@ -10,10 +10,10 @@ GIT
 
 GIT
   remote: https://github.com/duke-libraries/edtf-humanize
-  revision: 7cb95b76afb6e6adf82ddf22b052d053ac6b0ddc
+  revision: 66cc5f5a9b0d688fcfa284459329ff2548ac78a9
   branch: master
   specs:
-    edtf-humanize (0.0.1)
+    edtf-humanize (0.0.2)
       edtf (~> 2.3)
       rails (~> 4.0)
 
