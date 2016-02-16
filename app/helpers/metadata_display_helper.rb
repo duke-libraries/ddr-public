@@ -17,6 +17,11 @@ module MetadataDisplayHelper
     end
   end
 
+  def humanize_date options={}
+    reformatted_ranges = year_ranges({value: options[:value]})
+    display_date = edtf_date({value: Array(reformatted_ranges)})
+  end
+
   def year_ranges options={}
     ranges = []
     years = []
@@ -31,23 +36,21 @@ module MetadataDisplayHelper
     end
     if years.count > 1
       years.sort!
-      ranges << years.first + "-" + years.last
+      ranges << years.first + "/" + years.last
     elsif years.count == 1
       ranges << years.first
     end
     ranges.sort!
     ranges.join("; ")
   end
-  
 
-  def display_edtf_date options={}
+  def edtf_date options={}
     if date = Date.edtf(options[:value].first)
       date.humanize
     else
       options[:value].first
     end
   end
-  
 
   def source_collection options={}
     begin
