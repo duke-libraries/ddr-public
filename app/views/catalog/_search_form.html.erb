@@ -4,10 +4,12 @@
     <% if @search_scopes.present? %>
       <%= search_scope_dropdown(@search_scopes) %>
     <% end %>
+    <%= label_tag 'q', 'Search', class: 'mast-search' %>
     <%= text_field_tag :q, params[:q], :placeholder => t('blacklight.search.form.q'), :class => "search_q q form-control", :id => "q", :autofocus => should_autofocus_on_search_box? %>
+
     <div class="input-group-btn submit-btn">
       <button type="submit" class="btn btn-success search-btn" id="search">
-        <span class="submit-search-text"></span>
+        <span class="submit-search-text">Go</span>
         <span class="glyphicon glyphicon-search"></span>
       </button>
     </div>
