@@ -10,7 +10,7 @@ GIT
 
 GIT
   remote: https://github.com/duke-libraries/edtf-humanize
-  revision: 66cc5f5a9b0d688fcfa284459329ff2548ac78a9
+  revision: b0f2ea3da87bd11fe25694380232d05fd1b225af
   branch: master
   specs:
     edtf-humanize (0.0.2)
