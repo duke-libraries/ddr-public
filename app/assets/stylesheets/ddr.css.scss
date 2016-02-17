@@ -36,12 +36,23 @@ a.navbar-dul {
   padding: 0;
   margin: 0;
 
+  & label.mast-search {
+    display: block;
+    position: absolute;
+    margin-left: -5000px;
+  }
+
   & .input-group {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: flex-start;
     align-content: flex-start;
+
+    & .input-group-btn .submit-search-text {
+        position: absolute;
+        margin-left: -5000px;
+    }
 
 
     & .input-group-btn.scope-btn {
@@ -218,6 +229,10 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   height: 100%;
   width: 100%;
   z-index: 100;
+
+  line-height: 0;
+  font-size: 0;
+  color: transparent;
 }
 
 .showcase-item-caption, .highlight-item-caption {
@@ -377,7 +392,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   }
 }
 
-.facet_pagination .prev_next_links .disabled { 
+.facet_pagination .prev_next_links .disabled {
   display: none;
 }
 
@@ -425,7 +440,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
   & .extra-result-see-more {
     display: none;
-    
+
     @media (min-width: $screen-md-min) {
       display: block;
     }
@@ -450,7 +465,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 }
 
 
-#collections.gallery { 
+#collections.gallery {
 
     & .thumbnail-wrapper {
       border: 1px solid #e3e3e3;
@@ -460,7 +475,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       & .caption {
       text-align: center;
       line-height: 0.6em;
-      
+
         & dl {
         display: none;
         }
@@ -509,15 +524,67 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
   .well {
 
-      & .caption {
-        padding-top: 10px;
+    & .caption {
+      padding-top: 10px;
 
-        & p {
-          text-align: center;
-          line-height: 1.2em;
-          color:  #666;
-        }
-
+      & p {
+        text-align: center;
+        line-height: 1.2em;
+        color:  #666;
       }
 
+    }
+
+  }
+
+  #sidebar {
+
+    & .text-muted {
+      color: #777;
+    }
+
+  }
+
+  #source-collection {
+
+    background-color: #f9f9f9;
+
+    & h4 {
+      & .small {
+        color: #737373;
+      }
+    }
+
+    & .text-muted {
+      color: #737373;
+    }
+
+  }
+
+  #blog-posts {
+
+    & .text-muted {
+      color: #737373;
+    }
+
+  }
+
+  .footer {
+
+    & .text-muted {
+      color: #666;
+    }
+
+  }
+
+  #item-options {
+    & .dropdown-toggle {
+      color: #777;
+    }
+  }
+
+  .dl-invert {
+    & dt {
+      color: #777;
+    }
   }
