@@ -109,7 +109,6 @@ module CatalogHelper
     end
   end
 
-
   # View helper
   def render_content_type_and_size document
     "#{document.content_mime_type} #{document.content_size_human}"
