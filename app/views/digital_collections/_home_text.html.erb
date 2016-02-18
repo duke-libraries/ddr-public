@@ -7,9 +7,9 @@
 <% end %>
 
 <% if @collection_document && @collection_document.description %>
-  <p><%= @collection_document.description %></p>
+  <%= simple_format(@collection_document.description) %>
 <% else %>
-  <p><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.") %></p>
+  <%= simple_format(t("ddr.public.portal.#{params[:collection] || controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.")) %></p>
 <% end %>
 
 <% if lookup_context.exists?('about', 'digital_collections') %>
