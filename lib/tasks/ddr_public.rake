@@ -165,7 +165,7 @@ namespace :ddr_public do
     DDR_PORTALS_PATH = Rails.root.join('ddr-portals')
     GITFILE = "#{DDR_PORTALS_PATH}/.git"
     PORTAL_VIEW_PATH = Rails.root.join('app','views','ddr-portals')
-    PORTAL_IMAGES_PATH = Rails.root.join('app', 'assets', 'images', 'ddr-portals')
+    PORTAL_IMAGES_PATH = Rails.root.join('app', 'assets', 'images')
 
     file GITFILE do
       sh "git clone #{DDR_PORTALS_REPO} #{DDR_PORTALS_PATH}"
@@ -192,7 +192,7 @@ namespace :ddr_public do
         sh "ln -s #{dir} #{PORTAL_VIEW_PATH}/#{setname}" if File.directory?(dir)
 
         dir = set_repo_path + "/assets/images"
-        sh "cp -r #{dir} #{PORTAL_IMAGES_PATH}/#{setname}" if File.directory?(dir)
+        sh "cp -r #{dir} #{PORTAL_IMAGES_PATH}/ddr-portals/#{setname}" if File.directory?(dir)
 
         if Rails.env.production?
           Rake::Task["assets:precompile"]
@@ -204,8 +204,8 @@ namespace :ddr_public do
     desc "Clean all view symlinks and image directories without removing the git repository"
     task :clean_links => [PORTAL_VIEW_PATH, PORTAL_IMAGES_PATH] do
       sh "find #{PORTAL_VIEW_PATH} -type l -exec rm {} \\;"
-      sh "rm -rf #{PORTAL_IMAGES_PATH}"
-      sh "mkdir #{PORTAL_IMAGES_PATH}"
+      sh "rm -rf #{PORTAL_IMAGES_PATH}/ddr-portals"
+      sh "mkdir #{PORTAL_IMAGES_PATH}/ddr-portals"
     end
 
     desc "Clean all portal-specific views, including the repository"
