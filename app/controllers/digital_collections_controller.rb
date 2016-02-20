@@ -3,7 +3,7 @@
 class DigitalCollectionsController < CatalogController
   include Ddr::Public::Controller::Portal
 
-  # This enables us to use a .rb template to render json for the media action
+  # Enables us to use a .rb template to render json for the media action
   ActionView::Template.register_template_handler(:rb, :source.to_proc)
 
   # This has to run after get_pid_from_params_id
@@ -25,13 +25,22 @@ class DigitalCollectionsController < CatalogController
     end
     collection_document
     alert_message
-    search_scopes
+  end
+
+  # Action exists to distinguish between the collection
+  # scoped dc/:collection portals and the  dc/ portal
+  # This is for the dc/ portal page
+  def index_portal
+    index
+
+    collection_count
+    item_count
+    featured_collection_documents
   end
 
   def show
     super
     collection_document
-    search_scopes
     max_download
   end
 
@@ -40,7 +49,6 @@ class DigitalCollectionsController < CatalogController
   end
 
   def about
-    search_scopes
     collection_document
   end
 
@@ -49,7 +57,6 @@ class DigitalCollectionsController < CatalogController
   end
 
   def featured
-    search_scopes
     collection_document
     showcase_documents
     highlight_documents

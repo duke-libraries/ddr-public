@@ -66,10 +66,6 @@ a.navbar-dul {
         }
       }
 
-      // Hide Digital Collections as a search scope until there are more published collections.
-      & ul.selectpicker li a[data-normalized-text*="Digital Collections"] {
-        display: none;
-      }
     }
 
     & input#q {
