@@ -1,14 +1,22 @@
 <%= render partial: "home_highlights" %>
 
-<h3 id="about">About the Digital Collection</h3>
-<% if @collection_document && @collection_document.description %>
-  <p><%= @collection_document.description %></p>
+<% if lookup_context.exists?('about', 'digital_collections') %>
+  <h3 id="about"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
 <% else %>
-  <p><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.") %></p>  
+  <h3 id="about">About the Digital Collection</h3>
 <% end %>
 
+<% if @collection_document && @collection_document.description %>
+  <%= simple_format(@collection_document.description) %>
+<% else %>
+  <%= simple_format(t("ddr.public.portal.#{params[:collection] || controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.")) %></p>
+<% end %>
+
+<% if lookup_context.exists?('about', 'digital_collections') %>
+   <p class="text-right"> <%= link_to raw("read more &raquo;"), digital_collections_about_path %></p>
+<% end %>
 
 <% if @collection_document %>
   <%= render partial: 'show_finding_aid_full', locals: { document: @collection_document } %>
-  <%= render partial: 'show_blog_posts', locals: { document: @collection_document } %>  
+  <%= render partial: 'show_blog_posts', locals: { document: @collection_document } %>
 <% end %>

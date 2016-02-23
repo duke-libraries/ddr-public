@@ -7,6 +7,7 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
+  include Ddr::Public::Controller::ConfigureBlacklight
 
   before_action :enforce_show_permissions, only: :show
 
@@ -89,9 +90,9 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
-    config.add_facet_field Ddr::Index::Fields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', collapse: false, limit: 5
-    config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 5
-    config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: 'Browse', show: false
+    # config.add_facet_field Ddr::Index::Fields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', collapse: false, limit: 5
+    # config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 5
+    # config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: 'Browse', show: false
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -217,6 +218,11 @@ class CatalogController < ApplicationController
     config.max_per_page = 999
   end
 
+  def show
+    super
+    multires_image_file_paths
+  end
+
   def include_only_published(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "#{Ddr::Index::Fields::WORKFLOW_STATE}:published"
@@ -233,6 +239,10 @@ class CatalogController < ApplicationController
       config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", label: "Title"
       config.add_sort_field "#{Ddr::Index::Fields::LOCAL_ID} asc", label: "Local ID"
     end
+  end
+
+  def multires_image_file_paths
+    @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
   end
 
   # For portal scoping

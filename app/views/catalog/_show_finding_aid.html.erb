@@ -1,8 +1,11 @@
-<% cache("finding_aid_brief_#{params[:collection]}", expires_in: 7.days) do %>
-  <% unless document.finding_aid.blank? %>
-    <div class="buffer-bottom-40">
-      <div class="text-muted text-uppercase small strong">Source Collection</div>
+<% unless document.finding_aid.blank? %>
+  <div class="buffer-bottom-40">
+    <div class="text-muted text-uppercase small strong">Source Collection</div>
+      <% cache("finding_aid_brief_#{params[:collection]}", expires_in: 7.days) do %>
         <%= source_collection({ :document => document, :placement => 'left' })  %>
-    </div>
-  <% end %>
+      <% end %>
+      <% unless document.aspace_id.blank? %>
+        <p><a href="<%= document.finding_aid.url %>#aspace_<%= document.aspace_id %>" class="text-muted small">View Item in Context</a></p>
+      <% end %>
+  </div>
 <% end %>

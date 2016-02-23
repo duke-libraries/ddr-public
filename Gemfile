@@ -25,6 +25,7 @@ gem 'prawn'
 gem 'fastimage'
 gem 'bootstrap-select-rails'
 gem 'nokogiri'
+gem 'edtf-humanize', :git => 'https://github.com/duke-libraries/edtf-humanize', :branch => 'master'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
