@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe BlacklightHelper do
 
   describe "#document_or_object_url" do
-    let(:doc_or_obj) { SolrDocument.new(SolrDocument.new(
+    let(:doc_or_obj) { SolrDocument.new(
       'id' => 'changeme:2',
-      ) ) }
+      ) }
     before { allow(doc_or_obj).to receive(:public_action).and_return('show') }
     context "document has a public_collection defined" do
       it "should return a collection scoped url to a document" do
