@@ -1,3 +1,3 @@
 <div class="input-group-btn scope-btn">
-  <%= select_tag(nil, options_for_select(current_search_scope_options, h(params[:search_field])), :title => t('blacklight.search.form.search_field.title'), :class=>"selectpicker search_scope form-control") %>
+  <%= select_tag(nil, options_for_select(active_search_scope_options, h(params[:search_field])), :title => t('blacklight.search.form.search_field.title'), :class=>"selectpicker search_scope form-control") %>
 </div>

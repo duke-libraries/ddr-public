@@ -1,0 +1,47 @@
+<!-- This can become whatever we need it to be to support -->
+<!-- the dc/ portal page -->
+
+<div id="home-branding" class="col-sm-12">
+  <!-- Could have two branding templates -->
+  <!-- One for the collection portal page -->
+  <!-- And one for the search results page and/or show pages -->
+  <!-- Select one or the other using the has_search_parameters? check as below -->
+  <%= @item_count %>
+  <%= @collection_count %>
+  <%= @featured_collection_documents %>
+  <% if @collection_document %>
+    <%= render 'home_showcase' %>
+  <% else %>
+    <h1><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1>
+  <% end %>
+</div>
+
+<div id="sidebar" class="col-md-3 col-sm-4">
+  
+  <% if @collection_document %>
+    <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
+    
+    <% if has_search_parameters? %>
+      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>     
+    <% end %>
+    
+  <% end %>
+
+  <%= render 'search_sidebar' %>
+</div>
+
+<div id="content" class="col-md-9 col-sm-8">
+  <% unless has_search_parameters? %>
+    <%# if there are no input/search related params, display the "home" partial -%>
+    <%= render 'home' %>
+    
+    <%# set the html title for collection portal page -%>
+    <% if @collection_document %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) + " - Duke Libraries" %>
+    <% else %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+    <% end %>
+  <% else %>
+    <%= render 'search_results' %>
+  <% end %>
+</div>

@@ -130,17 +130,22 @@ module CatalogHelper
   end
 
   # View helper
-  def search_scope_dropdown current_search_scopes = nil
-    all_search_scopes = all_search_scopes()
+  def render_search_scope_dropdown params={}
+    active_search_scopes = []
 
-    if current_search_scopes.present?
-      current_search_scope_options = []
-      current_search_scopes.each do |scope_name|
-        current_search_scope_options << all_search_scopes[scope_name]
-      end
-      render partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options}
+    if request.path =~ /^\/dc\/.*$/
+      active_search_scopes << ["This Collection", digital_collections_url(params[:collection])]
     end
 
+    if request.path =~ /^\/dc.*$/
+      active_search_scopes << ["Digital Collections", digital_collections_index_portal_url]
+    end
+
+    active_search_scopes << ["Digital Repository", catalog_index_url]
+
+    if active_search_scopes.count > 1
+      render partial: "search_scope_dropdown", locals: {active_search_scope_options: active_search_scopes}
+    end
   end
   
   def finding_aid_popover finding_aid
@@ -201,11 +206,6 @@ module CatalogHelper
 
 
   private
-
-  def all_search_scopes
-    {:search_action_url => ["This Collection", search_action_url],
-     :catalog_index_url => ["Digital Repository", catalog_index_url]}
-  end
 
   def find_relationship document
     if document.active_fedora_model == 'Item'

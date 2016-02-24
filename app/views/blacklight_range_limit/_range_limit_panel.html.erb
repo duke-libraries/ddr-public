@@ -28,13 +28,20 @@
   <% end %>
 
   <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>
+  
+    <!-- TODO: There is probably a better approach but this works for now.
+         Range Limit assumes you're always using the catalog index route.
+         To support our portal index routes we need this additional logic. -->
     <% if controller_name == 'catalog' %>
       <% controller_index_name = 'catalog_index' %>
-    <% else %>
+    <% elsif params[:collection] == nil %>
+      <% controller_index_name = "#{controller_name}_index_portal" %>
+    <% else  %>
       <% controller_index_name = controller_name %>
-    <% end  %>
-    <!-- TODO this needs to be catalog_index_path for the catalog controller routes -->
-    <%= form_tag eval("#{controller_index_name}_path"), :method => :get, :class=>"range_limit subsection range_#{solr_field} form-inline" do %>
+    <% end %>
+    
+    <%= form_tag Rails.application.routes.url_helpers.send("#{controller_index_name}_path", :collection => params[:collection]), :method => :get, :class=>"range_limit subsection range_#{solr_field} form-inline" do %>
+
       <%= render_hash_as_hidden_fields(params_for_search) %>
       
       <!-- we need to include a dummy search_field parameter if none exists,

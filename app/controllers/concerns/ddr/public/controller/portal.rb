@@ -36,6 +36,10 @@ module Ddr
           @highlight_count ||= portal_config.try(:[], 'highlight_images').try(:[], 'display')
         end
 
+        def featured_collection_documents
+          @featured_collection_documents ||= image_documents('featured_collections')
+        end
+
         def max_download
           @max_download ||= portal_config.try(:[], 'restrictions').try(:[], 'max_download')
         end
@@ -47,12 +51,6 @@ module Ddr
 
         def alert_message
           @portal_alert_message ||= portal_config.try(:[], 'alert')
-        end
-
-        def search_scopes
-          @search_scopes ||= []
-          @search_scopes << :search_action_url
-          @search_scopes << :catalog_index_url
         end
 
         def include_only_specified_records(solr_parameters, user_parameters)
@@ -68,6 +66,15 @@ module Ddr
 
         def parent_collection_document_list
           @parent_collection_documents ||= parent_collection_search
+        end
+
+        def collection_count
+          @collection_count = @parent_collection_documents.count
+        end
+
+        def item_count
+          response, documents = get_search_results({ :q => "(#{construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
+          @item_count = response.total
         end
 
         def parent_collection_search
@@ -94,7 +101,7 @@ module Ddr
           image_documents ||= []
           if portal_config[field]
             query = portal_config[field]['local_ids'].map { |value| "#{Ddr::Index::Fields::LOCAL_ID}:#{value}" }.join(" OR ")
-            response, image_documents = get_search_results({:q => "(#{query}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
+            response, image_documents = get_search_results({:q => "(#{query}) AND (#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item OR #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Collection)"})
           end
           image_documents
         end
