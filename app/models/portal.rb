@@ -22,7 +22,7 @@ class Portal
 
 
   def parent_collection_uris
-    @parent_collection_uris ||= parent_collection_documents.map { |document| document.internal_uri }
+    @parent_collection_uris ||= parent_collection_documents.map { |document| document.id }
   end
 
   def parent_collection_document
@@ -45,7 +45,7 @@ class Portal
     portal_local_ids ? local_ids_query(portal_local_ids) : admin_set_query(portal_admin_sets)
   end
 
-  
+
 
   def child_item_documents
     @child_item_documents ||= documents(child_items_search) || []

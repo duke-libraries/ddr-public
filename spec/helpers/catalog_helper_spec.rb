@@ -12,7 +12,7 @@ RSpec.describe CatalogHelper do
             'content_size_human_ssim'=>content_size,
             'workflow_state_ssi'=>'published',
             Ddr::Index::Fields::ACCESS_ROLE=>"{}",
-            'object_profile_ssm'=>['{"datastreams":{"content":{"dsLabel":"image10.tif","dsVersionID":"content.0","dsCreateDate":"2014-10-22T17:30:02Z","dsState":"A","dsMIME":"image/tiff","dsFormatURI":null,"dsControlGroup":"M","dsSize":69742260,"dsVersionable":true,"dsInfoType":null,"dsLocation":"changeme:10+content+content.0","dsLocationType":"INTERNAL_ID","dsChecksumType":"SHA-256","dsChecksum":"b9eb20b6fb4a27d6bf478bdefb25538bea95740bdf48471ec360d25af622a911"}}}']
+            'attached_files_ss'=>['{"thumbnail":{"size":14992},"content":{"size":24330280},"extractedText":{"size":null},"fits":{"size":4797}}']
             ) }
 
     context "user can download the file" do
@@ -33,11 +33,18 @@ RSpec.describe CatalogHelper do
         end
       end
       context "and the user is not logged in" do
-        let(:role_set) { Ddr::Auth::Roles::DetachedRoleSet.new }
-        before { allow(helper).to receive(:user_signed_in?) { false } }
-        it "should render a login-to-download button" do
-          expect(helper).to receive(:render).with(hash_including(partial: "download_restricted"))
-          helper.file_info(document: document)
+        let(:downloader_role) { Ddr::Auth::Roles::Role.new(role_type: "Downloader", agent: 'registered', scope: "resource") }
+        let(:role_set) { Ddr::Auth::Roles::RoleSet.new }
+        before do
+          allow(helper).to receive(:user_signed_in?) { false }
+          allow(document).to receive(:roles) { role_set }
+        end
+        context "and the 'registered' group has the 'downloader' role" do
+          before { role_set.roles= downloader_role }
+          it "should render a 'login to download' button" do
+            expect(helper).to receive(:render).with(hash_including(partial: "download_restricted"))
+            helper.file_info(document: document)
+          end
         end
       end
     end

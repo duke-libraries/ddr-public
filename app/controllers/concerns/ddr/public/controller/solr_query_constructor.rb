@@ -9,7 +9,7 @@ module Ddr
         end
 
         def children_query(values)
-          ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs(:is_governed_by, values), 'OR')
+          ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs(:isGovernedBy, values), ' OR ')
         end
 
         def admin_set_query(values)

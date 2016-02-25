@@ -32,6 +32,7 @@ class DigitalCollectionsController < CatalogController
   # This is for the dc/ portal page
   def index_portal
     index
+    digital_collections_portal
   end
 
   def feed
