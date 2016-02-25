@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'blacklight/catalog'
+# require 'blacklight/catalog'
 require 'zip'
 require 'fastimage'
 
@@ -9,14 +9,17 @@ class CatalogController < ApplicationController
   include Hydra::Controller::ControllerBehavior
   include Ddr::Public::Controller::ConfigureBlacklight
 
+  # uninitialized constant ViewConfig
+  # SearchBuilder 
   before_action :enforce_show_permissions, only: :show
 
-  CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
+  # CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   CatalogController.solr_search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
   helper_method :configure_blacklight_for_children
-
+  
+  # Get "wrong number of arguments (2 for 1)" error if present
   rescue_from CanCan::AccessDenied do |exception|
     if user_signed_in?
       forbidden
@@ -24,6 +27,8 @@ class CatalogController < ApplicationController
       authenticate_user!
     end
   end
+  
+  layout 'blacklight'
 
   configure_blacklight do |config|
     config.show.route = {}

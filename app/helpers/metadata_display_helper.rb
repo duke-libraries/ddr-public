@@ -5,7 +5,7 @@ module MetadataDisplayHelper
   end
 
   def descendant_of options={}
-    pid = ActiveFedora::Base.pid_from_uri(options[:value].first)
+    pid = ActiveFedora::Base.uri_to_id(options[:value].first)
     query = ActiveFedora::SolrService.construct_query_for_pids([pid])
     results = ActiveFedora::SolrService.query(query)
     docs = results.map { |result| SolrDocument.new(result) }
