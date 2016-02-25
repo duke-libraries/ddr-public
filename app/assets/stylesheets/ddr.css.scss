@@ -168,6 +168,45 @@ body.blacklight-catalog-show #content {
   margin: -21px -20px 20px -20px;
 }
 
+.showcase-full {
+  position: relative;
+
+  & .collection-start {
+    height: auto;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin-right: 20px;
+    z-index: 120;
+    background-color: rgba(0, 0, 0, 0.65);
+    overflow: visible;
+  }
+
+  & .collection-showcase {
+    height: 650px;
+    max-height: 67vh;
+  }
+
+  & .showcase-item-caption {
+    z-index: 110;
+    display:block;
+    background-image: linear-gradient(rgba(0, 0, 0, 0) 67%, rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.6));
+  }
+
+  & #collection-title {
+    font-size: 33px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  & .item-tally {
+    font-weight: bold;
+    font-size: 110%;
+  }
+
+}
+
+
 .collection-start {
   background-color: rgba(0,0,0,0.8);
   color: white;
@@ -244,6 +283,35 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   & .item-caption-inner {
     position: absolute;
     bottom: 10px;
+  }
+  & a {
+    color: white;
+  }
+}
+
+.featured-collections {
+  background: $gray-lighter;
+  margin: 0;
+  padding-top: 15px;
+
+  & .collection-thumb {
+    width: 100%;
+    display: block;
+    height: 250px;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    margin-bottom: 15px;
+  }
+
+  & .collection-caption {
+    background: #333;
+    position: absolute;
+    bottom:0;
+    padding:10px;
+    color: white;
+    width: 100%;
+    float:left;
   }
 }
 
@@ -340,7 +408,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 #facets {
 
   & .top-panel-heading.panel-heading {
-    padding-left: 0;
+    padding: 0;
     @media (min-width: $screen-sm) {
       border: none;
     }
@@ -348,6 +416,10 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       padding: 15px;
     }
   }
+  
+    & h4 {
+      margin-top: 0;
+    }
 
   & .facets-toggle {
       background-color: #ddd;
@@ -380,7 +452,10 @@ a.showcase-item-wrap, a.highlight-item-wrap {
       background-image: none;
     }
     & input.range_begin, input.range_end {
-        font-size: 15px;
+        font-size: 14px;
+    }
+    & input.form-control {
+        padding:10px 16px;
     }
     & .missing {
       display: none;
@@ -517,6 +592,20 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   /* ------------------------
       Bootstrap Enhancements
   --------------------------- */
+
+
+
+  .feature-head {
+    text-transform: uppercase;
+    color: #333;
+    font-size: 26px;
+  }
+
+  #sidebar, #content {
+    & .feature-head:first-of-type {
+      margin-top: 0;
+    }
+  }
 
   .well {
 
