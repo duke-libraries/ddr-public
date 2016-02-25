@@ -201,7 +201,10 @@ module CatalogHelper
     end
     
   end
-  
+
+  def custom_image_path filename, params
+    "ddr-portals/#{params[:collection]}/#{filename}"
+  end  
   
 
 

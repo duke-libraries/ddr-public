@@ -23,6 +23,10 @@ module Ddr
         def showcase_documents
           @showcase_documents ||= image_documents('showcase_images')
         end
+
+        def showcase_custom_images
+          @showcase_custom_images ||= portal_config.try(:[], 'showcase_images').try(:[], 'custom_images')
+        end
         
         def showcase_layout
           @showcase_layout ||= portal_config.try(:[], 'showcase_images').try(:[], 'layout')
@@ -99,7 +103,7 @@ module Ddr
 
         def image_documents(field)
           image_documents ||= []
-          if portal_config[field]
+          if portal_config[field].try(:[], 'local_ids')
             query = portal_config[field]['local_ids'].map { |value| "#{Ddr::Index::Fields::LOCAL_ID}:#{value}" }.join(" OR ")
             response, image_documents = get_search_results({:q => "(#{query}) AND (#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item OR #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Collection)"})
           end
