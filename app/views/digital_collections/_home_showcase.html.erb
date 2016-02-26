@@ -9,8 +9,7 @@
               Browse all <strong><%= number_with_delimiter(item_count(@collection_document.id)) %></strong> Items
             <% end %>
       </div>
-      <% if @showcase_documents %>
-
+      <% if @showcase_documents.present? %>
         <% if @showcase_layout == 'portrait' %>
           <% @showcase_documents.sample(2).each_with_index do |doc, index| %>
             <% if doc.multires_image_file_paths.first %>
@@ -27,11 +26,18 @@
           <%- end %>
         <%- end %>
 
-      <% end %>
-
-
-
-
+      <% elsif @showcase_custom_images.present? %>
+        <% if @showcase_layout == 'portrait' %>
+          <% @showcase_custom_images.sample(2).each_with_index do |img, index| %>
+            <%= render partial: "home_showcase_image", locals: { index: index, custom_image: img, sizeclass: 'col-md-4 col-sm-6' } %>          
+          <%- end %>
+        <%- end %>
+        <% if @showcase_layout == 'landscape' %>
+          <% @showcase_custom_images.sample(1).each_with_index do |img, index| %>
+            <%= render partial: "home_showcase_image", locals: { index: index, custom_image: img, sizeclass: 'col-md-8 col-sm-12' } %>          
+          <%- end %>
+        <%- end %>
+      <%- end %>
     </div>
   </div>
 

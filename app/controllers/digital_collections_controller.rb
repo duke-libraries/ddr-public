@@ -18,6 +18,7 @@ class DigitalCollectionsController < CatalogController
     super
     unless has_search_parameters?
       showcase_documents
+      showcase_custom_images
       showcase_layout
       highlight_documents
       highlight_count
