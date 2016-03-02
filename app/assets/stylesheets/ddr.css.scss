@@ -1,3 +1,7 @@
+/* -------------
+ MASTHEAD
+---------------- */
+
 #header-navbar {
   padding: 10px 0;
   margin-bottom: 0;
@@ -126,6 +130,17 @@ a.navbar-dul {
   }
 }
 
+.preview-alert {
+  margin-bottom: 0;
+
+  & .preview-alert-msg {
+    margin-right: 1em;
+  }
+}
+
+/* -------------
+ GENERAL LAYOUT
+---------------- */
 
 #main-container {
   padding: 20px;
