@@ -26,7 +26,12 @@
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <% if Rails.env.production? %><%= render 'google_analytics' %><% end %>
+    <%# Only track analytics in production; filter out other %>
+    <%# preview environments that may use production env. %>
+    
+    <% if Rails.env.production? and ENV['DDR_PUBLIC_PREVIEW'].nil? %> %>
+      <%= render 'google_analytics' %>
+    <% end %>
   </head>
   <body class="<%= render_body_class %>">
   <%= render :partial => 'shared/header_navbar' %>

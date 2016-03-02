@@ -53,4 +53,9 @@ module ApplicationHelper
     end
   end
 
+  def git_branch_info
+    branch_name = `git rev-parse --abbrev-ref HEAD`
+    branch_name
+  end
+
 end
