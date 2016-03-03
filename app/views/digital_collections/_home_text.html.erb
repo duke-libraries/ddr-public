@@ -1,9 +1,10 @@
+<%= render partial: "home_featured_collections"%>
 <%= render partial: "home_highlights" %>
 
 <% if lookup_context.exists?('about', 'digital_collections') %>
   <h3 id="about"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
 <% else %>
-  <h3 id="about">About the Digital Collection</h3>
+  <h3 id="about" class="feature-head">About the Digital Collection</h3>
 <% end %>
 
 <% if @collection_document && @collection_document.description %>
@@ -20,3 +21,5 @@
   <%= render partial: 'show_finding_aid_full', locals: { document: @collection_document } %>
   <%= render partial: 'show_blog_posts', locals: { document: @collection_document } %>
 <% end %>
+
+

@@ -5,6 +5,14 @@ module ThumbnailHelper
     thumbnail = image_tag(src, :alt => "Thumbnail", :class => "img-thumbnail", size: "100x100")
   end
 
+  def collection_thumbnail_image_path document, image_options = {}
+    if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
+      iiif_image_path(thumbnail_multires_image_file_path, { :size => "!350,350", :region => 'pct:5,5,90,90' } )
+    else
+      src = document.has_thumbnail? && can?(:read, document) ? thumbnail_path(document) : default_thumbnail(document)
+    end
+  end
+
   def default_thumbnail(doc_or_obj)
     if doc_or_obj.has_content?
       default_mime_type_thumbnail(doc_or_obj.content_type)
