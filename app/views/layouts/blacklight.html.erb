@@ -26,10 +26,9 @@
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <%# Only track analytics in production; filter out other %>
-    <%# preview environments that may use production env. %>
+    <%# Only track analytics on production %>
     
-    <% if Rails.env.production? and ENV['DDR_PUBLIC_PREVIEW'].nil? %> %>
+    <% if ENV['TRACK_GOOGLE_ANALYTICS'] == 'true' %>
       <%= render 'google_analytics' %>
     <% end %>
   </head>

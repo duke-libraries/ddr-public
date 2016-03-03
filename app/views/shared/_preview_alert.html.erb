@@ -1,12 +1,9 @@
 <div class="alert alert-info alert-dismissible preview-alert preview-alert-<%= Rails.env %>" role="alert">
   <small>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <i class="fa fa-exclamation-triangle"></i> 
+    <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-html="true" data-placement="right" data-title="Rails Env: &lt;strong&gt;<%= Rails.env %>&lt;/strong&gt;"></i> 
       <span class="preview-alert-msg"><%= ENV['DDR_PUBLIC_PREVIEW'] %></span> 
-    <% if Rails.env != 'production' %>
       <span class="preview-alert-msg"> | </span>
       <span class="preview-alert-msg">Git branch: <strong><%= git_branch_info %></strong></span>
-      <span class="preview-alert-msg">Rails env: <strong><%= Rails.env %></strong></span>      
-    <% end %>
   </small>
 </div>
