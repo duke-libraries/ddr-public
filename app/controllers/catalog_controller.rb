@@ -113,8 +113,8 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:dc_type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
-    config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
-    config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field :isMemberOfCollection_ssim, helper_method: 'descendant_of', label: 'Collection'
     config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
@@ -145,8 +145,8 @@ class CatalogController < ApplicationController
       config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.gsub(/^(dc|duketerms)_/, "").titleize
     end
 
-    config.add_show_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
-    config.add_show_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_show_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field :isMemberOfCollection_ssim, helper_method: 'descendant_of', label: 'Collection'
     config.add_show_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     # "fielded" search configuration. Used by pulldown among other places.
