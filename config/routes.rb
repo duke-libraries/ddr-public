@@ -31,14 +31,14 @@ Rails.application.routes.draw do
     end
   end
 
-  def pid_constraint
-      /[a-zA-Z0-9\-_]+:[a-zA-Z0-9\-_]+/
-  end
+  # def pid_constraint
+  #     /[a-zA-Z0-9\-_]+:[a-zA-Z0-9\-_]+/
+  # end
 
-  resources :thumbnail, only: :show, constraints: {id: pid_constraint}
+  resources :thumbnail, only: :show #, constraints: {id: pid_constraint}
 
   # Downloads
-  get 'download/:id(/:datastream_id)' => 'downloads#show', constraints: {id: pid_constraint}, as: 'download'
+  get 'download/:id(/:datastream_id)' => 'downloads#show', as: 'download' #, constraints: {id: pid_constraint},
   post 'download/images/:id' => 'catalog#zip_images'
   post 'download/images-pdf/:id' => 'catalog#pdf_images'
 

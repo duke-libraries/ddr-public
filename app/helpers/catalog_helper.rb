@@ -20,16 +20,16 @@ module CatalogHelper
 
   # Facet field view helper
   # Also used in custom sort for collection facet
-  def collection_title collection_internal_uri
-    collections[collection_internal_uri]
+  def collection_title id
+    collections[id]
   end
   
   def render_thumbnail_link document, size, counter = nil
-    if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
-      thumbnail_link_to_document(document, thumbnail_multires_image_file_path, size, counter)
-    else
+    # if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
+    #   thumbnail_link_to_document(document, thumbnail_multires_image_file_path, size, counter)
+    # else
       render_thumbnail_tag(document, {}, :counter => counter)
-    end 
+    # end 
   end
 
   def collection_thumbnail_local_id(document)
@@ -87,7 +87,7 @@ module CatalogHelper
     configure_blacklight_for_children
     relationship ||= find_relationship(document)
 
-    query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::Index::Fields::INTERNAL_URI]]])
+    query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::Index::Fields::ID]]])
     response, document_list = get_search_results(params.merge(rows: 99999), {q: query}) # allow params
 
     return response, document_list
@@ -220,10 +220,10 @@ module CatalogHelper
     @collections ||=
       begin
         response, docs = get_search_results(q: "active_fedora_model_ssi:Collection",
-                                            fl: "internal_uri_ssi,title_ssi",
+                                            fl: "id,title_ssi",
                                             rows: 9999)
         docs.each_with_object({}) do |doc, memo|
-          memo[doc["internal_uri_ssi"]] = doc["title_ssi"]
+          memo[doc["id"]] = doc["title_ssi"]
         end
       end
   end

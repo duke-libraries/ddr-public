@@ -65,7 +65,7 @@ module Ddr
         end
 
         def parent_collection_uris
-          @parent_collection_uris ||= parent_collection_document_list.map { |document| document.internal_uri }
+          @parent_collection_uris ||= parent_collection_document_list.map { |document| document.id }
         end
 
         def parent_collection_document_list

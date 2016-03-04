@@ -5,7 +5,7 @@ module ApplicationHelper
     case solr_field
     when Ddr::Index::Fields::ADMIN_SET_FACET
       # apply custom sort for 'admin set' facet
-      items = admin_set_facet_sort(paginator.items)
+      # items = admin_set_facet_sort(paginator.items)
     when Ddr::Index::Fields::COLLECTION_FACET
       # apply custom sort for 'Collection' facet
       items = collection_facet_sort(paginator.items)

@@ -11,22 +11,22 @@ class CatalogController < ApplicationController
 
   # uninitialized constant ViewConfig
   # SearchBuilder 
-  before_action :enforce_show_permissions, only: :show
+  # before_action :enforce_show_permissions, only: :show
 
   # CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
-  CatalogController.solr_search_params_logic += [:include_only_published]
+  # CatalogController.solr_search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
   helper_method :configure_blacklight_for_children
   
   # Get "wrong number of arguments (2 for 1)" error if present
-  rescue_from CanCan::AccessDenied do |exception|
-    if user_signed_in?
-      forbidden
-    else
-      authenticate_user!
-    end
-  end
+  # rescue_from CanCan::AccessDenied do |exception|
+  #   if user_signed_in?
+  #     forbidden
+  #   else
+  #     authenticate_user!
+  #   end
+  # end
   
   layout 'blacklight'
 
@@ -42,19 +42,19 @@ class CatalogController < ApplicationController
       :qt => 'search',
       :rows => 20,
       :qf => ["id",
-              solr_name(:title, :stored_searchable),
-              solr_name(:creator, :stored_searchable),
-              solr_name(:contributor, :stored_searchable),              
-              solr_name(:subject, :stored_searchable),
-              solr_name(:type, :stored_searchable),
-              solr_name(:publisher, :stored_searchable),
-              solr_name(:series, :stored_searchable),
-              solr_name(:description, :stored_searchable),
-              solr_name(:absrtact, :stored_searchable),
+              solr_name(:dc_title, :stored_searchable),
+              solr_name(:dc_creator, :stored_searchable),
+              solr_name(:dc_contributor, :stored_searchable),              
+              solr_name(:dc_subject, :stored_searchable),
+              solr_name(:dc_type, :stored_searchable),
+              solr_name(:dc_publisher, :stored_searchable),
+              solr_name(:duketerms_series, :stored_searchable),
+              solr_name(:dc_description, :stored_searchable),
+              solr_name(:dc_abstract, :stored_searchable),
               Ddr::Index::Fields::YEAR_FACET,
-              solr_name(:spatial, :stored_searchable),
+              solr_name(:dc_spatial, :stored_searchable),
               Ddr::Index::Fields::LOCAL_ID,
-              solr_name(:identifier, :stored_searchable),
+              solr_name(:dc_identifier, :stored_searchable),
               Ddr::Index::Fields::PERMANENT_ID].join(' ')
     }
     
@@ -108,9 +108,9 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
-    config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
+    config.add_index_field solr_name(:dc_creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_index_field solr_name(:dc_date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_index_field solr_name(:dc_type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
@@ -134,18 +134,17 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
+    config.add_show_field solr_name(:dc_title, :stored_searchable), separator: '; ', label: 'Title'
     config.add_show_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_show_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
-    config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
-    config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
-    (Ddr::Vocab::Vocabulary.term_names(RDF::DC) - [ :title, :creator, :date, :type ]).each do |term_name|
-      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
+    config.add_show_field solr_name(:dc_creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_show_field solr_name(:dc_date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_show_field solr_name(:dc_type, :stored_searchable), separator: '; ', label: 'Type'
+
+    (Ddr::Models::DescriptiveMetadata.field_names - [ :dc_title, :dc_creator, :dc_date, :dc_type ]).each do |term_name|
+      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.gsub(/^(dc|duketerms)_/, "").titleize
     end
-    Ddr::Vocab::Vocabulary.term_names(Ddr::Vocab::DukeTerms).each do |term_name|
-      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
-    end
+
     config.add_show_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
     config.add_show_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
     config.add_show_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
@@ -170,7 +169,7 @@ class CatalogController < ApplicationController
 
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
-        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
+        :qf => "id dc_title_tesim dc_creator_tesim dc_subject_tesim dc_description_tesim dc_identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
       }
     end
 
@@ -225,7 +224,7 @@ class CatalogController < ApplicationController
 
   def show
     super
-    multires_image_file_paths
+    #multires_image_file_paths
   end
 
   def include_only_published(solr_parameters, user_parameters)
@@ -246,9 +245,9 @@ class CatalogController < ApplicationController
     end
   end
 
-  def multires_image_file_paths
-    @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
-  end
+  # def multires_image_file_paths
+  #   @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
+  # end
 
   # For portal scoping
   def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
