@@ -13,8 +13,8 @@ class CatalogController < ApplicationController
   # SearchBuilder 
   # before_action :enforce_show_permissions, only: :show
 
-  # CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
-  # CatalogController.solr_search_params_logic += [:include_only_published]
+  #CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
+  CatalogController.solr_search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
   helper_method :configure_blacklight_for_children
