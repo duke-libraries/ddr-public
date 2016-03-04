@@ -26,11 +26,11 @@ class SolrDocument
   end
 
   def abstract
-    get("abstract_tesim")
+    get("dc_abstract_tesim")
   end
 
   def description
-    get("description_tesim")
+    get("dc_description_tesim")
   end
 
   def public_controller
