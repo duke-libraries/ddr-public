@@ -224,7 +224,7 @@ class CatalogController < ApplicationController
 
   def show
     super
-    #multires_image_file_paths
+    multires_image_file_paths
   end
 
   def include_only_published(solr_parameters, user_parameters)
@@ -245,9 +245,9 @@ class CatalogController < ApplicationController
     end
   end
 
-  # def multires_image_file_paths
-  #   @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
-  # end
+  def multires_image_file_paths
+    @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
+  end
 
   # For portal scoping
   def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
