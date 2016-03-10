@@ -50,7 +50,8 @@ class CatalogController < ApplicationController
               solr_name(:spatial, :stored_searchable),
               Ddr::Index::Fields::LOCAL_ID,
               solr_name(:identifier, :stored_searchable),
-              Ddr::Index::Fields::PERMANENT_ID].join(' ')
+              Ddr::Index::Fields::PERMANENT_ID,
+              Ddr::Index::Fields::ALL_TEXT].join(' ')
     }
     
     config.per_page = [10,20,50,100]
