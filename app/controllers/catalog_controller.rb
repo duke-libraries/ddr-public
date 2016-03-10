@@ -242,7 +242,7 @@ class CatalogController < ApplicationController
   end
 
   def multires_image_file_paths
-    @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
+    @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
   end
 
   # For portal scoping
