@@ -60,7 +60,7 @@ module Ddr
         def include_only_specified_records(solr_parameters, user_parameters)
           if @parent_collection_uris
             solr_parameters[:fq] ||= []
-            solr_parameters[:fq] << construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})
+            solr_parameters[:fq] << construct_solr_parameter_value({:solr_field => 'isGovernedBy_ssim', :boolean_operator => "OR", :values => @parent_collection_uris})
           end
         end
 
@@ -77,8 +77,8 @@ module Ddr
         end
 
         def item_count
-          response, documents = get_search_results({ :q => "(#{construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
-          @item_count = response.total
+          response, documents = get_search_results({ :q => "(#{construct_solr_parameter_value({:solr_field => 'isGovernedBy_ssim', :boolean_operator => "OR", :values => @parent_collection_uris})}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
+          @item_count = documents.count
         end
 
         def parent_collection_search

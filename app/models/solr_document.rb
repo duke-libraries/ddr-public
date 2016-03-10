@@ -67,12 +67,12 @@ class SolrDocument
   end
 
   def admin_set_configuration
-    admin_set = SolrDocument.find(self.admin_policy_pid).admin_set
+    admin_set = SolrDocument.find(self.admin_policy_uri).admin_set
     Rails.application.config.portal.try(:[], 'portals').try(:[], 'admin_sets').try(:[], admin_set)
   end
 
   def collection_pid_configuration
-    local_id = SolrDocument.find(self.admin_policy_pid).local_id
+    local_id = SolrDocument.find(self.admin_policy_uri).local_id
     Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
   end
 

@@ -37,13 +37,13 @@ class DigitalCollectionsController < CatalogController
     collection_count
     item_count
     featured_collection_documents
-
   end
 
   def show
     super
     collection_document
     max_download
+    item_count
   end
 
   def media

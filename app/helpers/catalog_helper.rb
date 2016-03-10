@@ -25,11 +25,11 @@ module CatalogHelper
   end
   
   def render_thumbnail_link document, size, counter = nil
-    # if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
-    #   thumbnail_link_to_document(document, thumbnail_multires_image_file_path, size, counter)
-    # else
+    if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
+      thumbnail_link_to_document(document, thumbnail_multires_image_file_path, size, counter)
+    else
       render_thumbnail_tag(document, {}, :counter => counter)
-    # end 
+    end 
   end
 
   def collection_thumbnail_local_id(document)
