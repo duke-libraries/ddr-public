@@ -149,4 +149,14 @@ RSpec.describe CatalogHelper do
     end        
   end
 
+  describe "#derivative_urls" do
+    context "item is display_format audio" do
+      let(:prefixes) { {'audio' => "http://library.duke.edu/derivatives/"} }
+      it "should return an array of audio derivative URLs" do
+        document = double("document", :derivative_ids => ["audio_100"], :display_format => "audio")
+        expect(helper.derivative_urls({document: document, derivative_url_prefixes: prefixes })).to match(['http://library.duke.edu/derivatives/audio_100.mp3'])
+      end
+    end
+  end
+
 end

@@ -161,10 +161,27 @@ module CatalogHelper
     end
     
   end
+
+  def derivative_urls options={}
+    derivative_urls = []
+    options[:document].derivative_ids.each do |id|
+       derivative_urls << "#{options[:derivative_url_prefixes][options[:document].display_format]}#{id}.#{derivative_file_extension(options[:document])}"
+    end
+
+    derivative_urls
+  end
   
 
-
   private
+
+  def derivative_file_extension document
+    case document.display_format
+    when "audio"
+      "mp3"
+    when "video"
+      "mp4"
+    end
+  end
 
   def find_relationship document
     if document.active_fedora_model == 'Item'
