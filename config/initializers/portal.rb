@@ -16,4 +16,6 @@ unless Dir.glob(Rails.root.join('ddr-portals', '*/')).blank?
   end
 
   Rails.application.config.portal = loaded_configs
+else
+  Rails.application.config.portal = {}
 end
