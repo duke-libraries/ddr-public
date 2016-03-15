@@ -57,6 +57,11 @@ class SolrDocument
       public_id = self.id unless Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], self.local_id)
     end
   end
+
+  # This assumes that the derivative IDs are the local_ids of an item's components
+  def derivative_ids(type='default')
+    struct_map_docs(type).map { |doc| doc.local_id }.compact
+  end
   
 
   private
@@ -75,6 +80,8 @@ class SolrDocument
     local_id = SolrDocument.find(self.admin_policy_pid).local_id
     Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
   end
+
+
 
 
 end

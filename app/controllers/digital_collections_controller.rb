@@ -14,6 +14,10 @@ class DigitalCollectionsController < CatalogController
   before_action :get_pid_from_params_id, only: [:show, :media]
   before_action :enforce_show_permissions, only: :show
 
+  configure_blacklight do |config|
+    config.view.gallery.default = true
+  end
+
   def index
     super
     unless has_search_parameters?
@@ -37,13 +41,13 @@ class DigitalCollectionsController < CatalogController
     collection_count
     item_count
     featured_collection_documents
-
   end
 
   def show
     super
     collection_document
     max_download
+    derivative_url_prefixes
   end
 
   def media
@@ -52,10 +56,6 @@ class DigitalCollectionsController < CatalogController
 
   def about
     collection_document
-  end
-
-  configure_blacklight do |config|
-    config.view.gallery.default = true
   end
 
   def featured

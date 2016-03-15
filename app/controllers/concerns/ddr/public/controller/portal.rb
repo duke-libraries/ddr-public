@@ -48,13 +48,16 @@ module Ddr
           @max_download ||= portal_config.try(:[], 'restrictions').try(:[], 'max_download')
         end
 
-
         def blog_posts_url
           @blog_post_url ||= portal_config.try(:[], 'blog_posts')
         end
 
         def alert_message
           @portal_alert_message ||= portal_config.try(:[], 'alert')
+        end
+
+        def derivative_url_prefixes
+          @derivative_url_prefixes ||= portal_config.try(:[], 'derivative_url_prefixes')
         end
 
         def include_only_specified_records(solr_parameters, user_parameters)
