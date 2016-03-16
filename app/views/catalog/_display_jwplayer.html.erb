@@ -1,0 +1,50 @@
+<%# NOTE: this partial supports audio or video items.
+Either can have one or multiple files. %>
+
+<div id="jwplayer-element">Loading the media player...</div>
+<% @derivcount = derivatives.count %>
+
+<%= javascript_tag do %>
+  var playerInstance = jwplayer("jwplayer-element");
+  playerInstance.setup({
+    <% if defined?(width) %>
+      width: "<%= width %>",
+    <% end %>
+    <% if defined?(height) %>
+      height: <%= height %>,
+    <% end %>
+    <% if defined?(aspectratio) %>
+      aspectratio: "<%= aspectratio %>",
+    <% end %>
+    skin: {
+      name: "seven",
+      active: "#a1b70d",
+      inactive: "white",
+      background: "#333"
+    },
+    playlist: [
+      <% derivatives.each_with_index do |url,index| %>
+        {
+          file: "<%= url %>",
+          <% if @derivcount > 1 %>
+          title: "Part <%= index + 1 %> of <%= @derivcount %>",
+          <% end %>
+          tracks: [{
+            //file: "/path/to/captions.vtt" ...etc...
+          }]          
+        }<% unless url == derivatives.last %>,<% end %>
+      <% end %>
+    ]
+  });
+<% end %>
+
+<noscript>
+  <h3>Files for this Item</h3>
+  <ul>
+    <% derivatives.each do |url| %>
+      <% unless url.blank? %>
+        <li><%= link_to url, url %></li>
+      <% end %>
+    <% end %>
+  </ul>
+</noscript>
