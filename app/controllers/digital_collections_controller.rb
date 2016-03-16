@@ -11,7 +11,7 @@ class DigitalCollectionsController < CatalogController
   # CatalogController.
   skip_filter :enforce_show_permissions, only: :show
 
-  before_action :get_pid_from_params_id, only: [:show, :media]
+  before_action :get_pid_from_params_id, only: [:show, :media, :feed]
   before_action :enforce_show_permissions, only: :show
 
   configure_blacklight do |config|
@@ -48,6 +48,10 @@ class DigitalCollectionsController < CatalogController
     collection_document
     max_download
     derivative_url_prefixes
+  end
+
+  def feed
+    @document = SolrDocument.find(params[:id])
   end
 
   def media
