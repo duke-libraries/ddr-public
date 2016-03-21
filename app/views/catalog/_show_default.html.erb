@@ -8,3 +8,7 @@
     <% end -%>
   <% end -%>
 </dl>
+
+<% if @item_relators %>
+  <p><%= related_item_documents({document: document, item_relators: @item_relators}) %></p>
+<% end -%>

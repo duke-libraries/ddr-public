@@ -1,9 +1,10 @@
-
 module Ddr
   module Public
     module Controller
       module Portal
         extend ActiveSupport::Concern
+
+        include Ddr::Public::Controller::ConstantizeSolrFieldName
           
         def self.included(base)
           base.before_action :prepend_view_path_for_portal_overrides
@@ -58,6 +59,10 @@ module Ddr
 
         def derivative_url_prefixes
           @derivative_url_prefixes ||= portal_config.try(:[], 'derivative_url_prefixes')
+        end
+
+        def item_relators
+          @item_relators ||= portal_config.try(:[], 'item_relators')
         end
 
         def include_only_specified_records(solr_parameters, user_parameters)

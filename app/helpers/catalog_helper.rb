@@ -1,5 +1,7 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
+  include Ddr::Public::Controller::ConstantizeSolrFieldName
+
 
   # Predicate methods for object types
   def is_item? document
@@ -194,6 +196,7 @@ module CatalogHelper
   
 
   private
+
 
   def derivative_file_extension document
     case document.display_format

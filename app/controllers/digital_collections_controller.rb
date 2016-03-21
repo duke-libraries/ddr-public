@@ -48,6 +48,7 @@ class DigitalCollectionsController < CatalogController
     collection_document
     max_download
     derivative_url_prefixes
+    item_relators
   end
 
   def feed
