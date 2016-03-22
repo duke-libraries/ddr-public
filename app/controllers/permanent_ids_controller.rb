@@ -1,6 +1,7 @@
 class PermanentIdsController < ApplicationController
 
   include Blacklight::Catalog
+  include BlacklightHelper
 
   def show
     permanent_id = params.require(:permanent_id)
@@ -8,7 +9,7 @@ class PermanentIdsController < ApplicationController
     if response.total == 0
       render file: "#{Rails.root}/public/404", layout: false, status: 404
     else
-      redirect_to catalog_path(response.documents.first)
+      redirect_to document_or_object_url(response.documents.first)
     end
   end
 
