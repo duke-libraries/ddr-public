@@ -226,8 +226,16 @@ body.blacklight-catalog-show #content {
   background-color: rgba(0,0,0,0.8);
   color: white;
   padding: 30px !important;
-  height: 500px;
-  overflow: auto;
+
+  &.showcase-side {
+    height: 500px;
+    overflow: auto; 
+  }
+  
+  &.collection-submast {
+    margin: -21px -21px 25px -21px;
+  }
+
   @media (max-width: $screen-md) {
     height: auto;
   }
@@ -242,6 +250,8 @@ body.blacklight-catalog-show #content {
 
   & .collection-abstract {
     color: $gray-lighter;
+    font-size: $font-size-large;
+    margin-top: 1em;
   }
 
   & a {
@@ -250,6 +260,7 @@ body.blacklight-catalog-show #content {
 
   & .more-link {
     font-weight: bold;
+    margin-left: 0.4em;
   }
 
 
@@ -351,10 +362,13 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
 
 #source-collection.well {
-  margin-top: 30px;
   & h3 {
     margin-top: 10px;
   }
+}
+
+p + #source-collection {
+  margin-top: 30px;
 }
 
 #blog-posts {
@@ -387,6 +401,21 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
   & .blog-post-secondary {
     margin-bottom: 20px;
+  }
+}
+
+
+/* ----------------------
+  DEFAULT COLLECTION SHOW
+------------------------- */
+
+.collection-description {
+  margin-bottom: 30px;  
+}
+
+#collection-info {
+  & dl { /* Metadata display for collection show */
+    margin-bottom: 30px;
   }
 }
 

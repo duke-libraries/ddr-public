@@ -39,6 +39,8 @@
   <div id="main-container" class="container">
     <%= render :partial=>'/flash_msg', layout: 'shared/flash_messages' %>
 
+    <%= yield(:submast) if content_for? :submast %>
+
     <div class="row">
       <%= yield %>
     </div>

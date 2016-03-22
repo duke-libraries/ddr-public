@@ -121,7 +121,7 @@ class CatalogController < ApplicationController
     }
 
     # partials for show view
-    config.show.partials = [:show_header, :show, :show_children]
+    config.show.partials = [:show_header, :show, :show_children, :show_bottom]
 
     # deactivate certain tools
     config.show.document_actions.delete(:email)

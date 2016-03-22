@@ -1,0 +1,28 @@
+<% content_for :head do -%>
+  <style type="text/css">
+    <%# Hide title in the collection partial in favor of the one in the submast %>
+    #document h1:first-of-type { display: none; }
+    
+    <%# Hide the back-to-results, new search links; these are awkward for collection show pages %> 
+    #previousNextDocument { display: none; }
+
+    <%# Hide collection metadata fields that are already rendered elsewhere on page %>
+    
+    #collection-info .blacklight-title_tesim,
+    #collection-info .blacklight-description_tesim,
+    #collection-info .blacklight-abstract_tesim,
+    #collection-info .blacklight-type_tesim {
+      display: none;
+    }
+  </style>
+<% end -%>
+
+<% content_for :submast do -%>
+  <%= render partial: 'collection_submast', locals: { document: document } %>
+<% end -%>
+
+<% unless document.description.blank? %>
+  <div class="collection-description"><%= simple_format(document.description) %></div>
+<% end %>
+
+<%= render partial: 'show_finding_aid_full', locals: { document: document } %>

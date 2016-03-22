@@ -1,5 +1,21 @@
-<h3>Items</h3>
+<hr/>
+
+<%= link_to collection_browse_items_url(@document), :class => "" do %>
+  <h3 class="feature-head">Items in This Collection <span class="text-muted smaller">(<%= number_with_delimiter(@item_count) %>)</span></h3>
+<% end %>
+
+
 <% @response, @document_list = find_children(@document, :is_member_of_collection, params) %>
-<%= render 'sort_and_per_page' %>
-<%= render_document_index %>
-<%= render 'results_pagination' %>
+
+<%# Show the first 6 items in a grid %>
+<%= render_document_index_with_view("gallery", @document_list[0..5]) %>
+
+<% if @document_list.length > 6 %>
+  <p>
+    <%= link_to collection_browse_items_url(@document), :class => "" do %>
+      Browse all <%= number_with_delimiter(@item_count) %> Items &raquo;
+    <% end %>
+  </p>  
+<% end %>
+
+<hr/>

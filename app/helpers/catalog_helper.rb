@@ -45,6 +45,11 @@ module CatalogHelper
     link
   end
 
+  # View helper: from collection show page, browse items.
+  def collection_browse_items_url document, options={}
+    search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))
+  end
+
   def find_children document, relationship = nil, params = {}
     configure_blacklight_for_children
     relationship ||= find_relationship(document)
