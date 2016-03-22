@@ -1,5 +1,7 @@
 module ShowFeedHelper
 
+  include Ddr::Public::Controller::ConstantizeSolrFieldName
+
   def field_value_mappings options={}
     feed_to_duke_value_mapping = []
 
@@ -42,7 +44,7 @@ module ShowFeedHelper
   end
 
   def solr_field_value options={}
-    solr_field_name = constantize_solr_field_string({ solr_field: options[:solr_field] })
+    solr_field_name = constantize_solr_field_name({ solr_field: options[:solr_field] })
     values = options[:document][solr_field_name.to_s]
 
     if options[:helper_method] and values
@@ -54,14 +56,6 @@ module ShowFeedHelper
 
   def value options={}
     options[:value]
-  end
-
-  def constantize_solr_field_string options={}
-    if options[:solr_field].respond_to? :each
-      ActiveFedora::SolrService.solr_name(*options[:solr_field])
-    else
-      options[:solr_field].safe_constantize
-    end
   end
 
 end

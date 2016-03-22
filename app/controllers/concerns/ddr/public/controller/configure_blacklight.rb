@@ -4,6 +4,8 @@ module Ddr
       module ConfigureBlacklight
         extend ActiveSupport::Concern
 
+        include Ddr::Public::Controller::ConstantizeSolrFieldName
+
         def self.included(base)
           base.before_action :configure_blacklight_facets
           base.before_action :configure_blacklight_show_fields
@@ -33,7 +35,7 @@ module Ddr
             blacklight_config.send(options[:clear_field]).clear
             conf.each do |field|
               blacklight_config.send(options[:add_field],
-                constantize_solr_field_string({solr_field: field['field']}),
+                constantize_solr_field_name({solr_field: field['field']}),
                 :label => field['label'],
                 :show => field['show'],
                 :collapse => field['collapse'],
@@ -41,7 +43,7 @@ module Ddr
                 :sort => field['sort'],
                 :range => field['range'],
                 :helper_method => field['helper_method'],
-                :link_to_search => if field['link_to_search'] then constantize_solr_field_string({solr_field: field['link_to_search']}) end
+                :link_to_search => if field['link_to_search'] then constantize_solr_field_name({solr_field: field['link_to_search']}) end
                 )
             end
           end
@@ -50,14 +52,6 @@ module Ddr
         def portal_config
           portal_config = Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], params[:collection])
           portal_config ||= Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], controller_name)
-        end
-
-        def constantize_solr_field_string options={}
-          if options[:solr_field].respond_to? :each
-            ActiveFedora::SolrService.solr_name(*options[:solr_field]).to_s
-          else
-            options[:solr_field].safe_constantize.to_s
-          end
         end
         
       end
