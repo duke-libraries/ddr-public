@@ -31,6 +31,20 @@ $(function () {
             }
         }
     });
+
+
+    // Popover metadata from Gallery (Grid) View of search results
+    $('#related-items #documents.gallery .thumbnail-wrapper').popover({
+      trigger: 'hover',
+      container: '#related-items',
+      viewport: '#content',
+      content: function(){
+        return $(this).find('.document-metadata').html();
+      },
+      placement: 'auto bottom',
+      html: true
+    });
+
 });
 
 
