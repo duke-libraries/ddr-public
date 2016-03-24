@@ -1,0 +1,6 @@
+<div id="related-items">
+<% related_item_documents({document: document, item_relators: @item_relators}).each do |relation_name, docs| %>
+  <h3><%= relation_name %></h3>
+  <%= render_document_index_with_view("gallery", docs) %>
+<% end %>
+</div>

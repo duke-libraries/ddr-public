@@ -10,5 +10,5 @@
 </dl>
 
 <% if @item_relators %>
-  <p><%= related_item_documents({document: document, item_relators: @item_relators}) %></p>
+  <%= render partial: 'related_items', locals: {document: document} %>
 <% end -%>
