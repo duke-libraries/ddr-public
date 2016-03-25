@@ -11,11 +11,11 @@
     <%# For search engine indexing & graceful degradation, %>
     <%# show the first image in <img> and make links to the rest %>   
     <noscript>          
-      <%= render partial: "show_image_derivative", locals: { image_path: @document_multires_image_file_paths.first } %> 
+      <%= render partial: "show_image_derivative", locals: { image_path: document.multires_image_file_paths.first } %> 
 
       <h3>Images for this Item</h3>
       <ul>
-        <% @document_multires_image_file_paths.each do |path| %>
+        <% document.multires_image_file_paths.each do |path| %>
           <% unless path.blank? %>
             <li><%= link_to File.basename(path, File.extname(path)), iiif_image_path(path, {:size => '!850,850'}) %></li>
           <% end %>
@@ -25,7 +25,7 @@
     
     <%# Make the array of page image paths accessible to JS for use by the download buttons %>
     <%= javascript_tag do %>
-      var pagepaths = <%= raw @document_multires_image_file_paths.to_json %>;
+      var pagepaths = <%= raw document.multires_image_file_paths.to_json %>;
     <% end %>
     
   <% end %>
@@ -36,8 +36,8 @@
 
   <% if tilesources = image_item_tilesources(@document_multires_image_file_paths) %>
     
-    <%= render partial: "show_multires_image_download", locals: { image_path: @document_multires_image_file_paths.first, imagecount: tilesources.length } %>  
-    <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(@document_multires_image_file_paths), imagecount: tilesources.length } %>
+    <%= render partial: "show_multires_image_download", locals: { image_path: document.multires_image_file_paths.first, imagecount: tilesources.length } %>  
+    <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(document.multires_image_file_paths), imagecount: tilesources.length } %>
 
   <% end %>
 

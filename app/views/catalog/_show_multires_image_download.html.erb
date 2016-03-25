@@ -9,6 +9,11 @@
 	    </a>
 	
 	    <ul class="dropdown-menu">
+
+    <% if @document.display_format == 'document' %>
+      <%= render partial: 'document_download_menu_section', locals: {document: @document} %>
+    <% end %>
+
 		<% if is_multi_image?(@document) %>
 			<% ptifs = @document_multires_image_file_paths %>
 		  <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
@@ -18,7 +23,7 @@
 			Had to use button_to to make a form to pass array of JPGs as a POST request (too long for 
 			URL string in GET). 
 			 -->
-			 		  
+			
       <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => @max_download ? '!'+@max_download.to_s+','+@max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
 
 			<li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => @max_download ? '!'+@max_download.to_s+','+@max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>				
