@@ -119,7 +119,7 @@ GEM
     ddr-alerts (1.0.0)
       rails (~> 4.1.6)
     ddr-antivirus (2.1.1)
-    ddr-models (2.4.8)
+    ddr-models (2.4.9)
       active-fedora (~> 7.0)
       activeresource
       cancancan (~> 1.12)
@@ -159,7 +159,7 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     execjs (2.5.2)
-    ezid-client (1.4.2)
+    ezid-client (1.4.3)
       hashie
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -353,7 +353,7 @@ GEM
     ref (1.0.5)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
-    resque (1.25.2)
+    resque (1.26.0)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
       redis-namespace (~> 1.3)
@@ -473,7 +473,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.4.8)
+  ddr-models (= 2.4.9)
   devise
   edtf-humanize!
   factory_girl_rails (~> 4.4)
