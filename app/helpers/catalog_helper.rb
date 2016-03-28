@@ -83,6 +83,26 @@ module CatalogHelper
     link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
   end
 
+  # View helper
+  def default_mime_type_label(mime_type)
+    case mime_type
+    when /^image/
+      'Image'
+    when /^video/
+      'Video'
+    when /^audio/
+      'Audio'
+    when /^application\/(x-)?pdf/
+      'PDF'
+    when /^application/
+      'Binary'
+    when /^text\/comma-separated-values/
+      'CSV'
+    else
+      'File'
+    end
+  end
+
 
   # View helper
   def research_help_title research_help
