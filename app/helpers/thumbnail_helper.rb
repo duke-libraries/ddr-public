@@ -63,6 +63,8 @@ module ThumbnailHelper
   def default_thumbnail(doc_or_obj)
     if doc_or_obj.has_content?
       default_mime_type_thumbnail(doc_or_obj.content_type)
+    elsif doc_or_obj.display_format
+      default_display_format_thumbnail(doc_or_obj.display_format)
     else
       default_model_thumbnail(doc_or_obj.active_fedora_model)
     end
@@ -73,26 +75,45 @@ module ThumbnailHelper
   def default_mime_type_thumbnail(mime_type)
     case mime_type
     when /^image/
-      'crystal-clear/image2.png'
+      'ddr-icons/image.png'
     when /^video/
-      'crystal-clear/video.png'
+      'ddr-icons/video.png'
     when /^audio/
-      'crystal-clear/sound.png'
+      'ddr-icons/audio.png'
     when /^application\/(x-)?pdf/
-      'crystal-clear/document.png'
+      'ddr-icons/pdf.png'
     when /^application/
-      'crystal-clear/binary.png'
+      'ddr-icons/binary.png'
+    when /^text\/comma-separated-values/
+      'ddr-icons/csv.png'
     else
-      'crystal-clear/misc.png'
+      'ddr-icons/default.png'
+    end
+  end
+
+  def default_display_format_thumbnail(display_format)
+    case display_format
+    when 'multi_image'
+      'ddr-icons/image.png'
+    when 'image'
+      'ddr-icons/image.png'
+    when 'video'
+      'ddr-icons/video.png'
+    when 'audio'
+      'ddr-icons/audio.png'
+    when 'collection'
+      'ddr-icons/multiple.png'
+    else
+      'ddr-icons/default.png'
     end
   end
 
   def default_model_thumbnail(model)
     case model
     when 'Collection'
-      'crystal-clear/kmultiple.png'
+      'ddr-icons/multiple.png'
     else
-      'crystal-clear/misc.png'
+      'ddr-icons/default.png'
     end
   end
 
