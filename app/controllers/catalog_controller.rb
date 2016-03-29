@@ -9,6 +9,8 @@ class CatalogController < ApplicationController
   include Hydra::Controller::ControllerBehavior
   include Ddr::Public::Controller::ConfigureBlacklight
 
+  before_action :authenticate_user!, if: :authentication_required?
+
   before_action :enforce_show_permissions, only: :show
 
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
@@ -208,8 +210,10 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc, pub_date_dtsi desc, title_tesi asc', :label => 'relevance'
+    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} desc, title_tesi asc", :label => 'relevance'
     config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
+    config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} asc", :label => 'date (old to new)'
+    config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} desc", :label => 'date (new to old)'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
@@ -355,6 +359,10 @@ class CatalogController < ApplicationController
 
   def forbidden
     render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
+  end
+
+  def authentication_required?
+    Ddr::Public.require_authentication
   end
 
 end

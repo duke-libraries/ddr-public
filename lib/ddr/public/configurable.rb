@@ -15,6 +15,8 @@ module Ddr
           ENV["STAFF_APP_URL"] || "https://ddr.lib.duke.edu/"
         end
 
+        mattr_accessor :require_authentication
+
       end
 
       module ClassMethods
