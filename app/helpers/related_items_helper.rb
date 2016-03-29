@@ -19,14 +19,14 @@ module RelatedItemsHelper
   def facet_field_value_matches document_id, relator_field
     relator_field_values = relator_field_values(document_id, relator_field)
     unless relator_field_values.blank?
-      relator_field_items = relator_field_values.map { |value| Item.where(relator_field => value) }
+      relator_field_items = relator_field_values.map { |value| ActiveFedora::SolrService.query("#{relator_field}:\"#{value}\"") }
       related_items_solr_documents(document_id, relator_field_items)
     end
   end
 
   def related_items_solr_documents document_id, relator_field_items
-    item_ids = relator_field_items.map{ |items| items.map { |item| item.id } - [document_id] }
-    item_ids.first.map { |id| SolrDocument.find(id) }
+    items = relator_field_items.map{ |items| items.delete_if { |item| item['id'] == document_id } }
+    items.first.map { |item| SolrDocument.new(item) }
   end
 
   def relator_field_values document_id, relator_field
