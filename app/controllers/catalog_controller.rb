@@ -7,30 +7,26 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
+  include Ddr::Models::Catalog
   include Ddr::Public::Controller::ConfigureBlacklight
 
-  # uninitialized constant ViewConfig
-  # SearchBuilder 
-  # before_action :enforce_show_permissions, only: :show
-
-  #CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
-  CatalogController.solr_search_params_logic += [:include_only_published]
+  self.search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
   helper_method :configure_blacklight_for_children
-  
-  # Get "wrong number of arguments (2 for 1)" error if present
-  # rescue_from CanCan::AccessDenied do |exception|
-  #   if user_signed_in?
-  #     forbidden
-  #   else
-  #     authenticate_user!
-  #   end
-  # end
-  
+
+  rescue_from CanCan::AccessDenied do |exception|
+    if user_signed_in?
+      forbidden
+    else
+      authenticate_user!
+    end
+  end
+
   layout 'blacklight'
 
   configure_blacklight do |config|
+    config.search_builder_class = SearchBuilder
     config.show.route = {}
           config.view.gallery.partials = [:index_header, :index]
 
@@ -44,7 +40,7 @@ class CatalogController < ApplicationController
       :qf => ["id",
               solr_name(:dc_title, :stored_searchable),
               solr_name(:dc_creator, :stored_searchable),
-              solr_name(:dc_contributor, :stored_searchable),              
+              solr_name(:dc_contributor, :stored_searchable),
               solr_name(:dc_subject, :stored_searchable),
               solr_name(:dc_type, :stored_searchable),
               solr_name(:dc_publisher, :stored_searchable),
@@ -57,7 +53,7 @@ class CatalogController < ApplicationController
               solr_name(:dc_identifier, :stored_searchable),
               Ddr::Index::Fields::PERMANENT_ID].join(' ')
     }
-    
+
     config.per_page = [10,20,50,100]
     config.default_per_page = 20
     config.max_per_page = 100
@@ -227,15 +223,10 @@ class CatalogController < ApplicationController
     multires_image_file_paths
   end
 
-  def include_only_published(solr_parameters, user_parameters)
-      solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "#{Ddr::Index::Fields::WORKFLOW_STATE}:published"
-  end
-  
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
-  end  
+  end
 
   def configure_blacklight_for_children
     blacklight_config.configure do |config|
@@ -265,30 +256,30 @@ class CatalogController < ApplicationController
     solr_parameter_value
   end
 
-  
-  def zip_images 
-    
+
+  def zip_images
+
     # TO-DO: make the image_list param a real array or hash instead of delimited string
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
-    
-  
+
+
     # Combination of these techniques:
     #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
     #   https://github.com/rubyzip/rubyzip#basic-zip-archive-creation
-         
+
     t = Tempfile.new("temp-ddr-#{Time.now.utc}")
     Zip::OutputStream.open(t.path) do |z|
       image_list.each_with_index do |item, index|
         title = item.to_s
         z.put_next_entry("#{index+1}.jpg")
-        
+
         # TODO: use DPC ID for the component filename OR extract the ptif path basename.
-        
+
         url1 = item
         url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
         z.print IO.read(url1_data)
-        
+
         # TODO: update a progress bar to indicate status.
         # TODO: write a test for this feature.
 
@@ -300,7 +291,7 @@ class CatalogController < ApplicationController
                                    :filename => itemid+".zip"
 
             t.close
-    end  
+    end
   end
 
   def pdf_images
@@ -308,22 +299,22 @@ class CatalogController < ApplicationController
     itemid = params[:itemid]
 
 
-    # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size. 
+    # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size.
     # Let's use 1000 on long side.
-    
-    pdf = Prawn::Document.new({ :margin => 0, :skip_page_creation => true })               
+
+    pdf = Prawn::Document.new({ :margin => 0, :skip_page_creation => true })
 
     image_list.each_with_index do | file, index |
 
       # New document, A4 paper, landscaped
       # pdf = Prawn::Document.new(:page_size => "A4", :page_layout => :landscape)
 
-  
+
       image_size = FastImage.size(file) # returns [w,h]
-  
+
       image_w = image_size[0]
       image_h = image_size[1]
-  
+
       # aspect ratio (w/h)
       image_r = image_w.to_f / image_h.to_f
 
@@ -334,23 +325,23 @@ class CatalogController < ApplicationController
         pg_w = 1000 * image_r
         pg_h = 1000
       end
-      
+
       # For small-derivative source image: PDF page will be full-size
       if image_w < 1000 && image_h < 1000
         pg_w = image_w.to_i
-        pg_h = image_h.to_i      
+        pg_h = image_h.to_i
       end
-      
+
       # Note: keep layout => :portrait even for landscape images else they don't render correctly
       pdf.start_new_page(:size => [pg_w, pg_h], :layout => :portrait, :margin => 0)
       y_pos = pdf.cursor   # Record the top y value (y=0 is the bottom of the page)
-      pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]  
-        
+      pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]
+
     end
-    
-    
+
+
     send_data pdf.render, filename: itemid+'.pdf', type: 'application/pdf'
-    
+
   end
 
 

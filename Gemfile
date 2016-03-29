@@ -5,7 +5,7 @@ gem 'blacklight', '5.16'
 gem 'hydra-head', '~> 9.5.0'
 gem 'ddr-alerts', '~> 1.0.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '3.0.0.beta.11'
+gem 'ddr-models', '3.0.0.beta.20'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'

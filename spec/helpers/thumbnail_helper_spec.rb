@@ -25,9 +25,9 @@ RSpec.describe ThumbnailHelper do
     context "the object does not have a thumbnail" do
       let(:document) { SolrDocument.new({
               'id'=>'changeme:10',
-              'attached_files_ss'=>['{"thumbnail":{"size":14992},"content":{"size":24330280},"extractedText":{"size":null},"fits":{"size":4797}}']
+              'attached_files_ss'=>['{"content":{"size":24330280},"extractedText":{"size":null},"fits":{"size":4797}}']
               }) }
-      xit "calls default_thumbnail" do
+      it "calls default_thumbnail" do
         expect(helper).to receive(:default_thumbnail).with(document)
         helper.thumbnail_image_tag(document)
       end
@@ -38,9 +38,9 @@ RSpec.describe ThumbnailHelper do
     context "object has content" do
       let(:document) { SolrDocument.new({
               'id'=>'changeme:10',
-              'content_media_type_ssim'=> "image/tiff"
+              'attached_files_ss'=>['{"content":{"size":24330280, "mime_type":"image/tiff"},"extractedText":{"size":null},"fits":{"size":4797}}']
               }) }
-      xit "should call default_mime_type_thumbnail" do
+      it "should call default_mime_type_thumbnail" do
         expect(helper).to receive(:default_mime_type_thumbnail).with("image/tiff")
         helper.default_thumbnail(document)
       end
@@ -49,12 +49,12 @@ RSpec.describe ThumbnailHelper do
       let(:document) { SolrDocument.new({
               'active_fedora_model_ssi'=>'TestModel',
               'id'=>'changeme:10',
-              'content_media_type_ssim'=> ''
-              }) }
-      xit "should call default_model_thumbnail" do
+              'attached_files_ss'=>['{"content":{"size":null, "mime_type":"text/plain"},"extractedText":{"size":null},"fits":{"size":4797}}']
+                                        }) }
+      it "should call default_model_thumbnail" do
         expect(helper).to receive(:default_model_thumbnail).with("TestModel")
         helper.default_thumbnail(document)
-      end      
+      end
     end
   end
 

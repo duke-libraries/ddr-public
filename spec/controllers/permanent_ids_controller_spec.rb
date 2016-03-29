@@ -12,7 +12,7 @@ RSpec.describe PermanentIdsController do
           double(total: 0)
         end
       end
-      xit "should render a 404 not found response" do
+      it "should render a 404 not found response" do
         get :show, permanent_id: permanent_id
         expect(response.response_code).to eq(404)
         expect(response).to render_template(file: "#{Rails.root}/public/404.html")

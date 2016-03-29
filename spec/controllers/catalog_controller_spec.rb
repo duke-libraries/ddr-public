@@ -9,7 +9,7 @@ RSpec.describe CatalogController, type: :controller do
 
     describe "when user is signed in" do
       before { allow(controller).to receive(:user_signed_in?) { true } }
-      xit "should return an unauthorized response" do
+      it "should return an unauthorized response" do
         get :index
         expect(response.response_code).to eq(403)
         expect(response).to render_template(file: "#{Rails.root}/public/403.html")
@@ -34,14 +34,14 @@ RSpec.describe CatalogController, type: :controller do
       sign_in user
     end
     describe "when an object is not published" do
-      xit "should not be found" do
+      it "should not be found" do
         get :show, id: obj.id
         expect(response.response_code).to eq(404)
       end
     end
     describe "when an object is published" do
       before { obj.publish! }
-      xit "should be found" do
+      it "should be found" do
         get :show, id: obj.id
         expect(response.response_code).to eq(200)
       end
