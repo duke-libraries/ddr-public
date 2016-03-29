@@ -36,7 +36,7 @@
 
   <% if tilesources = image_item_tilesources(@document_multires_image_file_paths) %>
     
-    <%= render partial: "show_multires_image_download", locals: { image_path: document.multires_image_file_paths.first, imagecount: tilesources.length } %>  
+    <%= render partial: "item_options", locals: { image_path: document.multires_image_file_paths.first, imagecount: tilesources.length } %>  
     <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(document.multires_image_file_paths), imagecount: tilesources.length } %>
 
   <% end %>

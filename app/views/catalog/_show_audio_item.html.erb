@@ -1,5 +1,6 @@
 <% cache("display_audio_#{params[:collection]}_#{params[:id]}", expires_in: 7.days) do %>
 
+  <%= render partial: "item_options", locals: { derivatives: derivative_urls({document: document, derivative_url_prefixes: @derivative_url_prefixes}) } %>  
   <%= render partial: "display_jwplayer", locals: { derivatives: derivative_urls({document: document, derivative_url_prefixes: @derivative_url_prefixes}), width: "100%", height: 30  } %> 
 
   <%= render partial: "show_default", locals: {document: document} %>
