@@ -1,0 +1,9 @@
+<% if is_item?(@document) %>
+
+<div id="item-options">
+	<ul class="nav nav-pills item-options">
+    <%= render partial: 'item_options_download', locals: local_assigns %>
+    <%# future options may include citations, etc. %>
+	</ul>
+</div>
+<% end %>
