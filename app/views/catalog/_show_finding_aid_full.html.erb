@@ -1,6 +1,5 @@
-<% cache("finding_aid_full_#{params[:collection]}", expires_in: 7.days) do %>
-
-  <% unless document.finding_aid.blank? %>
+<% unless document.finding_aid.blank? %>
+  <% cache("finding_aid_full_#{document.ead_id}", expires_in: 7.days) do %>
 
   <div class="well well-md" id="source-collection">  
     <h3 class="feature-head"><%= image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") %>Source Collection</h3>
