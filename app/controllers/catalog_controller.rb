@@ -59,7 +59,7 @@ class CatalogController < ApplicationController
     
     config.per_page = [10,20,50,100]
     config.default_per_page = 20
-    config.max_per_page = 100
+    config.max_per_page = 999
 
     # solr field configuration for search results/index views
     config.index.title_field = Ddr::Index::Fields::TITLE.to_s
