@@ -7,9 +7,13 @@ Rails.application.routes.draw do
   # Range Limit and Facet routes for DC
   get "dc/range_limit/", to: "digital_collections#range_limit"
   get "dc/facet/:id", to: "digital_collections#facet", as: "digital_collections_facet"
+
+  def local_id_constraint
+    /[a-zA-Z0-9\-_]+:?[a-zA-Z0-9\-_]*/
+  end
   
   # DC Collection scoped routes
-  constraints Collection do
+  constraints(id: local_id_constraint, collection: local_id_constraint) do
     get "dc/:collection/featured", to: "digital_collections#featured", as: "featured_items"
     get "dc/:collection/about", :to => "digital_collections#about", as: "digital_collections_about"
     get "dc/:collection/:id/media", :to => "digital_collections#media", constraints: { format: 'json' }
@@ -24,13 +28,6 @@ Rails.application.routes.draw do
 
   # Must exist for facets to work from DC portal
   get "dc" => "digital_collections#index"
-
-  # Constrain DC Collection Routes to those configured
-  class Collection
-    def self.matches?(request)
-      Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').keys.include?(request.params[:collection])
-    end
-  end
 
   def pid_constraint
       /[a-zA-Z0-9\-_]+:[a-zA-Z0-9\-_]+/

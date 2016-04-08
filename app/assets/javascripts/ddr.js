@@ -33,7 +33,7 @@ $(function () {
     });
 
 
-    // Popover metadata from Gallery (Grid) View of search results
+    // Popover metadata from Gallery (Grid) View of Related Items
     $('#related-items #documents.gallery .thumbnail-wrapper').popover({
       trigger: 'hover',
       container: '#related-items',
@@ -44,6 +44,7 @@ $(function () {
       placement: 'auto bottom',
       html: true
     });
+
 
 });
 
