@@ -415,6 +415,21 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   opacity: 0.6;
 }
 
+#related-items {
+  & .popover { // Obscure links in popover metadata
+    & a {
+      color: $text-color;
+      cursor: unset;
+    }
+    & a:hover {
+      text-decoration: none;
+    }
+    & .blacklight-permanent_url_ssi {
+      display: none;
+    }
+  }
+}
+
 
 /* -------------
     FACETS
