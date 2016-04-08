@@ -50,7 +50,7 @@ module CatalogHelper
     relationship ||= find_relationship(document)
 
     query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::Index::Fields::INTERNAL_URI]]])
-    response, document_list = get_search_results(params.merge(rows: 99999), {q: query}) # allow params
+    response, document_list = get_search_results(params.merge(rows: 20), {q: query})
 
     return response, document_list
   end

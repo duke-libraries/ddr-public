@@ -220,8 +220,6 @@ class CatalogController < ApplicationController
     # mean") suggestion is offered.
     config.spell_max = 5
 
-    # Maximum number of results to show per page
-    config.max_per_page = 999
   end
 
   def show
