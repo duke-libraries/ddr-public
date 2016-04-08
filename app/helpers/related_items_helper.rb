@@ -19,9 +19,14 @@ module RelatedItemsHelper
   def facet_field_value_matches document_id, relator_field
     relator_field_values = relator_field_values(document_id, relator_field)
     unless relator_field_values.blank?
-      relator_field_items = relator_field_values.map { |value| ActiveFedora::SolrService.query("#{relator_field}:\"#{value}\"") }
+      relator_field_items = relator_field_values.map { |value| solr_query(relator_field, value) }
       related_items_solr_documents(document_id, relator_field_items)
     end
+  end
+
+  def solr_query relator_field, value
+    response, documents = get_search_results({ :q => "#{relator_field}:\"#{value}\"" })
+    documents
   end
 
   def related_items_solr_documents document_id, relator_field_items
