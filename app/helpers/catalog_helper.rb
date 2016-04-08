@@ -54,10 +54,6 @@ module CatalogHelper
 
     return response, document_list
   end
-  
-  def item_count pid
-    Item.where("is_governed_by_ssim"=>"info:fedora/#{pid}").count
-  end
 
   # Index / Show field view helper
   def file_info options={}

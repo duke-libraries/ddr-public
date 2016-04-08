@@ -6,7 +6,7 @@
         <p class="collection-abstract"><%= @collection_document.abstract %> <%= link_to raw("More &raquo;"), {anchor: "about"}, class: "more-link", title: "Learn more about the collection" %></p>
 
             <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
-              Browse all <strong><%= number_with_delimiter(item_count(@collection_document.id)) %></strong> Items
+              Browse all <strong><%= number_with_delimiter(@item_count) %></strong> Items
             <% end %>
       </div>
 
