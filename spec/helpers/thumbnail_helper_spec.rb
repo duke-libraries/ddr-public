@@ -45,6 +45,17 @@ RSpec.describe ThumbnailHelper do
         helper.default_thumbnail(document)
       end
     end
+    context "object does not have content but does have a display format" do
+      let(:document) { SolrDocument.new({
+              'id'=>'changeme:10',
+              'display_format_ssi' => 'audio',
+              'object_profile_ssm'=>['{"datastreams":{}}']
+              }) }
+      it "should call default_display_format_thumbnail" do
+        expect(helper).to receive(:default_display_format_thumbnail).with("audio")
+        helper.default_thumbnail(document)
+      end
+    end
     context "object does not have content" do
       let(:document) { SolrDocument.new({
               'active_fedora_model_ssi'=>'TestModel',

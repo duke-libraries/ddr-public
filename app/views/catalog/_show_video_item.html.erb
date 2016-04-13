@@ -1,0 +1,9 @@
+<% cache("display_video_#{params[:collection]}_#{params[:id]}", expires_in: 7.days) do %>
+
+  <%= render partial: "item_options", locals: { derivatives: derivative_urls({document: document, derivative_url_prefixes: @derivative_url_prefixes}) } %>  
+  <%= render partial: "display_jwplayer", locals: { derivatives: derivative_urls({document: document, derivative_url_prefixes: @derivative_url_prefixes}), width: "100%", aspectratio: "4:3"  } %> 
+  <%# TODO: Can the aspect ratio be determined from the video's technical metadata? %>
+  
+  <%= render partial: "show_default", locals: {document: document} %>
+
+<% end %>

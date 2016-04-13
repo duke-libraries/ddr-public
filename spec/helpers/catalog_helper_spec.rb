@@ -61,15 +61,15 @@ RSpec.describe CatalogHelper do
             'id'=>'changeme:10',
             ) }
     context "document or its children have a multires image" do 
-      it "should receive a message from thumbnail_link_to_document" do
-        allow(helper).to receive(:thumbnail_multires_image_file_path).and_return ("path/to/image/")
-        expect(helper).to receive(:thumbnail_link_to_document)
+      it "should receive a message from multires_thumbnail_link_to_document" do
+        allow(helper).to receive(:multires_thumbnail_image_file_path).and_return ("path/to/image/")
+        expect(helper).to receive(:multires_thumbnail_link_to_document)
         helper.render_thumbnail_link(document, "100")
       end
     end
     context "document and its children do not have a multires image" do 
       it "should receive a message from render_thumbnail_tag" do
-        allow(helper).to receive(:thumbnail_multires_image_file_path).and_return (nil)
+        allow(helper).to receive(:multires_thumbnail_image_file_path).and_return (nil)
         expect(helper).to receive(:render_thumbnail_tag)
         helper.render_thumbnail_link(document, "100")
       end
@@ -91,30 +91,39 @@ RSpec.describe CatalogHelper do
     end
   end
 
-  describe "#search_scope_dropdown" do
-    let(:current_search_scope_options) do
-      [nil]
-    end
-    let(:search_scopes) do
-      {:search_action_url => ["This Collection", "http://localhost:3000/dc/wdukesons"],
-       :digital_collections => ["Digital Collections", "http://localhost:3000/dc"],
-       :catalog_index_url => ["Digital Repository", "http://localhost:3000/catalog"]}
-    end
-    before {all_search_scopes = double("all_search_scopes")}
-    before {allow(helper).to receive(:all_search_scopes).and_return(search_scopes)}
-    context "search scopes is defined" do
-      let(:current_search_scopes) do
-        [:search_action_url, :digital_collections, :catalog_index_url]
-      end
+  describe "#render_search_scope_dropdown" do
+    let(:path) { '/dc' }
+    let(:request) { double('request', path: path) }
+
+    let(:collection) { ["This Collection", digital_collections_url('hmp')] }
+    let(:digital_collections) { ["Digital Collections", digital_collections_index_portal_url] }
+    let(:repository) { ["Digital Repository", catalog_index_url] }
+
+    before  { allow(helper).to receive(:request).and_return(request) }
+
+    context "request path is the digital collections portal" do
+      let(:active_search_scope_options) { [digital_collections, repository] }
       it "should render the partial for the scope dropdown" do
-        expect(helper).to receive(:render).with(partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options})
-        helper.search_scope_dropdown(current_search_scopes: current_search_scopes)
+        expect(helper).to receive(:render).with(partial: "search_scope_dropdown", locals: {active_search_scope_options: active_search_scope_options})
+        helper.render_search_scope_dropdown()
       end
     end
-    context "search scopes is not defined" do
-      it "should not render the partial" do
-        expect(helper).not_to receive(:render).with(partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options})
-        helper.search_scope_dropdown()
+
+    context "request path is a collection" do
+      let(:path) { '/dc/hmp' }
+      let(:active_search_scope_options) { [collection, digital_collections, repository] }
+      it "should render the partial for the scope dropdown" do
+        expect(helper).to receive(:render).with(partial: "search_scope_dropdown", locals: {active_search_scope_options: active_search_scope_options})
+        helper.render_search_scope_dropdown({collection: 'hmp'})
+      end
+    end
+
+    context "only the catalog search scope is applied" do
+      let(:path) { '/catalog' }
+      let(:active_search_scope_options) { [repository] }
+      it "should not render the partial for the scope dropdown" do
+        expect(helper).not_to receive(:render)
+        helper.render_search_scope_dropdown()
       end
     end
   end
@@ -138,6 +147,16 @@ RSpec.describe CatalogHelper do
         expect(helper.blog_post_thumb(post)).to match('devillogo-150-square.jpg') 
       end
     end        
+  end
+
+  describe "#derivative_urls" do
+    context "item is display_format audio" do
+      let(:prefixes) { {'audio' => "http://library.duke.edu/derivatives/"} }
+      it "should return an array of audio derivative URLs" do
+        document = double("document", :derivative_ids => ["audio_100"], :display_format => "audio")
+        expect(helper.derivative_urls({document: document, derivative_url_prefixes: prefixes })).to match(['http://library.duke.edu/derivatives/audio_100.mp3'])
+      end
+    end
   end
 
 end

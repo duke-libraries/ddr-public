@@ -1,9 +1,11 @@
-<div class="<%= sizeclass %> collection-showcase" id="collection-showcase-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => size, :region => region }) %>);">
+<div class="<%= size_class %> collection-showcase" id="collection-showcase-<%= index %>" style="background-image: url(<%= showcase_image_path({locals: local_assigns, params: params, controller_name: controller_name}) %>);">
 
-  <%= link_to_document doc, "View the feature item", :class => "showcase-item-wrap", :id => "showcase-item-link-"+index.to_s, data: { toggle: "fade-element", target_id: "showcase-item-caption-"+index.to_s } %>
+  <% if image.respond_to? :multires_image_file_paths %>
+    <%= link_to_document image, "View the feature item", :class => "showcase-item-wrap", :id => "showcase-item-link-" + index.to_s, data: { toggle: "fade-element", target_id: "showcase-item-caption-" + index.to_s } %>
 
-  <div class="showcase-item-caption" id="showcase-item-caption-<%= index %>">
-    <div class="item-caption-inner"><small><%= doc.title.truncate(captionlength, separator: ' ') %> <small class="text-muted"><%= doc.local_id %></small></small></div>
-  </div>
+    <div class="showcase-item-caption" id="showcase-item-caption-<%= index %>">
+      <div class="item-caption-inner"><small><%= image.title.truncate(caption_length, separator: ' ') %> <small class="text-muted"><%= image.local_id %></small></small></div>
+    </div>
+  <% end %>
 
 </div>

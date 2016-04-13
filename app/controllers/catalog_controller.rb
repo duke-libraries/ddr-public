@@ -9,6 +9,8 @@ class CatalogController < ApplicationController
   include Hydra::Controller::ControllerBehavior
   include Ddr::Public::Controller::ConfigureBlacklight
 
+  before_action :authenticate_user!, if: :authentication_required?
+
   before_action :enforce_show_permissions, only: :show
 
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
@@ -45,7 +47,8 @@ class CatalogController < ApplicationController
               solr_name(:publisher, :stored_searchable),
               solr_name(:series, :stored_searchable),
               solr_name(:description, :stored_searchable),
-              solr_name(:absrtact, :stored_searchable),
+              solr_name(:abstract, :stored_searchable),
+              solr_name(:format, :stored_searchable),
               Ddr::Index::Fields::YEAR_FACET,
               solr_name(:spatial, :stored_searchable),
               Ddr::Index::Fields::LOCAL_ID,
@@ -56,7 +59,7 @@ class CatalogController < ApplicationController
     
     config.per_page = [10,20,50,100]
     config.default_per_page = 20
-    config.max_per_page = 100
+    config.max_per_page = 999
 
     # solr field configuration for search results/index views
     config.index.title_field = Ddr::Index::Fields::TITLE.to_s
@@ -208,15 +211,15 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc, pub_date_dtsi desc, title_tesi asc', :label => 'relevance'
+    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} desc, title_tesi asc", :label => 'relevance'
     config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
+    config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} asc", :label => 'date (old to new)'
+    config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} desc", :label => 'date (new to old)'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
 
-    # Maximum number of results to show per page
-    config.max_per_page = 999
   end
 
   def show
@@ -243,7 +246,7 @@ class CatalogController < ApplicationController
   end
 
   def multires_image_file_paths
-    @document_multires_image_file_paths ||= @document.multires_image_file_paths | []
+    @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
   end
 
   # For portal scoping
@@ -355,6 +358,10 @@ class CatalogController < ApplicationController
 
   def forbidden
     render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
+  end
+
+  def authentication_required?
+    Ddr::Public.require_authentication
   end
 
 end

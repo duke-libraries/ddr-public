@@ -1,0 +1,42 @@
+<% if is_multi_image?(@document) %>
+	<% ptifs = @document_multires_image_file_paths %>
+  <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
+
+
+	<!-- This works but it's hacky: push the array of paths into a delimited concatenated string, split later.
+	Had to use button_to to make a form to pass array of JPGs as a POST request (too long for 
+	URL string in GET). 
+	 -->
+	
+  <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => @max_download ? '!'+@max_download.to_s+','+@max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
+
+	<li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => @max_download ? '!'+@max_download.to_s+','+@max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>				
+	</li>
+	
+	<!-- TO-DO: add options for resolution beyond full. Style the button/link to resemble the other links in the menu -->
+
+  <li class="dropdown-header">Currently Displayed Image</li>
+
+<% end %>
+
+    <li><%= link_to ("Small JPG " + content_tag(:span, "400px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!400,400'}), class: "download-link-single", id: "download-small", download: "" %></li>
+
+  <% unless @max_download && @max_download.to_i <= 800 %>
+    <li><%= link_to ("Medium JPG " + content_tag(:span, "800px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!800,800'}), class: "download-link-single", id: "download-med", download: "" %></li>	
+  <% end %>
+
+  <% unless @max_download && @max_download.to_i <= 1200 %>
+    <li><%= link_to ("Large JPG " + content_tag(:span, "1,200px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!1200,1200'}), class: "download-link-single", id: "download-lrg", download: "" %></li>
+  <% end %>
+
+  <% if @max_download %>
+    <li><%= link_to ("Largest JPG " + content_tag(:span, number_with_delimiter(@max_download.to_i)+"px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!' + @max_download.to_s + ',' + @max_download.to_s }), class: "download-link-single", id: "download-lrg", download: "" %></li>  	  
+  <% else %>
+    <li><%= link_to ("Full-Res JPG " + content_tag(:span, "Original Resolution", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {}), class: "download-link-single", id: "download-full", download: "" %></li>
+  <% end %>
+
+
+<% if is_multi_image?(@document) %>	
+  <li class="divider" role="separator"></li>
+<li role="presentation" class="disabled"><a href="#">Please be patient with high-res and bulk downloads.</a></li>
+<% end %>

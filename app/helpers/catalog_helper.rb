@@ -1,5 +1,7 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
+  include Ddr::Public::Controller::ConstantizeSolrFieldName
+
 
   # Predicate methods for object types
   def is_item? document
@@ -22,46 +24,6 @@ module CatalogHelper
   # Also used in custom sort for collection facet
   def collection_title collection_internal_uri
     collections[collection_internal_uri]
-  end
-  
-  def render_thumbnail_link document, size, counter = nil
-    if thumbnail_multires_image_file_path = thumbnail_multires_image_file_path(document)
-      thumbnail_link_to_document(document, thumbnail_multires_image_file_path, size, counter)
-    else
-      render_thumbnail_tag(document, {}, :counter => counter)
-    end 
-  end
-
-  def collection_thumbnail_local_id(document)
-    Rails.application.config.portal.try(:[] , 'portals').try(:[] , 'collection_local_id').try(:[] , document.local_id).try(:[] , 'thumbnail_image')
-  end
-
-  def collection_thumbnail_item_documents(document)
-    thumbnail_documents = []
-    if thumbnail_local_id = collection_thumbnail_local_id(document)
-      response, thumbnail_documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{thumbnail_local_id}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
-    end
-    thumbnail_documents
-  end
-
-  def thumbnail_multires_image_file_path(document)
-    multires_thumbnail_path = nil
-    collection_item_documents = collection_thumbnail_item_documents(document)
-
-    if collection_thumbnail_local_id(document) and collection_item_documents.length > 0
-      multires_thumbnail_path = collection_item_documents.first.multires_image_file_paths.first
-    elsif document.multires_image_file_path.present?
-      multires_thumbnail_path = document.multires_image_file_path
-    elsif document.multires_image_file_paths.present?
-      multires_thumbnail_path = document.multires_image_file_paths.first
-    end
-
-    multires_thumbnail_path
-  end
-
-  def thumbnail_link_to_document(document, multires_image_file_path, size, counter)
-    image_tag = iiif_image_tag(multires_image_file_path, {:size => size, :alt => 'Thumbnail', :class => 'img-thumbnail'})
-    link_to_document document, image_tag, :counter => counter
   end
 
   def item_image_embed options={}
@@ -88,13 +50,9 @@ module CatalogHelper
     relationship ||= find_relationship(document)
 
     query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::Index::Fields::INTERNAL_URI]]])
-    response, document_list = get_search_results(params.merge(rows: 99999), {q: query}) # allow params
+    response, document_list = get_search_results(params.merge(rows: 20), {q: query})
 
     return response, document_list
-  end
-  
-  def item_count pid
-    Item.where("is_governed_by_ssim"=>"info:fedora/#{pid}").count
   end
 
   # Index / Show field view helper
@@ -121,6 +79,26 @@ module CatalogHelper
     link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
   end
 
+  # View helper
+  def default_mime_type_label(mime_type)
+    case mime_type
+    when /^image/
+      'Image'
+    when /^video/
+      'Video'
+    when /^audio/
+      'Audio'
+    when /^application\/(x-)?pdf/
+      'PDF'
+    when /^application/
+      'Binary'
+    when /^text\/comma-separated-values/
+      'CSV'
+    else
+      'File'
+    end
+  end
+
 
   # View helper
   def research_help_title research_help
@@ -130,19 +108,25 @@ module CatalogHelper
   end
 
   # View helper
-  def search_scope_dropdown current_search_scopes = nil
-    all_search_scopes = all_search_scopes()
+  def render_search_scope_dropdown params={}
+    active_search_scopes = []
 
-    if current_search_scopes.present?
-      current_search_scope_options = []
-      current_search_scopes.each do |scope_name|
-        current_search_scope_options << all_search_scopes[scope_name]
-      end
-      render partial: "search_scope_dropdown", locals: {current_search_scope_options: current_search_scope_options}
+    if request.path =~ /^\/dc\/.*$/
+      active_search_scopes << ["This Collection", digital_collections_url(params[:collection])]
     end
 
+    if request.path =~ /^\/dc.*$/
+      active_search_scopes << ["Digital Collections", digital_collections_index_portal_url]
+    end
+
+    active_search_scopes << ["Digital Repository", catalog_index_url]
+
+    if active_search_scopes.count > 1
+      render partial: "search_scope_dropdown", locals: {active_search_scope_options: active_search_scopes}
+    end
   end
-  
+
+  # View helper
   def finding_aid_popover finding_aid
     popover = ''
     if finding_aid.collection_title
@@ -196,15 +180,47 @@ module CatalogHelper
     end
     
   end
-  
+
+  # DPLA Feed document helper
+  def thumbnail_url document
+    if multires_thumbnail_image_file_path = multires_thumbnail_image_file_path(document)
+      iiif_image_path(multires_thumbnail_image_file_path, {size: '!300,300'})
+    else
+      url_for controller: :thumbnail, action: :show, id: document.id, only_path: false
+    end
+  end
+
+  # DPLA Feed document helper
+  def source_collection_title document
+    document.try(:finding_aid).try(:collection_title)
+  end
+
+  # DPLA Feed document helper
+  def research_help_name document
+    document.try(:research_help).try(:name)
+  end
   
 
+  def derivative_urls options={}
+    derivative_urls = []
+    options[:document].derivative_ids.each do |id|
+       derivative_urls << "#{options[:derivative_url_prefixes][options[:document].display_format]}#{id}.#{derivative_file_extension(options[:document])}"
+    end
+
+    derivative_urls
+  end
+  
 
   private
 
-  def all_search_scopes
-    {:search_action_url => ["This Collection", search_action_url],
-     :catalog_index_url => ["Digital Repository", catalog_index_url]}
+
+  def derivative_file_extension document
+    case document.display_format
+    when "audio"
+      "mp3"
+    when "video"
+      "mp4"
+    end
   end
 
   def find_relationship document

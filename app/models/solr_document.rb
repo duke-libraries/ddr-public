@@ -57,6 +57,35 @@ class SolrDocument
       public_id = self.id unless Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], self.local_id)
     end
   end
+
+  # This assumes that the derivative IDs are the local_ids of an item's components
+  def derivative_ids(type='default')
+    struct_map_docs(type).map { |doc| doc.local_id }.compact
+  end
+
+  
+  # Support for Struct Maps with nested divs
+  # TODO: integrate nested div structure into ddr-models struct_map methods
+
+  def multires_image_file_paths(type='default')
+    nested_docs = nested_struct_map_docs('Images')
+    docs = nested_docs.any? ? nested_docs : struct_map_docs(type)
+    docs.map { |doc| doc.multires_image_file_path }.compact
+  end
+
+  def nested_struct_map_docs(type='default')
+    nested_struct_map_pids(type).map { |pid| self.class.find(pid) }.compact
+  end
+
+  def nested_struct_map_pids(type='default')
+    nested_struct_map(type).map { |d| d['divs'].map { |d| d['fptrs'].first } }.flatten.compact
+  rescue
+    []
+  end
+
+  def nested_struct_map(type='default')
+    struct_map.present? ? struct_map['divs'].select { |d| d['type'] == type }.compact : nil
+  end
   
 
   private
@@ -75,6 +104,8 @@ class SolrDocument
     local_id = SolrDocument.find(self.admin_policy_pid).local_id
     Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
   end
+
+
 
 
 end

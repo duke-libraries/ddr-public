@@ -20,11 +20,15 @@ RSpec.describe PermanentIdsController do
     end
 
     describe "when the object exists" do
+
       before do
         allow(controller).to receive(:query_solr).with(query_params) do
           double(total: 1, documents: [{"id"=>"test:1"}])
         end
+        document_or_object_url = double("document_or_object_url")
+        allow(controller).to receive(:document_or_object_url).and_return('/catalog/test:1')
       end
+
       it "should redirect to the catalog show view" do
         get :show, permanent_id: permanent_id
         expect(response).to redirect_to(catalog_path({"id"=>"test:1"}))

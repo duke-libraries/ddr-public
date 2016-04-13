@@ -2,6 +2,16 @@
   &:before { content: "\e011"; } 
 }
 
+#related-items .popover {
+  width: 100%;
+
+  dt {
+    font-weight: normal;
+    color: #777;
+    margin-top: 0.5em;
+  }
+}
+
 #documents.gallery {
 
   display: -webkit-box;
@@ -46,14 +56,6 @@
 
   .document-metadata { 
     display: none;
-    dt, dd {
-      float: none;
-      width: auto;
-      clear: none;
-      text-align: left;
-      margin: 0;
-      padding: 0;
-    }
-
   }
+  
 }

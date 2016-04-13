@@ -1,0 +1,39 @@
+<div id="home-branding" class="col-sm-12">
+  <!-- Could have two branding templates -->
+  <!-- One for the collection portal page -->
+  <!-- And one for the search results page and/or show pages -->
+  <!-- Select one or the other using the has_search_parameters? check as below -->
+
+  <% if @showcase_documents %>
+    <%= render 'home_showcase_index_portal' %>
+  <% end %>
+</div>
+
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <% if has_search_parameters? %>
+    <%= render partial: "show_portal_context" %>
+  <% end %>
+
+  <%= render 'search_sidebar' %>
+</div>
+
+<div id="content" class="col-md-9 col-sm-8">
+  <% unless has_search_parameters? %>
+
+  <%= render partial: "home_featured_collections"%>
+
+  <h3 class="feature-head">Featured Items</h3>
+  <%= render partial: "home_highlights" %>
+
+  <%= render partial: "show_blog_posts" %>
+    
+    <%# set the html title for collection portal page -%>
+    <% if @collection_document %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) + " - Duke Libraries" %>
+    <% else %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+    <% end %>
+  <% else %>
+    <%= render 'search_results' %>
+  <% end %>
+</div>

@@ -6,31 +6,15 @@
         <p class="collection-abstract"><%= @collection_document.abstract %> <%= link_to raw("More &raquo;"), {anchor: "about"}, class: "more-link", title: "Learn more about the collection" %></p>
 
             <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
-              Browse all <strong><%= number_with_delimiter(item_count(@collection_document.id)) %></strong> Items
+              Browse all <strong><%= number_with_delimiter(@item_count) %></strong> Items
             <% end %>
       </div>
-      <% if @showcase_documents %>
 
-        <% if @showcase_layout == 'portrait' %>
-          <% @showcase_documents.sample(2).each_with_index do |doc, index| %>
-            <% if doc.multires_image_file_paths.first %>
-              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '600,', region: 'pct:5,5,90,90', sizeclass: 'col-md-4 col-sm-6', captionlength: 50 } %>
-            <%- end %>
-          <%- end %>
-        <%- end %>
+      <% showcase_images = Array(@showcase_custom_images).concat Array(@showcase_documents) %>
 
-        <% if @showcase_layout == 'landscape' %>
-          <% @showcase_documents.sample(1).each_with_index do |doc, index| %>
-            <% if doc.multires_image_file_paths.first %>
-              <%= render partial: "home_showcase_image", locals: { index: index, doc: doc, size: '1200,', region: 'pct:5,5,90,90', sizeclass: 'col-md-8 col-sm-12', captionlength: 100 } %>
-            <%- end %>
-          <%- end %>
-        <%- end %>
-
-      <% end %>
-
-
-
+      <% showcase_images.sample(showcase_samples({showcase_layout: @showcase_layout})).each_with_index do |image, index| %>
+        <%= render partial: "home_showcase_image", locals: home_showcase_locals({index: index, image: image, showcase_layout: @showcase_layout}) %>          
+      <%- end %>
 
     </div>
   </div>

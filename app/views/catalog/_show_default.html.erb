@@ -8,3 +8,7 @@
     <% end -%>
   <% end -%>
 </dl>
+
+<% if @item_relators %>
+  <%= render partial: 'related_items', locals: {document: document} %>
+<% end -%>

@@ -13,12 +13,14 @@
               </div>
 
             </div>
-          <%-end %>
+          <%- end %>
         <%- end %>
       <%- end %>
-      <div class="col-md-12">
-        <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path %></p>
-      </div>
+      <% if params[:collection].present? %>
+        <div class="col-md-12">
+          <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path %></p>
+        </div>
+      <% end %>
     </div>
   </div>
 
