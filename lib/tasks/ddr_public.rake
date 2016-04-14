@@ -71,7 +71,9 @@ namespace :ddr_public do
 
       collection.items(response_format: :solr).each do |item_doc|
         item = Item.find(item_doc["id"])
-        urls << full_document_url(item.pid)
+        if item.workflow_state == "published"
+          urls << full_document_url(item.pid)
+        end
       end
 
       sitemap_builder = Nokogiri::XML::Builder.new do |xml|
