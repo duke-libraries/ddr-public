@@ -4,11 +4,12 @@
   <!-- One for the collection portal page -->
   <!-- And one for the search results page and/or show pages -->
   <!-- Select one or the other using the has_search_parameters? check as below -->
-  <% if @showcase_documents %>
+  <% unless @showcase_documents.blank? and @showcase_custom_images.blank? %>
     <%= render 'home_showcase' %>
   <% else %>
     <% unless has_search_parameters? %>
-      <h1><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1>
+    <%= render partial: 'collection_submast', locals: { document: @collection_document } %>
+      <!-- <h1><%# t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1> -->
     <% end %>
   <% end %>
 </div>

@@ -4,9 +4,6 @@
   <h3 class="feature-head">Items in This Collection <span class="text-muted smaller">(<%= number_with_delimiter(@item_count) %>)</span></h3>
 <% end %>
 
-
-<% @response, @document_list = find_children(@document, :is_member_of_collection, params) %>
-
 <%# Show the first 6 items in a grid %>
 <%= render_document_index_with_view("gallery", @document_list[0..5]) %>
 

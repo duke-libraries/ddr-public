@@ -8,6 +8,8 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
   include Ddr::Public::Controller::ConfigureBlacklight
+  include Ddr::Public::Controller::DocumentContext
+
 
   before_action :authenticate_user!, if: :authentication_required?
 
@@ -17,7 +19,6 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
-  helper_method :configure_blacklight_for_children
 
   rescue_from CanCan::AccessDenied do |exception|
     if user_signed_in?
@@ -225,6 +226,9 @@ class CatalogController < ApplicationController
   def show
     super
     multires_image_file_paths
+    document_list
+    item_count
+    parent_collection_document
   end
 
   def include_only_published(solr_parameters, user_parameters)
@@ -235,14 +239,6 @@ class CatalogController < ApplicationController
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
-  end  
-
-  def configure_blacklight_for_children
-    blacklight_config.configure do |config|
-      config.sort_fields.clear
-      config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", label: "Title"
-      config.add_sort_field "#{Ddr::Index::Fields::LOCAL_ID} asc", label: "Local ID"
-    end
   end
 
   def multires_image_file_paths
