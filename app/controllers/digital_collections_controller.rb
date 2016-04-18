@@ -29,6 +29,7 @@ class DigitalCollectionsController < CatalogController
       highlight_count
       blog_posts_url
       item_count
+      children_item_documents
     end
     collection_document
     alert_message

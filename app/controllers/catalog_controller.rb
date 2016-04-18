@@ -226,7 +226,7 @@ class CatalogController < ApplicationController
   def show
     super
     multires_image_file_paths
-    document_list
+    children_item_documents
     item_count
     parent_collection_document
   end
