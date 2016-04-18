@@ -84,9 +84,17 @@ module Ddr
           @collection_count = @parent_collection_documents.count
         end
 
+        def children_item_documents
+          response, @children_item_documents = children_search()
+        end
+
         def item_count
-          response, documents = get_search_results({ :q => "(#{construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
+          response, document_list = children_search()
           @item_count = response.total
+        end
+
+        def children_search
+          get_search_results({ :q => "(#{construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
         end
 
         def parent_collection_search

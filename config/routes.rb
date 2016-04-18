@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get "dc/facet/:id", to: "digital_collections#facet", as: "digital_collections_facet"
 
   def local_id_contraint
-    /[a-zA-Z0-9\-_]+/
+    /[a-zA-Z0-9\-_]+:?[a-zA-Z0-9\-_]*/
   end
   
   # DC Collection scoped routes

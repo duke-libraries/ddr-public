@@ -4,12 +4,12 @@ module Ddr
       module DocumentContext
         extend ActiveSupport::Concern
 
-        def document_list
+        def children_item_documents
           configure_blacklight_for_children
           relationship ||= find_relationship(@document)
 
           query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, @document[Ddr::Index::Fields::INTERNAL_URI]]])
-          @response, @document_list = get_search_results(params.merge(rows: 20), {q: query})
+          response, @children_item_documents = get_search_results(params.merge(rows: 9999), {q: query})
         end
 
         def item_count
