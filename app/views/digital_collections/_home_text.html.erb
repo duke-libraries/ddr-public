@@ -1,5 +1,6 @@
 <%= render partial: "home_featured_collections"%>
 <%= render partial: "home_highlights" %>
+<%= render partial: "show_children_collection" %>
 
 <% if lookup_context.exists?('about', 'digital_collections') %>
   <h3 id="about"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>

@@ -45,9 +45,13 @@ module CatalogHelper
     link
   end
 
-  # View helper: from collection show page, browse items.
+  # View helper: from EITHER collection show page or configured collection portal, browse items.
   def collection_browse_items_url document, options={}
-    search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))
+    if document.present? # if the collection homepage is a document show
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))   
+    else
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))  
+    end
   end
 
   # Index / Show field view helper
