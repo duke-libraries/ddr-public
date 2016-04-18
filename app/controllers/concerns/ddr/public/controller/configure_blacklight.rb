@@ -31,7 +31,7 @@ module Ddr
         end
 
         def configure_blacklight options={}
-          if conf = portal_config.try(:[], 'configure_blacklight').try(:[], options[:add_field])
+          if conf = portal_blacklight_config.try(:[], options[:add_field])
             blacklight_config.send(options[:clear_field]).clear
             conf.each do |field|
               blacklight_config.send(options[:add_field],
@@ -49,9 +49,9 @@ module Ddr
           end
         end
 
-        def portal_config
-          portal_config = Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], params[:collection])
-          portal_config ||= Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], controller_name)
+        def portal_blacklight_config
+          portal_config = Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], params[:collection]).try(:[], 'configure_blacklight')
+          portal_config ||= Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], controller_name).try(:[], 'configure_blacklight')
         end
         
       end
