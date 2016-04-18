@@ -84,8 +84,8 @@ module Ddr
           @collection_count = @parent_collection_documents.count
         end
 
-        def children_item_documents
-          response, @children_item_documents = children_search()
+        def children_documents
+          response, @children_documents = children_search()
         end
 
         def item_count

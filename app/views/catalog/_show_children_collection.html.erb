@@ -5,9 +5,9 @@
 <% end %>
 
 <%# Show the first 6 items in a grid %>
-<%= render_document_index_with_view("gallery", @children_item_documents[0..5]) %>
+<%= render_document_index_with_view("gallery", @children_documents[0..5]) %>
 
-<% if @children_item_documents.length > 6 %>
+<% if @children_documents.length > 6 %>
   <p>
     <%= link_to collection_browse_items_url(@document), :class => "" do %>
       Browse all <%= number_with_delimiter(@item_count) %> Items &raquo;
