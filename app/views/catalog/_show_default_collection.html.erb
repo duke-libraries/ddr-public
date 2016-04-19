@@ -23,6 +23,7 @@
 
 <% unless document.description.blank? %>
   <div class="collection-description"><%= simple_format(document.description) %></div>
+  <hr/>
 <% end %>
 
 <%= render partial: 'show_finding_aid_full', locals: { document: document } %>
