@@ -1,8 +1,7 @@
-<h3>Files</h3>
-<% @response, @document_list = find_children(@document, :is_part_of, params) %>
+<h3 class="feature-head">Files</h3>
 <div id="sortAndPerPage" class="clearfix">
 	<div class="search-widgets pull-right">
 		<%= render 'sort_widget' %>
 	</div>
 </div>
-<%= render_document_index %>
+<%= render_document_index(@children_documents) %>

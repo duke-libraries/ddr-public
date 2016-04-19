@@ -45,14 +45,13 @@ module CatalogHelper
     link
   end
 
-  def find_children document, relationship = nil, params = {}
-    configure_blacklight_for_children
-    relationship ||= find_relationship(document)
-
-    query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, document[Ddr::Index::Fields::INTERNAL_URI]]])
-    response, document_list = get_search_results(params.merge(rows: 20), {q: query})
-
-    return response, document_list
+  # View helper: from EITHER collection show page or configured collection portal, browse items.
+  def collection_browse_items_url document, options={}
+    if document.present? # if the collection homepage is a document show
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))   
+    else
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))  
+    end
   end
 
   # Index / Show field view helper
@@ -181,6 +180,12 @@ module CatalogHelper
     
   end
 
+  def link_to_admin_set document, options={}
+    name = admin_set_full_name(document.admin_set)
+    url =  search_action_url(add_facet_params(Ddr::Index::Fields::ADMIN_SET_FACET, document.admin_set))
+    link_to name, url, :class => options[:class]
+  end
+
   # DPLA Feed document helper
   def thumbnail_url document
     if multires_thumbnail_image_file_path = multires_thumbnail_image_file_path(document)
@@ -202,12 +207,9 @@ module CatalogHelper
   
 
   def derivative_urls options={}
-    derivative_urls = []
-    options[:document].derivative_ids.each do |id|
-       derivative_urls << "#{options[:derivative_url_prefixes][options[:document].display_format]}#{id}.#{derivative_file_extension(options[:document])}"
+    options[:document].derivative_ids.map do |id|
+      "#{options[:derivative_url_prefixes][options[:document].display_format]}#{id}.#{derivative_file_extension(options[:document])}"
     end
-
-    derivative_urls
   end
   
 
@@ -220,16 +222,6 @@ module CatalogHelper
       "mp3"
     when "video"
       "mp4"
-    end
-  end
-
-  def find_relationship document
-    if document.active_fedora_model == 'Item'
-      relationship = :is_part_of
-    elsif document.active_fedora_model == 'Collection'
-      relationship = :is_member_of_collection
-    else
-      return
     end
   end
 
