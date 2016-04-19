@@ -1,6 +1,5 @@
 <%= render partial: "home_featured_collections"%>
 <%= render partial: "home_highlights" %>
-<%= render partial: "show_children_collection" %>
 
 <% if @collection_document && @collection_document.description %>
   <% if lookup_context.exists?('about', 'digital_collections') %>
@@ -17,7 +16,7 @@
 <% end %>
 
 <%# Only show the first few items from the collection if there are no highlights defined. %>
-<% if @highlight_documents.empty? and @show_items != 0 %>
+<% if @highlight_documents.blank? and @show_items != 0 %>
   <%= render partial: "show_children_collection", locals: { show_items: @show_items } %>
 <% end %>
 

@@ -1,7 +1,7 @@
-<% unless @highlight_documents.empty? and @showcase_documents.empty? %>
+<% unless @highlight_documents.blank? and @showcase_documents.blank? %>
   <div class="row">
     <div class="col-md-12">
-      <% unless @highlight_documents.empty? %>
+      <% unless @highlight_documents.blank? %>
         <% @highlight_documents.sample(@highlight_count ||= 4).each_with_index do |doc, index| %>
           <% if doc.multires_image_file_paths.first %>
             <div class="collection-highlight" id="collection-highlight-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '!500,500', :region => 'pct:5,5,90,90' }) %>);">
