@@ -4,9 +4,11 @@
   <% if document.abstract.present? %>
     <p class="collection-abstract"><%= document.abstract %></p>
   <% end %>
-  
-  <%= link_to collection_browse_items_url(document), :class => "btn btn-primary browse-all" do %>
-    Browse all <strong><%= number_with_delimiter(@item_count) %></strong> Items
+
+  <% if @item_count > 1 %>
+    <%= link_to collection_browse_items_url(document), :class => "btn btn-primary browse-all" do %>
+      Browse all <strong><%= number_with_delimiter(@item_count) %></strong> Items
+    <% end %>
   <% end %>
 
 </div>
