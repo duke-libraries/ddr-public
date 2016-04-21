@@ -87,8 +87,8 @@ class DigitalCollectionsController < CatalogController
 
   def generic_collections
     configured_collections = Rails.application.config.portal["portals"]["collection_local_id"].map { |k,v| k }
-    collections = ActiveFedora::SolrService.query("#{Ddr::Index::Fields::ADMIN_SET}:dc", rows => 999)
-    all_collections = collections.map { |c| c['local_id_ssi'] }.compact
+    collections = ActiveFedora::SolrService.query("#{Ddr::Index::Fields::ADMIN_SET}:dc", rows: 999)
+    all_collections = collections.map { |c| c[Ddr::Index::Fields::LOCAL_ID] }.compact
     all_collections - configured_collections
   end
 

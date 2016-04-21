@@ -26,11 +26,11 @@ class SolrDocument
   end
 
   def abstract
-    get("abstract_tesim")
+    get(ActiveFedora::SolrService.solr_name(:abstract, :stored_searchable))
   end
 
   def description
-    get("description_tesim")
+    get(ActiveFedora::SolrService.solr_name(:description, :stored_searchable))
   end
 
   def public_controller
