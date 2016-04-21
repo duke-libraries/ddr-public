@@ -230,6 +230,10 @@ body.blacklight-catalog-show #content {
   &.showcase-side {
     height: 500px;
     overflow: auto; 
+
+    & h1.long-title {
+      font-size: floor(($font-size-h1 * 0.86));
+    }
   }
   
   &.collection-submast {
