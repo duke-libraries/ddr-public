@@ -2,7 +2,9 @@
   <div class="container-fluid showcase-wrapper">
     <div class="row no-gutter">
       <div class="col-md-4 collection-start showcase-side">
-        <h1 id="collection-title"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) %></h1>
+        <h1 id="collection-title"<% if @collection_document.title.length >= 70 %> class="long-title"<% end %>>
+        <%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) %>
+        </h1>
         <p class="collection-abstract"><%= @collection_document.abstract %> <%= link_to raw("More&nbsp;&raquo;"), {anchor: "about"}, class: "more-link", title: "Learn more about the collection" %></p>
 
             <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
