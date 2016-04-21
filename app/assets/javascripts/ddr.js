@@ -16,6 +16,23 @@ $(function () {
         $(this).tab('show');
     })
 
+
+    // Bookmarkable tabs
+    $(document).ready(function() {
+        // show active tab on reload
+        if (location.hash !== '') $('a[href="' + location.hash + '"]').tab('show');
+
+        // remember the hash in the URL without jumping
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+           if(history.pushState) {
+                history.pushState(null, null, '#'+$(e.target).attr('href').substr(1));
+           } else {
+                location.hash = '#'+$(e.target).attr('href').substr(1);
+           }
+        });
+    });
+
+
     // Smooth scroll to all anchors
     $('a[href*=#]:not([href=#])').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
@@ -51,20 +68,13 @@ $(function () {
 
 
 $( document ).ready(function() {
-    
+
     // Apply Bootstrap button dropdown style to search select dropdown
     $('.selectpicker').selectpicker();
-    
+
     // Changes the search form's action URL to the selected dropdown option
     $(".search_scope").change(function() {
         var action = $(this).val();
         $(".search-query-form").attr("action", action);
     });
 });
-
-
-
-
-
-
-
