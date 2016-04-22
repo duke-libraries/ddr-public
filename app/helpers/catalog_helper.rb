@@ -54,6 +54,10 @@ module CatalogHelper
     end
   end
 
+  def item_browse_components_url document, options={}
+    search_action_url(add_facet_params(Ddr::Index::Fields::IS_PART_OF, document.internal_uri))
+  end
+
   # Index / Show field view helper
   def file_info options={}
     document = options[:document]
