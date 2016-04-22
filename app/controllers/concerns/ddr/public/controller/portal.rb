@@ -4,7 +4,7 @@ module Ddr
       module Portal
         extend ActiveSupport::Concern
 
-        include Ddr::Public::Controller::ConstantizeSolrFieldName
+        include Ddr::Public::Controller::SolrQueryConstructor
           
         def self.included(base)
           base.before_action :prepend_view_path_for_portal_overrides
@@ -16,13 +16,13 @@ module Ddr
         private
 
         def collection_document
-          if parent_collection_document_list.length == 1
-            @collection_document ||= parent_collection_document_list.first
+          if parent_collection_documents.length == 1
+            @collection_document ||= parent_collection_documents.first
           end
         end
 
         def showcase_documents
-          @showcase_documents ||= image_documents('showcase_images')
+          @showcase_documents ||= image_documents_search('showcase_images')
         end
 
         def showcase_custom_images
@@ -34,7 +34,7 @@ module Ddr
         end
 
         def highlight_documents
-          @highlight_documents ||= image_documents('highlight_images')
+          @highlight_documents ||= image_documents_search('highlight_images')
         end
 
         def highlight_count
@@ -46,7 +46,7 @@ module Ddr
         end
 
         def featured_collection_documents
-          @featured_collection_documents ||= image_documents('featured_collections')
+          @featured_collection_documents ||= image_documents_search('featured_collections')
         end
 
         def max_download
@@ -71,63 +71,59 @@ module Ddr
 
         def include_only_specified_records(solr_parameters, user_parameters)
           if @parent_collection_uris
+            field_value_pairs = @parent_collection_uris.map { |id| [:is_governed_by, id] }
             solr_parameters[:fq] ||= []
-            solr_parameters[:fq] << construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})
+            solr_parameters[:fq] << ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs, 'OR')
           end
         end
 
         def parent_collection_uris
-          @parent_collection_uris ||= parent_collection_document_list.map { |document| document.internal_uri }
+          @parent_collection_uris ||= parent_collection_documents.map { |document| document.internal_uri }
         end
 
-        def parent_collection_document_list
+        def parent_collection_documents
           @parent_collection_documents ||= parent_collection_search
-        end
-
-        def collection_count
-          @collection_count = @parent_collection_documents.count
         end
 
         def children_documents
           response, @children_documents = children_search()
-        end
-
-        def item_count
-          response, document_list = children_search()
           @item_count = response.total
         end
 
         def children_search
-          get_search_results({ :q => "(#{construct_solr_parameter_value({:solr_field => Ddr::Index::Fields::IS_GOVERNED_BY, :boolean_operator => "OR", :values => @parent_collection_uris})}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
+          query = "(#{children_query(@parent_collection_uris)}) AND #{active_fedora_model_query(['Item'])}"
+          get_search_results({:q => query})
         end
 
         def parent_collection_search
-          opts = parent_collection_configs
-          response, document_list = get_search_results({:q => construct_solr_parameter_value({:solr_field => opts[:field], :boolean_operator => "OR", :values => opts[:config_values]})})
+          response, document_list = get_search_results({:q => parent_collection_query })
+          @collection_count = response.total
           document_list
         end
 
-        def parent_collection_configs
-          configs ||= {}
-          if portal_config['includes']['admin_sets']
-            configs = {:field => Ddr::Index::Fields::ADMIN_SET, :config_values => portal_config['includes']['admin_sets']}
-          end
-          if portal_config['includes']['local_ids']
-            query = portal_config['includes']['local_ids'].map { |value| "#{Ddr::Index::Fields::LOCAL_ID}:#{value}" }.join(" OR ")
-            response, document_list = get_search_results({:q => "(#{query}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Collection"})
-            parent_pids = document_list.map { |document| document.pid }
-            configs = {:field => Ddr::Index::Fields::ID, :config_values => parent_pids}
-          end
-          configs
-        end
-
-        def image_documents(field)
+        def image_documents_search(field)
           image_documents ||= []
-          if portal_config[field].try(:[], 'local_ids')
-            query = portal_config[field]['local_ids'].map { |value| "#{Ddr::Index::Fields::LOCAL_ID}:#{value}" }.join(" OR ")
-            response, image_documents = get_search_results({:q => "(#{query}) AND (#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item OR #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Collection)"})
+          if portal_config[field].try(:[], 'local_ids')            
+            query = "(#{local_ids_query(image_config(field))}) AND (#{active_fedora_model_query(['Collection', 'Item'])})"
+            response, image_documents = get_search_results({:q => query})
           end
           image_documents
+        end
+
+        def parent_collection_query
+          local_id_config ? local_ids_query(local_id_config()) : admin_set_query(admin_set_config())
+        end
+
+        def image_config(field)
+          portal_config[field]['local_ids']
+        end
+
+        def admin_set_config
+          portal_config['includes']['admin_sets']
+        end
+
+        def local_id_config
+          portal_config['includes']['local_ids']
         end
 
         def portal_config

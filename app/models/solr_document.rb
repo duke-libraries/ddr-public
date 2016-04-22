@@ -73,8 +73,24 @@ class SolrDocument
     docs.map { |doc| doc.multires_image_file_path }.compact
   end
 
+  def first_multires_image_file_path(type='default')
+    nested_pids = nested_struct_map_pids('Images')
+    pids = nested_pids.any? ? nested_pids : struct_map_pids(type)
+    unless pids.blank?
+      paths = self.class.find(pids.first).multires_image_file_path
+    else
+      nil
+    end
+  end
+
+  def struct_map_docs(type='default')
+    pids = struct_map_pids(type)
+    ordered_documents(pids)
+  end
+
   def nested_struct_map_docs(type='default')
-    nested_struct_map_pids(type).map { |pid| self.class.find(pid) }.compact
+    pids = nested_struct_map_pids(type)
+    ordered_documents(pids)
   end
 
   def nested_struct_map_pids(type='default')
@@ -89,6 +105,13 @@ class SolrDocument
   
 
   private
+
+  def ordered_documents(pids)
+    query = ActiveFedora::SolrService.construct_query_for_pids(pids)
+    result = ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q=>query, :qt=>'standard' , :rows=>99999} )
+    ordered = pids.map{ |pid| result['response']['docs'].find{ |doc| doc["id"] == pid } }
+    docs = ordered.map { |doc| SolrDocument.new(doc) }.compact
+  end
 
   def effective_configs
     applied_configs = collection_pid_configuration()
