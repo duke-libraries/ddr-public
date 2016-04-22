@@ -17,6 +17,12 @@ module Ddr
           @item_count = response.total
         end
 
+        def component_count
+          query = ActiveFedora::SolrService.construct_query_for_rel([[:is_part_of, @document[Ddr::Index::Fields::INTERNAL_URI]]])
+          response = query_solr(q: query, rows: 1)
+          @component_count = response.total
+        end
+
         def parent_collection_document
           response, documents = get_search_results({:rows => 1, :q => "id:\"#{@document.admin_policy_id}\""})
           @parent_collection_document = documents.first

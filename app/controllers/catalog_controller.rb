@@ -228,6 +228,7 @@ class CatalogController < ApplicationController
     multires_image_file_paths
     children_documents
     item_count
+    component_count
     parent_collection_document
   end
 

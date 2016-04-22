@@ -1,6 +1,8 @@
-<%= link_to collection_browse_items_url(@document), :class => "" do %>
-  <h3 class="feature-head">Items in This Collection <span class="text-muted">(<%= number_with_delimiter(@item_count) %>)</span></h3>
-<% end %>
+<h3 class="feature-head">
+  <%= link_to collection_browse_items_url(@document) do %>
+    Items in This Collection <span class="text-muted">(<%= number_with_delimiter(@item_count) %>)</span>
+  <% end %>
+</h3>
 
 <%# Show the first 6 items in a grid. Can specify a different number in a
 portal config for digital collections using setting "show_items". Use 0 to 
@@ -9,11 +11,11 @@ not show this section at all.  %>
 <%= render_document_index_with_view("gallery", @children_documents[0..(show_items - 1)]) %>
 
 <% if @children_documents.length > show_items %>
-  <p>
-    <%= link_to collection_browse_items_url(@document), :class => "" do %>
+  <p class="browse-more">
+    <%= link_to collection_browse_items_url(@document) do %>
       Browse all <%= number_with_delimiter(@item_count) %> Items &raquo;
     <% end %>
-  </p>  
+  </p>
 <% end %>
 
 
