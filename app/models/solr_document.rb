@@ -38,6 +38,10 @@ class SolrDocument
     public_controller ||= 'catalog'
   end
 
+  def thumbnail
+    Rails.application.config.portal['portals']['collection_local_id'].try(:[], self.local_id).try(:[], 'thumbnail_image')
+  end
+
   def public_collection
     effective_configs.try(:[] , 'collection')
   end

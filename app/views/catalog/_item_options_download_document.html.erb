@@ -4,7 +4,7 @@
 <% @document.nested_struct_map_docs("Documents").each do |doc| %>
   <li>
     <%= link_to(download_path(doc)) do %>
-        <%= image_tag(default_mime_type_thumbnail(doc.content_type), size: "20", alt: doc.content_type) %>
+        <%= image_tag(default_thumbnail_path(doc), size: "20", alt: doc.content_type) %>
         <%= default_mime_type_label(doc.content_type) %>
         <span class="small text-muted">
           <% if @doc_count > 1 %><%= doc.title %><% end %>

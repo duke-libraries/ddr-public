@@ -3,6 +3,8 @@
 class DigitalCollectionsController < CatalogController
 
   before_action :configure_generic_collections
+  
+  before_action :configure_portal
   include Ddr::Public::Controller::Portal
 
   # Enables us to use a .rb template to render json for the media action
@@ -75,6 +77,13 @@ class DigitalCollectionsController < CatalogController
 
   private
 
+  def configure_portal
+    @portal = PortalConfiguration.new({ local_id: params[:collection], controller_name: controller_name })
+  end
+
+  #TODO: Put into a concern or something?
+  #      Use the PortalConifguration.new()
+  #      Or just add generic conifguration base on the current controller name????
   def configure_generic_collections
     if Rails.application.config.portal["controllers"]["digital_collections"]
       generic_collections.each do |local_id|

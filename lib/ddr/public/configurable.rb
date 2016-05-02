@@ -17,6 +17,8 @@ module Ddr
 
         mattr_accessor :require_authentication
 
+        mattr_accessor :thumbnails
+
       end
 
       module ClassMethods
