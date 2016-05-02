@@ -1,6 +1,7 @@
 # # -*- encoding : utf-8 -*-
 
 class DigitalCollectionsController < CatalogController
+
   before_action :configure_generic_collections
   include Ddr::Public::Controller::Portal
 
@@ -29,7 +30,6 @@ class DigitalCollectionsController < CatalogController
       highlight_count
       show_items
       blog_posts_url
-      item_count
       children_documents
     end
     collection_document
@@ -42,8 +42,7 @@ class DigitalCollectionsController < CatalogController
   def index_portal
     index
 
-    collection_count
-    item_count
+    children_documents
     featured_collection_documents
   end
 

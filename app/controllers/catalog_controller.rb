@@ -246,22 +246,6 @@ class CatalogController < ApplicationController
     @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
   end
 
-  # For portal scoping
-  def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
-    solr_parameter_value = ""
-    opts[:values].each do |value|
-      segment = opts[:solr_field] + ":\"" + value + "\""
-      if opts[:boolean_operator].present?
-        segment << " " + opts[:boolean_operator] + " "
-      end
-      solr_parameter_value << segment
-    end
-    if opts[:boolean_operator].present?
-      solr_parameter_value.gsub!(/\s#{Regexp.escape opts[:boolean_operator]}\s$/, "")
-    end
-    solr_parameter_value
-  end
-
   
   def zip_images 
     

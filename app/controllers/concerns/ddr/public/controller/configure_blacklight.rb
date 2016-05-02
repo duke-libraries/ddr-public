@@ -4,7 +4,7 @@ module Ddr
       module ConfigureBlacklight
         extend ActiveSupport::Concern
 
-        include Ddr::Public::Controller::ConstantizeSolrFieldName
+        include Ddr::Public::Controller::SolrQueryConstructor
 
         def self.included(base)
           base.before_action :configure_blacklight_facets
@@ -38,6 +38,7 @@ module Ddr
                 constantize_solr_field_name({solr_field: field['field']}),
                 :label => field['label'],
                 :show => field['show'],
+                :separator => field['separator'],
                 :collapse => field['collapse'],
                 :limit => field['limit'],
                 :sort => field['sort'],

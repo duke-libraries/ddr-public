@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Ddr::Public::Controller::SolrQueryConstructor
 
   # Overrides corresponding method in Blacklight::FacetsHelperBehavior
   def render_facet_limit_list(paginator, solr_field, wrapping_element=:li)

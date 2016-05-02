@@ -1,7 +1,5 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
-  include Ddr::Public::Controller::ConstantizeSolrFieldName
-
 
   # Predicate methods for object types
   def is_item? document
@@ -26,6 +24,7 @@ module CatalogHelper
     collections[collection_internal_uri]
   end
 
+  # TODO: use solr query concerns
   def item_image_embed options={}
     image_tag = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
@@ -36,6 +35,7 @@ module CatalogHelper
     image_tag
   end
 
+  # TODO: use solr query concerns
   def item_title_link options={}
     link = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})

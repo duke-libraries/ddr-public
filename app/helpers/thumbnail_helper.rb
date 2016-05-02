@@ -4,7 +4,7 @@ module ThumbnailHelper
     if multires_thumbnail_image_file_path = multires_thumbnail_image_file_path(document)
       multires_thumbnail_link_to_document(document, multires_thumbnail_image_file_path, size, counter)
     elsif collection_thumbnail_custom_image = collection_thumbnail_custom_image(document)
-      image_tag = image_tag("ddr-portals/#{document.local_id}/#{collection_thumbnail_custom_image}", class: 'img-thumbnail', alt: 'Thumbnail')
+      image_tag = image_tag("ddr-portals/#{document.local_id}/#{collection_thumbnail_custom_image}", width: '200', class: 'img-thumbnail', alt: 'Thumbnail')
       link_to_document document, image_tag, :counter => counter
     else
       render_thumbnail_tag(document, {}, :counter => counter)
@@ -16,11 +16,11 @@ module ThumbnailHelper
     collection_item_documents = collection_thumbnail_item_documents(document)
 
     if collection_thumbnail_local_id(document) and collection_item_documents.length > 0
-      multires_thumbnail_path = collection_item_documents.first.multires_image_file_paths.first
+      multires_thumbnail_path = collection_item_documents.first.first_multires_image_file_path
     elsif document.multires_image_file_path.present?
       multires_thumbnail_path = document.multires_image_file_path
-    elsif document.multires_image_file_paths.present?
-      multires_thumbnail_path = document.multires_image_file_paths.first
+    elsif document.first_multires_image_file_path.present?
+      multires_thumbnail_path = document.first_multires_image_file_path
     end
 
     multires_thumbnail_path

@@ -44,16 +44,6 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
-  describe "#year_ranges" do
-    let (:year_display) { "1990-1993; 2000-2002" }
-    context "field contains string of sequential years and a range delimited by semicolons" do
-      let (:year_metadata) { ["1990; 1991; 1992; 1993; 2000-2002"] }
-      it "should return a range of years when possible" do
-        expect(helper.year_ranges({:value => year_metadata})).to match(year_display)
-      end
-    end
-  end
-
   describe "#language_display" do
     let (:language_display_string) { "Afar; Abkhaz; ack" }
     context "language field contains multiple language codes, one of which not have a translation" do

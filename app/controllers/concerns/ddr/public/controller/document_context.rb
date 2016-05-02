@@ -4,21 +4,23 @@ module Ddr
       module DocumentContext
         extend ActiveSupport::Concern
 
+        include Ddr::Public::Controller::SolrQueryConstructor
+
         def children_documents
           configure_blacklight_for_children
           relationship ||= find_relationship(@document)
 
-          query = ActiveFedora::SolrService.construct_query_for_rel([[relationship, @document[Ddr::Index::Fields::INTERNAL_URI]]])
+          query = ActiveFedora::SolrService.construct_query_for_rel(relationship => @document[Ddr::Index::Fields::INTERNAL_URI])
           response, @children_documents = get_search_results(params.merge(rows: 20), {q: query})
         end
 
         def item_count
-          response, documents = get_search_results({:fl => 'id', :rows => 1, :q => "#{Ddr::Index::Fields::IS_GOVERNED_BY}:\"#{@document[Ddr::Index::Fields::INTERNAL_URI]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item" })
+          response, documents = get_search_results({:q => "#{children_query([@document[Ddr::Index::Fields::INTERNAL_URI]])} AND active_fedora_model_query(['Item'])" })
           @item_count = response.total
         end
 
         def component_count
-          query = ActiveFedora::SolrService.construct_query_for_rel([[:is_part_of, @document[Ddr::Index::Fields::INTERNAL_URI]]])
+          query = ActiveFedora::SolrService.construct_query_for_rel(:is_part_of => @document[Ddr::Index::Fields::INTERNAL_URI])
           response = query_solr(q: query, rows: 1)
           @component_count = response.total
         end
