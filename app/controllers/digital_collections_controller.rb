@@ -60,6 +60,7 @@ class DigitalCollectionsController < CatalogController
 
   def media
     @document = SolrDocument.find(params[:id])
+    derivative_url_prefixes
   end
 
   def about
