@@ -190,14 +190,6 @@ module CatalogHelper
     link_to name, url, :class => options[:class]
   end
 
-  # DPLA Feed document helper
-  def thumbnail_url document
-    if multires_thumbnail_image_file_path = multires_thumbnail_image_file_path(document)
-      iiif_image_path(multires_thumbnail_image_file_path, {size: '!300,300'})
-    else
-      url_for controller: :thumbnail, action: :show, id: document.id, only_path: false
-    end
-  end
 
   # DPLA Feed document helper
   def source_collection_title document
