@@ -19,12 +19,21 @@ module ApplicationHelper
     )
   end
 
+  # Facet field view helper
+  # Also used in custom sort for admin set facet
+  def admin_set_title(code)
+    admin_set_titles[code]
+  end
+
   # Custom sort for 'admin set' facet
   # Sort by full name of admin set normalized to lower case for case-independent sorting
-  # The 'value' attribute of each 'item' in the facet is the admin set slug
-  # The #admin_set_full_name method is defined in ModelsHelper in ddr-models and is also the view helper for the facet field
+  # The 'value' attribute of each 'item' in the facet is the admin set code
   def admin_set_facet_sort(items=[])
-    items.sort { |a,b| admin_set_full_name(a.value).downcase <=> admin_set_full_name(b.value).downcase }
+    items.sort { |a,b| admin_set_title(a.value).downcase <=> admin_set_title(b.value).downcase }
+  end
+
+  def admin_set_titles
+    @admin_set_titles ||= Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
   end
 
   # Custom sort for 'Collection' facet
