@@ -1,5 +1,7 @@
 module MultiresImageHelper
 
+  include Ddr::Public::Controller::IiifImagePaths
+
   def iiif_image_tag(filepath,options)
     url = iiif_image_path(filepath,options)
     image_tag url, :alt => options[:alt].presence, :class => options[:class].presence
@@ -69,21 +71,5 @@ module MultiresImageHelper
     imagedata ||= JSON.load(open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }))
     aspectratio ||= (imagedata['width'].to_f/imagedata['height'].to_f)    
   end
-
-  private
-
-  # Build IIIF image tags for image files served by IIP Image Server
-
-  def iiif_image_path(filepath,options)
-    size = options[:size] ? options[:size] : 'full'
-    region = options[:region] ? options[:region] : 'full'
-    url = "#{Ddr::Models.image_server_url}?IIIF=#{filepath}/#{region}/#{size}/0/default.jpg"
-  end
-  
-  def iiif_image_info_path(filepath)
-    url = "#{Ddr::Models.image_server_url}?IIIF=#{filepath}/info.json"    
-  end
-
-
 
 end
