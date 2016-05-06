@@ -9,13 +9,8 @@ module Ddr
         def children_documents
           configure_blacklight_for_children
           relationship ||= find_relationship(@document)
-
           query = ActiveFedora::SolrService.construct_query_for_rel(relationship => @document[Ddr::Index::Fields::INTERNAL_URI])
           response, @children_documents = get_search_results(params.merge(rows: 20), {q: query})
-        end
-
-        def item_count
-          response, documents = get_search_results({:q => "#{children_query([@document[Ddr::Index::Fields::INTERNAL_URI]])} AND active_fedora_model_query(['Item'])" })
           @item_count = response.total
         end
 
