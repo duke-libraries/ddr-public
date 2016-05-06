@@ -214,6 +214,8 @@ module CatalogHelper
     options[:document].derivative_ids.map do |id|
       "#{options[:derivative_url_prefixes][options[:document].display_format]}#{id}.#{derivative_file_extension(options[:document])}"
     end
+  rescue
+    []
   end
   
 
