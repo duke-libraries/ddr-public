@@ -9,7 +9,7 @@ module ThumbnailHelper
   end
 
   def thumbnail_path document
-    Thumbnail::Selector.new({ document: document, read_permission: can?(:read, document) }).thumbnail_path
+    Thumbnail.new({ document: document, read_permission: can?(:read, document) }).thumbnail_path
   end
 
   def default_thumbnail_path document

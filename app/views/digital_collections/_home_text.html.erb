@@ -1,13 +1,13 @@
 <%= render partial: "home_featured_collections"%>
 <%= render partial: "home_highlights" %>
 
-<% if @collection_document && @collection_document.description %>
+<% if @portal.collection && @portal.description %>
   <% if lookup_context.exists?('about', 'digital_collections') %>
     <h3 id="about" class="feature-head"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
   <% else %>
     <h3 id="about" class="feature-head">About the Digital Collection</h3>
   <% end %>
-  <%= simple_format(@collection_document.description) %>
+  <%= simple_format(@portal.description) %>
 
   <% if lookup_context.exists?('about', 'digital_collections') %>
      <p> <%= link_to raw("Read More &raquo;"), digital_collections_about_path %></p>
@@ -16,13 +16,13 @@
 <% end %>
 
 <%# Only show the first few items from the collection if there are no highlights defined. %>
-<% if @highlight_documents.blank? and @show_items != 0 %>
-  <%= render partial: "show_children_collection", locals: { show_items: @show_items } %>
+<% if @portal.item_highlights.documents.blank? and @portal.show_items != 0 %>
+  <%= render partial: "show_children_collection", locals: { show_items: @portal.show_items } %>
 <% end %>
 
-<% if @collection_document %>
-  <%= render partial: 'show_finding_aid_full', locals: { document: @collection_document } %>
-  <%= render partial: 'show_blog_posts', locals: { document: @collection_document } %>
+<% if @portal.collection %>
+  <%= render partial: 'show_finding_aid_full', locals: { document: @portal.collection } %>
+  <%= render partial: 'show_blog_posts', locals: { document: @portal.collection } %>
 <% end %>
 
 

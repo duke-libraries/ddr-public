@@ -5,7 +5,7 @@ class Thumbnail::MultiresCollection
   include Ddr::Public::Controller::SolrQueryConstructor
   include Ddr::Public::Controller::IiifImagePaths
 
-  
+
   attr_accessor :document, :size, :region
 
 

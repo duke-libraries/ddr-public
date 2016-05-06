@@ -51,8 +51,8 @@ module Ddr
         end
 
         def portal_blacklight_config
-          portal_config = Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], params[:collection]).try(:[], 'configure_blacklight')
-          portal_config ||= Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], controller_name).try(:[], 'configure_blacklight')
+          portal_blacklight_config ||= BlacklightConfiguration.new({ controller_name: controller_name, local_id: params[:collection] })
+          portal_blacklight_config.configuration
         end
         
       end

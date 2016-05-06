@@ -11,17 +11,17 @@ collections homepage.  %>
         <p class="collection-abstract"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about") %></p>
 
         <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Collection"), :class => "btn btn-success browse-all") do %>
-          Browse All <span class="item-tally"><%= number_with_delimiter(@collection_count) %></span> Collections
+          Browse All <span class="item-tally"><%= number_with_delimiter(@portal.collection_count) %></span> Collections
         <% end %>
         
         <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
-          Browse All <span class="item-tally"><%= number_with_delimiter(@item_count) %></span> Items
+          Browse All <span class="item-tally"><%= number_with_delimiter(@portal.item_count) %></span> Items
         <% end %>
 
       </div>
-      <% if @showcase_documents %>
+      <% if @portal.showcase.documents %>
         
-          <% @showcase_documents.sample(1).each_with_index do |doc, index| %>
+          <% @portal.showcase.documents.sample(1).each_with_index do |doc, index| %>
             <% if doc.multires_image_file_paths.first %>
             
               <div class="col-md-12 col-sm-12 collection-showcase" id="collection-showcase-0" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '1200,', :region => 'pct:5,5,90,90' }) %>);">

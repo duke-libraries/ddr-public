@@ -1,6 +1,6 @@
 <h3 class="feature-head">
   <%= link_to collection_browse_items_url(@document) do %>
-    Items in This Collection <span class="text-muted">(<%= number_with_delimiter(@item_count) %>)</span>
+    Items in This Collection <span class="text-muted">(<%= number_with_delimiter(@document.item_count) %>)</span>
   <% end %>
 </h3>
 
@@ -8,12 +8,12 @@
 portal config for digital collections using setting "show_items". Use 0 to 
 not show this section at all.  %>
 <% show_items = 6 if local_assigns[:show_items].nil? %>
-<%= render_document_index_with_view("gallery", @children_documents[0..(show_items - 1)]) %>
+<%= render_document_index_with_view("gallery", @document.items[0..(show_items - 1)]) %>
 
-<% if @children_documents.length > show_items %>
+<% if @document.item_count > show_items %>
   <p class="browse-more">
     <%= link_to collection_browse_items_url(@document) do %>
-      Browse all <%= number_with_delimiter(@item_count) %> Items &raquo;
+      Browse all <%= number_with_delimiter(@document.item_count) %> Items &raquo;
     <% end %>
   </p>
 <% end %>

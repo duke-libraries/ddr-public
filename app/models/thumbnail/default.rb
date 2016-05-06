@@ -1,5 +1,5 @@
 class Thumbnail::Default
-  
+
   attr_accessor :document
 
 
