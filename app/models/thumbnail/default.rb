@@ -13,7 +13,7 @@ class Thumbnail::Default
   end
 
   def thumbnail_path
-    default_thumbnail
+    ENV['ROOT_URL'] ? "#{ENV['ROOT_URL']}/assets/#{default_thumbnail}" : default_thumbnail
   end
 
 

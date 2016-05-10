@@ -23,12 +23,12 @@ RSpec.describe Thumbnail::Default do
 
   it "has a thumbnail path for any document" do
     default = Thumbnail::Default.new({document: basic_document})
-    expect(default.thumbnail_path).to eq 'ddr-icons/default.png'
+    expect(default.thumbnail_path).to end_with 'ddr-icons/default.png'
   end
 
   it "favors display format over model" do
     new_document = Thumbnail::Default.new({document: multi_field_document})
-    expect(new_document.thumbnail_path).to eq 'ddr-icons/video.png'
+    expect(new_document.thumbnail_path).to end_with 'ddr-icons/video.png'
   end
 
 end
