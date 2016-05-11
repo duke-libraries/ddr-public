@@ -30,7 +30,7 @@ dpla_fields:
     - solr_field:
       - :local_id
       - :stored_sortable
-    - document_helper: :thumbnail_url
+    - document_helper: :multires_thumbnail_path
     - solr_field:
       - :permanent_url
       - :stored_sortable

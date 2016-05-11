@@ -21,7 +21,9 @@ class Thumbnail::MultiresCollection
   end
 
   def thumbnail_path
-    iiif_image_path(collection_multires_image_file_path, { size: size, region: region })
+    if collection_multires_image_file_path?
+      iiif_image_path(collection_multires_image_file_path, { size: size, region: region })
+    end
   end
 
 
