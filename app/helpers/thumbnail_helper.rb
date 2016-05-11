@@ -16,4 +16,8 @@ module ThumbnailHelper
     Thumbnail::Default.new({ document: document }).thumbnail_path
   end
 
+  def multires_thumbnail_path document
+    Thumbnail::MultiresItem.new({ document: document }).thumbnail_path
+  end
+
 end
