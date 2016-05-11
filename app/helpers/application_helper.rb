@@ -6,10 +6,13 @@ module ApplicationHelper
     case solr_field
     when Ddr::Index::Fields::ADMIN_SET_FACET
       # apply custom sort for 'admin set' facet
-      items = admin_set_facet_sort(paginator.items)
+      items = facet_display_value_sort(paginator.items, :admin_set_title)
     when Ddr::Index::Fields::COLLECTION_FACET
       # apply custom sort for 'Collection' facet
-      items = collection_facet_sort(paginator.items)
+      items = facet_display_value_sort(paginator.items, :collection_title)
+    when Ddr::Index::Fields::EAD_ID
+      # apply custom sort for 'Source Collection' facet
+      items = facet_display_value_sort(paginator.items, :ead_id_title)
     else
       items = paginator.items
     end
@@ -25,23 +28,24 @@ module ApplicationHelper
     admin_set_titles[code]
   end
 
-  # Custom sort for 'admin set' facet
-  # Sort by full name of admin set normalized to lower case for case-independent sorting
-  # The 'value' attribute of each 'item' in the facet is the admin set code
-  def admin_set_facet_sort(items=[])
-    items.sort { |a,b| admin_set_title(a.value).downcase <=> admin_set_title(b.value).downcase }
-  end
-
   def admin_set_titles
     @admin_set_titles ||= Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
   end
 
-  # Custom sort for 'Collection' facet
-  # Sort by title of collection normalized to lower case for case-independent sorting
-  # The 'value' attribute of each 'item' in the facet is the collection URI
-  # The #collection_title method is defined in CatalogHelper and is also the view helper for the facet field
-  def collection_facet_sort(items=[])
-    items.sort { |a,b| collection_title(a.value).downcase <=> collection_title(b.value).downcase }
+  def ead_id_title(code)
+    Rails.cache.fetch("#{code}/ead_id_title", expires_in: 7.days) do
+      begin
+        Ddr::Models::FindingAid.new(code).collection_title
+      rescue OpenURI::HTTPError
+        code
+      end
+    end
+  end
+
+  # Sort by a method derived title of coded field normalized to lower case for case-independent sorting
+  # The 'value' attribute of each 'item' in the facet is the code
+  def facet_display_value_sort(items=[], facet_value_method)
+    items.sort { |a,b| send(facet_value_method, a.value).downcase <=> send(facet_value_method, b.value).downcase }
   end
 
   def alert_messages

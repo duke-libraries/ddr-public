@@ -24,15 +24,15 @@ module MetadataDisplayHelper
       options[:value].first
     end
   end
-  
+
   def source_collection options={}
     begin
-      
-      link_to options[:document].finding_aid.collection_title, options[:document].finding_aid.url, { data: { 
-        toggle: 'popover', 
-        placement: options[:placement] ? options[:placement] : 'top', 
-        html: true, 
-        title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide', 
+
+      link_to options[:document].finding_aid.collection_title, options[:document].finding_aid.url, { data: {
+        toggle: 'popover',
+        placement: options[:placement] ? options[:placement] : 'top',
+        html: true,
+        title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide',
         content: finding_aid_popover(options[:document].finding_aid)
       }}
 
@@ -49,6 +49,6 @@ module MetadataDisplayHelper
     end
     display.join("; ")
   end
-  
+
 
 end
