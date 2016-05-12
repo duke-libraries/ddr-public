@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class SolrDocument 
+class SolrDocument
 
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
@@ -7,10 +7,10 @@ class SolrDocument
   include Ddr::Models::SolrDocument
 
   # self.unique_key = 'id'
-  
+
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension( Blacklight::Solr::Document::Email )
-  
+
   # SMS uses the semantic field mappings below to generate the body of an SMS email.
   SolrDocument.use_extension( Blacklight::Solr::Document::Sms )
 
@@ -19,7 +19,7 @@ class SolrDocument
   # single valued. See Blacklight::Solr::Document::ExtendableClassMethods#field_semantics
   # and Blacklight::Solr::Document#to_semantic_values
   # Recommendation: Use field names from Dublin Core
-  use_extension( Blacklight::Solr::Document::DublinCore)    
+  use_extension( Blacklight::Solr::Document::DublinCore)
 
   def published?
     get(Ddr::Index::Fields::WORKFLOW_STATE) == "published"
@@ -67,7 +67,7 @@ class SolrDocument
     struct_map_docs(type).map { |doc| doc.local_id }.compact
   end
 
-  
+
   # Support for Struct Maps with nested divs
   # TODO: integrate nested div structure into ddr-models struct_map methods
 
@@ -106,16 +106,45 @@ class SolrDocument
   def nested_struct_map(type='default')
     struct_map.present? ? struct_map['divs'].select { |d| d['type'] == type }.compact : nil
   end
-  
+
 
   private
 
   def ordered_documents(pids)
-    query = ActiveFedora::SolrService.construct_query_for_pids(pids)
-    result = ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q=>query, :qt=>'standard' , :rows=>99999} )
-    ordered = pids.map{ |pid| result['response']['docs'].find{ |doc| doc["id"] == pid } }
-    docs = ordered.map { |doc| SolrDocument.new(doc) }.compact
+    pids.map{ |pid| response_to_solr_docs(pids).find{ |doc| doc["id"] == pid } }
   end
+
+  def response_to_solr_docs(pids)
+    @response_to_solr_docs ||= merged_response_docs(pids).map { |doc| SolrDocument.new(doc) }
+  end
+
+  def merged_response_docs(pids)
+    @merged_response_docs ||= pids_searches(pids).map { |response| response['response']['docs']}.flatten
+  end
+
+  def pids_searches(pids)
+    pids_queries(pids).map { |query| pids_search(query) }
+  end
+
+  def pids_queries(pids)
+    sliced_pids(pids).map { |pids| pids_query(pids) }
+  end
+
+  # NOTE: Dividing long array of pids into multiple arrays of 100
+  #       pids each so as not to exceed request size limits.
+  def sliced_pids(pids)
+    pids.each_slice(100).to_a
+  end
+
+  def pids_search(query)
+    ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q=>query, :qt=>'standard' , :rows=>100} )
+  end
+
+  def pids_query(pids)
+    ActiveFedora::SolrService.construct_query_for_pids(pids)
+  end
+
+
 
   def effective_configs
     applied_configs = collection_pid_configuration()
