@@ -5,15 +5,15 @@ module CatalogHelper
   def is_item? document
     document[:active_fedora_model_ssi] == "Item"
   end
-  
+
   def is_component? document
     document[:active_fedora_model_ssi] == "Component"
   end
-  
+
   def is_collection? document
     document[:active_fedora_model_ssi] == "Collection"
   end
-  
+
   def is_multi_image? document
     document.multires_image_file_paths.length > 1
   end
@@ -48,9 +48,9 @@ module CatalogHelper
   # View helper: from EITHER collection show page or configured collection portal, browse items.
   def collection_browse_items_url document, options={}
     if document.present? # if the collection homepage is a document show
-      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))   
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))
     else
-      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))  
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))
     end
   end
 
@@ -151,12 +151,12 @@ module CatalogHelper
     response, document_list = get_search_results(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection', params.merge({rows: 21})))
     document_list
   end
-  
+
   def get_blog_posts blog_url
     if blog_url.present?
       # NOTE: This URL has to be https. We get this data from Wordpress via the JSON API plugin.
       # We had to revise the query_images() function in json-api/models/attachment.php to
-      # cirumvent a bug where image data was not rendering when hitting the API via https. 
+      # cirumvent a bug where image data was not rendering when hitting the API via https.
       begin
         blog_posts = JSON.parse(open(blog_url,{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
       rescue OpenURI::HTTPError => e
@@ -166,26 +166,26 @@ module CatalogHelper
       end
     end
   end
-  
+
   def blog_post_thumb post
-    
+
     # If a post has a selected "featured image", use that.
     if post['thumbnail_images'] && post['thumbnail_images']['thumbnail']
       post['thumbnail_images']['thumbnail']['url']
-      
+
     # If a post has no selected "featured image", but does have an image in it, use the first image's thumb
     elsif post['attachments'] && post['attachments'][0] && post['attachments'][0]['images'] && post['attachments'][0]['images']['thumbnail']
       post['attachments'][0]['images']['thumbnail']['url']
-      
+
     # If imageless, use a generic thumb
     else
       image_path('ddr/devillogo-150-square.jpg')
     end
-    
+
   end
 
   def link_to_admin_set document, options={}
-    name = admin_set_full_name(document.admin_set)
+    name = admin_set_title(document.admin_set)
     url =  search_action_url(add_facet_params(Ddr::Index::Fields::ADMIN_SET_FACET, document.admin_set))
     link_to name, url, :class => options[:class]
   end
@@ -200,14 +200,14 @@ module CatalogHelper
   def research_help_name document
     document.try(:research_help).try(:name)
   end
-  
 
-  def derivative_urls options={}
-    options[:document].derivative_ids.map do |id|
-      "#{options[:derivative_url_prefixes][options[:document].display_format]}#{id}.#{derivative_file_extension(options[:document])}"
+
+  def derivative_urls document
+    document.derivative_ids.map do |id|
+      "#{document.derivative_url_prefixes[document.display_format]}#{id}.#{derivative_file_extension(document)}"
     end
   end
-  
+
 
   private
 
@@ -232,14 +232,14 @@ module CatalogHelper
         end
       end
   end
-  
+
   def faid_date_span finding_aid
     if finding_aid.collection_date_span
       return ' <span class="small text-muted">'+ finding_aid.collection_date_span+'</span>'
     end
   end
-  
-  def faid_collno_and_extent finding_aid  
+
+  def faid_collno_and_extent finding_aid
     section = ''
     section << '<p class="small text-muted">'
     if finding_aid.collection_number
@@ -249,7 +249,7 @@ module CatalogHelper
       section << '<br/>' + finding_aid.extent
     end
     section << '</p>'
-    return section  
+    return section
   end
 
 end

@@ -1,9 +1,9 @@
 module RelatedItemsHelper
 
-  def related_item_documents options={}
-    related_item_documents = options[:item_relators].map do |item_relator|
+  def related_item_documents document
+    related_item_documents = document.item_relators.map do |item_relator|
       relator_field = constantize_solr_field_name({solr_field: item_relator["field"]})
-      solr_documents = facet_field_value_matches(options[:document].id, relator_field)
+      solr_documents = facet_field_value_matches(document.id, relator_field)
       unless solr_documents.blank?
         { item_relator['name'] => solr_documents }
       end

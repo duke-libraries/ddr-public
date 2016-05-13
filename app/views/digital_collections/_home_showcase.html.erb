@@ -2,20 +2,20 @@
   <div class="container-fluid showcase-wrapper">
     <div class="row no-gutter">
       <div class="col-md-4 collection-start showcase-side">
-        <h1 id="collection-title"<% if @collection_document.title.length >= 70 %> class="long-title"<% end %>>
-        <%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) %>
+        <h1 id="collection-title"<% if @portal.title.length >= 70 %> class="long-title"<% end %>>
+        <%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) %>
         </h1>
-        <p class="collection-abstract"><%= @collection_document.abstract %> <%= link_to raw("More&nbsp;&raquo;"), {anchor: "about"}, class: "more-link", title: "Learn more about the collection" %></p>
+        <p class="collection-abstract"><%= @portal.abstract %> <%= link_to raw("More&nbsp;&raquo;"), {anchor: "about"}, class: "more-link", title: "Learn more about the collection" %></p>
 
             <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
-              Browse all <strong><%= number_with_delimiter(@item_count) %></strong> Items
+              Browse all <strong><%= number_with_delimiter(@portal.item_count) %></strong> Items
             <% end %>
       </div>
 
-      <% showcase_images = Array(@showcase_custom_images).concat Array(@showcase_documents) %>
+      <% showcase_images = Array(@portal.showcase_custom_images).concat Array(@portal.showcase.documents) %>
 
-      <% showcase_images.sample(showcase_samples({showcase_layout: @showcase_layout})).each_with_index do |image, index| %>
-        <%= render partial: "home_showcase_image", locals: home_showcase_locals({index: index, image: image, showcase_layout: @showcase_layout}) %>          
+      <% showcase_images.sample(showcase_samples({showcase_layout: @portal.showcase.layout})).each_with_index do |image, index| %>
+        <%= render partial: "home_showcase_image", locals: home_showcase_locals({index: index, image: image, showcase_layout: @portal.showcase.layout}) %>          
       <%- end %>
 
     </div>

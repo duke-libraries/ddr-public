@@ -22,7 +22,7 @@ RSpec.describe CatalogHelper do
         helper.file_info(document: document)
       end
     end
-    
+
     context "user cannot download the file" do
       before { allow(helper).to receive(:can?).with(:download, document) { false } }
       context "and the user is logged in" do
@@ -51,7 +51,7 @@ RSpec.describe CatalogHelper do
             helper.file_info(document: document)
           end
         end
-      end      
+      end
     end
 
   end
@@ -62,7 +62,7 @@ RSpec.describe CatalogHelper do
       it "should return a link to a research help page" do
         research_help = double("research_help", :name => "Rubenstein", :url => "http://library.duke.edu/rubenstein")
         expect(helper.research_help_title(research_help)).to include (link_to(research_help.name, research_help.url))
-      end  
+      end
     end
     context "item has neither a research help name nor url" do
       it "should not return a title nor a link" do
@@ -108,34 +108,34 @@ RSpec.describe CatalogHelper do
       end
     end
   end
-    
+
   describe "#blog_post_thumb" do
     context "blog post has a featured image thumb" do
       let(:post) { { "url"=>"https:\/\/blogs.library.duke.edu\/bitstreams\/2014\/10\/24\/collection-announcement\/", "title"=>"Announcing My New Digital Collection", "excerpt"=>"<p>We have just launched an amazing new collection. &hellip; <\/p>\n", "date"=>"2014-10-24 16:29:48", "author"=>{ "slug"=>"abc123duke-edu", "name"=>"John Doe" }, "attachments"=>[ { "url"=>"IMAG0327.jpg", "images"=>{ "thumbnail"=>{ "url"=>"IMAG0327-150x150.jpg" } } } ], "thumbnail"=>"dscsi033030010.jpg", "thumbnail_images"=>{ "thumbnail"=>{ "url"=>"dscsi033030010-150x150.jpg" } } } }
       it "should return the thumbnail URL" do
-        expect(helper.blog_post_thumb(post)).to match("dscsi033030010-150x150.jpg") 
+        expect(helper.blog_post_thumb(post)).to match("dscsi033030010-150x150.jpg")
       end
     end
     context "blog post missing featured image thumb but has attachment" do
       let(:post) { { "url"=>"https:\/\/blogs.library.duke.edu\/bitstreams\/2014\/10\/24\/collection-announcement\/", "title"=>"Announcing My New Digital Collection", "excerpt"=>"<p>We have just launched an amazing new collection. &hellip; <\/p>\n", "date"=>"2014-10-24 16:29:48", "author"=>{ "slug"=>"abc123duke-edu", "name"=>"John Doe" }, "attachments"=>[ { "url"=>"IMAG0327.jpg", "images"=>{ "thumbnail"=>{ "url"=>"IMAG0327-150x150.jpg" } } } ] } }
       it "should return the first attachment's thumb URL" do
-        expect(helper.blog_post_thumb(post)).to match("IMAG0327-150x150.jpg") 
+        expect(helper.blog_post_thumb(post)).to match("IMAG0327-150x150.jpg")
       end
     end
     context "blog post has no images" do
       let(:post) { { "url"=>"https:\/\/blogs.library.duke.edu\/bitstreams\/2014\/10\/24\/collection-announcement\/", "title"=>"Announcing My New Digital Collection", "excerpt"=>"<p>We have just launched an amazing new collection. &hellip; <\/p>\n", "date"=>"2014-10-24 16:29:48", "author"=>{ "slug"=>"abc123duke-edu", "name"=>"John Doe" } } }
       it "should return a default generic image URL" do
-        expect(helper.blog_post_thumb(post)).to match('devillogo-150-square.jpg') 
+        expect(helper.blog_post_thumb(post)).to match('devillogo-150-square.jpg')
       end
-    end        
+    end
   end
 
   describe "#derivative_urls" do
     context "item is display_format audio" do
       let(:prefixes) { {'audio' => "http://library.duke.edu/derivatives/"} }
       it "should return an array of audio derivative URLs" do
-        document = double("document", :derivative_ids => ["audio_100"], :display_format => "audio")
-        expect(helper.derivative_urls({document: document, derivative_url_prefixes: prefixes })).to match(['http://library.duke.edu/derivatives/audio_100.mp3'])
+        document = double("document", :derivative_ids => ["audio_100"], :display_format => "audio", :derivative_url_prefixes => {"audio"=>"http://library.duke.edu/derivatives/"})
+        expect(helper.derivative_urls(document)).to match(['http://library.duke.edu/derivatives/audio_100.mp3'])
       end
     end
   end

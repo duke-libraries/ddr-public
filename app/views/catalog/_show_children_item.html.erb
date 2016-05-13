@@ -1,19 +1,19 @@
 <h3 class="feature-head">
-  <% if @component_count > 1 %>
+  <% if document.component_count > 1 %>
     <%= link_to item_browse_components_url(@document) do %>
-      Files <span class="text-muted">(<%= number_with_delimiter(@component_count) %>)</span>
+      Files <span class="text-muted">(<%= number_with_delimiter(document.component_count) %>)</span>
     <% end %>
   <% else %>
       File
   <% end %>
 </h3>
 
-<%= render_document_index(@children_documents[0..19]) %>
+<%= render_document_index(@document.components[0..19]) %>
 
-<% if @component_count > 20 %>
+<% if @document.component_count > 20 %>
   <p class="browse-more">
     <%= link_to item_browse_components_url(@document) do %>
-      Browse all <%= number_with_delimiter(@component_count) %> Files &raquo;
+      Browse all <%= number_with_delimiter(@document.component_count) %> Files &raquo;
     <% end %>
   </p>  
 <% end %>

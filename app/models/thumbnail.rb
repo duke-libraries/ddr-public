@@ -1,4 +1,4 @@
-class Thumbnail::Selector
+class Thumbnail
 
   attr_accessor :document, :size, :region, :read_permission
 

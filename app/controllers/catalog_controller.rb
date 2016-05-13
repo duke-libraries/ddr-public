@@ -8,7 +8,6 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
   include Ddr::Public::Controller::ConfigureBlacklight
-  include Ddr::Public::Controller::DocumentContext
 
 
   before_action :authenticate_user!, if: :authentication_required?
@@ -226,9 +225,9 @@ class CatalogController < ApplicationController
   def show
     super
     multires_image_file_paths
-    children_documents
-    component_count
-    parent_collection_document
+    # children_documents
+    # component_count
+    # parent_collection_document
   end
 
   def include_only_published(solr_parameters, user_parameters)

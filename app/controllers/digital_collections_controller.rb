@@ -3,9 +3,8 @@
 class DigitalCollectionsController < CatalogController
 
   before_action :configure_generic_collections
-  
-  before_action :configure_portal
-  include Ddr::Public::Controller::Portal
+
+  include Ddr::Public::Controller::PortalSetup
 
   # Enables us to use a .rb template to render json for the media action
   ActionView::Template.register_template_handler(:rb, :source.to_proc)
@@ -24,18 +23,8 @@ class DigitalCollectionsController < CatalogController
 
   def index
     super
-    unless has_search_parameters?
-      showcase_documents
-      showcase_custom_images
-      showcase_layout
-      highlight_documents
-      highlight_count
-      show_items
-      blog_posts_url
-      children_documents
-    end
-    collection_document
-    alert_message
+
+    digital_collections_portal
   end
 
   # Action exists to distinguish between the collection
@@ -43,17 +32,6 @@ class DigitalCollectionsController < CatalogController
   # This is for the dc/ portal page
   def index_portal
     index
-
-    children_documents
-    featured_collection_documents
-  end
-
-  def show
-    super
-    collection_document
-    max_download
-    derivative_url_prefixes
-    item_relators
   end
 
   def feed
@@ -62,25 +40,24 @@ class DigitalCollectionsController < CatalogController
 
   def media
     @document = SolrDocument.find(params[:id])
-    derivative_url_prefixes
   end
 
   def about
-    collection_document
+    digital_collections_portal
   end
 
   def featured
-    collection_document
-    showcase_documents
-    highlight_documents
+    digital_collections_portal
   end
 
 
   private
 
-  def configure_portal
-    @portal = PortalConfiguration.new({ local_id: params[:collection], controller_name: controller_name })
+  def digital_collections_portal
+    @portal = Portal::DigitalCollections.new({ controller_name: controller_name, local_id: params[:collection] })
   end
+
+
 
   #TODO: Put into a concern or something?
   #      Use the PortalConifguration.new()

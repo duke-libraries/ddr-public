@@ -13,6 +13,6 @@
   <%= render partial: 'show_license_default', locals: { document: @document } %>
 </div>
 
-<% if @item_relators %>
-  <%= render partial: 'related_items', locals: {document: document} %>
-<% end -%>
+
+<%= render partial: 'related_items', locals: {document: @document} %>
+

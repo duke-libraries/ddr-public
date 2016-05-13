@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 class SolrDocument
 
+  include DocumentModel
+
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
 
@@ -40,6 +42,18 @@ class SolrDocument
 
   def thumbnail
     Rails.application.config.portal['portals']['collection_local_id'].try(:[], self.local_id).try(:[], 'thumbnail_image')
+  end
+
+  def derivative_url_prefixes
+    portal_view_config.try(:[], 'derivative_url_prefixes')
+  end
+
+  def item_relators
+    portal_view_config.try(:[], 'item_relators')
+  end
+
+  def restrictions
+    Restrictions.new(max_download)
   end
 
   def public_collection
@@ -108,7 +122,17 @@ class SolrDocument
   end
 
 
+
   private
+
+
+  Restrictions = Struct.new(:max_download)
+
+  def max_download
+    portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
+  end
+
+
 
   def ordered_documents(pids)
     pids.map{ |pid| response_to_solr_docs(pids).find{ |doc| doc["id"] == pid } }
@@ -145,7 +169,6 @@ class SolrDocument
   end
 
 
-
   def effective_configs
     applied_configs = collection_pid_configuration()
     applied_configs ||= admin_set_configuration()
@@ -159,6 +182,11 @@ class SolrDocument
   def collection_pid_configuration
     local_id = SolrDocument.find(self.admin_policy_pid).local_id
     Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
+  end
+
+  def portal_view_config
+    local_id = SolrDocument.find(self.admin_policy_pid).local_id
+    Rails.application.config.portal.try(:[], 'controllers').try(:[], local_id)
   end
 
 
