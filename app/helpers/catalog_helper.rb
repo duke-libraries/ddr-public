@@ -148,8 +148,8 @@ module CatalogHelper
   end
 
   def find_collection_results
-    response, document_list = get_search_results(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection', params.merge({rows: 21})))
-    document_list
+    response, document_list = get_search_results(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection', params.merge({rows: 3})))
+    {documents: document_list, count: response.total}
   end
 
   def get_blog_posts blog_url
