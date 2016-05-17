@@ -1,5 +1,5 @@
 <% unless document.finding_aid.blank? %>
-  <div class="buffer-bottom-40">
+  <div class="finding_aid buffer-bottom-40">
     <div class="text-muted text-uppercase small strong">Source Collection</div>
       <% cache("finding_aid_brief_#{document.ead_id}", expires_in: 7.days) do %>
         <%= source_collection({ :document => document, :placement => 'left' })  %>

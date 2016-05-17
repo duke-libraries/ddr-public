@@ -3,12 +3,9 @@
 <% end %>
 
 <%= render partial: 'show_research_help', locals: { document: @document.collection  }  %>
-
 <%= render partial: 'show_collection_context', locals: { document: @document.collection, collection: is_collection?(@document) } %>
-
-<div class="finding_aid">
-  <%= render partial: 'show_finding_aid', locals: { document: @document } %>
-</div>
+<%= render partial: 'show_finding_aid', locals: { document: @document } %>
+<%= render partial: 'show_item_context', locals: { document: @document.item, component: is_component?(@document) } %>
 
 <% unless @document.more_like_this.empty? %>
   <div class="panel panel-default">
