@@ -6,3 +6,11 @@
 .jw-playlist {
   min-height:5em !important;
 }
+
+.av-playlist-pagination {
+  & a.now-playing {
+    background-color: $brand-success !important;
+    border-color: $brand-success !important;
+    color: white !important;
+  }
+}
