@@ -135,15 +135,16 @@ class SolrDocument
 
 
   def ordered_documents(pids)
-    pids.map{ |pid| response_to_solr_docs(pids).find{ |doc| doc["id"] == pid } }
+    solr_documents = response_to_solr_docs(pids)
+    pids.map{ |pid| solr_documents.find{ |doc| doc["id"] == pid } }
   end
 
   def response_to_solr_docs(pids)
-    @response_to_solr_docs ||= merged_response_docs(pids).map { |doc| SolrDocument.new(doc) }
+    merged_response_docs(pids).map { |doc| SolrDocument.new(doc) }
   end
 
   def merged_response_docs(pids)
-    @merged_response_docs ||= pids_searches(pids).map { |response| response['response']['docs']}.flatten
+    pids_searches(pids).map { |response| response['response']['docs']}.flatten
   end
 
   def pids_searches(pids)
