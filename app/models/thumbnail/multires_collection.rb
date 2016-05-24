@@ -45,6 +45,8 @@ class Thumbnail::MultiresCollection
     if configured_local_id
       response, documents = get_search_results({ :q => item_query })
       documents.first
+    else
+      document.items.first if document.items
     end
   end
 
