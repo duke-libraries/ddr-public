@@ -62,23 +62,20 @@ module CatalogHelper
   def file_info options={}
     document = options[:document]
     if can? :download, document
-      render partial: "download_link_and_icon", locals: {document: document}
-    elsif document.effective_permissions([Ddr::Auth::Groups::REGISTERED]).include?(:download)
-      render partial: "login_to_download", locals: {document: document}
+      render partial: "download_link_and_icon", locals: { document: document }
     else
-      render_content_type_and_size(document)
+      if user_signed_in?
+        render partial: "download_not_authorized", locals: { document: document }
+      else
+        render partial: "download_restricted", locals: { document: document }
+      end
     end
-  end
-
-  # View helper
-  def render_content_type_and_size document
-    "#{document.content_mime_type} #{document.content_size_human}"
   end
 
   # View helper
   def render_download_link args = {}
     return unless args[:document]
-    label = args.fetch(:label, "Download")
+    label = icon("download", "Download")
     link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
   end
 
