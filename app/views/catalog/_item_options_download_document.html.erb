@@ -1,7 +1,7 @@
 <%# This section appears in the Download menu for items with multi-res image viewer + additional documents %>
 <li class="dropdown-header">Documents <span class="text-muted" style="text-transform: none; font-weight: normal">(may include searchable text)</span></li>
-<% @doc_count = @document.nested_struct_map_docs("Documents").count %>
-<% @document.nested_struct_map_docs("Documents").each do |doc| %>
+<% @doc_count = @document.ordered_component_docs("Documents").count %>
+<% @document.ordered_component_docs("Documents").each do |doc| %>
   <li>
     <%= link_to(download_path(doc)) do %>
         <%= image_tag(default_thumbnail_path(doc), size: "20", alt: doc.content_type) %>
