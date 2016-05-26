@@ -2,12 +2,17 @@ require 'spec_helper'
 
 RSpec.describe SolrDocument do
 
-  describe "#nested_struct_map" do
+  describe "#ordered_component_pids" do
+
+    before { local_id_order_component_pids = double("local_id_order_component_pids") }
+    before { allow(subject).to receive(:local_id_order_component_pids) {nil} }
+
     context "no indexed struct maps" do
       it "should return nil" do
-        expect(subject.nested_struct_map('default')).to be_nil
+        expect(subject.ordered_component_pids('default')).to be_nil
       end
     end
+
     context "indexed nested struct map" do
       let(:struct_map) do
         {"type"=>"default", "divs"=>
@@ -20,22 +25,23 @@ RSpec.describe SolrDocument do
           ]
         }
       end
+
       before { allow(subject).to receive(:struct_map) { struct_map } }
+
       context "nested struct map has documents" do
-        let(:expected_result) { [{"id"=>"dukechapel_dcrst003606-documents", "type"=>"Documents", "fptrs"=>[], "divs"=>[{"id"=>"dcrst003606", "order"=>"1", "fptrs"=>["changeme:1029"], "divs"=>[]}]}] }
+        let(:expected_result) { ['changeme:1029'] }
         it "should return the documents portion of the struct map" do
-          expect(subject.nested_struct_map("Documents")).to match(expected_result)
+          expect(subject.ordered_component_pids("Documents")).to match(expected_result)
         end
       end
+
       context "nested struct map is missing requested type" do
-        it "should return an empty array" do
-          expect(subject.nested_struct_map("foo")).to match([])
+        it "should return nil" do
+          expect(subject.ordered_component_pids("foo")).to match(nil)
         end
-
       end
+
     end
-
   end
-
 
 end

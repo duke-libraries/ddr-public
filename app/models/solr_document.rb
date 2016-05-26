@@ -82,43 +82,33 @@ class SolrDocument
   end
 
 
-  # Support for Struct Maps with nested divs
-  # TODO: integrate nested div structure into ddr-models struct_map methods
-
   def multires_image_file_paths(type='default')
-    nested_docs = nested_struct_map_docs('Images')
-    docs = nested_docs.any? ? nested_docs : struct_map_docs(type)
-    docs.map { |doc| doc.multires_image_file_path }.compact
+    docs = ordered_component_docs('Images')
+    if docs.present?
+      docs.map { |doc| doc.multires_image_file_path }.compact
+    else
+      nil
+    end
   end
 
   def first_multires_image_file_path(type='default')
-    nested_pids = nested_struct_map_pids('Images')
-    pids = nested_pids.any? ? nested_pids : struct_map_pids(type)
-    unless pids.blank?
+    pids = ordered_component_pids('Images')
+    if pids.present?
       paths = self.class.find(pids.first).multires_image_file_path
     else
       nil
     end
   end
 
-  def struct_map_docs(type='default')
-    pids = struct_map_pids(type)
-    ordered_documents(pids)
+
+  def ordered_component_pids(type='default')
+    [struct_map_ordered_pids(type),
+     local_id_order_component_pids].find { |val| val.present? }
   end
 
-  def nested_struct_map_docs(type='default')
-    pids = nested_struct_map_pids(type)
-    ordered_documents(pids)
-  end
-
-  def nested_struct_map_pids(type='default')
-    nested_struct_map(type).map { |d| d['divs'].map { |d| d['fptrs'].first } }.flatten.compact
-  rescue
-    []
-  end
-
-  def nested_struct_map(type='default')
-    struct_map.present? ? struct_map['divs'].select { |d| d['type'] == type }.compact : nil
+  def ordered_component_docs(type='default')
+    [struct_map_ordered_docs(type),
+     local_id_order_component_docs].find { |val| val.present? }
   end
 
 
@@ -132,7 +122,35 @@ class SolrDocument
     portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
   end
 
+  def struct_map_ordered_docs(type='default')
+    pids = struct_map_ordered_pids(type)
+    ordered_documents(pids) if pids.present?
+  end
 
+  def struct_map_ordered_pids(type='default')
+    if struct_map.present?
+      fptrs.any? ? fptrs : nested_fprts(type)
+    end
+  end
+
+  def nested_fprts(type='default')
+    type_div = struct_map['divs'].select { |div| div['type'] == type }.first || {}
+    if type_div.any?
+      type_div['divs'].map { |div| div['fptrs'] }.flatten.compact
+    end
+  end
+
+  def fptrs
+    struct_map['divs'].map { |div| div['fptrs'] }.flatten.compact
+  end
+
+  def local_id_order_component_pids
+    local_id_order_component_docs.map(&:id) if components.present?
+  end
+
+  def local_id_order_component_docs
+    components.sort { |a,b| a.local_id <=> b.local_id } if components.present?
+  end
 
   def ordered_documents(pids)
     solr_documents = response_to_solr_docs(pids)
