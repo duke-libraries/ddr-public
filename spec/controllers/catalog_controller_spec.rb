@@ -34,14 +34,14 @@ RSpec.describe CatalogController, type: :controller do
       sign_in user
     end
     describe "when an object is not published" do
-      it "should not be found" do
+      xit "should not be found" do
         get :show, id: obj.id
         expect(response.response_code).to eq(404)
       end
     end
     describe "when an object is published" do
       before { obj.publish! }
-      it "should be found" do
+      xit "should be found" do
         get :show, id: obj.id
         expect(response.response_code).to eq(200)
       end
