@@ -14,9 +14,9 @@ module Ddr
 
         def include_only_specified_records(solr_parameters, user_parameters)
           if portal_controller_setup.parent_collection_uris
-            field_value_pairs = portal_controller_setup.parent_collection_uris.map { |id| [:is_governed_by, id] }
+            field_value_pairs = portal_controller_setup.parent_collection_uris.map { |id| [:isGovernedBy, id] }
             solr_parameters[:fq] ||= []
-            solr_parameters[:fq] << ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs, 'OR')
+            solr_parameters[:fq] << ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs, ' OR ')
           end
         end
 

@@ -20,11 +20,10 @@ module CatalogHelper
 
   # Facet field view helper
   # Also used in custom sort for collection facet
-  def collection_title collection_internal_uri
-    collections[collection_internal_uri]
+  def collection_title id
+    collections[id]
   end
-
-  # TODO: use solr query concerns
+  
   def item_image_embed options={}
     image_tag = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
@@ -48,14 +47,14 @@ module CatalogHelper
   # View helper: from EITHER collection show page or configured collection portal, browse items.
   def collection_browse_items_url document, options={}
     if document.present? # if the collection homepage is a document show
-      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.id)))
     else
       search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))
     end
   end
 
   def item_browse_components_url document, options={}
-    search_action_url(add_facet_params(Ddr::Index::Fields::IS_PART_OF, document.internal_uri))
+    search_action_url(add_facet_params(Ddr::Index::Fields::IS_PART_OF, document.id))
   end
 
   # Index / Show field view helper
@@ -222,10 +221,10 @@ module CatalogHelper
     @collections ||=
       begin
         response, docs = get_search_results(q: "active_fedora_model_ssi:Collection",
-                                            fl: "internal_uri_ssi,title_ssi",
+                                            fl: "id,title_ssi",
                                             rows: 9999)
         docs.each_with_object({}) do |doc, memo|
-          memo[doc["internal_uri_ssi"]] = doc["title_ssi"]
+          memo[doc["id"]] = doc["title_ssi"]
         end
       end
   end
