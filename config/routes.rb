@@ -29,6 +29,29 @@ Rails.application.routes.draw do
   # Must exist for facets to work from DC portal
   get "dc" => "digital_collections#index"
 
+
+
+  # Range Limit and Facet routes for DC
+  get "portal/range_limit/", to: "portal#range_limit"
+  get "portal/facet/:id", to: "portal#facet", as: "portal_facet"
+
+  # DC Collection scoped routes
+  constraints(id: id_constraint, collection: id_constraint) do
+    get "portal/:collection/about", :to => "portal#about", as: "portal_about"
+    get "portal/:collection/:id", to: "portal#show"
+    get "portal/:collection", to: "portal#index", as: "portal"
+  end
+
+  # Special named route just for DC Portal to distinguish
+  # from DC collection portals
+  get "portal" => "portal#index_portal", as: "portal_index_portal"
+
+  # Must exist for facets to work from DC portal
+  get "portal" => "portal#index"
+
+
+
+
   resources :thumbnail, only: :show, constraints: {id: id_constraint}
 
   # Downloads
