@@ -25,7 +25,7 @@ gem 'prawn'
 gem 'fastimage'
 gem 'bootstrap-select-rails'
 gem 'nokogiri'
-gem 'edtf-humanize', :git => 'https://github.com/duke-libraries/edtf-humanize', :branch => 'master'
+gem 'edtf-humanize', '~> 0.0.4'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
@@ -38,6 +38,8 @@ group :development, :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'orderly'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :production do

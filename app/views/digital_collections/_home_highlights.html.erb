@@ -1,8 +1,8 @@
-<% unless @highlight_documents.empty? and @showcase_documents.empty? %>
+<% unless @portal.item_highlights.documents.blank? and @portal.showcase.documents.blank? %>
   <div class="row">
     <div class="col-md-12">
-      <% unless @highlight_documents.empty? %>
-        <% @highlight_documents.sample(@highlight_count ||= 4).each_with_index do |doc, index| %>
+      <% unless @portal.item_highlights.documents.blank? %>
+        <% @portal.item_highlights.documents.sample(@portal.item_highlights.limit ||= 4).each_with_index do |doc, index| %>
           <% if doc.multires_image_file_paths.first %>
             <div class="collection-highlight" id="collection-highlight-<%= index %>" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '!500,500', :region => 'pct:5,5,90,90' }) %>);">
 
@@ -18,7 +18,7 @@
       <%- end %>
       <% if params[:collection].present? %>
         <div class="col-md-12">
-          <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path %></p>
+          <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path, class: "small text-muted" %></p>
         </div>
       <% end %>
     </div>

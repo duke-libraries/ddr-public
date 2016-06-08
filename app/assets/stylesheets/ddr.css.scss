@@ -226,8 +226,11 @@ body.blacklight-catalog-show #content {
   background-color: rgba(0,0,0,0.8);
   color: white;
   padding: 30px !important;
-  height: 500px;
-  overflow: auto;
+  
+  &.collection-submast {
+    margin: -21px -21px 25px -21px;
+  }
+
   @media (max-width: $screen-md) {
     height: auto;
   }
@@ -242,6 +245,8 @@ body.blacklight-catalog-show #content {
 
   & .collection-abstract {
     color: $gray-lighter;
+    font-size: $font-size-large;
+    margin-top: 1em;
   }
 
   & a {
@@ -250,11 +255,34 @@ body.blacklight-catalog-show #content {
 
   & .more-link {
     font-weight: bold;
+    margin-left: 0.4em;
   }
 
 
   & .browse-all {
     margin-top: 10px;
+  }
+
+  &.showcase-side {
+    height: 500px;
+    overflow: auto;
+    @media (max-width: $screen-md) {
+      height: auto;
+    }
+
+    & h1#collection-title.long-title {
+      font-size: floor(($font-size-h1 * 0.86));
+      @media (max-width: $screen-lg) and (min-width: $screen-md) {
+        font-size: floor(($font-size-h1 * 0.72));
+      }
+    }
+
+    & .collection-abstract {
+      @media (max-width: $screen-lg) and (min-width: $screen-md) {
+        font-size: $font-size-base;
+      }
+    }
+
   }
 
 }
@@ -351,10 +379,13 @@ a.showcase-item-wrap, a.highlight-item-wrap {
 
 
 #source-collection.well {
-  margin-top: 30px;
   & h3 {
     margin-top: 10px;
   }
+}
+
+p + #source-collection {
+  margin-top: 30px;
 }
 
 #blog-posts {
@@ -388,6 +419,25 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   & .blog-post-secondary {
     margin-bottom: 20px;
   }
+}
+
+
+/* ----------------------
+  DEFAULT COLLECTION SHOW
+------------------------- */
+
+.collection-description {
+  margin-bottom: 30px;  
+}
+
+#collection-info {
+  & dl { /* Metadata display for collection show */
+    margin-bottom: 30px;
+  }
+}
+
+.browse-more {
+  margin-top: 20px;
 }
 
 /* -------------
@@ -631,11 +681,13 @@ a.showcase-item-wrap, a.highlight-item-wrap {
     font-size: 26px;
   }
 
-  #sidebar, #content {
+  /* D.C. Portals */
+  .blacklight-digital_collections-index #content {
     & .feature-head:first-of-type {
       margin-top: 0;
     }
   }
+  
 
   .well {
 
@@ -675,6 +727,10 @@ a.showcase-item-wrap, a.highlight-item-wrap {
     }
 
   }
+  
+  #documents + #source-collection {
+    margin-top: 20px;
+  }  
 
   #blog-posts {
 

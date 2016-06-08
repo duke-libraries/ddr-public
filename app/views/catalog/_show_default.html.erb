@@ -1,5 +1,5 @@
 <%# default partial to display solr document fields in catalog show view -%>
-<h3 id="info">Item Info</h3>
+<h3 id="info" class="feature-head">Item Info</h3>
 <dl class="dl-horizontal  dl-invert">
   <% document_show_fields(document).each do |field_name, field| -%>
     <% if should_render_show_field? document, field %>
@@ -9,6 +9,10 @@
   <% end -%>
 </dl>
 
-<% if @item_relators %>
-  <%= render partial: 'related_items', locals: {document: document} %>
-<% end -%>
+<div class="license">
+  <%= render partial: 'show_license_default', locals: { document: @document } %>
+</div>
+
+
+<%= render partial: 'related_items', locals: {document: @document} %>
+

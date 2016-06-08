@@ -1,14 +1,18 @@
 module ApplicationHelper
+  include Ddr::Public::Controller::SolrQueryConstructor
 
   # Overrides corresponding method in Blacklight::FacetsHelperBehavior
   def render_facet_limit_list(paginator, solr_field, wrapping_element=:li)
     case solr_field
     when Ddr::Index::Fields::ADMIN_SET_FACET
       # apply custom sort for 'admin set' facet
-      items = admin_set_facet_sort(paginator.items)
+      items = facet_display_value_sort(paginator.items, :admin_set_title)
     when Ddr::Index::Fields::COLLECTION_FACET
       # apply custom sort for 'Collection' facet
-      items = collection_facet_sort(paginator.items)
+      items = facet_display_value_sort(paginator.items, :collection_title)
+    when Ddr::Index::Fields::EAD_ID
+      # apply custom sort for 'Source Collection' facet
+      items = facet_display_value_sort(paginator.items, :ead_id_title)
     else
       items = paginator.items
     end
@@ -18,20 +22,30 @@ module ApplicationHelper
     )
   end
 
-  # Custom sort for 'admin set' facet
-  # Sort by full name of admin set normalized to lower case for case-independent sorting
-  # The 'value' attribute of each 'item' in the facet is the admin set slug
-  # The #admin_set_full_name method is defined in ModelsHelper in ddr-models and is also the view helper for the facet field
-  def admin_set_facet_sort(items=[])
-    items.sort { |a,b| admin_set_full_name(a.value).downcase <=> admin_set_full_name(b.value).downcase }
+  # Facet field view helper
+  # Also used in custom sort for admin set facet
+  def admin_set_title(code)
+    admin_set_titles[code]
   end
 
-  # Custom sort for 'Collection' facet
-  # Sort by title of collection normalized to lower case for case-independent sorting
-  # The 'value' attribute of each 'item' in the facet is the collection URI
-  # The #collection_title method is defined in CatalogHelper and is also the view helper for the facet field
-  def collection_facet_sort(items=[])
-    items.sort { |a,b| collection_title(a.value).downcase <=> collection_title(b.value).downcase }
+  def admin_set_titles
+    @admin_set_titles ||= Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
+  end
+
+  def ead_id_title(code)
+    Rails.cache.fetch("#{code}/ead_id_title", expires_in: 7.days) do
+      begin
+        Ddr::Models::FindingAid.new(code).collection_title
+      rescue OpenURI::HTTPError
+        code
+      end
+    end
+  end
+
+  # Sort by a method derived title of coded field normalized to lower case for case-independent sorting
+  # The 'value' attribute of each 'item' in the facet is the code
+  def facet_display_value_sort(items=[], facet_value_method)
+    items.sort { |a,b| send(facet_value_method, a.value).downcase <=> send(facet_value_method, b.value).downcase }
   end
 
   def alert_messages

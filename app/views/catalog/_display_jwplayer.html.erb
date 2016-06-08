@@ -1,8 +1,11 @@
-<%# NOTE: this partial supports audio or video items.
-Either can have one or multiple files. %>
+<%# NOTE: this partial supports both audio or video items.
+Either can have one or multiple files.  %>
 
 <div id="jwplayer-element">Loading the media player...</div>
 <% @derivcount = derivatives.count %>
+
+<%# Instantiate JW Player with a playlist. Single-component A/V is %>
+<%# also treated as a playlist with one item. %>
 
 <%= javascript_tag do %>
   var playerInstance = jwplayer("jwplayer-element");
@@ -36,6 +39,41 @@ Either can have one or multiple files. %>
       <% end %>
     ]
   });
+
+  <%# If there are multiple A/V derivatives, use JS API to navigate
+  <%# playlist with external controls. %>
+  <%# See https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/#playlist %>
+
+  <% if @derivcount > 1 %>
+    playerInstance.on('ready', function(){
+      $('ul.av-playlist-pagination li a').click(function(e){
+        e.preventDefault();
+        if(!$(this).hasClass("disabled")) {
+          playerInstance.playlistItem($(this).data('index'));
+        }
+      });
+    });
+
+    playerInstance.on('playlistItem', function(){
+      $('ul.av-playlist-pagination a').each(function(){
+        $(this).removeClass('now-playing');
+        if($(this).attr('data-index') == playerInstance.getPlaylistIndex()) {
+          $(this).addClass('now-playing');
+        }
+      });
+    });
+  <% end %>
+<% end %>
+
+<% if @derivcount > 1 %>
+  <nav>
+    <ul class="pagination pagination-sm av-playlist-pagination">
+      <li class="disabled"><a href="#" class="disabled">Part: </a></li>
+      <% derivatives.each_with_index do |url,index| %>
+        <li><a href="<%= url %>" data-index="<%= index %>"><%= index + 1 %></a></li>
+      <% end %>
+    </ul>
+  </nav>
 <% end %>
 
 <noscript>

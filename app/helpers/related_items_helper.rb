@@ -1,17 +1,14 @@
 module RelatedItemsHelper
 
-  include Ddr::Public::Controller::ConstantizeSolrFieldName
-
-  def related_item_documents options={}
-    related_item_documents = {}
-    options[:item_relators].each do |item_relator|
+  def related_item_documents document
+    related_item_documents = document.item_relators.map do |item_relator|
       relator_field = constantize_solr_field_name({solr_field: item_relator["field"]})
-      solr_documents = facet_field_value_matches(options[:document].id, relator_field)
+      solr_documents = facet_field_value_matches(document.id, relator_field)
       unless solr_documents.blank?
-        related_item_documents[item_relator['name']] = facet_field_value_matches(options[:document].id, relator_field)
+        { item_relator['name'] => solr_documents }
       end
     end
-    related_item_documents
+    related_item_documents.reduce(:merge) || {}
   end
 
   private
@@ -19,13 +16,14 @@ module RelatedItemsHelper
   def facet_field_value_matches document_id, relator_field
     relator_field_values = relator_field_values(document_id, relator_field)
     unless relator_field_values.blank?
-      relator_field_items = relator_field_values.map { |value| solr_query(relator_field, value) }
+      relator_field_items = relator_field_values.map { |value| relator_field_query(relator_field, value) }
       related_items_solr_documents(document_id, relator_field_items)
     end
   end
 
-  def solr_query relator_field, value
-    response, documents = get_search_results({ :q => "#{relator_field}:\"#{value}\"" })
+  def relator_field_query relator_field, value
+    query = construct_query(relator_field => value)
+    response, documents = get_search_results({ :q => query })
     documents
   end
 
@@ -40,8 +38,8 @@ module RelatedItemsHelper
   end
 
   def document_facet_field_values_and_counts document_id, solr_field
-    response, docs = get_search_results(q: "id:\"#{document_id}\"", "facet.field" => solr_field, fl: "id")
-    
+    query = ActiveFedora::SolrService.construct_query_for_pids([document_id])
+    response, docs = get_search_results(q: query, "facet.field" => solr_field, fl: "id")
     response['facet_counts']['facet_fields'][solr_field]
   end
 

@@ -1,24 +1,23 @@
 <!-- TODO: Some of this should be moved to a helper probably -->
 <% if @response.first_page? %>
-  <% document_list = find_collection_results %>
+  <% collections = find_collection_results %>
   <% fedora_model = params.try(:[], 'f').try(:[], Ddr::Index::Fields::ACTIVE_FEDORA_MODEL) || [] %>
-  <% if document_list.length == @document_list.length %>
-    <% doc_list_match = document_list.map { |doc| doc.id } == @document_list.map { |doc| doc.id } %>
+  <% if collections[:count] == @document_list.length %>
+    <% doc_list_match = collections[:documents].map { |doc| doc.id } == @document_list.map { |doc| doc.id } %>
   <% else %>
     <% doc_list_match = false %>
   <% end %>
-  <% unless document_list.blank? or fedora_model.include? 'Collection' or doc_list_match %>
+  <% unless collections[:documents].blank? or fedora_model.include? 'Collection' or doc_list_match %>
     <div class="collection-matches-container well">
 
-      <% if document_list.length > 3 %>
+      <% if collections[:count] > 3 %>
         <% path = add_facet_params_and_redirect(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection') %>
-        <% document_count = document_list.length > 20 ? "more than 20" : document_list.length %>
-        <h4><%= link_to "Matching Collections (#{document_count}) &raquo;".html_safe, path %></h4>
+        <h4><%= link_to "Matching Collections (#{number_with_delimiter(collections[:count])}) &raquo;".html_safe, path %></h4>
       <% else %>
-        <h4>Matching Collections (<%= document_list.length %>)</h4>
+        <h4>Matching Collections (<%= collections[:count] %>)</h4>
       <% end %>
       <div id="collections" class="row gallery horizontal-gallery">
-          <%= render_gallery_collection document_list[0..2] %>
+          <%= render_gallery_collection collections[:documents][0..2] %>
       </div>
     </div>
   <% end %>

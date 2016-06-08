@@ -9,6 +9,7 @@ class CatalogController < ApplicationController
   include Hydra::Controller::ControllerBehavior
   include Ddr::Public::Controller::ConfigureBlacklight
 
+
   before_action :authenticate_user!, if: :authentication_required?
 
   before_action :enforce_show_permissions, only: :show
@@ -17,7 +18,6 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
-  helper_method :configure_blacklight_for_children
 
   rescue_from CanCan::AccessDenied do |exception|
     if user_signed_in?
@@ -121,7 +121,7 @@ class CatalogController < ApplicationController
     }
 
     # partials for show view
-    config.show.partials = [:show_header, :show, :show_children]
+    config.show.partials = [:show_header, :show, :show_children, :show_bottom]
 
     # deactivate certain tools
     config.show.document_actions.delete(:email)
@@ -225,6 +225,9 @@ class CatalogController < ApplicationController
   def show
     super
     multires_image_file_paths
+    # children_documents
+    # component_count
+    # parent_collection_document
   end
 
   def include_only_published(solr_parameters, user_parameters)
@@ -235,34 +238,10 @@ class CatalogController < ApplicationController
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
-  end  
-
-  def configure_blacklight_for_children
-    blacklight_config.configure do |config|
-      config.sort_fields.clear
-      config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", label: "Title"
-      config.add_sort_field "#{Ddr::Index::Fields::LOCAL_ID} asc", label: "Local ID"
-    end
   end
 
   def multires_image_file_paths
     @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
-  end
-
-  # For portal scoping
-  def construct_solr_parameter_value opts = {} # opts[:solr_field, :boolean_operator => 'OR', :values => []]
-    solr_parameter_value = ""
-    opts[:values].each do |value|
-      segment = opts[:solr_field] + ":\"" + value + "\""
-      if opts[:boolean_operator].present?
-        segment << " " + opts[:boolean_operator] + " "
-      end
-      solr_parameter_value << segment
-    end
-    if opts[:boolean_operator].present?
-      solr_parameter_value.gsub!(/\s#{Regexp.escape opts[:boolean_operator]}\s$/, "")
-    end
-    solr_parameter_value
   end
 
   

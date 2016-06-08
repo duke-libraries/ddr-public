@@ -1,11 +1,11 @@
 
-<% @showcase_documents.push(*@highlight_documents) %>
+<% @portal.showcase.documents.push(*@portal.item_highlights.documents) %>
 
-<% if @showcase_documents %>
+<% if @portal.showcase.documents %>
     <div class="col-md-9 col-sm-8">
       <h2>Featured Items</h2>
       <div id="documents" class="row gallery horizontal-gallery">
-        <% @showcase_documents.each_with_index do |doc, index| %>
+        <% @portal.showcase.documents.each_with_index do |doc, index| %>
           <div class="document highlight col-xs-12 col-sm-6 col-md-4">
             <div class="thumbnail-wrapper">
                 <%= render_thumbnail_link(doc, "!350,350") %>
@@ -21,12 +21,12 @@
 <%- end %>
 
 <div id="sidebar" class="col-md-3 col-sm-4">
-  <% if @collection_document %>
-    <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
-    <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>   
+  <% if @portal.collection %>
+    <%= render partial: 'show_research_help', locals: { document: @portal.collection }  %>
+    <%= render partial: 'show_collection_context', locals: { document: @portal.collection } %>   
   <% end %>
 </div>
 
-<%= content_for :page_title, "Featured Items - " + t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) + " - Duke Libraries" %>
+<%= content_for :page_title, "Featured Items - " + t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
 
 

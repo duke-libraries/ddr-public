@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
-class SolrDocument 
+class SolrDocument
+
+  include DocumentModel
 
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
@@ -7,10 +9,10 @@ class SolrDocument
   include Ddr::Models::SolrDocument
 
   # self.unique_key = 'id'
-  
+
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension( Blacklight::Solr::Document::Email )
-  
+
   # SMS uses the semantic field mappings below to generate the body of an SMS email.
   SolrDocument.use_extension( Blacklight::Solr::Document::Sms )
 
@@ -19,23 +21,39 @@ class SolrDocument
   # single valued. See Blacklight::Solr::Document::ExtendableClassMethods#field_semantics
   # and Blacklight::Solr::Document#to_semantic_values
   # Recommendation: Use field names from Dublin Core
-  use_extension( Blacklight::Solr::Document::DublinCore)    
+  use_extension( Blacklight::Solr::Document::DublinCore)
 
   def published?
     get(Ddr::Index::Fields::WORKFLOW_STATE) == "published"
   end
 
   def abstract
-    get("abstract_tesim")
+    get(ActiveFedora::SolrService.solr_name(:abstract, :stored_searchable))
   end
 
   def description
-    get("description_tesim")
+    get(ActiveFedora::SolrService.solr_name(:description, :stored_searchable))
   end
 
   def public_controller
     public_controller = effective_configs.try(:[] , 'controller')
     public_controller ||= 'catalog'
+  end
+
+  def thumbnail
+    Rails.application.config.portal['portals']['collection_local_id'].try(:[], self.local_id).try(:[], 'thumbnail_image')
+  end
+
+  def derivative_url_prefixes
+    portal_view_config.try(:[], 'derivative_url_prefixes')
+  end
+
+  def item_relators
+    portal_view_config.try(:[], 'item_relators')
+  end
+
+  def restrictions
+    Restrictions.new(max_download)
   end
 
   def public_collection
@@ -63,32 +81,112 @@ class SolrDocument
     struct_map_docs(type).map { |doc| doc.local_id }.compact
   end
 
-  
-  # Support for Struct Maps with nested divs
-  # TODO: integrate nested div structure into ddr-models struct_map methods
 
   def multires_image_file_paths(type='default')
-    nested_docs = nested_struct_map_docs('Images')
-    docs = nested_docs.any? ? nested_docs : struct_map_docs(type)
-    docs.map { |doc| doc.multires_image_file_path }.compact
+    docs = ordered_component_docs('Images')
+    if docs.present?
+      docs.map { |doc| doc.multires_image_file_path }.compact
+    else
+      nil
+    end
   end
 
-  def nested_struct_map_docs(type='default')
-    nested_struct_map_pids(type).map { |pid| self.class.find(pid) }.compact
+  def first_multires_image_file_path(type='default')
+    pids = ordered_component_pids('Images')
+    if pids.present?
+      paths = self.class.find(pids.first).multires_image_file_path
+    else
+      nil
+    end
   end
 
-  def nested_struct_map_pids(type='default')
-    nested_struct_map(type).map { |d| d['divs'].map { |d| d['fptrs'].first } }.flatten.compact
-  rescue
-    []
+
+  def ordered_component_pids(type='default')
+    [struct_map_ordered_pids(type),
+     local_id_order_component_pids].find { |val| val.present? }
   end
 
-  def nested_struct_map(type='default')
-    struct_map.present? ? struct_map['divs'].select { |d| d['type'] == type }.compact : nil
+  def ordered_component_docs(type='default')
+    [struct_map_ordered_docs(type),
+     local_id_order_component_docs].find { |val| val.present? }
   end
-  
+
+
 
   private
+
+
+  Restrictions = Struct.new(:max_download)
+
+  def max_download
+    portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
+  end
+
+  def struct_map_ordered_docs(type='default')
+    pids = struct_map_ordered_pids(type)
+    ordered_documents(pids) if pids.present?
+  end
+
+  def struct_map_ordered_pids(type='default')
+    if struct_map.present?
+      fptrs.any? ? fptrs : nested_fprts(type)
+    end
+  end
+
+  def nested_fprts(type='default')
+    type_div = struct_map['divs'].select { |div| div['type'] == type }.first || {}
+    if type_div.any?
+      type_div['divs'].map { |div| div['fptrs'] }.flatten.compact
+    end
+  end
+
+  def fptrs
+    struct_map['divs'].map { |div| div['fptrs'] }.flatten.compact
+  end
+
+  def local_id_order_component_pids
+    local_id_order_component_docs.map(&:id) if components.present?
+  end
+
+  def local_id_order_component_docs
+    components.sort { |a,b| a.local_id <=> b.local_id } if components.present?
+  end
+
+  def ordered_documents(pids)
+    solr_documents = response_to_solr_docs(pids)
+    pids.map{ |pid| solr_documents.find{ |doc| doc["id"] == pid } }
+  end
+
+  def response_to_solr_docs(pids)
+    merged_response_docs(pids).map { |doc| SolrDocument.new(doc) }
+  end
+
+  def merged_response_docs(pids)
+    pids_searches(pids).map { |response| response['response']['docs']}.flatten
+  end
+
+  def pids_searches(pids)
+    pids_queries(pids).map { |query| pids_search(query) }
+  end
+
+  def pids_queries(pids)
+    sliced_pids(pids).map { |pids| pids_query(pids) }
+  end
+
+  # NOTE: Dividing long array of pids into multiple arrays of 100
+  #       pids each so as not to exceed request size limits.
+  def sliced_pids(pids)
+    pids.each_slice(100).to_a
+  end
+
+  def pids_search(query)
+    ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q=>query, :qt=>'standard' , :rows=>100} )
+  end
+
+  def pids_query(pids)
+    ActiveFedora::SolrService.construct_query_for_pids(pids)
+  end
+
 
   def effective_configs
     applied_configs = collection_pid_configuration()
@@ -103,6 +201,11 @@ class SolrDocument
   def collection_pid_configuration
     local_id = SolrDocument.find(self.admin_policy_pid).local_id
     Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
+  end
+
+  def portal_view_config
+    local_id = SolrDocument.find(self.admin_policy_pid).local_id
+    Rails.application.config.portal.try(:[], 'controllers').try(:[], local_id)
   end
 
 

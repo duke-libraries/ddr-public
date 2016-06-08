@@ -4,7 +4,7 @@ module Ddr
       module ConfigureBlacklight
         extend ActiveSupport::Concern
 
-        include Ddr::Public::Controller::ConstantizeSolrFieldName
+        include Ddr::Public::Controller::SolrQueryConstructor
 
         def self.included(base)
           base.before_action :configure_blacklight_facets
@@ -31,13 +31,14 @@ module Ddr
         end
 
         def configure_blacklight options={}
-          if conf = portal_config.try(:[], 'configure_blacklight').try(:[], options[:add_field])
+          if conf = portal_blacklight_config.try(:[], options[:add_field])
             blacklight_config.send(options[:clear_field]).clear
             conf.each do |field|
               blacklight_config.send(options[:add_field],
                 constantize_solr_field_name({solr_field: field['field']}),
                 :label => field['label'],
                 :show => field['show'],
+                :separator => field['separator'],
                 :collapse => field['collapse'],
                 :limit => field['limit'],
                 :sort => field['sort'],
@@ -49,9 +50,9 @@ module Ddr
           end
         end
 
-        def portal_config
-          portal_config = Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], params[:collection])
-          portal_config ||= Rails.application.config.try(:portal).try(:[], 'controllers').try(:[], controller_name)
+        def portal_blacklight_config
+          portal_blacklight_config ||= BlacklightConfiguration.new({ controller_name: controller_name, local_id: params[:collection] })
+          portal_blacklight_config.configuration
         end
         
       end

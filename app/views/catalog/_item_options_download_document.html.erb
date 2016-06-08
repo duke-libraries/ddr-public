@@ -1,10 +1,10 @@
 <%# This section appears in the Download menu for items with multi-res image viewer + additional documents %>
 <li class="dropdown-header">Documents <span class="text-muted" style="text-transform: none; font-weight: normal">(may include searchable text)</span></li>
-<% @doc_count = @document.nested_struct_map_docs("Documents").count %>
-<% @document.nested_struct_map_docs("Documents").each do |doc| %>
+<% @doc_count = @document.ordered_component_docs("Documents").count %>
+<% @document.ordered_component_docs("Documents").each do |doc| %>
   <li>
     <%= link_to(download_path(doc)) do %>
-        <%= image_tag(default_mime_type_thumbnail(doc.content_type), size: "20", alt: doc.content_type) %>
+        <%= image_tag(default_thumbnail_path(doc), size: "20", alt: doc.content_type) %>
         <%= default_mime_type_label(doc.content_type) %>
         <span class="small text-muted">
           <% if @doc_count > 1 %><%= doc.title %><% end %>
@@ -13,6 +13,4 @@
     <% end %>
   </li>
 <% end %>
-<li class="divider" role="separator"></li>
 
-<%= render partial: 'item_options_download_multi_image', locals: local_assigns %>

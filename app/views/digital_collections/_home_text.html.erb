@@ -1,25 +1,27 @@
 <%= render partial: "home_featured_collections"%>
 <%= render partial: "home_highlights" %>
 
-<% if lookup_context.exists?('about', 'digital_collections') %>
-  <h3 id="about"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
-<% else %>
-  <h3 id="about" class="feature-head">About the Digital Collection</h3>
+<% if @portal.collection && @portal.description %>
+  <% if lookup_context.exists?('about', 'digital_collections') %>
+    <h3 id="about" class="feature-head"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
+  <% else %>
+    <h3 id="about" class="feature-head">About the Digital Collection</h3>
+  <% end %>
+  <%= simple_format(@portal.description) %>
+
+  <% if lookup_context.exists?('about', 'digital_collections') %>
+     <p> <%= link_to raw("Read More &raquo;"), digital_collections_about_path %></p>
+  <% end %>
 <% end %>
 
-<% if @collection_document && @collection_document.description %>
-  <%= simple_format(@collection_document.description) %>
-<% else %>
-  <%= simple_format(t("ddr.public.portal.#{params[:collection] || controller_name}.about", :default => "Duke Digital Repository (DDR) provides access to Duke scholarship, research, datasets and Duke University Libraries collections.  Duke Digital Repository is a service of Duke University Libraries.")) %></p>
+<%# Only show the first few items from the collection if there are no highlights defined. %>
+<% if @portal.item_highlights.documents.blank? and @portal.show_items != 0 %>
+  <%= render partial: "show_children_collection", locals: { show_items: @portal.show_items } %>
 <% end %>
 
-<% if lookup_context.exists?('about', 'digital_collections') %>
-   <p class="text-right"> <%= link_to raw("read more &raquo;"), digital_collections_about_path %></p>
-<% end %>
-
-<% if @collection_document %>
-  <%= render partial: 'show_finding_aid_full', locals: { document: @collection_document } %>
-  <%= render partial: 'show_blog_posts', locals: { document: @collection_document } %>
+<% if @portal.collection %>
+  <%= render partial: 'show_finding_aid_full', locals: { document: @portal.collection } %>
+  <%= render partial: 'show_blog_posts', locals: { document: @portal.collection } %>
 <% end %>
 
 

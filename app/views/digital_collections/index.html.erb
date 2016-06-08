@@ -4,22 +4,23 @@
   <!-- One for the collection portal page -->
   <!-- And one for the search results page and/or show pages -->
   <!-- Select one or the other using the has_search_parameters? check as below -->
-  <% if @showcase_documents %>
+  <% unless @portal.showcase.documents.blank? and @portal.showcase_custom_images.blank? %>
     <%= render 'home_showcase' %>
   <% else %>
     <% unless has_search_parameters? %>
-      <h1><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1>
+    <%= render partial: 'collection_submast', locals: { document: @portal.collection } %>
+      <!-- <h1><%# t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1> -->
     <% end %>
   <% end %>
 </div>
 
 <div id="sidebar" class="col-md-3 col-sm-4">
   
-  <% if @collection_document %>
-    <%= render partial: 'show_research_help', locals: { document: @collection_document }  %>
+  <% if @portal.collection %>
+    <%= render partial: 'show_research_help', locals: { document: @portal.collection }  %>
     
     <% if has_search_parameters? %>
-      <%= render partial: 'show_collection_context', locals: { document: @collection_document } %>     
+      <%= render partial: 'show_collection_context', locals: { document: @portal.collection } %>     
     <% end %>
     
   <% end %>
@@ -33,8 +34,8 @@
     <%= render 'home' %>
     
     <%# set the html title for collection portal page -%>
-    <% if @collection_document %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) + " - Duke Libraries" %>
+    <% if @portal.collection %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
     <% else %>
       <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
     <% end %>

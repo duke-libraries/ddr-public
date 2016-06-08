@@ -1,8 +1,19 @@
-<h3>Files</h3>
-<% @response, @document_list = find_children(@document, :is_part_of, params) %>
-<div id="sortAndPerPage" class="clearfix">
-	<div class="search-widgets pull-right">
-		<%= render 'sort_widget' %>
-	</div>
-</div>
-<%= render_document_index %>
+<h3 class="feature-head">
+  <% if document.component_count > 1 %>
+    <%= link_to item_browse_components_url(@document) do %>
+      Files <span class="text-muted">(<%= number_with_delimiter(document.component_count) %>)</span>
+    <% end %>
+  <% else %>
+      File
+  <% end %>
+</h3>
+
+<%= render_document_index(@document.components[0..19]) %>
+
+<% if @document.component_count > 20 %>
+  <p class="browse-more">
+    <%= link_to item_browse_components_url(@document) do %>
+      Browse all <%= number_with_delimiter(@document.component_count) %> Files &raquo;
+    <% end %>
+  </p>  
+<% end %>

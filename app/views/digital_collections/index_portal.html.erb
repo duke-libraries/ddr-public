@@ -4,7 +4,7 @@
   <!-- And one for the search results page and/or show pages -->
   <!-- Select one or the other using the has_search_parameters? check as below -->
 
-  <% if @showcase_documents %>
+  <% if @portal.showcase.documents %>
     <%= render 'home_showcase_index_portal' %>
   <% end %>
 </div>
@@ -28,8 +28,8 @@
   <%= render partial: "show_blog_posts" %>
     
     <%# set the html title for collection portal page -%>
-    <% if @collection_document %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @collection_document.title) + " - Duke Libraries" %>
+    <% if @portal.collection %>
+      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
     <% else %>
       <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
     <% end %>

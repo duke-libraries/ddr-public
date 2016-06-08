@@ -1,5 +1,5 @@
 <% cache("blog_posts_#{params[:collection]}", expires_in: 1.day) do %>
-  <% @blog_posts = get_blog_posts(@blog_post_url) %>
+  <% @blog_posts = get_blog_posts(@portal.blog_posts_url) %>
 
   <% if @blog_posts && @blog_posts['posts'] %>
 

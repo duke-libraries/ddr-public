@@ -2,7 +2,7 @@
 <% derivatives.each_with_index do |d, index| %>
   <li>
     <%= link_to(d, download: "") do %>
-      <%= image_tag(default_display_format_thumbnail(@document.display_format), size: "20", alt: @document.display_format) %>
+      <%= image_tag(default_thumbnail_path(@document), size: "20", alt: @document.display_format) %>
       <% if derivatives.length > 1 %>
         Part <%= index + 1 %>
       <% end %> 

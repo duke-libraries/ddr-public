@@ -17,29 +17,6 @@ module MetadataDisplayHelper
     end
   end
 
-  def year_ranges options={}
-    ranges = []
-    years = []
-    year_values = options[:value].first.split(";")
-    year_values.each do |year_value|
-      year_value.strip!
-      if year_value.match(/^\d{4}$/)
-        years << year_value
-      else
-        ranges << year_value
-      end
-    end
-    if years.count > 1
-      years.sort!
-      ranges << years.first + "-" + years.last
-    elsif years.count == 1
-      ranges << years.first
-    end
-    ranges.sort!
-    ranges.join("; ")
-  end
-  
-
   def display_edtf_date options={}
     if date = Date.edtf(options[:value].first)
       date.humanize
@@ -47,16 +24,15 @@ module MetadataDisplayHelper
       options[:value].first
     end
   end
-  
 
   def source_collection options={}
     begin
-      
-      link_to options[:document].finding_aid.collection_title, options[:document].finding_aid.url, { data: { 
-        toggle: 'popover', 
-        placement: options[:placement] ? options[:placement] : 'top', 
-        html: true, 
-        title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide', 
+
+      link_to options[:document].finding_aid.collection_title, options[:document].finding_aid.url, { data: {
+        toggle: 'popover',
+        placement: options[:placement] ? options[:placement] : 'top',
+        html: true,
+        title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide',
         content: finding_aid_popover(options[:document].finding_aid)
       }}
 
@@ -68,12 +44,11 @@ module MetadataDisplayHelper
   end
 
   def language_display options={}
-    display = []
-    options[:value].each do |language_code|
-      display << t("ddr.language_codes.#{language_code}", :default => language_code)
+    display = options[:value].map do |language_code|
+      t("ddr.language_codes.#{language_code}", :default => language_code)
     end
     display.join("; ")
   end
-  
+
 
 end
