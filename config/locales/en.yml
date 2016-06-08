@@ -32,4 +32,9 @@ en:
                 digital_collections:
                     title: "Duke Digital Collections"
                     about: "Digitized historic photographs, advertisements, texts & more from Duke's unique library collections."
-
+                portal:
+                    title: "Duke Digital Repository Portals"
+                    about: "Browse collections that have a portal."
+                dvs:
+                    title: "Data and Visualization Services"
+                    about: "Provides consulting services and instruction that support data-driven research."

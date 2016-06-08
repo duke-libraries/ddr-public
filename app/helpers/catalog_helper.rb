@@ -118,6 +118,14 @@ module CatalogHelper
       active_search_scopes << ["Digital Collections", digital_collections_index_portal_url]
     end
 
+    if request.path =~ /^\/portal\/(?!facet).*$/
+      active_search_scopes << ["This Portal", portal_url(params[:collection])]
+    end
+
+    if request.path =~ /^\/portal.*$/
+      active_search_scopes << ["All Portals", portal_index_portal_url]
+    end
+
     active_search_scopes << ["Digital Repository", catalog_index_url]
 
     if active_search_scopes.count > 1
