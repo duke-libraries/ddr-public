@@ -5,15 +5,17 @@ class Portal
   include Ddr::Public::Controller::SolrQueryConstructor
 
 
-  attr_accessor :local_id, :controller_name
+  attr_accessor :local_id, :controller_name, :current_ability
 
   def initialize(args={})
     @local_id        = args.fetch(:local_id, nil)
     @controller_name = args.fetch(:controller_name, nil)
+    @current_ability = args.fetch(:current_ability, nil)
   end
 
 
   private
+
 
   def item_or_collection_documents(local_ids)
     local_ids ? documents(item_or_collection_documents_search(local_ids)) : []
@@ -38,7 +40,7 @@ class Portal
   end
 
   def parent_collections_search
-    response, documents = get_search_results({ q: parent_collections_query, rows: 100 }, include_only_published)
+    response, documents = search_results({ q: parent_collections_query, rows: 100 }, query_processor_chain)
   end
 
   def parent_collections_query
@@ -56,7 +58,7 @@ class Portal
   end
 
   def child_items_search
-    response, documents = get_search_results({ q: child_items_query, rows: 100 }, include_only_published)
+    response, documents = search_results({ q: child_items_query, rows: 100 }, query_processor_chain)
   end
 
   def child_items_query
@@ -70,13 +72,13 @@ class Portal
   end
 
   def item_or_collection_documents_search(local_ids)
-    response, documents = get_search_results( { q: item_or_collection_documents_query(local_ids), rows: 25 }, include_only_published)
+    response, documents = search_results( { q: item_or_collection_documents_query(local_ids), rows: 25 }, query_processor_chain)
   end
 
 
 
-  def include_only_published
-    { fq: "#{Ddr::Index::Fields::WORKFLOW_STATE}:published" }
+  def query_processor_chain
+    [:add_query_to_solr, :apply_gated_discovery, :include_only_published]
   end
 
 

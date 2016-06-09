@@ -25,7 +25,7 @@ module Ddr
         end
 
         def portal_controller_setup
-          portal_controller_setup ||= Portal::ControllerSetup.new({ controller_name: controller_name, local_id: params[:collection] })
+          portal_controller_setup ||= Portal::ControllerSetup.new({ controller_name: controller_name, local_id: params[:collection], current_ability: current_ability })
         end
 
       end
