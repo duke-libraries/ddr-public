@@ -25,7 +25,7 @@ class DigitalCollectionsController < CatalogController
     super
 
     digital_collections_portal
-    authorize! :read, @portal.collection.id
+    authorize! :read, @portal.collection.id if @portal.collection
   end
 
   # Action exists to distinguish between the collection
@@ -37,11 +37,13 @@ class DigitalCollectionsController < CatalogController
   end
 
   def feed
-    @document = SolrDocument.find(params[:id])
+    response, @document = fetch(params[:id])
+    authorize! :read, @document.id
   end
 
   def media
-    @document = SolrDocument.find(params[:id])
+    response, @document = fetch(params[:id])
+    authorize! :read, @document.id
   end
 
   def about
