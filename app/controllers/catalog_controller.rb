@@ -224,19 +224,13 @@ class CatalogController < ApplicationController
 
   end
 
-  def show
-    super
-    multires_image_file_paths
-  end
+
 
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
   end
 
-  def multires_image_file_paths
-    @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
-  end
 
 
   def zip_images

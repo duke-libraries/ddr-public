@@ -1,41 +1,41 @@
-<%# This partial works for any combo of multi-image, single-image, item object or component object. 
+<%# This partial works for any combo of multi-image, single-image, item object or component object.
 We may want to refactor into separate partials. %>
 
 <div class="seadragon-wrapper">
 
-	<% if is_item?(@document) && is_multi_image?(@document) %>
-	    <div id="image-count">
-		  <button class="btn"><span class="btn-wrapper"><%= imagecount %> images</span></button>	
-		</div>
-	<% end %>
-	
-	<div id="image-toolbar">
-	  <div id="image-toolbar-inner">
-		
-		<% if is_item?(@document) && is_multi_image?(@document) %>
-			<div class="multi-image-nav">
-				<button id="btn-prev" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Prev" aria-label="Prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></span></button>
-				<button id="btn-next" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Next" aria-label="Next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></button>
-				<div class="page-indicator">
-					<form class="form-inline" id="page-jumper">
-					    <input type="text" class="form-control" id="page-jumper-text" placeholder="1">
-					</form>
-					<span> of <%= imagecount %></span>
-				</div>
-			</div>
-		<% end %>
-		<div class="zoom-nav">
-			<button id="btn-zoom-in" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Zoom In" aria-label="Zoom In"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></span></button>
-			<button id="btn-zoom-out" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Zoom Out" aria-label="Zoom Out"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></span></button>
-			<button id="btn-full-page" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Fit on Page" aria-label="Fit on Page"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></button>
-			<button id="btn-fullscreen" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="View Fullscreen" aria-label="Fullscreen"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></span></button>
-		</div>
+  <% if is_item?(@document) && is_multi_image?(@document) %>
+      <div id="image-count">
+      <button class="btn"><span class="btn-wrapper"><%= imagecount %> images</span></button>
+    </div>
+  <% end %>
 
-			<button id="btn-fullscreen-close" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Close Fullscreen" aria-label="Close Fullscreen"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></button>	
-	  </div>	
-	</div>
-	
-	<%# The aspect ratio of the first image determines how tall to make the open seadragon container. But don't make it shorter than 400px else problematic for mixed-orientation items & button display %>
+  <div id="image-toolbar">
+    <div id="image-toolbar-inner">
+
+    <% if is_item?(@document) && is_multi_image?(@document) %>
+      <div class="multi-image-nav">
+        <button id="btn-prev" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Prev" aria-label="Prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></span></button>
+        <button id="btn-next" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Next" aria-label="Next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></button>
+        <div class="page-indicator">
+          <form class="form-inline" id="page-jumper">
+              <input type="text" class="form-control" id="page-jumper-text" placeholder="1">
+          </form>
+          <span> of <%= imagecount %></span>
+        </div>
+      </div>
+    <% end %>
+    <div class="zoom-nav">
+      <button id="btn-zoom-in" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Zoom In" aria-label="Zoom In"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></span></button>
+      <button id="btn-zoom-out" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Zoom Out" aria-label="Zoom Out"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></span></button>
+      <button id="btn-full-page" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Fit on Page" aria-label="Fit on Page"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></button>
+      <button id="btn-fullscreen" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="View Fullscreen" aria-label="Fullscreen"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></span></button>
+    </div>
+
+      <button id="btn-fullscreen-close" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Close Fullscreen" aria-label="Close Fullscreen"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></button>
+    </div>
+  </div>
+
+  <%# The aspect ratio of the first image determines how tall to make the open seadragon container. But don't make it shorter than 400px else problematic for mixed-orientation items & button display %>
     <div id="image-content" style="height: <%= [400,(838 / aspectratio)].max %>px; width:auto;" class="openseadragon"></div>
 </div>
 
@@ -56,7 +56,7 @@ $(document).ready(function(e){
     maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
 
   <% if is_item?(@document) %>
-    tileSources:   <%= image_item_tilesources(@document_multires_image_file_paths).to_json.html_safe %>,		
+    tileSources:   <%= image_item_tilesources(@document.multires_image_file_paths).to_json.html_safe %>,
   <% elsif is_component?(@document) %>
     tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
   <% end %>
@@ -76,7 +76,7 @@ $(document).ready(function(e){
     });
 
   // When the current page has changed
-  viewer.addHandler("page", function (data) { 
+  viewer.addHandler("page", function (data) {
 
     // Update the page info indicator to show current page number
     $("#page-jumper-text").val( parseInt(data.page) + 1 );
@@ -87,7 +87,7 @@ $(document).ready(function(e){
     // structmap array w/index of page currently viewed
     currentpagepath = pagepaths[ parseInt(data.page) ];
 
-    // Update the download options to refer to the currently viewed page		
+    // Update the download options to refer to the currently viewed page
     $('#item-options .download-link-single').each(function(){
       this.href = this.href.replace(/IIIF=(.*)ptif/,"IIIF=" + currentpagepath);
     });
@@ -108,7 +108,7 @@ $(document).ready(function(e){
     if(zoomlevel < 1){
 
       // Zoom immediately to 90% of the expected zoom. 'true' means immediately do it w/o animating.
-      viewer.viewport.zoomTo(zoomlevel*.90,null,true); 
+      viewer.viewport.zoomTo(zoomlevel*.90,null,true);
 
     }
 
@@ -124,21 +124,21 @@ $(document).ready(function(e){
   viewer.addControl("image-toolbar",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
 
   // When the zoom has changed...
-  viewer.addHandler("zoom", function (data) { 
+  viewer.addHandler("zoom", function (data) {
 
     // ...make the navigator image visible (hidden by default)
-    $('.navigator').css({ 'visibility':'visible','opacity':0.9 });	
+    $('.navigator').css({ 'visibility':'visible','opacity':0.9 });
   });
 
   // When a user enters the seadragon container area...
-  viewer.addHandler("container-enter", function () { 
+  viewer.addHandler("container-enter", function () {
 
     // ...make the nav toolbar and thumbnail strip visible
     $('#image-toolbar').css({ 'visibility':'visible','opacity':1 });
     $('.referencestrip').css({ 'visibility':'visible','opacity':0.9 });
-    $('.openseadragon-container #image-count').css({ 'opacity':0,'visibility':'hidden', 'display':'none' });		
+    $('.openseadragon-container #image-count').css({ 'opacity':0,'visibility':'hidden', 'display':'none' });
 
-  });	
+  });
 
   // When a user exits the seadragon container area...
   viewer.addHandler("container-exit", function () { // When the zoom or pan has changed
@@ -146,18 +146,18 @@ $(document).ready(function(e){
     // ...hide the nav toolbar, thumbnail strip, and navigator again
     $('#image-toolbar').css({ 'visibility':'hidden','opacity':0 });
     $('.referencestrip').css({ 'visibility':'hidden','opacity':0 });
-    $('.navigator').css({ 'visibility':'hidden','opacity':0 });		
+    $('.navigator').css({ 'visibility':'hidden','opacity':0 });
   });
 
   // When the pan has changed...
-  viewer.addHandler("pan", function () { 
+  viewer.addHandler("pan", function () {
 
     // ...show the navigator
     $('.navigator').css({ 'visibility':'visible','opacity':0.9 });
   });
 
 
-  viewer.addHandler("home", function () { 
+  viewer.addHandler("home", function () {
     // Possible to customize the home/fit on page button behavior.
     // console.log(JSON.stringify(viewer, null, '\t'));
   });
@@ -170,25 +170,25 @@ $(document).ready(function(e){
   });
 
 
-  // Page jump form: erase value of current page when this box is selected 
+  // Page jump form: erase value of current page when this box is selected
   // It remains in the placeholder attribute
-  $('#page-jumper-text').focus(function(e){ 
+  $('#page-jumper-text').focus(function(e){
     e.preventDefault();
     $(this).val('');
   });
 
   // Page jump form submission: jump to the page a user entered
-  $('form#page-jumper').submit(function(e){ 
+  $('form#page-jumper').submit(function(e){
     e.preventDefault();
     viewer.goToPage($('#page-jumper-text').val() - 1);
   });
 
-  $('#btn-fullscreen-close').click(function(e){ 
+  $('#btn-fullscreen-close').click(function(e){
     e.preventDefault();
     viewer.setFullScreen(false);
   });
 
 
 });
- 
+
 </script>
