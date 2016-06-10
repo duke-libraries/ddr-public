@@ -25,6 +25,7 @@ class DigitalCollectionsController < CatalogController
     super
 
     digital_collections_portal
+    authorize! :read, @portal.collection.id
   end
 
   # Action exists to distinguish between the collection
