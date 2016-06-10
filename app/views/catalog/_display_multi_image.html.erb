@@ -9,9 +9,9 @@
   <% if is_multi_image?(@document) %>
 
     <%# For search engine indexing & graceful degradation, %>
-    <%# show the first image in <img> and make links to the rest %>   
-    <noscript>          
-      <%= render partial: "show_image_derivative", locals: { image_path: document.multires_image_file_paths.first } %> 
+    <%# show the first image in <img> and make links to the rest %>
+    <noscript>
+      <%= render partial: "show_image_derivative", locals: { image_path: document.first_multires_image_file_path } %>
 
       <h3>Images for this Item</h3>
       <ul>
@@ -22,21 +22,21 @@
         <% end %>
       </ul>
     </noscript>
-    
+
     <%# Make the array of page image paths accessible to JS for use by the download buttons %>
     <%= javascript_tag do %>
       var pagepaths = <%= raw document.multires_image_file_paths.to_json %>;
     <% end %>
-    
+
   <% end %>
 
   <%# ------------------------------------ %>
   <%#   Multi-Res (Has One or More PTIFs)  %>
   <%# ------------------------------------ %>
 
-  <% if tilesources = image_item_tilesources(@document_multires_image_file_paths) %>
-    
-    <%= render partial: "item_options", locals: { image_path: document.multires_image_file_paths.first, imagecount: tilesources.length } %>  
+  <% if tilesources = image_item_tilesources(document.multires_image_file_paths) %>
+
+    <%= render partial: "item_options", locals: { image_path: document.first_multires_image_file_path, imagecount: tilesources.length } %>
     <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(document.multires_image_file_paths), imagecount: tilesources.length } %>
 
   <% end %>

@@ -1,5 +1,4 @@
 <% if is_multi_image?(@document) %>
-  <% ptifs = @document_multires_image_file_paths %>
   <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
 
 
@@ -8,9 +7,9 @@
   URL string in GET).
    -->
 
-  <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => @document.restrictions.max_download ? '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
+  <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document.multires_image_file_paths, {:size => @document.restrictions.max_download ? '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
 
-  <li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(ptifs, {:size => @document.restrictions.max_download ? '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>
+  <li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document.multires_image_file_paths, {:size => @document.restrictions.max_download ? '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>
   </li>
 
   <!-- TO-DO: add options for resolution beyond full. Style the button/link to resemble the other links in the menu -->
