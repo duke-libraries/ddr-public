@@ -55,9 +55,8 @@ class DigitalCollectionsController < CatalogController
   private
 
   def digital_collections_portal
-    @portal = Portal::DigitalCollections.new({ controller_name: controller_name, local_id: params[:collection] })
+    @portal = Portal::DigitalCollections.new({ controller_name: controller_name, local_id: params[:collection], current_ability: current_ability })
   end
-
 
 
   #TODO: Put into a concern or something?
