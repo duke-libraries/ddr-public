@@ -17,7 +17,7 @@ gem 'therubyracer',  platforms: :ruby, group: :production
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'bootswatch-rails'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 4.6.2'
 gem 'openseadragon', '~> 0.2.0'
 gem 'blacklight-gallery'
 gem 'rubyzip', '~> 1.1.7'

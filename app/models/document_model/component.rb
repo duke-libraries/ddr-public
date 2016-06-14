@@ -18,6 +18,9 @@ class DocumentModel::Component
     item_search[1].first
   end
 
+  def metadata_header
+    "File Info"
+  end
 
   private
 

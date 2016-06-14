@@ -3,12 +3,6 @@ We may want to refactor into separate partials. %>
 
 <div class="seadragon-wrapper">
 
-  <% if is_item?(@document) && is_multi_image?(@document) %>
-      <div id="image-count">
-      <button class="btn"><span class="btn-wrapper"><%= imagecount %> images</span></button>
-    </div>
-  <% end %>
-
   <div id="image-toolbar">
     <div id="image-toolbar-inner">
 
@@ -116,9 +110,6 @@ $(document).ready(function(e){
 
   });
 
-  <% if is_item?(@document) && is_multi_image?(@document) %>
-    viewer.addControl("image-count",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
-  <% end %>
 
   // Add the entire image nav toolbar as a seadragon control. This preserves it in full-screen view.
   viewer.addControl("image-toolbar",{anchor: OpenSeadragon.ControlAnchor.TOP_CENTER});
@@ -136,7 +127,6 @@ $(document).ready(function(e){
     // ...make the nav toolbar and thumbnail strip visible
     $('#image-toolbar').css({ 'visibility':'visible','opacity':1 });
     $('.referencestrip').css({ 'visibility':'visible','opacity':0.9 });
-    $('.openseadragon-container #image-count').css({ 'opacity':0,'visibility':'hidden', 'display':'none' });
 
   });
 
@@ -186,6 +176,12 @@ $(document).ready(function(e){
   $('#btn-fullscreen-close').click(function(e){
     e.preventDefault();
     viewer.setFullScreen(false);
+  });
+
+  $('#imagecount-indicator').click(function(e){
+    e.preventDefault();
+    viewer.raiseEvent('container-enter');
+    $('#image-content .openseadragon-canvas').focus();
   });
 
 

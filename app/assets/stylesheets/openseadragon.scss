@@ -24,15 +24,6 @@
 .openseadragon-container {
 
 	background-color: #333 !important;
-	
-	& #image-count {
-		visibility: visible;
-		opacity: 1;		
-		display: inline-block;
-		position: absolute;
-		top: 5px;
-		transition: visibility .75s, opacity .75s, display .75s;
-	}
 		
 	& #image-toolbar {
 		visibility:hidden;

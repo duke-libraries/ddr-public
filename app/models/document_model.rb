@@ -24,6 +24,24 @@ module DocumentModel
     document_model.try(:component_count)
   end
 
+  def display_format_icon
+    case self.display_format
+    when 'multi_image'
+      'clone'
+    when 'folder'
+      'folder-open-o'
+    when 'video'
+      'film'
+    when 'audio'
+      'headphones'
+    else
+      'file-o'
+    end
+  end
+
+  def metadata_header
+    document_model.try(:metadata_header) || "Item Info"
+  end
 
   private
 

@@ -22,6 +22,9 @@ class DocumentModel::Collection
     items_search[0].total
   end
 
+  def metadata_header
+    "Collection Info"
+  end
 
   private
 

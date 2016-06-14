@@ -552,6 +552,40 @@ p + #source-collection {
     SEARCH RESULTS
 --------------------- */
 
+/* Overlay format icons over search result thumbnails using the display_format
+administrative metadata. This will help disambiguate different kinds of
+image-based items */
+
+#documents {
+  & .document {
+
+    & .document-thumbnail a:first-child, & .thumbnail-wrapper a:first-child {
+      float: left;
+      position: relative;
+
+      &:before {
+        display: none;
+        color: white;
+        font-family: "FontAwesome";
+        padding: 0.4em;
+        background-color: $gray-light;
+        font-size: $font-size-base;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+      }
+    }
+    /* Add more of these as needed using blacklight-{display_format} class
+    and FontAwesome Unicode character... */
+    &.blacklight-folder .document-thumbnail a:first-child, &.blacklight-folder .thumbnail-wrapper a:first-child {
+      &:before {
+        display: block;
+        content: "\f115";
+      }
+    }
+  }
+}
+
 #documents.gallery, #collections.gallery { // Grid view
 
   &:before, &:after {
@@ -571,12 +605,10 @@ p + #source-collection {
 
 
   & .document {
-
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: auto;
     min-width: auto;
-
   }
 
   & .img-thumbnail {

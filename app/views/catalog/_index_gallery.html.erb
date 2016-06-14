@@ -1,4 +1,4 @@
-<div class="document col-xs-12 col-sm-6 col-md-4">
+<div class="document col-xs-12 col-sm-6 col-md-4 blacklight-<%= document.display_format or 'no-format' %>">
   <div class="thumbnail-wrapper">
       <%= render_thumbnail_link(document, "!350,350", document_counter_with_offset(document_counter)) %>
     <div class="caption"><%= render_document_partials document, blacklight_config.view_config(:gallery).partials, :document_counter => document_counter %>
