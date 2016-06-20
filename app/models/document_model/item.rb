@@ -23,7 +23,7 @@ class DocumentModel::Item
   end
 
   def metadata_header
-    case @document.display_format
+    case document.display_format
     when 'folder'
       'Folder Info'
     end

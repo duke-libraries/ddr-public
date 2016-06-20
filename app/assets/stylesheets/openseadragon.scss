@@ -3,156 +3,162 @@
 // Image Viewer Customizations (Open Seadragon) ==============================
 
 #image-content {
-	max-height: 800px;
-	&.openseadragon.fullpage {
-		max-height: 100%;
-		& .openseadragon-container button#btn-fullscreen-close {
-			display: block;
-		}
-		& .openseadragon-container button#btn-fullscreen {
-			display: none !important;
-		}
-	}
+  max-height: 800px;
+  &.openseadragon.fullpage {
+    max-height: 100%;
+    & .openseadragon-container button#btn-fullscreen-close {
+      display: block;
+    }
+    & .openseadragon-container button#btn-fullscreen {
+      display: none !important;
+    }
+  }
 }
 
 .openseadragon-viewer {
-	height: 100%;
-	background-color: #333;	
+  height: 100%;
+  background-color: #333;
 }
 
 
 .openseadragon-container {
 
-	background-color: #333 !important;
-		
-	& #image-toolbar {
-		visibility:hidden;
-		opacity: 0;		
-		transition: visibility .75s, opacity .75s;
-		
-		& #image-toolbar-inner {
-		    visibility: visible; 
-			display: inline-block;
-	        padding: 5px;
-			position: relative;
-			-moz-user-select: none;
-			-khtml-user-select: none;
-			-webkit-user-select: none;
-			-o-user-select: none;
-			user-select: none;
-			
-		}			
-		& .multi-image-nav {
-			margin-left: 100px; 
-			margin-right: 20px;
-			float: left;
-		}
-		
-		& .zoom-nav {
-			float: left;
-		}
+  background-color: #333 !important;
 
-		& .multi-image-nav + .zoom-nav {
-		  @media (max-width: $screen-md) {
-		    clear: both;
+  & #image-toolbar {
+    visibility:hidden;
+    opacity: 0;		
+    transition: visibility .75s, opacity .75s;
+
+    & #image-toolbar-inner {
+      visibility: visible;
+      display: inline-block;
+      padding: 5px;
+      position: relative;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+
+    & button {
+      border: 1px solid transparent;
+    }
+
+    & .dropdown-menu li a {
+      display: block;
+    }
+
+    & .multi-image-nav {
+      margin-left: 100px;
+      margin-right: 20px;
+      float: left;
+    }
+
+    & .zoom-nav {
+      float: left;
+    }
+
+    & .multi-image-nav + .zoom-nav {
+      @media (max-width: $screen-md) {
+        clear: both;
         margin-left: 100px;
-		  }
-		}
+      }
+    }
 
-		& #page-jumper {
-		  display: inline-block;
-		}
-		
-		& #page-jumper-text {
-			width: 54px;
-			padding: 0 0.8em; 
-			background: black; 
-			border: none; 
-			text-align: center; 
-			color: white;
-		}
-				
-		& .page-indicator {
-			color: white;
-			display: inline-block;
-			position: relative;
-			top: -1px; 
-		}
-	}
-	
-		
-	& .referencestrip {
-		visibility:hidden;
-		opacity: 0;	
-		transition: visibility .75s, opacity .75s;				
-		margin-left: 0 !important;
-		max-width: 100px !important;
+    & #page-jumper {
+      display: inline-block;
+    }
 
-		& > div[id^="referencestrip"] {
-			max-width: 100px !important;
-		}
+    & #page-jumper-text {
+      width: 54px;
+      padding: 0 0.8em;
+      background: black;
+      border: none;
+      text-align: center;
+      color: white;
+    }
 
-	}	
-	
+    & .page-indicator {
+      color: white;
+      display: inline-block;
+      position: relative;
+      top: -1px;
+    }
+  }
 
-	& .navigator {
-		visibility: hidden;	
-		opacity: 0;			
-		border: 0 !important;
-		transition: opacity .75s, visibility .75s;	
-	
-		& .displayregion {
-			border: 2px solid $brand-success !important;
-		}
-	} 
-	
-	& .btn {
-		color: $gray-light;
-		background-color: #000;
-		margin-bottom: 3px;
-		margin-right: 3px;	
-		padding: 0;
-		
-		& .btn-wrapper {
-			// This fixes http://getbootstrap.com/javascript/#markup-1 where bad things happen when
-			// the btn becomes disabled or when the tooltip activates.		
-			margin: 0;
-			display: inline-block;
-			padding:10px 18px;			
-		}
-		
-		&:hover {
-			color: $gray-lighter;
-			background-color: #111;
-		}	
-	}
-		
-	& #btn-next {
-		margin-right: 15px;
-	}
 
-	& #btn-zoom-out {
-		margin-right: 15px;
-	}
-	
-	& #btn-fullscreen-close {
-		z-index: 1200; 
-		position: fixed;
-		right: 20px;
-		top: 5px;
-		display: none;
-	}
-	
-	& #seadragon-buttons {
-		position: absolute;
-		left: 20px;
-		top: 20px;
-		z-index:1200;
-	}
-	& textarea {
-		display: none; 
-	}	
-	
+  & .referencestrip {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility .75s, opacity .75s;
+    margin-left: 0 !important;
+    max-width: 100px !important;
+
+    & > div[id^="referencestrip"] {
+      max-width: 100px !important;
+    }
+
+  }
+
+
+  & .navigator {
+    visibility: hidden;
+    opacity: 0;
+    border: 0 !important;
+    transition: opacity .75s, visibility .75s;
+
+    & .displayregion {
+      border: 2px solid $brand-success !important;
+    }
+  }
+
+  & .btn {
+    color: $gray-light;
+    background-color: #000;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    padding: 0;
+
+    & .btn-wrapper {
+      // This fixes http://getbootstrap.com/javascript/#markup-1 where bad things happen when
+      // the btn becomes disabled or when the tooltip activates.
+      margin: 0;
+      display: inline-block;
+      padding:10px 18px;
+    }
+
+    &:hover {
+      color: $gray-lighter;
+      background-color: #111;
+    }
+  }
+
+  & #btn-next {
+    margin-right: 15px;
+  }
+
+  & #btn-zoom-out {
+    margin-right: 15px;
+  }
+
+  & #btn-fullscreen-close {
+    z-index: 1200;
+    position: fixed;
+    right: 20px;
+    top: 5px;
+    display: none;
+  }
+
+  & #seadragon-buttons {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    z-index:1200;
+  }
+  & textarea {
+    display: none;
+  }
+
 }
-
-

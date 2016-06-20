@@ -22,6 +22,17 @@ We may want to refactor into separate partials. %>
       <button id="btn-zoom-in" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Zoom In" aria-label="Zoom In"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></span></button>
       <button id="btn-zoom-out" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Zoom Out" aria-label="Zoom Out"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></span></button>
       <button id="btn-full-page" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Fit on Page" aria-label="Fit on Page"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></button>
+
+     <div class="btn-group">
+        <button id="btn-more-options" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="More" aria-label="More"><span class="glyphicon glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#" id="btn-rotate-r" class="btn-block"><%= icon("rotate-right") %> Rotate (R)</a></li>
+          <li><a href="#" id="btn-rotate-l" class="btn-block"><%= icon("rotate-left") %> Rotate (L)</a></li>
+        </ul>
+      </div>
+
       <button id="btn-fullscreen" type="button" class="btn"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="View Fullscreen" aria-label="Fullscreen"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></span></button>
     </div>
 
@@ -50,7 +61,11 @@ $(document).ready(function(e){
     defaultZoomLevel: 0,
     minZoomImageRatio: 0.5,
     maxZoomImageRatio: 1.0, // don't zoom farther than 100%, default is 110%
-
+    showRotationControl: true,
+    // Enable touch rotation on tactile devices
+    gestureSettingsTouch: {
+        pinchRotate: true
+    },
   <% if is_item?(@document) %>
     tileSources:   <%= image_item_tilesources(@document.multires_image_file_paths).to_json.html_safe %>,
   <% elsif is_component?(@document) %>
@@ -68,6 +83,8 @@ $(document).ready(function(e){
     zoomInButton: "btn-zoom-in",
     zoomOutButton: "btn-zoom-out",
     homeButton: "btn-full-page",
+    rotateLeftButton: "btn-rotate-l",
+    rotateRightButton: "btn-rotate-r",
     fullPageButton: "btn-fullscreen"
     });
 
@@ -160,7 +177,7 @@ $(document).ready(function(e){
     viewer.raiseEvent('container-enter');
   });
 
-  $('#image-toolbar-inner').click(function(e){
+  $('#image-toolbar-inner *:disabled').click(function(e){
     // Prevent clicks on a disabled prev or next button from zooming the image behind it
     e.preventDefault();
     e.stopPropagation();
