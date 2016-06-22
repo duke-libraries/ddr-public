@@ -20,19 +20,18 @@
 <div id="content" class="col-md-9 col-sm-8">
   <% unless has_search_parameters? %>
 
-  <%= render partial: "home_featured_collections"%>
+    <%= render partial: "home_featured_collections"%>
 
-  <h3 class="feature-head">Featured Items</h3>
-  <%= render partial: "home_highlights" %>
+    <h3 class="feature-head">Featured Items</h3>
+    <%= render partial: "home_highlights" %>
 
-  <%= render partial: "show_blog_posts" %>
+    <%= render partial: "show_blog_posts" %>
     
     <%# set the html title for collection portal page -%>
-    <% if @portal.collection %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
-    <% else %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+    <% if @portal %>
+      <%= content_for :page_title, @portal.title + " - Duke Libraries" %>
     <% end %>
+
   <% else %>
     <%= render 'search_results' %>
   <% end %>
