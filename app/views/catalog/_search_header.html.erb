@@ -5,3 +5,7 @@
 <%= render 'collection_matches' %>
 
 <%= render 'sort_and_per_page' %>
+
+<% if @portal %>
+  <%= content_for :page_title, t('blacklight.search.page_title.title', :constraints => render_search_to_page_title(params), :application_name => @portal.title + ' - Duke Libraries -') %>
+<% end %>

@@ -13,6 +13,6 @@
   <%= render partial: 'show_license_default', locals: { document: @document } %>
 </div>
 
-
 <%= render partial: 'related_items', locals: {document: @document} %>
 
+<%= content_for :page_title, t('blacklight.search.show.title', :document_title => document_show_html_title, :application_name => document.collection.title + ' - Duke Libraries').html_safe %>

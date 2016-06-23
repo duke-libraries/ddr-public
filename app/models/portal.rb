@@ -16,6 +16,9 @@ class Portal
 
   private
 
+  def configured_title
+    I18n.t('ddr.public.portal.%{controller_name}.title', :default => I18n.t('blacklight.application_name'))
+  end
 
   def item_or_collection_documents(local_ids)
     local_ids ? documents(item_or_collection_documents_search(local_ids)) : []

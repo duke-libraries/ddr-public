@@ -8,8 +8,7 @@
     <%= render 'home_showcase' %>
   <% else %>
     <% unless has_search_parameters? %>
-    <%= render partial: 'collection_submast', locals: { document: @portal.collection } %>
-      <!-- <h1><%# t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1> -->
+      <%= render partial: 'collection_submast', locals: { document: @portal.collection } %>
     <% end %>
   <% end %>
 </div>
@@ -34,10 +33,8 @@
     <%= render 'home' %>
     
     <%# set the html title for collection portal page -%>
-    <% if @portal.collection %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
-    <% else %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+    <% if @portal %>
+      <%= content_for :page_title, @portal.title + " - Duke Libraries" %>
     <% end %>
   <% else %>
     <%= render 'search_results' %>

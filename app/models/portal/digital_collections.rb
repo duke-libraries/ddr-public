@@ -21,7 +21,7 @@ class Portal::DigitalCollections < Portal
   end
 
   def title
-    parent_collection_document.title
+    parent_collection_document ? parent_collection_document.title : configured_title
   end
 
   def abstract
