@@ -466,7 +466,7 @@ p + #source-collection {
 }
 
 #related-items {
-  & .popover { // Obscure links in popover metadata
+  & .popover { /* Obscure links in popover metadata */
     & a {
       color: $text-color;
       cursor: unset;
@@ -477,6 +477,9 @@ p + #source-collection {
     & .blacklight-permanent_url_ssi {
       display: none;
     }
+  }
+  & .index-document-functions {
+    display: none; /* See https://github.com/duke-libraries/ddr-public/issues/414 */
   }
 }
 
