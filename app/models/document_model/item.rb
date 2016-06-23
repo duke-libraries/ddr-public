@@ -22,6 +22,12 @@ class DocumentModel::Item
     component_search[0].total
   end
 
+  def metadata_header
+    case document.display_format
+    when 'folder'
+      'Folder Info'
+    end
+  end
 
   private
 
