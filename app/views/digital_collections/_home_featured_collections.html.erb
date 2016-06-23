@@ -9,7 +9,7 @@
 
       <% @portal.collection_highlights.documents.each_with_index do |doc, index| %>
         <div class="col-md-4">
-          <a class="collection-thumb" href="<%= document_or_object_url(doc) %>" data-toggle="popover" data-content="<%= doc.abstract %>" data-placement="auto" style="background-image: url(<%= thumbnail_path(doc) %>);">
+          <a class="collection-thumb" href="<%= document_or_object_url(doc) %>" data-toggle="popover" data-content="<%= doc.abstract %>" data-placement="auto" style="background-image: url('<%= asset_path thumbnail_path(doc) %>');">
             <div class="collection-caption"><%= doc.title %></div> 
           </a>
      
