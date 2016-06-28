@@ -1,41 +1,29 @@
 <% if is_multi_image?(@document) %>
   <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
 
-
-  <!-- This works but it's hacky: push the array of paths into a delimited concatenated string, split later.
-  Had to use button_to to make a form to pass array of JPGs as a POST request (too long for
-  URL string in GET).
-   -->
-
-  <li><%= button_to "PDF", { controller: "catalog", action: "pdf_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document.multires_image_file_paths, {:size => @document.restrictions.max_download ? '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'}  %></li>
-
-  <li><%= button_to "ZIP file of JPGs", { controller: "catalog", action: "zip_images" }, { method: :post, params: { :image_list => array_to_delimited_str(multi_image_sorted_derivative_paths(@document.multires_image_file_paths, {:size => @document.restrictions.max_download ? '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s : 'full'} )), itemid: @document.local_id }, class: 'btn btn-link'} %>
-  </li>
-
-  <!-- TO-DO: add options for resolution beyond full. Style the button/link to resemble the other links in the menu -->
+  <li><%= multi_image_download_button(@document, { label: "PDF", action: "pdf_images" }) %></li>
+  <li><%= multi_image_download_button(@document, { label: "ZIP file of JPGs", action: "zip_images" }) %></li>
 
   <li class="dropdown-header">Currently Displayed Image</li>
 
 <% end %>
 
-    <li><%= link_to ("Small JPG " + content_tag(:span, "400px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!400,400'}), class: "download-link-single", id: "download-small", download: "" %></li>
+    <li><%= image_download_link(@document, { pixels: 400, id: "download-small", linklabel: "Small JPG", path: image_path })%></li>
 
   <% unless @document.restrictions.max_download && @document.restrictions.max_download.to_i <= 800 %>
-    <li><%= link_to ("Medium JPG " + content_tag(:span, "800px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!800,800'}), class: "download-link-single", id: "download-med", download: "" %></li>
+    <li><%= image_download_link(@document, { pixels: 800, id: "download-med", linklabel: "Medium JPG", path: image_path })%></li>
   <% end %>
 
+
   <% unless @document.restrictions.max_download && @document.restrictions.max_download.to_i <= 1200 %>
-    <li><%= link_to ("Large JPG " + content_tag(:span, "1,200px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!1200,1200'}), class: "download-link-single", id: "download-lrg", download: "" %></li>
+    <li><%= image_download_link(@document, { pixels: 1200, id: "download-lrg", linklabel: "Large JPG", path: image_path })%></li>
   <% end %>
 
   <% if @document.restrictions.max_download %>
-    <li><%= link_to ("Largest JPG " + content_tag(:span, number_with_delimiter(@document.restrictions.max_download.to_i) + "px", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {:size => '!' + @document.restrictions.max_download.to_s + ',' + @document.restrictions.max_download.to_s }), class: "download-link-single", id: "download-lrg", download: "" %></li>
+    <li><%= image_download_link(@document, { pixels: @document.restrictions.max_download, id: "download-full", linklabel: "Largest JPG", path: image_path })%></li>
   <% else %>
-    <li><%= link_to ("Full-Res JPG " + content_tag(:span, "Original Resolution", :class => "text-muted img-size")).html_safe, iiif_image_path(image_path, {}), class: "download-link-single", id: "download-full", download: "" %></li>
+    <li><%= image_download_link(@document, { id: "download-full", linklabel: "Full-Res JPG", path: image_path })%></li>
   <% end %>
 
-
-<% if is_multi_image?(@document) %>
   <li class="divider" role="separator"></li>
-<li role="presentation" class="disabled"><a href="#">Please be patient with high-res and bulk downloads.</a></li>
-<% end %>
+  <li role="presentation" class="disabled"><a href="#">Please be patient with high-res and bulk downloads.</a></li>
