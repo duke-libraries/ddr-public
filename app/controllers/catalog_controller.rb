@@ -234,10 +234,8 @@ class CatalogController < ApplicationController
 
 
   def zip_images
-    # TO-DO: make the image_list param a real array or hash instead of delimited string
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
-
 
     # Combination of these techniques:
     #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
@@ -246,10 +244,10 @@ class CatalogController < ApplicationController
     t = Tempfile.new("temp-ddr-#{Time.now.utc}")
     Zip::OutputStream.open(t.path) do |z|
       image_list.each_with_index do |item, index|
-        title = item.to_s
-        z.put_next_entry("#{index+1}.jpg")
-
-        # TODO: use DPC ID for the component filename OR extract the ptif path basename.
+        path = item.to_s
+        ptifname = path.split(".ptif")[0]
+        filename = File.basename(ptifname)
+        z.put_next_entry("#{index+1}-" + filename + ".jpg")
 
         url1 = item
         url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
@@ -260,19 +258,14 @@ class CatalogController < ApplicationController
 
       end
 
-
-      send_file t.path, :type => 'application/zip',
-                                   :disposition => 'attachment',
-                                   :filename => itemid+".zip"
-
-            t.close
+      send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => itemid+".zip"
+      t.close
     end
   end
 
   def pdf_images
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
-
 
     # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size.
     # Let's use 1000 on long side.
@@ -313,7 +306,6 @@ class CatalogController < ApplicationController
       pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]
 
     end
-
 
     send_data pdf.render, filename: itemid+'.pdf', type: 'application/pdf'
 

@@ -7,18 +7,10 @@ module MultiresImageHelper
     image_tag url, :alt => options[:alt].presence, :class => options[:class].presence
   end
 
-  # STRUCTURAL METADATA HELPERS
-  # ===========================
 
-  # Get an array of component pids for any item, sorted by the
-  # order indicated in the default struct_map. This is complicated
-  # with nesting possible; we have to deal with arrays of hashes
-  # with arrays for values, etc...
-
-
-  def multi_image_sorted_derivative_paths(ptifs, options)
+  def multi_image_derivatives ptifs, options={}
     # For an item page with multi-res image(s), get an array of absolute URLs to JPG
-    # derivatives for each page, sorted by struct_map order. Accept image server
+    # derivatives for each page. Accept image server
     # options to customize sizes, especially for download.
 
     derivs ||= []
@@ -32,15 +24,6 @@ module MultiresImageHelper
 
   end
 
-  # This helper is used for the multi-image ZIP downloading feature.
-  # TO-DO: find a better way to do this.
-  def array_to_delimited_str(array)
-    s = ""
-    array.each { |item|
-      s << item+"||"
-    }
-    s
-  end
 
   def image_item_tilesources(paths)
     sources ||= []
@@ -72,4 +55,37 @@ module MultiresImageHelper
     aspectratio ||= (imagedata['width'].to_f/imagedata['height'].to_f)
   end
 
+  # Download Menu Helpers for Multi-Image Items
+  def multi_image_download_button document, options = {}
+    button_to options[:label],
+    {
+      controller: "catalog",
+      action: options[:action]
+    },
+    {
+      method: :post,
+      params: {
+        image_list: multi_image_derivatives(@document.multires_image_file_paths, { :size => multi_image_max_download_size(@document) }).join('||'),
+        itemid: @document.local_id
+      },
+      class: "btn btn-link"
+    }
+  end
+
+  def image_download_link document, options = {}
+    link_to (options[:linklabel] + ' ' + content_tag(:span, multi_image_download_label(options[:pixels]), :class => "text-muted img-size")).html_safe, iiif_image_path(options[:path], {:size => iiif_image_size_maxpx(options[:pixels])}), class: "download-link-single", download: ""
+  end
+
+  private
+
+
+  def multi_image_max_download_size document, options = {}
+    document.restrictions.max_download.present? ? iiif_image_size_maxpx(document.restrictions.max_download.to_s) : 'full'
+  end
+
+  def multi_image_download_label pixels
+    px = pixels.to_s || ''
+    px.present? ? number_with_delimiter(px) + 'px' : 'Original Resolution'
+  end
+ 
 end
