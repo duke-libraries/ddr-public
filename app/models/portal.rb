@@ -72,9 +72,12 @@ class Portal
   end
 
   def item_or_collection_documents_search(local_ids)
-    response, documents = search_results( { q: item_or_collection_documents_query(local_ids), rows: 25 }, query_processor_chain)
+    response, documents = search_results( { q: item_or_collection_documents_query(local_ids), rows: 25, sort: solr_sort }, query_processor_chain)
   end
 
+  def solr_sort
+    "#{Ddr::Index::Fields::DATE_SORT} asc"
+  end
 
 
   def query_processor_chain
