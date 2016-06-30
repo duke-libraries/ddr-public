@@ -2,8 +2,6 @@
 
 class DigitalCollectionsController < CatalogController
 
-  before_action :configure_generic_collections
-
   include Ddr::Public::Controller::PortalSetup
 
   # Enables us to use a .rb template to render json for the media action
@@ -58,30 +56,6 @@ class DigitalCollectionsController < CatalogController
 
   def digital_collections_portal
     @portal = Portal::DigitalCollections.new({ controller_name: controller_name, local_id: params[:collection], current_ability: current_ability })
-  end
-
-
-  #TODO: Put into a concern or something?
-  #      Use the PortalConifguration.new()
-  #      Or just add generic conifguration base on the current controller name????
-  def configure_generic_collections
-    if Rails.application.config.portal["controllers"]["digital_collections"]
-      generic_collections.each do |local_id|
-        Rails.application.config.portal["portals"]["collection_local_id"][local_id] = {"controller"=>"digital_collections", "collection"=>local_id, "item_id_field"=>"local_id"}
-        Rails.application.config.portal["controllers"][local_id] = {"includes"=>{"local_ids"=>[local_id]}, "configure_blacklight"=> generic_collection_blacklight_configuration() }
-      end
-    end
-  end
-
-  def generic_collections
-    configured_collections = Rails.application.config.portal["portals"]["collection_local_id"].map { |k,v| k }
-    collections = ActiveFedora::SolrService.query("#{Ddr::Index::Fields::ADMIN_SET}:dc", rows: 999)
-    all_collections = collections.map { |c| c[Ddr::Index::Fields::LOCAL_ID] }.compact
-    all_collections - configured_collections
-  end
-
-  def generic_collection_blacklight_configuration
-    Rails.application.config.portal["controllers"]["digital_collections"]["configure_blacklight"]
   end
 
   def get_pid_from_params_id

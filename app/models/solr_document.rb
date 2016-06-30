@@ -35,13 +35,8 @@ class SolrDocument
     get("dc_description_tesim")
   end
 
-  def public_controller
-    public_controller = effective_configs.try(:[] , 'controller')
-    public_controller ||= 'catalog'
-  end
-
   def thumbnail
-    Rails.application.config.portal['portals']['collection_local_id'].try(:[], self.local_id).try(:[], 'thumbnail_image')
+    portal_doc_config.try(:[], 'collection_local_id').try(:[], self.local_id).try(:[], 'thumbnail_image')
   end
 
   def derivative_url_prefixes
@@ -56,12 +51,17 @@ class SolrDocument
     Restrictions.new(max_download)
   end
 
+  def public_controller
+    public_controller = effective_configs.try(:[] , 'controller')
+    public_controller ||= 'catalog'
+  end
+
   def public_collection
     effective_configs.try(:[] , 'collection')
   end
 
   def public_action
-    if Rails.application.config.portal['portals']['collection_local_id'][self.local_id]
+    if dc_collection? && self.local_id
       "index"
     else
       "show"
@@ -69,12 +69,15 @@ class SolrDocument
   end
 
   def public_id
-    if self.parent && collection_pid_configuration.try(:[], 'item_id_field') == 'local_id' && self.active_fedora_model != "Component"
-      public_id = self.local_id ? self.local_id : self.id
+    if dc_collection?
+      nil
+    elsif dc_item?
+      self.local_id ? self.local_id : self.id
     else
-      public_id = self.id unless Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], self.local_id)
+      self.id
     end
   end
+
 
   # This assumes that the derivative IDs are the local_ids of an item's components
   def derivative_ids(type='default')
@@ -114,7 +117,6 @@ class SolrDocument
 
 
   private
-
 
   Restrictions = Struct.new(:max_download)
 
@@ -187,28 +189,46 @@ class SolrDocument
     ActiveFedora::SolrQueryBuilder.construct_query_for_ids(pids)
   end
 
-
   def effective_configs
-    applied_configs = collection_pid_configuration()
-    applied_configs ||= admin_set_configuration()
+    [collection_pid_configuration, dc_generic_configuration, collection_pid_configuration].compact.first
   end
 
   def admin_set_configuration
-    admin_set = SolrDocument.find(self.admin_policy_uri).admin_set
-    Rails.application.config.portal.try(:[], 'portals').try(:[], 'admin_sets').try(:[], admin_set)
+    portal_doc_config.try(:[], 'admin_sets').try(:[], admin_policy_admin_set)
   end
 
   def collection_pid_configuration
-    local_id = SolrDocument.find(self.admin_policy_uri).local_id
-    Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
+    portal_doc_config.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], admin_policy_local_id)
+  end
+
+  def dc_generic_configuration
+    if admin_policy_local_id && admin_policy_admin_set == 'dc'
+      {"controller"=>"digital_collections", "collection"=>admin_policy_local_id, "item_id_field"=>"local_id"}
+    end
+  end
+
+  def dc_collection?
+    admin_policy_admin_set == 'dc' && self.active_fedora_model == 'Collection'
+  end
+
+  def dc_item?
+    admin_policy_admin_set == 'dc' && self.active_fedora_model == 'Item'
+  end
+
+  def portal_doc_config
+    Rails.application.config.portal.try(:[], 'portals')
   end
 
   def portal_view_config
-    local_id = SolrDocument.find(self.admin_policy_uri).local_id
-    Rails.application.config.portal.try(:[], 'controllers').try(:[], local_id)
+    Rails.application.config.portal.try(:[], 'controllers').try(:[], admin_policy_local_id)
   end
 
+  def admin_policy_admin_set
+    SolrDocument.find(self.admin_policy_uri).admin_set
+  end
 
-
+  def admin_policy_local_id
+    SolrDocument.find(self.admin_policy_uri).local_id
+  end
 
 end
