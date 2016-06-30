@@ -102,8 +102,25 @@ class Portal
   end
 
   def portal_view_config
-    portal_view_config = Rails.application.config.portal.try(:[], 'controllers').try(:[], local_id)
-    portal_view_config ||= Rails.application.config.portal.try(:[], 'controllers').try(:[], controller_name)
+    [local_id_configuration, dc_generic_view_config, controller_name_configuration].compact.first
+  end
+
+  def local_id_configuration
+   portal_configuration.try(:[], local_id)
+  end
+
+  def controller_name_configuration
+    portal_configuration.try(:[], controller_name)
+  end
+
+  def portal_configuration
+    Rails.application.config.portal.try(:[], 'controllers')
+  end
+
+  def dc_generic_view_config
+    if local_id && controller_name == 'digital_collections'
+      { "includes"=>{ "local_ids"=>[local_id] } }
+    end
   end
 
 
