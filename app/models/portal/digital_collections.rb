@@ -1,51 +1,51 @@
 class Portal::DigitalCollections < Portal
 
   def collection
-    parent_collection_document
+    @collection ||= parent_collection_document
   end
 
   def collections
-    parent_collection_documents
+    @collections ||= parent_collection_documents
   end
 
   def collection_count
-    parent_collections_count
+    @collection_count ||= parent_collections_count
   end
 
   def items
-    child_item_documents
+    @items ||= child_item_documents
   end
 
   def item_count
-    child_items_count
+    @item_count ||= child_items_count
   end
 
   def title
-    parent_collection_document.title
+    @title ||= parent_collection_document.title
   end
 
   def abstract
-    parent_collection_document.abstract
+    @abstract ||= parent_collection_document.abstract
   end
 
   def description
-    parent_collection_document.description
+    @description ||= parent_collection_document.description
   end
 
   def ead_id
-    parent_collection_document.ead_id
+    @ead_id ||= parent_collection_document.ead_id
   end
 
   def showcase
-    Showcase.new(showcase_documents, showcase_layout)
+    @showcase ||= Showcase.new(showcase_documents, showcase_layout)
   end
 
   def item_highlights
-    Highlight.new(highlight_documents, highlight_limit)
+    @item_highlights ||= Highlight.new(highlight_documents, highlight_limit)
   end
 
   def collection_highlights
-    Highlight.new(featured_collection_documents, nil)
+    @collection_highlights ||= Highlight.new(featured_collection_documents, nil)
   end
 
   def show_items
@@ -77,7 +77,7 @@ class Portal::DigitalCollections < Portal
   end
 
   def showcase_documents
-    @showcase_documents ||= item_or_collection_documents(showcase_local_ids)
+    item_or_collection_documents(showcase_local_ids)
   end
 
   def highlight_local_ids
@@ -85,7 +85,7 @@ class Portal::DigitalCollections < Portal
   end
 
   def highlight_documents
-    @highlight_documents ||= item_or_collection_documents(highlight_local_ids)
+    item_or_collection_documents(highlight_local_ids)
   end
 
   def highlight_limit
@@ -93,7 +93,7 @@ class Portal::DigitalCollections < Portal
   end
 
   def featured_collection_documents
-    @featured_collection_documents ||= item_or_collection_documents(featured_collections_local_ids)
+    item_or_collection_documents(featured_collections_local_ids)
   end
 
   def featured_collections_local_ids

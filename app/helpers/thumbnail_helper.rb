@@ -9,8 +9,9 @@ module ThumbnailHelper
   end
 
   def thumbnail_path document
-    Rails.cache.fetch("#{document.id}/#{can?(:read, document)}/thumbnail_path", expires_in: 7.days) do
-      Thumbnail.new({ document: document, read_permission: can?(:read, document) }).thumbnail_path
+    read_permission = can?(:read, document)
+    Rails.cache.fetch("#{document.id}/#{read_permission}}/thumbnail_path", expires_in: 7.days) do
+      Thumbnail.new({ document: document, read_permission: read_permission }).thumbnail_path
     end
   end
 

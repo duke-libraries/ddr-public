@@ -80,38 +80,25 @@ class SolrDocument
 
 
   # This assumes that the derivative IDs are the local_ids of an item's components
-  def derivative_ids(type='default')
-    struct_map_docs(type).map { |doc| doc.local_id }.compact
+  def derivative_ids
+    @derivative_ids ||= struct_map_docs(type).map { |doc| doc.local_id }.compact
   end
 
-
-  def multires_image_file_paths(type='default')
-    docs = ordered_component_docs('Images')
-    if docs.present?
-      docs.map { |doc| doc.multires_image_file_path }.compact
-    else
-      nil
-    end
+  def multires_image_file_paths
+    @multires_image_file_paths ||= find_multires_image_file_paths
   end
 
-  def first_multires_image_file_path(type='default')
-    pids = ordered_component_pids('Images')
-    if pids.present?
-      paths = self.class.find(pids.first).multires_image_file_path
-    else
-      nil
-    end
+  def first_multires_image_file_path
+    @first_multires_image_file_path ||= find_first_multires_image_file_path
   end
 
 
   def ordered_component_pids(type='default')
-    [struct_map_ordered_pids(type),
-     local_id_order_component_pids].find { |val| val.present? }
+    [struct_map_ordered_pids(type), local_id_order_component_pids].find { |val| val.present? }
   end
 
   def ordered_component_docs(type='default')
-    [struct_map_ordered_docs(type),
-     local_id_order_component_docs].find { |val| val.present? }
+    [struct_map_ordered_docs(type), local_id_order_component_docs].find { |val| val.present? }
   end
 
 
@@ -122,6 +109,24 @@ class SolrDocument
 
   def max_download
     portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
+  end
+
+  def find_multires_image_file_paths
+    docs = ordered_component_docs('Images')
+    if docs.present?
+      docs.map { |doc| doc.multires_image_file_path }.compact
+    else
+      nil
+    end
+  end
+
+  def find_first_multires_image_file_path
+    pids = ordered_component_pids('Images')
+    if pids.present?
+      self.class.find(pids.first).multires_image_file_path
+    else
+      nil
+    end
   end
 
   def struct_map_ordered_docs(type='default')
@@ -224,11 +229,15 @@ class SolrDocument
   end
 
   def admin_policy_admin_set
-    SolrDocument.find(self.admin_policy_uri).admin_set
+    Rails.cache.fetch("admin_policy_admin_set/#{self.admin_policy_id}", expires_in: 7.days) do
+      self.admin_policy.admin_set
+    end
   end
 
   def admin_policy_local_id
-    SolrDocument.find(self.admin_policy_uri).local_id
+    Rails.cache.fetch("admin_policy_local_id/#{self.admin_policy_id}", expires_in: 7.days) do
+      self.admin_policy.local_id
+    end
   end
 
 end

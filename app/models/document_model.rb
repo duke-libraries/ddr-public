@@ -1,27 +1,27 @@
 module DocumentModel
 
   def collection
-    document_model.try(:collection)
+    @collection ||= document_model.try(:collection)
   end
 
   def item
-    document_model.try(:item)
+    @item ||= document_model.try(:item)
   end
 
   def items
-    document_model.try(:items)
+    @items ||= document_model.try(:items)
   end
 
   def item_count
-    document_model.try(:item_count)
+    @item_count ||= document_model.try(:item_count)
   end
 
   def components
-    document_model.try(:components)
+    @components ||= document_model.try(:components)
   end
 
   def component_count
-    document_model.try(:component_count)
+    @component_count ||= document_model.try(:component_count)
   end
 
   def display_format_icon
