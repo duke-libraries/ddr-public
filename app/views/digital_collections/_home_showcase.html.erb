@@ -15,7 +15,7 @@
       <% showcase_images = Array(@portal.showcase_custom_images).concat Array(@portal.showcase.documents) %>
 
       <% showcase_images.sample(showcase_samples({showcase_layout: @portal.showcase.layout})).each_with_index do |image, index| %>
-        <%= render partial: "home_showcase_image", locals: home_showcase_locals({index: index, image: image, showcase_layout: @portal.showcase.layout}) %>          
+        <%= render partial: "home_showcase_image", locals: home_showcase_locals({index: index, image: image, showcase_layout: @portal.showcase.layout}) %>
       <%- end %>
 
     </div>

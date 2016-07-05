@@ -6,7 +6,7 @@ class Portal::ControllerSetup < Portal
   end
 
   def parent_collection_uris
-    parent_collection_documents.map { |document| document.id }
+    @parent_collection_uris ||= parent_collection_documents.map { |document| document.id }
   end
 
 

@@ -28,7 +28,7 @@ class Portal
   end
 
   def parent_collection_document
-    parent_collection_documents.first if parent_collection_documents.count == 1
+    @parent_collection_document ||= parent_collection_documents.first if parent_collection_documents.count == 1
   end
 
   def parent_collection_documents
@@ -40,11 +40,11 @@ class Portal
   end
 
   def parent_collections_search
-    response, documents = search_results({ q: parent_collections_query, rows: 100 }, query_processor_chain)
+    @parent_collections_search ||= search_results({ q: parent_collections_query, rows: 100 }, query_processor_chain)
   end
 
   def parent_collections_query
-    portal_local_ids ? local_ids_query(portal_local_ids) : admin_set_query(portal_admin_sets)
+    @parent_collections_query ||= portal_local_ids ? local_ids_query(portal_local_ids) : admin_set_query(portal_admin_sets)
   end
 
 
@@ -58,7 +58,7 @@ class Portal
   end
 
   def child_items_search
-    response, documents = search_results({ q: child_items_query, rows: 100 }, query_processor_chain)
+    @child_items_search ||= search_results({ q: child_items_query, rows: 100 }, query_processor_chain)
   end
 
   def child_items_query

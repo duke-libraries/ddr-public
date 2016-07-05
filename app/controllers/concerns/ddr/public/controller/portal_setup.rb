@@ -13,15 +13,24 @@ module Ddr
         private
 
         def include_only_specified_records(solr_parameters, user_parameters)
-          if portal_controller_setup.parent_collection_uris
-            field_value_pairs = portal_controller_setup.parent_collection_uris.map { |id| [:isGovernedBy, id] }
+          if parent_uris
             solr_parameters[:fq] ||= []
-            solr_parameters[:fq] << ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs, ' OR ')
+            solr_parameters[:fq] << ActiveFedora::SolrService.construct_query_for_rel(parent_uris, ' OR ')
+          end
+        end
+
+        def parent_uris
+          Rails.cache.fetch("#{controller_name}/#{params[:collection]}/#{current_ability}", expires_in: 7.days) do
+            parent_collection_uris.map { |id| [:isGovernedBy, id] }
           end
         end
 
         def prepend_view_path_for_portal_overrides
-          prepend_view_path portal_controller_setup.view_path
+          @prepend_view_path_for_portal_overrides ||= prepend_view_path portal_controller_setup.view_path
+        end
+
+        def parent_collection_uris
+          @parent_collection_uris = portal_controller_setup.parent_collection_uris
         end
 
         def portal_controller_setup
