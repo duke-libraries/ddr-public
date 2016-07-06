@@ -1,22 +1,23 @@
-<% if @portal.collection_highlights.documents.present? %>
-  <h3 class="feature-head">Featured Collections</h3>
+<% cache("home_featured_collections_#{@portal.local_id || @portal.controller_name}", expires_in: 30.minutes) do %>
 
-  <div class="row featured-collections">
+  <% if @portal.collection_highlights.documents.present? %>
+    <h3 class="feature-head">Featured Collections</h3>
 
-
-    <%# TODO: Maybe use a tighter grid? Add arrows to make this a slider? %>
-    <%# Call it "New & Featured"?  %>
-
-      <% @portal.collection_highlights.documents.each_with_index do |doc, index| %>
-        <div class="col-md-4">
-          <a class="collection-thumb" href="<%= document_or_object_url(doc) %>" data-toggle="popover" data-content="<%= doc.abstract %>" data-placement="auto" style="background-image: url('<%= asset_path thumbnail_path(doc) %>');">
-            <div class="collection-caption"><%= doc.title %></div> 
-          </a>
-        </div>
-      <% end %>
-
-  </div>
+    <div class="row featured-collections">
 
 
+      <%# TODO: Maybe use a tighter grid? Add arrows to make this a slider? %>
+      <%# Call it "New & Featured"?  %>
 
+        <% @portal.collection_highlights.documents.each_with_index do |doc, index| %>
+          <div class="col-md-4">
+            <a class="collection-thumb" href="<%= document_or_object_url(doc) %>" data-toggle="popover" data-content="<%= doc.abstract %>" data-placement="auto" style="background-image: url('<%= asset_path thumbnail_path(doc) %>');">
+              <div class="collection-caption"><%= doc.title %></div> 
+            </a>
+          </div>
+        <% end %>
+
+    </div>
+
+  <%- end %>
 <%- end %>
