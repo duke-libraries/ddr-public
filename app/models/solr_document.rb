@@ -80,8 +80,8 @@ class SolrDocument
 
 
   # This assumes that the derivative IDs are the local_ids of an item's components
-  def derivative_ids
-    @derivative_ids ||= struct_map_docs(type).map { |doc| doc.local_id }.compact
+  def derivative_ids(type='default')
+    struct_map_docs(type).map { |doc| doc.local_id }.compact
   end
 
   def multires_image_file_paths
