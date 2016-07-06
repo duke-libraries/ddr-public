@@ -30,6 +30,11 @@ gem 'edtf-humanize', '~> 0.0.4'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
+
 group :development, :test do
   gem 'sqlite3'
   gem "rspec-rails", "~> 3.4"
@@ -39,8 +44,6 @@ group :development, :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'orderly'
-  gem 'better_errors'
-  gem 'binding_of_caller'
 end
 
 group :production do

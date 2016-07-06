@@ -29,7 +29,9 @@ module ApplicationHelper
   end
 
   def admin_set_titles
-    @admin_set_titles ||= Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
+    Rails.cache.fetch("admin_set_titles", expires_in: 1.hour) do
+      Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
+    end
   end
 
   def ead_id_title(code)
