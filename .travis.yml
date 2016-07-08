@@ -1,14 +1,16 @@
 language: ruby
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libclamav6 libclamav-dev clamav
-  - gem install bundler
+- sudo apt-get update -qq
+- sudo apt-get install -qq libclamav6 libclamav-dev clamav
+- gem install bundler
 rvm:
-  - 2.1.5
+- 2.1.5
 before_script:
-  - "cp config/log4r.yml.sample config/log4r.yml"
+- cp config/log4r.yml.sample config/log4r.yml
 cache: bundler
-script: "bundle exec rake ci"
+script: bundle exec rake ci
 notifications:
   email:
-    - lib-drs@duke.edu
+  - lib-drs@duke.edu
+  slack:
+    secure: UFLtSB7YLseuqbQ7RdD98hWYoq0x6KiJsEb01g0LGw/QjoHJuWlL1eDBkSXAsgeDW3Cd/vS7EoFAVIMYhJhbDfmuv3F9QGfO8UqXnIypHAGoa/8cF93D/L98sum4gyQbEes3zaMaucKZOE1sgkIBkr6gJsguP8pxP856YRmWm2A=
