@@ -191,7 +191,7 @@ class SolrDocument
   end
 
   def pids_query(pids)
-    ActiveFedora::SolrQueryBuilder.construct_query_for_ids(pids)
+    ActiveFedora::SolrService.construct_query_for_ids(pids)
   end
 
   def effective_configs
