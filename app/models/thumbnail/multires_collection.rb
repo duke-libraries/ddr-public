@@ -42,6 +42,7 @@ class Thumbnail::MultiresCollection
   end
 
   def item_document
+    puts "@@@@@ MultiresCollection item_document @@@@@"
     if configured_local_id
       response, documents = get_search_results({ :q => item_query })
       documents.first

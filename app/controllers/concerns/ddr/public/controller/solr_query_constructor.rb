@@ -5,6 +5,7 @@ module Ddr
         extend ActiveSupport::Concern
 
         def get_solr_search_results(args)
+          puts "@@@@@ get_solr_search_results @@@@@"
           get_search_results(args)
         end
 

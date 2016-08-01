@@ -22,6 +22,7 @@ module RelatedItemsHelper
   end
 
   def relator_field_query relator_field, value
+    puts "@@@@@ relator_field_query @@@@@"
     query = construct_query(relator_field => value)
     response, documents = get_search_results({ :q => query })
     documents
@@ -38,6 +39,7 @@ module RelatedItemsHelper
   end
 
   def document_facet_field_values_and_counts document_id, solr_field
+    puts "@@@@@ document_facet_field_values_and_counts @@@@@"
     query = ActiveFedora::SolrService.construct_query_for_ids([document_id])
     response, docs = get_search_results(q: query, "facet.field" => solr_field, fl: "id")
     response['facet_counts']['facet_fields'][solr_field]

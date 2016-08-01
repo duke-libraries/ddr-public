@@ -31,6 +31,7 @@ class DigitalCollectionsController < CatalogController
   # This is for the dc/ portal page
   def index_portal
     index
+    puts "@@@@@@@@@@@@@@@@@@@@@@#{blacklight_config.facet_fields.keys}"
   end
 
   def feed
@@ -59,6 +60,7 @@ class DigitalCollectionsController < CatalogController
   end
 
   def get_pid_from_params_id
+    puts "@@@@@ get_pid_from_params_id @@@@@"
     query_result = ActiveFedora::SolrService.query("#{Ddr::Index::Fields::LOCAL_ID}:\"#{params[:id]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:\"Item\"", rows: 1).first
     if query_result.nil?
       pid = params[:id]

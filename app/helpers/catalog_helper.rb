@@ -25,6 +25,7 @@ module CatalogHelper
   end
   
   def item_image_embed options={}
+    puts "@@@@@ item_image_embed @@@@@"
     image_tag = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
     unless documents.empty?
@@ -36,6 +37,7 @@ module CatalogHelper
 
   # TODO: use solr query concerns
   def item_title_link options={}
+    puts "@@@@@ item_title_link @@@@@"
     link = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
     unless documents.empty?
@@ -152,6 +154,7 @@ module CatalogHelper
   end
 
   def find_collection_results
+    puts "@@@@@ get_collection_results @@@@@"
     response, document_list = get_search_results(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection', params.merge({rows: 3})))
     {documents: document_list, count: response.total}
   end
@@ -226,6 +229,7 @@ module CatalogHelper
   end
 
   def collections
+    puts "@@@@@ collections @@@@@"
     @collections ||=
       begin
         response, docs = get_search_results(q: "active_fedora_model_ssi:Collection",

@@ -40,24 +40,7 @@ class CatalogController < ApplicationController
     # TODO: Should the qf be set in the solr config?
     config.default_solr_params = {
       :qt => 'search',
-      :rows => 20,
-      :qf => ["id",
-              solr_name(:dc_title, :stored_searchable),
-              solr_name(:dc_creator, :stored_searchable),
-              solr_name(:dc_contributor, :stored_searchable),
-              solr_name(:dc_subject, :stored_searchable),
-              solr_name(:dc_type, :stored_searchable),
-              solr_name(:dc_publisher, :stored_searchable),
-              solr_name(:duketerms_series, :stored_searchable),
-              solr_name(:dc_description, :stored_searchable),
-              solr_name(:dc_abstract, :stored_searchable),
-              solr_name(:dc_format, :stored_searchable),
-              Ddr::Index::Fields::YEAR_FACET,
-              solr_name(:dc_spatial, :stored_searchable),
-              Ddr::Index::Fields::LOCAL_ID,
-              solr_name(:dc_identifier, :stored_searchable),
-              Ddr::Index::Fields::PERMANENT_ID,
-              Ddr::Index::Fields::ALL_TEXT].join(' ')
+      :rows => 20
     }
 
     config.per_page = [10,20,50,100]
@@ -99,7 +82,9 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
     # config.add_facet_field Ddr::Index::Fields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', collapse: false, limit: 5
     # config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 5
-    # config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: 'Browse', show: false
+    # config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: 'Browse', show: true
+    # config.add_facet_field Ddr::Index::Fields::SERIES_FACET.to_s, label: 'Series', show: true
+
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -169,9 +154,26 @@ class CatalogController < ApplicationController
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
 
+
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
-        :qf => "id dc_title_tesim dc_creator_tesim dc_subject_tesim dc_description_tesim dc_identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
+        :qf => ["id",
+                solr_name(:dc_title, :stored_searchable),
+                solr_name(:dc_creator, :stored_searchable),
+                solr_name(:dc_contributor, :stored_searchable),
+                solr_name(:dc_subject, :stored_searchable),
+                solr_name(:dc_type, :stored_searchable),
+                solr_name(:dc_publisher, :stored_searchable),
+                solr_name(:duketerms_series, :stored_searchable),
+                solr_name(:dc_description, :stored_searchable),
+                solr_name(:dc_abstract, :stored_searchable),
+                solr_name(:dc_format, :stored_searchable),
+                Ddr::Index::Fields::YEAR_FACET,
+                solr_name(:dc_spatial, :stored_searchable),
+                Ddr::Index::Fields::LOCAL_ID,
+                solr_name(:dc_identifier, :stored_searchable),
+                Ddr::Index::Fields::PERMANENT_ID,
+                Ddr::Index::Fields::ALL_TEXT].join(' ')
       }
     end
 
@@ -186,14 +188,15 @@ class CatalogController < ApplicationController
       # Solr parameter de-referencing like $title_qf.
       # See: http://wiki.apache.org/solr/LocalParams
       field.solr_local_parameters = {
-        :qf => '$title_qf',
-        :pf => '$title_pf'
+        #:qf => solr_name(:dc_title, :stored_searchable),
+        :qf => solr_name(:dc_title, :stored_searchable),
+        :pf => ''
       }
     end
 
     config.add_search_field('creator') do |field|
       field.solr_local_parameters = {
-        :qf => solr_name(:creator, :stored_searchable),
+        :qf => solr_name(:dc_creator, :stored_searchable),
         :pf => ''
       }
     end
@@ -204,10 +207,11 @@ class CatalogController < ApplicationController
     config.add_search_field('subject') do |field|
       field.qt = 'search'
       field.solr_local_parameters = {
-        :qf => '$subject_qf',
-        :pf => '$subject_pf'
+        :qf => solr_name(:dc_subject, :stored_searchable),
+        :pf => ''
       }
     end
+
 
     # "sort results by" select (pulldown)
     # label in pulldown is followed by the name of the SOLR field to sort by and
@@ -226,11 +230,20 @@ class CatalogController < ApplicationController
 
 
 
+
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
   end
 
+
+config.advanced_search = {
+  :form_solr_parameters => {
+    "facet.field" => ["spatial_facet_sim"],
+    "facet.limit" => -1, # return all facet values
+    "facet.sort" => "index" # sort by byte order of values
+  }
+}
 
 
   def zip_images

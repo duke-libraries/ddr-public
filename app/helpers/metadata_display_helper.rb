@@ -15,6 +15,7 @@ module MetadataDisplayHelper
   end
 
   def find_solr_documents id
+    puts "@@@@@ find_solr_documents @@@@@"
     Rails.cache.fetch("find_solr_document_#{id}", expires_in: 7.days) do
       query = ActiveFedora::SolrService.construct_query_for_ids([id])
       results = ActiveFedora::SolrService.query(query)

@@ -27,12 +27,15 @@ gem 'fastimage'
 gem 'bootstrap-select-rails'
 gem 'nokogiri'
 gem 'edtf-humanize', '~> 0.0.4'
+# gem 'blacklight_advanced_search', '~> 5.1.4'
+gem 'blacklight_advanced_search', :path => '/vagrant/blacklight_advanced_search'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'httplog'
 end
 
 group :development, :test do

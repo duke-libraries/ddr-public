@@ -11,6 +11,9 @@
 // about supported directives.
 //
 //= require jquery
+//= require 'blacklight_advanced_search'
+
+
 //= require bootstrap-sprockets
 //= require bootstrap-select
 //= require jquery_ujs

@@ -25,6 +25,7 @@ class DocumentModel::Component
   private
 
   def collection_search
+    puts "@@@@@ Component collection_search @@@@@"
     response, documents = get_search_results({ q: collection_query, rows: 10 })
   end
 
@@ -34,6 +35,7 @@ class DocumentModel::Component
   end
 
   def item_search
+    puts "@@@@@ Component item_search @@@@@"
     response, documents = get_search_results({ q: item_query, rows: 10 })
   end
 

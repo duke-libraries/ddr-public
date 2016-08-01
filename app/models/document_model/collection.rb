@@ -29,6 +29,7 @@ class DocumentModel::Collection
   private
 
   def items_search
+    puts "@@@@@ Collection item_search @@@@@"
     response, documents = get_search_results({ q: items_query, rows: 10000 })
   end
 
