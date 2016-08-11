@@ -37,27 +37,9 @@ class CatalogController < ApplicationController
           config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
           config.show.partials.insert(1, :openseadragon)
 
-    # TODO: Should the qf be set in the solr config?
     config.default_solr_params = {
       :qt => 'search',
-      :rows => 20,
-      :qf => ["id",
-              solr_name(:dc_title, :stored_searchable),
-              solr_name(:dc_creator, :stored_searchable),
-              solr_name(:dc_contributor, :stored_searchable),
-              solr_name(:dc_subject, :stored_searchable),
-              solr_name(:dc_type, :stored_searchable),
-              solr_name(:dc_publisher, :stored_searchable),
-              solr_name(:duketerms_series, :stored_searchable),
-              solr_name(:dc_description, :stored_searchable),
-              solr_name(:dc_abstract, :stored_searchable),
-              solr_name(:dc_format, :stored_searchable),
-              Ddr::Index::Fields::YEAR_FACET,
-              solr_name(:dc_spatial, :stored_searchable),
-              Ddr::Index::Fields::LOCAL_ID,
-              solr_name(:dc_identifier, :stored_searchable),
-              Ddr::Index::Fields::PERMANENT_ID,
-              Ddr::Index::Fields::ALL_TEXT].join(' ')
+      :rows => 20
     }
 
     config.per_page = [10,20,50,100]
@@ -171,7 +153,23 @@ class CatalogController < ApplicationController
 
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
-        :qf => "id dc_title_tesim dc_creator_tesim dc_subject_tesim dc_description_tesim dc_identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
+        :qf => ["id",
+                solr_name(:dc_title, :stored_searchable),
+                solr_name(:dc_creator, :stored_searchable),
+                solr_name(:dc_contributor, :stored_searchable),
+                solr_name(:dc_subject, :stored_searchable),
+                solr_name(:dc_type, :stored_searchable),
+                solr_name(:dc_publisher, :stored_searchable),
+                solr_name(:duketerms_series, :stored_searchable),
+                solr_name(:dc_description, :stored_searchable),
+                solr_name(:dc_abstract, :stored_searchable),
+                solr_name(:dc_format, :stored_searchable),
+                Ddr::Index::Fields::YEAR_FACET,
+                solr_name(:dc_spatial, :stored_searchable),
+                Ddr::Index::Fields::LOCAL_ID,
+                solr_name(:dc_identifier, :stored_searchable),
+                Ddr::Index::Fields::PERMANENT_ID,
+                Ddr::Index::Fields::ALL_TEXT].join(' ')
       }
     end
 
