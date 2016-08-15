@@ -6,7 +6,7 @@ module Ddr
 
         def self.included(base)
           base.before_action :prepend_view_path_for_portal_overrides
-          base.solr_search_params_logic += [:include_only_specified_records]
+          base.search_params_logic += [:include_only_specified_records]
         end
 
 
@@ -21,7 +21,7 @@ module Ddr
 
         def parent_uris
           Rails.cache.fetch("#{controller_name}/#{params[:collection]}/#{current_ability}", expires_in: 7.days) do
-            parent_collection_uris.map { |id| [:isGovernedBy, id] }
+            parent_collection_uris.map { |id| [:is_governed_by, id] }
           end
         end
 
@@ -34,7 +34,7 @@ module Ddr
         end
 
         def portal_controller_setup
-          portal_controller_setup ||= Portal::ControllerSetup.new({ controller_name: controller_name, local_id: params[:collection], current_ability: current_ability })
+          portal_controller_setup ||= Portal::ControllerSetup.new({ controller_name: controller_name, local_id: params[:collection], scope: self })
         end
 
       end

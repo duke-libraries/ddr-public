@@ -5,12 +5,12 @@ class Portal
   include Ddr::Public::Controller::SolrQueryConstructor
 
 
-  attr_accessor :local_id, :controller_name, :current_ability
+  attr_accessor :local_id, :controller_name, :scope
 
   def initialize(args={})
     @local_id        = args.fetch(:local_id, nil)
     @controller_name = args.fetch(:controller_name, nil)
-    @current_ability = args.fetch(:current_ability, nil)
+    @scope = args.fetch(:scope, nil)
   end
 
 
@@ -18,13 +18,13 @@ class Portal
 
 
   def item_or_collection_documents(local_ids)
-    local_ids ? documents(item_or_collection_documents_search(local_ids)) : []
+    local_ids ? item_or_collection_documents_search(local_ids).documents : []
   end
 
 
 
   def parent_collection_uris
-    @parent_collection_uris ||= parent_collection_documents.map { |document| document.id }
+    @parent_collection_uris ||= parent_collection_documents.map { |document| document.internal_uri }
   end
 
   def parent_collection_document
@@ -32,15 +32,16 @@ class Portal
   end
 
   def parent_collection_documents
-    @parent_collection_documents ||= documents(parent_collections_search) || []
+    @parent_collection_documents ||= parent_collections_search.documents || []
   end
 
   def parent_collections_count
-    @parent_collections_count ||= response(parent_collections_search).total
+    @parent_collections_count ||= parent_collections_search.total
   end
 
   def parent_collections_search
-    @parent_collections_search ||= search_results({ q: parent_collections_query, rows: 100 }, query_processor_chain)
+    query = search_builder.query({q: parent_collections_query, rows: '1000'})
+    @parent_collections_search ||= repository.search(query)
   end
 
   def parent_collections_query
@@ -50,15 +51,16 @@ class Portal
 
 
   def child_item_documents
-    @child_item_documents ||= documents(child_items_search) || []
+    @child_item_documents ||= child_items_search.documents || []
   end
 
   def child_items_count
-    @child_items_count ||= response(child_items_search).total
+    @child_items_count ||= child_items_search.total
   end
 
   def child_items_search
-    @child_items_search ||= search_results({ q: child_items_query, rows: 100 }, query_processor_chain)
+    query = search_builder.query({ q: child_items_query, rows: '100', sort: solr_sort })
+    @child_items_search ||= repository.search(query)
   end
 
   def child_items_query
@@ -72,7 +74,8 @@ class Portal
   end
 
   def item_or_collection_documents_search(local_ids)
-    response, documents = search_results( { q: item_or_collection_documents_query(local_ids), rows: 25, sort: solr_sort }, query_processor_chain)
+    query = search_builder.query({ q: item_or_collection_documents_query(local_ids), rows: '100', sort: solr_sort })
+    repository.search(query)
   end
 
   def solr_sort
@@ -80,18 +83,12 @@ class Portal
   end
 
 
+  def search_builder
+    @search_builder ||= SearchBuilder.new(query_processor_chain, @scope)
+  end
+
   def query_processor_chain
-    [:add_query_to_solr, :apply_gated_discovery, :include_only_published]
-  end
-
-
-
-  def response(response_and_documents)
-    response_and_documents[0]
-  end
-
-  def documents(response_and_documents)
-    response_and_documents[1]
+    [:add_query_to_solr, :apply_access_controls, :include_only_published]
   end
 
 

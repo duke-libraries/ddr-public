@@ -3,28 +3,28 @@ dpla_fields:
     - document_helper: :source_collection_title
   'dc:contributor':
     - solr_field: 
-      - :dc_contributor
+      - :contributor
       - :stored_searchable
   'dc:coverage':
     - solr_field:
-      - :dc_spatial
+      - :spatial
       - :stored_searchable
   'dc:creator':
     - solr_field: 
-      - :dc_creator
+      - :creator
       - :stored_searchable
   'dc:date':
     - solr_field:
-      - :dc_date
+      - :date
       - :stored_searchable
       helper_method: :display_edtf_date
   'dc:description':
     - solr_field:
-      - :dc_description
+      - :description
       - :stored_searchable
   'dc:format':
     - solr_field:
-      - :dc_format
+      - :format
       - :stored_searchable
   'dc:identifier':
     - solr_field:
@@ -36,26 +36,26 @@ dpla_fields:
       - :stored_sortable
   'dc:language':
     - solr_field:
-      - :dc_language
+      - :language
       - :stored_searchable
       helper_method: :language_display
   'dc:publisher':
     - solr_field:
-      - :dc_publisher
+      - :publisher
       - :stored_searchable
   'dc:rights':
     - solr_field:
-      - :dc_rights
+      - :rights
       - :stored_searchable
   'dc:subject':
     - solr_field:
-      - :dc_subject
+      - :subject
       - :stored_searchable
   'dc:title':
     - solr_field:
-      - :dc_title
+      - :title
       - :stored_searchable
   'dc:type':
     - solr_field:
-      - :dc_type
+      - :type
       - :stored_searchable

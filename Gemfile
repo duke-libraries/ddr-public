@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.1.13'
 gem 'blacklight', '5.16'
-gem 'hydra-head', '~> 9.5.0'
+gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.0.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '3.0.4'
+gem 'ddr-models', '2.4.9'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -39,7 +39,7 @@ group :development, :test do
   gem 'sqlite3'
   gem "rspec-rails", "~> 3.4"
   gem 'capybara', '~> 2.0'
-  gem "jettywrapper", "~> 2.0" # 1.x - fcrepo3 / 2.x - fcrepo4
+  gem "jettywrapper", "~> 1.8" # 1.x - fcrepo3 / 2.x - fcrepo4
   gem 'factory_girl_rails', '~> 4.4'
   gem 'launchy'
   gem 'database_cleaner'

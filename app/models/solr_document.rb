@@ -28,11 +28,11 @@ class SolrDocument
   end
 
   def abstract
-    get("dc_abstract_tesim")
+    get("abstract_tesim")
   end
 
   def description
-    get("dc_description_tesim")
+    get("description_tesim")
   end
 
   def thumbnail
@@ -191,7 +191,7 @@ class SolrDocument
   end
 
   def pids_query(pids)
-    ActiveFedora::SolrService.construct_query_for_ids(pids)
+    ActiveFedora::SolrService.construct_query_for_pids(pids)
   end
 
   def effective_configs

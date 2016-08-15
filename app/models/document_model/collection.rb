@@ -33,7 +33,7 @@ class DocumentModel::Collection
   end
 
   def items_query
-    field_pairs = field_value_pairs(Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION, [document.id])
+    field_pairs = field_value_pairs(Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION, [document.internal_uri])
     construct_query(field_pairs, "OR")
   end
 
