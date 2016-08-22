@@ -5,7 +5,8 @@ module MetadataDisplayHelper
   end
 
   def descendant_of options={}
-    docs = find_solr_documents(options[:value].first)
+    pid = ActiveFedora::Base.pid_from_uri(options[:value].first)
+    docs = find_solr_documents(pid)
     titles = docs.map(&:title)
     if can? :read, docs.first
       link_to_document(docs.first)
@@ -16,7 +17,7 @@ module MetadataDisplayHelper
 
   def find_solr_documents id
     Rails.cache.fetch("find_solr_document_#{id}", expires_in: 7.days) do
-      query = ActiveFedora::SolrService.construct_query_for_ids([id])
+      query = ActiveFedora::SolrService.construct_query_for_pids([id])
       results = ActiveFedora::SolrService.query(query)
       docs = results.map { |result| SolrDocument.new(result) }
     end

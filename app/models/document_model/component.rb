@@ -29,7 +29,7 @@ class DocumentModel::Component
   end
 
   def collection_query
-    field_pairs = field_value_pairs(Ddr::Index::Fields::ID, [document.admin_policy_uri])
+    field_pairs = field_value_pairs(Ddr::Index::Fields::INTERNAL_URI, [document.collection_uri])
     construct_query(field_pairs, "OR")
   end
 
@@ -38,7 +38,7 @@ class DocumentModel::Component
   end
 
   def item_query
-    field_pairs = field_value_pairs(Ddr::Index::Fields::ID, [document.is_part_of])
+    field_pairs = field_value_pairs(Ddr::Index::Fields::INTERNAL_URI, [document.is_part_of])
     construct_query(field_pairs, "OR")
   end
 

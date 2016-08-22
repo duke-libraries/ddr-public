@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-# require 'blacklight/catalog'
 require 'zip'
 require 'fastimage'
 
@@ -12,8 +11,6 @@ class CatalogController < ApplicationController
 
 
   before_action :authenticate_user!, if: :authentication_required?
-
-  before_action :enforce_show_permissions, only: :show
 
   self.search_params_logic += [:include_only_published]
 
@@ -92,9 +89,9 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field solr_name(:dc_creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_index_field solr_name(:dc_date, :stored_searchable), separator: '; ', label: 'Date'
-    config.add_index_field solr_name(:dc_type, :stored_searchable), separator: '; ', label:'Type'
+    config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_index_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
@@ -118,16 +115,12 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field solr_name(:dc_title, :stored_searchable), separator: '; ', label: 'Title'
+    config.add_show_field solr_name(:title, :stored_searchable), separator: '; ', label: 'Title'
     config.add_show_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_show_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
-    config.add_show_field solr_name(:dc_creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_show_field solr_name(:dc_date, :stored_searchable), separator: '; ', label: 'Date'
-    config.add_show_field solr_name(:dc_type, :stored_searchable), separator: '; ', label: 'Type'
-
-    (Ddr::Models::DescriptiveMetadata.field_names - [ :dc_title, :dc_creator, :dc_date, :dc_type ]).each do |term_name|
-      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.gsub(/^(dc|duketerms)_/, "").titleize
-    end
+    config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
+    config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
 
     config.add_show_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
     config.add_show_field :isMemberOfCollection_ssim, helper_method: 'descendant_of', label: 'Collection'
@@ -154,20 +147,20 @@ class CatalogController < ApplicationController
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
         :qf => ["id",
-                solr_name(:dc_title, :stored_searchable),
-                solr_name(:dc_creator, :stored_searchable),
-                solr_name(:dc_contributor, :stored_searchable),
-                solr_name(:dc_subject, :stored_searchable),
-                solr_name(:dc_type, :stored_searchable),
-                solr_name(:dc_publisher, :stored_searchable),
-                solr_name(:duketerms_series, :stored_searchable),
-                solr_name(:dc_description, :stored_searchable),
-                solr_name(:dc_abstract, :stored_searchable),
-                solr_name(:dc_format, :stored_searchable),
+                solr_name(:title, :stored_searchable),
+                solr_name(:creator, :stored_searchable),
+                solr_name(:contributor, :stored_searchable),
+                solr_name(:subject, :stored_searchable),
+                solr_name(:type, :stored_searchable),
+                solr_name(:publisher, :stored_searchable),
+                solr_name(:series, :stored_searchable),
+                solr_name(:description, :stored_searchable),
+                solr_name(:abstract, :stored_searchable),
+                solr_name(:format, :stored_searchable),
                 Ddr::Index::Fields::YEAR_FACET,
-                solr_name(:dc_spatial, :stored_searchable),
+                solr_name(:spatial, :stored_searchable),
                 Ddr::Index::Fields::LOCAL_ID,
-                solr_name(:dc_identifier, :stored_searchable),
+                solr_name(:identifier, :stored_searchable),
                 Ddr::Index::Fields::PERMANENT_ID,
                 Ddr::Index::Fields::ALL_TEXT].join(' ')
       }
@@ -319,5 +312,6 @@ class CatalogController < ApplicationController
   def authentication_required?
     Ddr::Public.require_authentication
   end
+
 
 end

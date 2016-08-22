@@ -20,8 +20,8 @@ module CatalogHelper
 
   # Facet field view helper
   # Also used in custom sort for collection facet
-  def collection_title id
-    collections[id]
+  def collection_title collection_internal_uri
+    collections[collection_internal_uri]
   end
   
   def item_image_embed options={}
@@ -49,12 +49,12 @@ module CatalogHelper
     if @portal
       search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))
     else
-      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.id, "f[admin_set_facet_sim][]" => document.admin_set)))
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri, "f[admin_set_facet_sim][]" => document.admin_set)))
     end
   end
 
   def item_browse_components_url document, options={}
-    search_action_url(add_facet_params(Ddr::Index::Fields::IS_PART_OF, document.id))
+    search_action_url(add_facet_params(Ddr::Index::Fields::IS_PART_OF, document.internal_uri))
   end
 
   # Index / Show field view helper
@@ -229,10 +229,10 @@ module CatalogHelper
     @collections ||=
       begin
         response, docs = get_search_results(q: "active_fedora_model_ssi:Collection",
-                                            fl: "id,title_ssi",
+                                            fl: "internal_uri_ssi,title_ssi",
                                             rows: 9999)
         docs.each_with_object({}) do |doc, memo|
-          memo[doc["id"]] = doc["title_ssi"]
+          memo[doc["internal_uri_ssi"]] = doc["title_ssi"]
         end
       end
   end

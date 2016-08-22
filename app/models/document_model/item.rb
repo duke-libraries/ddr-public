@@ -37,7 +37,7 @@ class DocumentModel::Item
 
   # TODO: Define query in SolrQueryConstructor
   def collection_query
-    field_pairs = field_value_pairs(Ddr::Index::Fields::ID, [document.parent_uri])
+    field_pairs = field_value_pairs(Ddr::Index::Fields::INTERNAL_URI, [document.parent_uri])
     construct_query(field_pairs, "OR")
   end
 
@@ -47,7 +47,7 @@ class DocumentModel::Item
 
   # TODO: Define query in SolrQueryConstructor
   def component_query
-    field_pairs = field_value_pairs(Ddr::Index::Fields::IS_PART_OF, [document.id])
+    field_pairs = field_value_pairs(Ddr::Index::Fields::IS_PART_OF, [document.internal_uri])
     construct_query(field_pairs, "OR")
   end
 
