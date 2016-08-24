@@ -23,7 +23,7 @@ module CatalogHelper
   def collection_title collection_internal_uri
     collections[collection_internal_uri]
   end
-  
+
   def item_image_embed options={}
     image_tag = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
@@ -99,6 +99,29 @@ module CatalogHelper
   end
 
 
+  def get_finding_aid(document)
+    begin
+      Timeout.timeout(2) do
+        document.finding_aid
+      end
+    rescue OpenURI::HTTPError, Timeout::Error => e
+      Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+      false
+    end
+  end
+
+
+  def get_research_help(document)
+    begin
+      Timeout.timeout(2) do
+        document.research_help
+      end
+    rescue => e
+      Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+      false
+    end
+  end
+
   # View helper
   def research_help_title research_help
     unless research_help.name.blank?
@@ -162,8 +185,8 @@ module CatalogHelper
       # We had to revise the query_images() function in json-api/models/attachment.php to
       # cirumvent a bug where image data was not rendering when hitting the API via https.
       begin
-        blog_posts = JSON.parse(open(blog_url,{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
-      rescue OpenURI::HTTPError => e
+        blog_posts = JSON.parse(open(blog_url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, read_timeout: 2 }).read)
+      rescue Net::ReadTimeout, OpenURI::HTTPError => e
         Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
         fallback_link = link_to "See All Blog Posts", "http://blogs.library.duke.edu/bitstreams"
         "<p class='small'>" + fallback_link + "</p>"
