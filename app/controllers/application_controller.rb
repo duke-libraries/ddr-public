@@ -1,4 +1,9 @@
 class ApplicationController < ActionController::Base
+
+  cattr_accessor :current
+  before_filter { ApplicationController.current = self }
+  after_filter  { ApplicationController.current = nil  }
+
   helper Openseadragon::OpenseadragonHelper
   # Adds a few additional behaviors into the application controller
    include Blacklight::Controller
