@@ -3,6 +3,7 @@ class DocumentModel::Component
   include Blacklight::Configurable
   include Blacklight::SolrHelper
   include Ddr::Public::Controller::SolrQueryConstructor
+  include DocumentModel::Searcher
 
   attr_accessor :document
 
@@ -11,11 +12,11 @@ class DocumentModel::Component
   end
 
   def collection
-    collection_search[1].first
+    collection_search.documents.first
   end
 
   def item
-    item_search[1].first
+    item_search.documents.first
   end
 
   def metadata_header
@@ -25,7 +26,8 @@ class DocumentModel::Component
   private
 
   def collection_search
-    response, documents = get_search_results({ q: collection_query, rows: 10 })
+    query = searcher.query({ q: collection_query, rows: '10' })
+    repository.search(query)
   end
 
   def collection_query
@@ -34,7 +36,8 @@ class DocumentModel::Component
   end
 
   def item_search
-    response, documents = get_search_results({ q: item_query, rows: 10 })
+    query = searcher.query({ q: item_query, rows: '10' })
+    repository.search(query)
   end
 
   def item_query

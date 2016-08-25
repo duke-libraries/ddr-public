@@ -3,6 +3,7 @@ class DocumentModel::Item
   include Blacklight::Configurable
   include Blacklight::SolrHelper
   include Ddr::Public::Controller::SolrQueryConstructor
+  include DocumentModel::Searcher
 
   attr_accessor :document
 
@@ -11,15 +12,15 @@ class DocumentModel::Item
   end
 
   def collection
-    collection_search[1].first
+    collection_search.documents.first
   end
 
   def components
-    component_search[1]
+    component_search.documents
   end
 
   def component_count
-    component_search[0].total
+    component_search.total
   end
 
   def metadata_header
@@ -32,20 +33,20 @@ class DocumentModel::Item
   private
 
   def collection_search
-    response, documents = get_search_results({ q: collection_query, rows: 10 })
+    query = searcher.query({ q: collection_query, rows: '10' })
+    repository.search(query)
   end
 
-  # TODO: Define query in SolrQueryConstructor
   def collection_query
     field_pairs = field_value_pairs(Ddr::Index::Fields::INTERNAL_URI, [document.parent_uri])
     construct_query(field_pairs, "OR")
   end
 
   def component_search
-    response, documents = get_search_results({ q: component_query, rows: 10000 })
+    query = searcher.query({ q: component_query, rows: '10000' })
+    repository.search(query)
   end
 
-  # TODO: Define query in SolrQueryConstructor
   def component_query
     field_pairs = field_value_pairs(Ddr::Index::Fields::IS_PART_OF, [document.internal_uri])
     construct_query(field_pairs, "OR")

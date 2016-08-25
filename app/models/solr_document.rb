@@ -23,6 +23,11 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Solr::Document::DublinCore)
 
+
+  def controller_scope
+    ApplicationController.try(:current)
+  end
+
   def published?
     get(Ddr::Index::Fields::WORKFLOW_STATE) == "published"
   end
