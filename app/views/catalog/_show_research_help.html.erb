@@ -1,5 +1,5 @@
 <% cache("show_research_help_#{document.id}", expires_in: 7.days) do %>
-  <% research_help = document.research_help %>
+  <% research_help = get_research_help(document) %>
   <% if research_help %>
   <div class="buffer-bottom-40">
     <h4><span class="contact-devil-logo"></span><%= research_help_title(research_help) %></h4>

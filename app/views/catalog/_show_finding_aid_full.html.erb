@@ -1,5 +1,5 @@
 <% cache("finding_aid_full_#{document.ead_id}", expires_in: 7.days) do %>
-  <% finding_aid = document.finding_aid %>
+  <% finding_aid = get_finding_aid(document) %>
   <% if finding_aid.present? %>
 
   <div class="well well-md" id="source-collection">
