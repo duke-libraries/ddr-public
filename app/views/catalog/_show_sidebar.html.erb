@@ -1,11 +1,6 @@
-<% if render_bookmarks_control? %>
-  <%= render :partial => 'show_tools' %>
-<% end %>
-
 <%= render partial: 'show_research_help', locals: { document: @document.collection  }  %>
-<%= render partial: 'show_collection_context', locals: { document: @document.collection, collection: is_collection?(@document) } %>
+<%= render partial: 'show_collection_context', locals: { document: @document.collection, collection: is_collection?(@document), item: is_item?(@document), component: is_component?(@document) } %>
 <%= render partial: 'show_finding_aid', locals: { document: @document } %>
-<%= render partial: 'show_item_context', locals: { document: @document.item, component: is_component?(@document) } %>
 
 <% unless @document.more_like_this.empty? %>
   <div class="panel panel-default">
@@ -14,4 +9,8 @@
       <%= render :collection => @document.more_like_this, :partial => 'show_more_like_this', :as => :document %>
     </div>
   </div>
+<% end %>
+
+<% if render_bookmarks_control? %>
+  <%= render :partial => 'show_tools' %>
 <% end %>

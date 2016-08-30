@@ -7,7 +7,7 @@
     <% if research_help.ask.present? || research_help.email.present? || research_help.phone.present? %>
 
       <div class="dropdown">
-        <a href="#" data-target="#" role="button" id="dLabel" data-toggle="dropdown" class="dropdown-toggle small text-uppercase text-muted" aria-haspopup="true" aria-expanded="false">Contact <span class="glyphicon glyphicon-menu-down"></span></a><br/>
+        <a href="#" data-target="#" role="button" id="dLabel" data-toggle="dropdown" class="dropdown-toggle small text-muted" aria-haspopup="true" aria-expanded="false">Contact</a><br/>
 
          <ul class="dropdown-menu" aria-labelledby="dLabel">
           <% if research_help.ask.present? %>
@@ -23,7 +23,7 @@
 
 
     <% end %>
-
+    <hr class="contact-separator"/>
   </div>
   <%- end %>
 <%- end %>
