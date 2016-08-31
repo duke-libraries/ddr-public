@@ -173,6 +173,8 @@ body.blacklight-catalog-show #content {
   background-size: contain;
   float: right;
   width: 50px;
+  display: block;
+  margin-bottom: 20px;
 }
 
 /* -------------
@@ -749,11 +751,12 @@ image-based items */
   
   hr.contact-separator {
     border-top: 2px solid $brand-success;
+    clear: both;
   }
 
   .vertical-model-separator {
     position: relative;
-    border-left:2px solid $gray-lighter;
+    border-left: 2px solid $gray-lighter;
     color: $gray-lighter;
     height: 30px;
     display: block;
@@ -788,6 +791,10 @@ image-based items */
       color: #737373;
     }
 
+  }
+  
+  .show-tools {
+    margin-top: 40px;
   }
   
   #documents + #source-collection {
