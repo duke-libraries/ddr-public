@@ -1,0 +1,22 @@
+<div id="home-branding" class="col-sm-12">
+  <!-- Could have two branding templates -->
+  <!-- One for the collection portal page -->
+  <!-- And one for the search results page and/or show pages -->
+  <!-- Select one or the other using the has_search_parameters? check as below -->
+</div>
+
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <% if has_search_parameters? %>
+    <%= render partial: "show_portal_context" %>
+  <% end %>
+
+  <%= render 'search_sidebar' %>
+</div>
+
+<div id="content" class="col-md-9 col-sm-8">
+  <% unless has_search_parameters? %>
+    <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+  <% else %>
+    <%= render 'search_results' %>
+  <% end %>
+</div>

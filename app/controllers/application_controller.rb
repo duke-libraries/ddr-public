@@ -1,12 +1,16 @@
 class ApplicationController < ActionController::Base
+
+  cattr_accessor :current
+  before_filter { ApplicationController.current = self }
+  after_filter  { ApplicationController.current = nil  }
+
   helper Openseadragon::OpenseadragonHelper
-  # Adds a few additional behaviors into the application controller 
+  # Adds a few additional behaviors into the application controller
    include Blacklight::Controller
-   include Hydra::AccessControlsEnforcement
    include Ddr::Auth::RoleBasedAccessControlsEnforcement
 
-  # Please be sure to impelement current_user and user_session. Blacklight depends on 
-  # these methods in order to perform user specific actions. 
+  # Please be sure to impelement current_user and user_session. Blacklight depends on
+  # these methods in order to perform user specific actions.
 
   layout 'blacklight'
 

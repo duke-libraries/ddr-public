@@ -25,26 +25,26 @@ RSpec.describe CatalogController, type: :controller do
     end
   end
 
-  describe "published / not published" do
-    let(:obj) { Item.new }
-    before do
-      obj.roles.grant type: "Viewer", agent: user
-      obj.save!
-      sign_in user
-    end
-    describe "when an object is not published" do
-      it "should not be found" do
-        get :show, id: obj.pid
-        expect(response.response_code).to eq(404)
-      end
-    end
-    describe "when an object is published" do
-      before { obj.publish! }
-      it "should be found" do
-        get :show, id: obj.pid
-        expect(response.response_code).to eq(200)
-      end
-    end
-  end
+  # describe "published / not published" do
+  #   let(:obj) { Item.new }
+  #   before do
+  #     obj.roles.grant type: "Viewer", agent: user
+  #     obj.save!
+  #     sign_in user
+  #   end
+  #   describe "when an object is not published" do
+  #     it "should not be found" do
+  #       get :show, id: obj.pid
+  #       expect(response.response_code).to eq(404)
+  #     end
+  #   end
+  #   describe "when an object is published" do
+  #     before { obj.publish! }
+  #     it "should be found" do
+  #       get :show, id: obj.pid
+  #       expect(response.response_code).to eq(200)
+  #     end
+  #   end
+  # end
 
 end

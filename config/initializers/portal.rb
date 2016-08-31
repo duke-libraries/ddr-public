@@ -7,7 +7,7 @@ def configure_ddr_public_portals
 
     if portal_doc_configs = load_portal_doc_configs(portal_directory)
       formatted_configs["portals"]["collection_local_id"].merge!(portal_doc_configs["collection_local_id"] || {})
-      formatted_configs["portals"]["admin_sets"].merge!(portal_doc_configs["admin_sets"] || {})
+      formatted_configs["portals"]["admin_sets"].merge!(portal_doc_configs["collection_admin_set"] || {})
     end
 
   end

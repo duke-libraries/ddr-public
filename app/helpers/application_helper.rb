@@ -29,14 +29,19 @@ module ApplicationHelper
   end
 
   def admin_set_titles
-    @admin_set_titles ||= Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
+    Rails.cache.fetch("admin_set_titles", expires_in: 1.hour) do
+      Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
+    end
   end
 
   def ead_id_title(code)
     Rails.cache.fetch("#{code}/ead_id_title", expires_in: 7.days) do
       begin
-        Ddr::Models::FindingAid.new(code).collection_title
-      rescue OpenURI::HTTPError
+        Timeout.timeout(2) do
+          Ddr::Models::FindingAid.new(code).collection_title
+        end
+      rescue OpenURI::HTTPError, Timeout::Error => e
+        Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
         code
       end
     end

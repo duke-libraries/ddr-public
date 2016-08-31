@@ -1,11 +1,11 @@
-<% unless document.finding_aid.blank? %>
+<% finding_aid = get_finding_aid(document) %>
+
+<% if finding_aid.present? %>
   <div class="finding_aid buffer-bottom-40">
     <div class="text-muted text-uppercase small strong">Source Collection</div>
-      <% cache("finding_aid_brief_#{document.ead_id}", expires_in: 7.days) do %>
-        <%= source_collection({ :document => document, :placement => 'left' })  %>
-      <% end %>
+      <%= source_collection({ :document => document, :placement => 'left' })  %>
       <% unless document.aspace_id.blank? %>
-        <p><a href="<%= document.finding_aid.url %>#aspace_<%= document.aspace_id %>" class="text-muted small">View Item in Context</a></p>
+        <p><a href="<%= finding_aid.url %>#aspace_<%= document.aspace_id %>" class="text-muted small">View Item in Context</a></p>
       <% end %>
   </div>
 <% end %>

@@ -2,8 +2,10 @@
 
 <div id="item-options">
 	<ul class="nav nav-pills item-options">
+	  <% if defined?(imagecount) %>
+      <%= render partial: 'item_options_imagecount', locals: local_assigns %>
+    <% end %>
     <%= render partial: 'item_options_download', locals: local_assigns %>
-    <%# future options may include citations, etc. %>
 	</ul>
 </div>
 <% end %>

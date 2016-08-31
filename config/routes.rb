@@ -4,16 +4,16 @@ Rails.application.routes.draw do
 
   blacklight_for :catalog
 
+  def id_constraint
+    /[a-zA-Z0-9\/\-_%]+:?[a-zA-Z0-9\/\-_%]*/
+  end
+
   # Range Limit and Facet routes for DC
   get "dc/range_limit/", to: "digital_collections#range_limit"
   get "dc/facet/:id", to: "digital_collections#facet", as: "digital_collections_facet"
 
-  def local_id_constraint
-    /[a-zA-Z0-9\-_]+:?[a-zA-Z0-9\-_]*/
-  end
-  
   # DC Collection scoped routes
-  constraints(id: local_id_constraint, collection: local_id_constraint) do
+  constraints(id: id_constraint, collection: id_constraint) do
     get "dc/:collection/featured", to: "digital_collections#featured", as: "featured_items"
     get "dc/:collection/about", :to => "digital_collections#about", as: "digital_collections_about"
     get "dc/:collection/:id/media", :to => "digital_collections#media", constraints: { format: 'json' }
@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     get "dc/:collection/:id", to: "digital_collections#show"
     get "dc/:collection", to: "digital_collections#index", as: "digital_collections"
   end
-  
+
   # Special named route just for DC Portal to distinguish
   # from DC collection portals
   get "dc" => "digital_collections#index_portal", as: "digital_collections_index_portal"
@@ -29,14 +29,33 @@ Rails.application.routes.draw do
   # Must exist for facets to work from DC portal
   get "dc" => "digital_collections#index"
 
-  def pid_constraint
-      /[a-zA-Z0-9\-_]+:[a-zA-Z0-9\-_]+/
+
+
+  # Range Limit and Facet routes for DC
+  get "portal/range_limit/", to: "portal#range_limit"
+  get "portal/facet/:id", to: "portal#facet", as: "portal_facet"
+
+  # DC Collection scoped routes
+  constraints(id: id_constraint, collection: id_constraint) do
+    get "portal/:collection/about", :to => "portal#about", as: "portal_about"
+    get "portal/:collection/:id", to: "portal#show"
+    get "portal/:collection", to: "portal#index", as: "portal"
   end
 
-  resources :thumbnail, only: :show, constraints: {id: pid_constraint}
+  # Special named route just for DC Portal to distinguish
+  # from DC collection portals
+  get "portal" => "portal#index_portal", as: "portal_index_portal"
+
+  # Must exist for facets to work from DC portal
+  get "portal" => "portal#index"
+
+
+
+
+  resources :thumbnail, only: :show, constraints: {id: id_constraint}
 
   # Downloads
-  get 'download/:id(/:datastream_id)' => 'downloads#show', constraints: {id: pid_constraint}, as: 'download'
+  get 'download/:id(/:datastream_id)' => 'downloads#show', as: 'download', constraints: {id: id_constraint}
   post 'download/images/:id' => 'catalog#zip_images'
   post 'download/images-pdf/:id' => 'catalog#pdf_images'
 

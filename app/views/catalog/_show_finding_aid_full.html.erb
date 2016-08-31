@@ -1,35 +1,36 @@
-<% unless document.finding_aid.blank? %>
-  <% cache("finding_aid_full_#{document.ead_id}", expires_in: 7.days) do %>
+<% cache("finding_aid_full_#{document.ead_id}", expires_in: 7.days) do %>
+  <% finding_aid = get_finding_aid(document) %>
+  <% if finding_aid.present? %>
 
-  <div class="well well-md" id="source-collection">  
+  <div class="well well-md" id="source-collection">
     <h3 class="feature-head"><%= image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") %>Source Collection</h3>
-    
-    <p class="small">This digital collection comprises materials from the following archival collection at <%= document.finding_aid.repository %>:</p>
-    
+
+    <p class="small">This digital collection comprises selected materials from the following archival collection at <%= finding_aid.repository %>:</p>
+
       <% begin %>
         <h4>
-          <%= link_to document.finding_aid.collection_title, document.finding_aid.url %>
-          <% if document.finding_aid.collection_date_span %>
-            <span class="small"> <%= document.finding_aid.collection_date_span %></span>
+          <%= link_to finding_aid.collection_title, finding_aid.url %>
+          <% if finding_aid.collection_date_span %>
+            <span class="small"> <%= finding_aid.collection_date_span %></span>
           <% end %>
-        </h4>  
+        </h4>
 
         <p class="text-muted">
-          <% if document.finding_aid.collection_number %>
-            Collection #<%= document.finding_aid.collection_number %> | 
+          <% if finding_aid.collection_number %>
+            Collection #<%= finding_aid.collection_number %> |
           <% end %>
-          <% if document.finding_aid.extent %>
-            <%= document.finding_aid.extent %>
+          <% if finding_aid.extent %>
+            <%= finding_aid.extent %>
           <% end %>
         </p>
-        
-        <% if document.finding_aid.abstract %>
-          <p><span class="text-muted text-uppercase small strong">ABSTRACT</span><br/><%= document.finding_aid.abstract %></p>
-        <% end %>   
-        
-        <p><%= link_to raw('Collection Guide &raquo;'), document.finding_aid.url, class: 'text-muted' %></p>
-        
-                                
+
+        <% if finding_aid.abstract %>
+          <p><span class="text-muted text-uppercase small strong">ABSTRACT</span><br/><%= finding_aid.abstract %></p>
+        <% end %>
+
+        <p><%= link_to raw('Collection Guide &raquo;'), finding_aid.url, class: 'text-muted' %></p>
+
+
       <% rescue OpenURI::HTTPError => e %>
         <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
         <p class="small"><%= link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/" %><p>

@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'blacklight/catalog'
 require 'zip'
 require 'fastimage'
 
@@ -7,15 +6,13 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
+  include Ddr::Models::Catalog
   include Ddr::Public::Controller::ConfigureBlacklight
 
 
   before_action :authenticate_user!, if: :authentication_required?
 
-  before_action :enforce_show_permissions, only: :show
-
-  CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
-  CatalogController.solr_search_params_logic += [:include_only_published]
+  self.search_params_logic += [:include_only_published]
 
   helper_method :get_search_results
 
@@ -27,36 +24,21 @@ class CatalogController < ApplicationController
     end
   end
 
+  layout 'blacklight'
+
   configure_blacklight do |config|
+    config.search_builder_class = SearchBuilder
     config.show.route = {}
           config.view.gallery.partials = [:index_header, :index]
 
           config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
           config.show.partials.insert(1, :openseadragon)
 
-    # TODO: Should the qf be set in the solr config?
     config.default_solr_params = {
       :qt => 'search',
-      :rows => 20,
-      :qf => ["id",
-              solr_name(:title, :stored_searchable),
-              solr_name(:creator, :stored_searchable),
-              solr_name(:contributor, :stored_searchable),              
-              solr_name(:subject, :stored_searchable),
-              solr_name(:type, :stored_searchable),
-              solr_name(:publisher, :stored_searchable),
-              solr_name(:series, :stored_searchable),
-              solr_name(:description, :stored_searchable),
-              solr_name(:abstract, :stored_searchable),
-              solr_name(:format, :stored_searchable),
-              Ddr::Index::Fields::YEAR_FACET,
-              solr_name(:spatial, :stored_searchable),
-              Ddr::Index::Fields::LOCAL_ID,
-              solr_name(:identifier, :stored_searchable),
-              Ddr::Index::Fields::PERMANENT_ID,
-              Ddr::Index::Fields::ALL_TEXT].join(' ')
+      :rows => 20
     }
-    
+
     config.per_page = [10,20,50,100]
     config.default_per_page = 20
     config.max_per_page = 999
@@ -112,8 +94,8 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
-    config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
-    config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field :isMemberOfCollection_ssim, helper_method: 'descendant_of', label: 'Collection'
     config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
@@ -139,14 +121,9 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
     config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
-    (Ddr::Vocab::Vocabulary.term_names(RDF::DC) - [ :title, :creator, :date, :type ]).each do |term_name|
-      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
-    end
-    Ddr::Vocab::Vocabulary.term_names(Ddr::Vocab::DukeTerms).each do |term_name|
-      config.add_show_field solr_name(term_name, :stored_searchable), separator: '; ', label: term_name.to_s.titleize
-    end
-    config.add_show_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
-    config.add_show_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
+
+    config.add_show_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
+    config.add_show_field :isMemberOfCollection_ssim, helper_method: 'descendant_of', label: 'Collection'
     config.add_show_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     # "fielded" search configuration. Used by pulldown among other places.
@@ -169,7 +146,23 @@ class CatalogController < ApplicationController
 
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
-        :qf => "id title_tesim creator_tesim subject_tesim description_tesim identifier_tesim #{Ddr::Index::Fields::PERMANENT_ID}"
+        :qf => ["id",
+                solr_name(:title, :stored_searchable),
+                solr_name(:creator, :stored_searchable),
+                solr_name(:contributor, :stored_searchable),
+                solr_name(:subject, :stored_searchable),
+                solr_name(:type, :stored_searchable),
+                solr_name(:publisher, :stored_searchable),
+                solr_name(:series, :stored_searchable),
+                solr_name(:description, :stored_searchable),
+                solr_name(:abstract, :stored_searchable),
+                solr_name(:format, :stored_searchable),
+                Ddr::Index::Fields::YEAR_FACET,
+                solr_name(:spatial, :stored_searchable),
+                Ddr::Index::Fields::LOCAL_ID,
+                solr_name(:identifier, :stored_searchable),
+                Ddr::Index::Fields::PERMANENT_ID,
+                Ddr::Index::Fields::ALL_TEXT].join(' ')
       }
     end
 
@@ -211,7 +204,7 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} desc, title_tesi asc", :label => 'relevance'
+    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} asc, title_tesi asc", :label => 'relevance'
     config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
     config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} asc", :label => 'date (old to new)'
     config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} desc", :label => 'date (new to old)'
@@ -222,87 +215,65 @@ class CatalogController < ApplicationController
 
   end
 
-  def show
-    super
-    multires_image_file_paths
-    # children_documents
-    # component_count
-    # parent_collection_document
-  end
 
-  def include_only_published(solr_parameters, user_parameters)
-      solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "#{Ddr::Index::Fields::WORKFLOW_STATE}:published"
-  end
-  
+
   def exclude_components(solr_parameters, user_parameters)
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
   end
 
-  def multires_image_file_paths
-    @document_multires_image_file_paths ||= @document.multires_image_file_paths || []
-  end
 
-  
-  def zip_images 
-    
-    # TO-DO: make the image_list param a real array or hash instead of delimited string
+
+  def zip_images
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
-    
-  
+
     # Combination of these techniques:
     #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
     #   https://github.com/rubyzip/rubyzip#basic-zip-archive-creation
-         
+
     t = Tempfile.new("temp-ddr-#{Time.now.utc}")
     Zip::OutputStream.open(t.path) do |z|
       image_list.each_with_index do |item, index|
-        title = item.to_s
-        z.put_next_entry("#{index+1}.jpg")
-        
-        # TODO: use DPC ID for the component filename OR extract the ptif path basename.
-        
+        path = item.to_s
+        ptifname = path.split(".ptif")[0]
+        filename = File.basename(ptifname)
+        z.put_next_entry("#{index+1}-" + filename + ".jpg")
+
         url1 = item
         url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
         z.print IO.read(url1_data)
-        
+
         # TODO: update a progress bar to indicate status.
         # TODO: write a test for this feature.
 
       end
 
-
-      send_file t.path, :type => 'application/zip',
-                                   :disposition => 'attachment',
-                                   :filename => itemid+".zip"
-
-            t.close
-    end  
+      send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => itemid+".zip"
+      t.close
+    end
   end
 
   def pdf_images
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
 
-
-    # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size. 
+    # A4 pixel dimensions are W: 595.28 x H: 841.89 so we should aim to keep our PDFs around that size.
     # Let's use 1000 on long side.
-    
-    pdf = Prawn::Document.new({ :margin => 0, :skip_page_creation => true })               
+
+    pdf = Prawn::Document.new({ :margin => 0, :skip_page_creation => true })
 
     image_list.each_with_index do | file, index |
 
       # New document, A4 paper, landscaped
       # pdf = Prawn::Document.new(:page_size => "A4", :page_layout => :landscape)
 
-  
+
       image_size = FastImage.size(file) # returns [w,h]
-  
+
       image_w = image_size[0]
       image_h = image_size[1]
-  
+
       # aspect ratio (w/h)
       image_r = image_w.to_f / image_h.to_f
 
@@ -313,23 +284,22 @@ class CatalogController < ApplicationController
         pg_w = 1000 * image_r
         pg_h = 1000
       end
-      
+
       # For small-derivative source image: PDF page will be full-size
       if image_w < 1000 && image_h < 1000
         pg_w = image_w.to_i
-        pg_h = image_h.to_i      
+        pg_h = image_h.to_i
       end
-      
+
       # Note: keep layout => :portrait even for landscape images else they don't render correctly
       pdf.start_new_page(:size => [pg_w, pg_h], :layout => :portrait, :margin => 0)
       y_pos = pdf.cursor   # Record the top y value (y=0 is the bottom of the page)
-      pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]  
-        
+      pdf.image open(file, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }), :at => [0, y_pos], :fit => [pg_w, pg_h]
+
     end
-    
-    
+
     send_data pdf.render, filename: itemid+'.pdf', type: 'application/pdf'
-    
+
   end
 
 
@@ -342,5 +312,6 @@ class CatalogController < ApplicationController
   def authentication_required?
     Ddr::Public.require_authentication
   end
+
 
 end

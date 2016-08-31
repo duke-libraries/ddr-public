@@ -1,53 +1,57 @@
-<%# TODO: This full-width large presentation might work better as a showcase layout option rather than 
+<%# TODO: This full-width large presentation might work better as a showcase layout option rather than
 live in its own special partial. E.g., then it could be used for other portals beyond the digital
 collections homepage.  %>
 
 <% unless has_search_parameters? %>
-  <div class="container-fluid showcase-wrapper showcase-full">
-    <div class="row no-gutter">
-      <div class="col-md-5 collection-start">
-        <h1 id="collection-title"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1>
-        <hr/>
-        <p class="collection-abstract"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about") %></p>
 
-        <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Collection"), :class => "btn btn-success browse-all") do %>
-          Browse All <span class="item-tally"><%= number_with_delimiter(@portal.collection_count) %></span> Collections
-        <% end %>
-        
-        <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
-          Browse All <span class="item-tally"><%= number_with_delimiter(@portal.item_count) %></span> Items
-        <% end %>
+  <% cache("home_showcase_index_portal}", expires_in: 30.minutes) do %>
 
-      </div>
-      <% if @portal.showcase.documents %>
-        
-          <% @portal.showcase.documents.sample(1).each_with_index do |doc, index| %>
-            <% if doc.multires_image_file_paths.first %>
-            
-              <div class="col-md-12 col-sm-12 collection-showcase" id="collection-showcase-0" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '1200,', :region => 'pct:5,5,90,90' }) %>);">
+    <div class="container-fluid showcase-wrapper showcase-full">
+      <div class="row no-gutter">
+        <div class="col-md-5 collection-start">
+          <h1 id="collection-title"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1>
+          <hr/>
+          <p class="collection-abstract"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about") %></p>
 
-                <%= link_to_document doc, "", :class => "showcase-item-wrap", :id => "showcase-item-link-"+index.to_s %>                 
+          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Collection"), :class => "btn btn-success browse-all") do %>
+            Browse All <span class="item-tally"><%= number_with_delimiter(@portal.collection_count) %></span> Collections
+          <% end %>
 
-                <div class="showcase-item-caption" id="showcase-item-caption-<%= index %>">
-                  <div class="item-caption-inner">
-                    <small>
-                    <%= link_to_document doc, doc.title.truncate(200, separator: ' ') %> 
-                    <span class="text-muted"> &mdash; Collection: <%= link_to_document(doc.parent) %></small>
+          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
+            Browse All <span class="item-tally"><%= number_with_delimiter(@portal.item_count) %></span> Items
+          <% end %>
+
+        </div>
+        <% if @portal.showcase.documents %>
+
+            <% @portal.showcase.documents.sample(1).each_with_index do |doc, index| %>
+              <% if doc.multires_image_file_paths.first %>
+
+                <div class="col-md-12 col-sm-12 collection-showcase" id="collection-showcase-0" style="background-image: url(<%= iiif_image_path(doc.multires_image_file_paths.first, {:size => '1200,', :region => 'pct:5,5,90,90' }) %>);">
+
+                  <%= link_to_document doc, "", :class => "showcase-item-wrap", :id => "showcase-item-link-"+index.to_s %>
+
+                  <div class="showcase-item-caption" id="showcase-item-caption-<%= index %>">
+                    <div class="item-caption-inner">
+                      <small>
+                      <%= link_to_document doc, doc.title.truncate(200, separator: ' ') %>
+                      <span class="text-muted"> &mdash; Collection: <%= link_to_document(doc.parent) %></small>
+                    </div>
                   </div>
+
                 </div>
 
-              </div>
-              
+            <%- end %>
           <%- end %>
-        <%- end %>
-        
-      <% end %>
+
+        <% end %>
 
 
-    
 
+
+      </div>
     </div>
-  </div>
-  
+
+  <%- end %>
 
 <%- end %>

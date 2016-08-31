@@ -173,6 +173,8 @@ body.blacklight-catalog-show #content {
   background-size: contain;
   float: right;
   width: 50px;
+  display: block;
+  margin-bottom: 20px;
 }
 
 /* -------------
@@ -466,7 +468,7 @@ p + #source-collection {
 }
 
 #related-items {
-  & .popover { // Obscure links in popover metadata
+  & .popover { /* Obscure links in popover metadata */
     & a {
       color: $text-color;
       cursor: unset;
@@ -477,6 +479,9 @@ p + #source-collection {
     & .blacklight-permanent_url_ssi {
       display: none;
     }
+  }
+  & .index-document-functions {
+    display: none; /* See https://github.com/duke-libraries/ddr-public/issues/414 */
   }
 }
 
@@ -552,6 +557,40 @@ p + #source-collection {
     SEARCH RESULTS
 --------------------- */
 
+/* Overlay format icons over search result thumbnails using the display_format
+administrative metadata. This will help disambiguate different kinds of
+image-based items */
+
+#documents {
+  & .document {
+
+    & .document-thumbnail a:first-child, & .thumbnail-wrapper a:first-child {
+      float: left;
+      position: relative;
+
+      &:before {
+        display: none;
+        color: white;
+        font-family: "FontAwesome";
+        padding: 0.4em;
+        background-color: $gray-light;
+        font-size: $font-size-base;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+      }
+    }
+    /* Add more of these as needed using blacklight-{display_format} class
+    and FontAwesome Unicode character... */
+    &.blacklight-folder .document-thumbnail a:first-child, &.blacklight-folder .thumbnail-wrapper a:first-child {
+      &:before {
+        display: block;
+        content: "\f115";
+      }
+    }
+  }
+}
+
 #documents.gallery, #collections.gallery { // Grid view
 
   &:before, &:after {
@@ -571,12 +610,10 @@ p + #source-collection {
 
 
   & .document {
-
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: auto;
     min-width: auto;
-
   }
 
   & .img-thumbnail {
@@ -711,6 +748,34 @@ p + #source-collection {
     }
 
   }
+  
+  hr.contact-separator {
+    border-top: 2px solid $brand-success;
+    clear: both;
+  }
+
+  .vertical-model-separator {
+    position: relative;
+    border-left: 2px solid $gray-lighter;
+    color: $gray-lighter;
+    height: 30px;
+    display: block;
+    width: 1px;
+    margin: 10px auto;
+
+    & .fa {
+      font-size: 10px;
+      position: absolute;
+      bottom: -2px;
+      left: -5px;
+      &.fa-map-marker {
+        font-size: 16px;
+        color: $brand-success;
+        background-color: white;
+      }
+    }
+
+  }
 
   #source-collection {
 
@@ -726,6 +791,10 @@ p + #source-collection {
       color: #737373;
     }
 
+  }
+  
+  .show-tools {
+    margin-top: 40px;
   }
   
   #documents + #source-collection {

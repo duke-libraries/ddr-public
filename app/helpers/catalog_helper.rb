@@ -24,7 +24,6 @@ module CatalogHelper
     collections[collection_internal_uri]
   end
 
-  # TODO: use solr query concerns
   def item_image_embed options={}
     image_tag = ""
     response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
@@ -47,10 +46,10 @@ module CatalogHelper
 
   # View helper: from EITHER collection show page or configured collection portal, browse items.
   def collection_browse_items_url document, options={}
-    if document.present? # if the collection homepage is a document show
-      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri)))
-    else
+    if @portal
       search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))
+    else
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri, "f[admin_set_facet_sim][]" => document.admin_set)))
     end
   end
 
@@ -100,6 +99,29 @@ module CatalogHelper
   end
 
 
+  def get_finding_aid(document)
+    begin
+      Timeout.timeout(2) do
+        document.finding_aid
+      end
+    rescue OpenURI::HTTPError, Timeout::Error => e
+      Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+      false
+    end
+  end
+
+
+  def get_research_help(document)
+    begin
+      Timeout.timeout(2) do
+        document.research_help
+      end
+    rescue => e
+      Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+      false
+    end
+  end
+
   # View helper
   def research_help_title research_help
     unless research_help.name.blank?
@@ -117,6 +139,14 @@ module CatalogHelper
 
     if request.path =~ /^\/dc.*$/
       active_search_scopes << ["Digital Collections", digital_collections_index_portal_url]
+    end
+
+    if request.path =~ /^\/portal\/(?!facet).*$/
+      active_search_scopes << ["This Portal", portal_url(params[:collection])]
+    end
+
+    if request.path =~ /^\/portal.*$/
+      active_search_scopes << ["All Portals", portal_index_portal_url]
     end
 
     active_search_scopes << ["Digital Repository", catalog_index_url]
@@ -155,8 +185,8 @@ module CatalogHelper
       # We had to revise the query_images() function in json-api/models/attachment.php to
       # cirumvent a bug where image data was not rendering when hitting the API via https.
       begin
-        blog_posts = JSON.parse(open(blog_url,{ ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read)
-      rescue OpenURI::HTTPError => e
+        blog_posts = JSON.parse(open(blog_url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, read_timeout: 2 }).read)
+      rescue Net::ReadTimeout, OpenURI::HTTPError => e
         Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
         fallback_link = link_to "See All Blog Posts", "http://blogs.library.duke.edu/bitstreams"
         "<p class='small'>" + fallback_link + "</p>"

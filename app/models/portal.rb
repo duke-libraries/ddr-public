@@ -5,18 +5,20 @@ class Portal
   include Ddr::Public::Controller::SolrQueryConstructor
 
 
-  attr_accessor :local_id, :controller_name
+  attr_accessor :local_id, :controller_name, :scope
 
   def initialize(args={})
     @local_id        = args.fetch(:local_id, nil)
     @controller_name = args.fetch(:controller_name, nil)
+    @scope = args.fetch(:scope, nil)
   end
 
 
   private
 
+
   def item_or_collection_documents(local_ids)
-    local_ids ? documents(item_or_collection_documents_search(local_ids)) : []
+    local_ids ? item_or_collection_documents_search(local_ids).documents : []
   end
 
 
@@ -26,37 +28,39 @@ class Portal
   end
 
   def parent_collection_document
-    parent_collection_documents.first if parent_collection_documents.count == 1
+    @parent_collection_document ||= parent_collection_documents.first if parent_collection_documents.count == 1
   end
 
   def parent_collection_documents
-    @parent_collection_documents ||= documents(parent_collections_search) || []
+    @parent_collection_documents ||= parent_collections_search.documents || []
   end
 
   def parent_collections_count
-    @parent_collections_count ||= response(parent_collections_search).total
+    @parent_collections_count ||= parent_collections_search.total
   end
 
   def parent_collections_search
-    response, documents = get_search_results({ q: parent_collections_query, rows: 100 }, include_only_published)
+    query = search_builder.query({q: parent_collections_query, rows: '1000'})
+    @parent_collections_search ||= repository.search(query)
   end
 
   def parent_collections_query
-    portal_local_ids ? local_ids_query(portal_local_ids) : admin_set_query(portal_admin_sets)
+    @parent_collections_query ||= portal_local_ids ? local_ids_query(portal_local_ids) : admin_set_query(portal_admin_sets)
   end
 
-  
+
 
   def child_item_documents
-    @child_item_documents ||= documents(child_items_search) || []
+    @child_item_documents ||= child_items_search.documents || []
   end
 
   def child_items_count
-    @child_items_count ||= response(child_items_search).total
+    @child_items_count ||= child_items_search.total
   end
 
   def child_items_search
-    response, documents = get_search_results({ q: child_items_query, rows: 100 }, include_only_published)
+    query = search_builder.query({ q: child_items_query, rows: '100', sort: solr_sort })
+    @child_items_search ||= repository.search(query)
   end
 
   def child_items_query
@@ -70,23 +74,21 @@ class Portal
   end
 
   def item_or_collection_documents_search(local_ids)
-    response, documents = get_search_results( { q: item_or_collection_documents_query(local_ids), rows: 25 }, include_only_published)
+    query = search_builder.query({ q: item_or_collection_documents_query(local_ids), rows: '100', sort: solr_sort })
+    repository.search(query)
+  end
+
+  def solr_sort
+    "#{Ddr::Index::Fields::DATE_SORT} asc"
   end
 
 
-
-  def include_only_published
-    { fq: "#{Ddr::Index::Fields::WORKFLOW_STATE}:published" }
+  def search_builder
+    @search_builder ||= SearchBuilder.new(query_processor_chain, @scope)
   end
 
-
-
-  def response(response_and_documents)
-    response_and_documents[0]
-  end
-
-  def documents(response_and_documents)
-    response_and_documents[1]
+  def query_processor_chain
+    [:add_query_to_solr, :apply_access_controls, :include_only_published]
   end
 
 
@@ -100,8 +102,25 @@ class Portal
   end
 
   def portal_view_config
-    portal_view_config = Rails.application.config.portal.try(:[], 'controllers').try(:[], local_id)
-    portal_view_config ||= Rails.application.config.portal.try(:[], 'controllers').try(:[], controller_name)
+    [local_id_configuration, dc_generic_view_config, controller_name_configuration].compact.first
+  end
+
+  def local_id_configuration
+   portal_configuration.try(:[], local_id)
+  end
+
+  def controller_name_configuration
+    portal_configuration.try(:[], controller_name)
+  end
+
+  def portal_configuration
+    Rails.application.config.portal.try(:[], 'controllers')
+  end
+
+  def dc_generic_view_config
+    if local_id && controller_name == 'digital_collections'
+      { "includes"=>{ "local_ids"=>[local_id] } }
+    end
   end
 
 

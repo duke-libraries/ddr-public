@@ -23,25 +23,25 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Solr::Document::DublinCore)
 
+
+  def controller_scope
+    ApplicationController.try(:current)
+  end
+
   def published?
     get(Ddr::Index::Fields::WORKFLOW_STATE) == "published"
   end
 
   def abstract
-    get(ActiveFedora::SolrService.solr_name(:abstract, :stored_searchable))
+    get("abstract_tesim")
   end
 
   def description
-    get(ActiveFedora::SolrService.solr_name(:description, :stored_searchable))
-  end
-
-  def public_controller
-    public_controller = effective_configs.try(:[] , 'controller')
-    public_controller ||= 'catalog'
+    get("description_tesim")
   end
 
   def thumbnail
-    Rails.application.config.portal['portals']['collection_local_id'].try(:[], self.local_id).try(:[], 'thumbnail_image')
+    portal_doc_config.try(:[], 'collection_local_id').try(:[], self.local_id).try(:[], 'thumbnail_image')
   end
 
   def derivative_url_prefixes
@@ -56,12 +56,17 @@ class SolrDocument
     Restrictions.new(max_download)
   end
 
+  def public_controller
+    public_controller = effective_configs.try(:[] , 'controller')
+    public_controller ||= 'catalog'
+  end
+
   def public_collection
     effective_configs.try(:[] , 'collection')
   end
 
   def public_action
-    if Rails.application.config.portal['portals']['collection_local_id'][self.local_id]
+    if dc_collection? && self.local_id
       "index"
     else
       "show"
@@ -69,20 +74,49 @@ class SolrDocument
   end
 
   def public_id
-    if self.parent && collection_pid_configuration.try(:[], 'item_id_field') == 'local_id' && self.active_fedora_model != "Component"
-      public_id = self.local_id ? self.local_id : self.id
+    if dc_collection?
+      nil
+    elsif dc_item?
+      self.local_id ? self.local_id : self.id
     else
-      public_id = self.id unless Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], self.local_id)
+      self.id
     end
   end
 
+
   # This assumes that the derivative IDs are the local_ids of an item's components
   def derivative_ids(type='default')
-    struct_map_docs(type).map { |doc| doc.local_id }.compact
+    ordered_component_docs(type).map { |doc| doc.local_id }.compact
+  end
+
+  def multires_image_file_paths
+    @multires_image_file_paths ||= find_multires_image_file_paths
+  end
+
+  def first_multires_image_file_path
+    @first_multires_image_file_path ||= find_first_multires_image_file_path
   end
 
 
-  def multires_image_file_paths(type='default')
+  def ordered_component_pids(type='default')
+    [struct_map_ordered_pids(type), local_id_order_component_pids].find { |val| val.present? }
+  end
+
+  def ordered_component_docs(type='default')
+    [struct_map_ordered_docs(type), local_id_order_component_docs].find { |val| val.present? }
+  end
+
+
+
+  private
+
+  Restrictions = Struct.new(:max_download)
+
+  def max_download
+    portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
+  end
+
+  def find_multires_image_file_paths
     docs = ordered_component_docs('Images')
     if docs.present?
       docs.map { |doc| doc.multires_image_file_path }.compact
@@ -91,35 +125,13 @@ class SolrDocument
     end
   end
 
-  def first_multires_image_file_path(type='default')
+  def find_first_multires_image_file_path
     pids = ordered_component_pids('Images')
     if pids.present?
-      paths = self.class.find(pids.first).multires_image_file_path
+      self.class.find(pids.first).multires_image_file_path
     else
       nil
     end
-  end
-
-
-  def ordered_component_pids(type='default')
-    [struct_map_ordered_pids(type),
-     local_id_order_component_pids].find { |val| val.present? }
-  end
-
-  def ordered_component_docs(type='default')
-    [struct_map_ordered_docs(type),
-     local_id_order_component_docs].find { |val| val.present? }
-  end
-
-
-
-  private
-
-
-  Restrictions = Struct.new(:max_download)
-
-  def max_download
-    portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
   end
 
   def struct_map_ordered_docs(type='default')
@@ -187,28 +199,50 @@ class SolrDocument
     ActiveFedora::SolrService.construct_query_for_pids(pids)
   end
 
-
   def effective_configs
-    applied_configs = collection_pid_configuration()
-    applied_configs ||= admin_set_configuration()
+    [collection_pid_configuration, dc_generic_configuration, collection_pid_configuration].compact.first
   end
 
   def admin_set_configuration
-    admin_set = SolrDocument.find(self.admin_policy_pid).admin_set
-    Rails.application.config.portal.try(:[], 'portals').try(:[], 'admin_sets').try(:[], admin_set)
+    portal_doc_config.try(:[], 'admin_sets').try(:[], admin_policy_admin_set)
   end
 
   def collection_pid_configuration
-    local_id = SolrDocument.find(self.admin_policy_pid).local_id
-    Rails.application.config.portal.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], local_id)
+    portal_doc_config.try(:[], 'portals').try(:[], 'collection_local_id').try(:[], admin_policy_local_id)
+  end
+
+  def dc_generic_configuration
+    if admin_policy_local_id && admin_policy_admin_set == 'dc'
+      {"controller"=>"digital_collections", "collection"=>admin_policy_local_id, "item_id_field"=>"local_id"}
+    end
+  end
+
+  def dc_collection?
+    admin_policy_admin_set == 'dc' && self.active_fedora_model == 'Collection'
+  end
+
+  def dc_item?
+    admin_policy_admin_set == 'dc' && self.active_fedora_model == 'Item'
+  end
+
+  def portal_doc_config
+    Rails.application.config.portal.try(:[], 'portals')
   end
 
   def portal_view_config
-    local_id = SolrDocument.find(self.admin_policy_pid).local_id
-    Rails.application.config.portal.try(:[], 'controllers').try(:[], local_id)
+    Rails.application.config.portal.try(:[], 'controllers').try(:[], admin_policy_local_id)
   end
 
+  def admin_policy_admin_set
+    Rails.cache.fetch("admin_policy_admin_set/#{self.admin_policy_id}", expires_in: 7.days) do
+      self.admin_policy.admin_set
+    end
+  end
 
-
+  def admin_policy_local_id
+    Rails.cache.fetch("admin_policy_local_id/#{self.admin_policy_id}", expires_in: 7.days) do
+      self.admin_policy.local_id
+    end
+  end
 
 end

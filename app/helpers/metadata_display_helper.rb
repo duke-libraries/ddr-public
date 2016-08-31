@@ -6,14 +6,20 @@ module MetadataDisplayHelper
 
   def descendant_of options={}
     pid = ActiveFedora::Base.pid_from_uri(options[:value].first)
-    query = ActiveFedora::SolrService.construct_query_for_pids([pid])
-    results = ActiveFedora::SolrService.query(query)
-    docs = results.map { |result| SolrDocument.new(result) }
+    docs = find_solr_documents(pid)
     titles = docs.map(&:title)
     if can? :read, docs.first
       link_to_document(docs.first)
     else
       titles.first
+    end
+  end
+
+  def find_solr_documents id
+    Rails.cache.fetch("find_solr_document_#{id}", expires_in: 7.days) do
+      query = ActiveFedora::SolrService.construct_query_for_pids([id])
+      results = ActiveFedora::SolrService.query(query)
+      docs = results.map { |result| SolrDocument.new(result) }
     end
   end
 
@@ -26,20 +32,22 @@ module MetadataDisplayHelper
   end
 
   def source_collection options={}
+    document = options[:document]
+    placement = options[:placement] ? options[:placement] : 'top'
     begin
-
-      link_to options[:document].finding_aid.collection_title, options[:document].finding_aid.url, { data: {
-        toggle: 'popover',
-        placement: options[:placement] ? options[:placement] : 'top',
-        html: true,
-        title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide',
-        content: finding_aid_popover(options[:document].finding_aid)
-      }}
-
+      Rails.cache.fetch("source_collection_#{document.pid}_#{placement}", expires_in: 7.days) do
+        finding_aid = document.finding_aid
+        link_to finding_aid.collection_title, finding_aid.url, { data: {
+          toggle: 'popover',
+          placement: placement,
+          html: true,
+          title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide',
+          content: finding_aid_popover(finding_aid)
+        }}
+      end
     rescue OpenURI::HTTPError => e
       Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
-      fallback_link = link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/"
-      "<p class='small'>" + fallback_link + "</p>"
+      link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/"
     end
   end
 

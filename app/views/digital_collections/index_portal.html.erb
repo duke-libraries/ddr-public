@@ -26,7 +26,7 @@
   <%= render partial: "home_highlights" %>
 
   <%= render partial: "show_blog_posts" %>
-    
+
     <%# set the html title for collection portal page -%>
     <% if @portal.collection %>
       <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>

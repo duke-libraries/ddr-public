@@ -3,6 +3,7 @@ class DocumentModel::Collection
   include Blacklight::Configurable
   include Blacklight::SolrHelper
   include Ddr::Public::Controller::SolrQueryConstructor
+  include DocumentModel::Searcher
 
   attr_accessor :document
 
@@ -15,18 +16,22 @@ class DocumentModel::Collection
   end
 
   def items
-    items_search[1]
+    items_search.documents
   end
 
   def item_count
-    items_search[0].total
+    items_search.total
   end
 
+  def metadata_header
+    "Collection Info"
+  end
 
   private
 
   def items_search
-    response, documents = get_search_results({ q: items_query, rows: 10000 })
+    query = searcher.query({ q: items_query, rows: '10000' })
+    repository.search(query)
   end
 
   def items_query
