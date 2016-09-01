@@ -1,6 +1,6 @@
 <% unless has_search_parameters? %>
 
-  <% cache("home_showcase_#{params[:collection]}", expires_in: 30.minutes) do %>
+  <% cache("home_showcase_#{params[:collection]}_#{current_ability.user}", expires_in: 30.minutes) do %>
 
     <div class="container-fluid showcase-wrapper">
       <div class="row no-gutter">
