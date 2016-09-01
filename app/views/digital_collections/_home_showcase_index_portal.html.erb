@@ -4,7 +4,7 @@ collections homepage.  %>
 
 <% unless has_search_parameters? %>
 
-  <% cache("home_showcase_index_portal}", expires_in: 30.minutes) do %>
+  <% cache("home_showcase_index_portal_#{current_ability.user}", expires_in: 30.minutes) do %>
 
     <div class="container-fluid showcase-wrapper showcase-full">
       <div class="row no-gutter">
