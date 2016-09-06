@@ -1,2 +1,2 @@
-<%= render_download_link(document: document, label: "Download", css_class: "btn btn-default btn-success") %>
+<%= render_download_link(document: document, label: "Download", css_class: "btn btn-default btn-success btn-file-download", data: { ga_permanent_id: ga_permanent_id(document), ga_admin_set: ga_admin_set(document), ga_collection: ga_collection(document), ga_item: ga_item(document) }) %>
 <%= render partial: "component_type_and_size", locals: { document: document } %>

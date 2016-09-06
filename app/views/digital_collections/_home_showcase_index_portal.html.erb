@@ -13,11 +13,11 @@ collections homepage.  %>
           <hr/>
           <p class="collection-abstract"><%= t("ddr.public.portal.#{params[:collection] || controller_name}.about") %></p>
 
-          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Collection"), :class => "btn btn-success browse-all") do %>
+          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Collection"), :class => "btn btn-success browse-all", :id => "browse-all-colls-btn") do %>
             Browse All <span class="item-tally"><%= number_with_delimiter(@portal.collection_count) %></span> Collections
           <% end %>
 
-          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
+          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
             Browse All <span class="item-tally"><%= number_with_delimiter(@portal.item_count) %></span> Items
           <% end %>
 

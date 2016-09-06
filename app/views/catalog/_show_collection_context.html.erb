@@ -2,7 +2,7 @@
   <div id="collection-context" class="text-center">
     <% if @document.collection.admin_set.present? %>
       <div class="text-muted text-uppercase small">Collection Group</div>
-      <strong><%= link_to_admin_set(@document.collection) %></strong>
+      <strong><%= link_to_admin_set(@document.collection, { id: "admin-set" }) %></strong>
       <div class="vertical-model-separator">
         <span class="fa <%= collection ? 'fa-map-marker' : 'fa-circle' %>"></span>
       </div>
@@ -12,7 +12,7 @@
       <div class="text-muted text-uppercase small">This Collection</div>
     <% else %>
       <div class="text-muted text-uppercase small">Collection</div>
-      <p class="strong"><%= link_to_document(@document.collection) %></p>
+      <p class="strong"><%= link_to_document @document.collection, @document.collection.title, :id => "parent-collection" %></p>
       <p class="small"><%= truncate(@document.collection.abstract, :length => 180, :separator => ' ') %></p>
       <div class="vertical-model-separator">
         <span class="fa <%= item ? 'fa-map-marker' : 'fa-circle' %>"></span>
@@ -23,7 +23,7 @@
       <div class="text-muted text-uppercase small">This Item</div>
     <% elsif component %>
       <div class="text-muted text-uppercase small">Item</div>
-      <p class="strong"><%= link_to_document(@document.item) %></p>
+      <p class="strong"><%= link_to_document @document.item, @document.item.title, :id => "parent-item" %></p>
       <div class="vertical-model-separator">
         <span class="fa fa-map-marker"></span>
       </div>

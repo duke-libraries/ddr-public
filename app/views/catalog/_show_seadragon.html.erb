@@ -83,8 +83,7 @@ $(document).ready(function(e){
     zoomOutButton: "btn-zoom-out",
     homeButton: "btn-full-page",
     rotateLeftButton: "btn-rotate-l",
-    rotateRightButton: "btn-rotate-r",
-    fullPageButton: "btn-fullscreen"
+    rotateRightButton: "btn-rotate-r"
     });
 
   // When the current page has changed
@@ -194,6 +193,11 @@ $(document).ready(function(e){
   $('form#page-jumper').submit(function(e){
     e.preventDefault();
     viewer.goToPage($('#page-jumper-text').val() - 1);
+  });
+
+  $('#btn-fullscreen').click(function(e){
+    e.preventDefault();
+    viewer.setFullScreen(true);
   });
 
   $('#btn-fullscreen-close').click(function(e){

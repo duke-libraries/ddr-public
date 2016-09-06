@@ -12,7 +12,7 @@
 
       <% if collections[:count] > 3 %>
         <% path = add_facet_params_and_redirect(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection') %>
-        <h4><%= link_to "Matching Collections (#{number_with_delimiter(collections[:count])}) &raquo;".html_safe, path %></h4>
+        <h4><%= link_to "Matching Collections (#{number_with_delimiter(collections[:count])}) &raquo;".html_safe, path, data: { :"ga-category" => 'search-results', :"ga-action" => 'collection-match-browse' }   %></h4>
       <% else %>
         <h4>Matching Collections (<%= collections[:count] %>)</h4>
       <% end %>

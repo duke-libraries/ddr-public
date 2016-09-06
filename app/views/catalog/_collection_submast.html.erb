@@ -6,7 +6,7 @@
   <% end %>
 
   <% if document.item_count > 1 %>
-    <%= link_to collection_browse_items_url(document), :class => "btn btn-primary browse-all" do %>
+    <%= link_to collection_browse_items_url(document), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn" do %>
       Browse all <strong><%= number_with_delimiter(document.item_count) %></strong> Items
     <% end %>
   <% end %>

@@ -2,6 +2,7 @@
 Either can have one or multiple files.  %>
 
 <div id="jwplayer-element">Loading the media player...</div>
+
 <% @derivcount = derivatives.count %>
 
 <%# Instantiate JW Player with a playlist. Single-component A/V is %>
@@ -40,6 +41,33 @@ Either can have one or multiple files.  %>
     ]
   });
 
+  <%# Trigger events that GA Event Tracking listeners can detect %>
+  <%# https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/ %>
+  playerInstance.on('play', function(){
+    if(playerInstance.getPosition() == 0) { <%# only track if play from beginning of file %>
+      $('#jwplayer-element').trigger('play');
+    }
+  });
+  playerInstance.on('complete', function(){
+    $('#jwplayer-element').trigger('complete');
+  });
+  playerInstance.on('seeked', function(){
+    $('#jwplayer-element').trigger('seeked');
+  });
+  playerInstance.on('fullscreen', function(){
+    $('#jwplayer-element').trigger('fullscreen');
+  });
+  playerInstance.on('playlistItem', function(){
+    if(playerInstance.getPlaylistIndex() > 0) { 
+      $ ('#jwplayer-element').trigger('playlist-item-change');
+    }
+  });
+  playerInstance.on('playlistComplete', function(){
+    if(playerInstance.getPlaylist().length > 1) { 
+      $('#jwplayer-element').trigger('playlist-complete');
+    }
+  });
+
   <%# If there are multiple A/V derivatives, use JS API to navigate
   <%# playlist with external controls. %>
   <%# See https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/#playlist %>
@@ -66,7 +94,7 @@ Either can have one or multiple files.  %>
 <% end %>
 
 <% if @derivcount > 1 %>
-  <nav>
+  <nav id="av-playlist-nav">
     <ul class="pagination pagination-sm av-playlist-pagination">
       <li class="disabled"><a href="#" class="disabled">Part: </a></li>
       <% derivatives.each_with_index do |url,index| %>

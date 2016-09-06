@@ -2,16 +2,18 @@
 <%= render partial: "home_highlights" %>
 
 <% if @portal.collection && @portal.description %>
-  <% if lookup_context.exists?('about', 'digital_collections') %>
-    <h3 id="about" class="feature-head"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
-  <% else %>
-    <h3 id="about" class="feature-head">About the Digital Collection</h3>
-  <% end %>
-  <%= simple_format(@portal.description) %>
+  <div id="about-collection">
+    <% if lookup_context.exists?('about', 'digital_collections') %>
+      <h3 class="feature-head"><%= link_to raw("About the Digital Collection &raquo;"), digital_collections_about_path %></h3>
+    <% else %>
+      <h3 class="feature-head">About the Digital Collection</h3>
+    <% end %>
+    <%= simple_format(@portal.description) %>
 
-  <% if lookup_context.exists?('about', 'digital_collections') %>
-     <p> <%= link_to raw("Read More &raquo;"), digital_collections_about_path %></p>
-  <% end %>
+    <% if lookup_context.exists?('about', 'digital_collections') %>
+       <p> <%= link_to raw("Read More &raquo;"), digital_collections_about_path %></p>
+    <% end %>
+  </div>
 <% end %>
 
 <% unless @portal.description.present? %>
