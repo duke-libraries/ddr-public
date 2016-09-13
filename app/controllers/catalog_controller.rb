@@ -204,7 +204,7 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} asc, title_tesi asc", :label => 'relevance'
+    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} asc, #{Ddr::Index::Fields::TITLE} asc", :label => 'relevance'
     config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
     config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} asc", :label => 'date (old to new)'
     config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} desc", :label => 'date (new to old)'
