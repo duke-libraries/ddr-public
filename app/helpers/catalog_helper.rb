@@ -75,7 +75,7 @@ module CatalogHelper
   def render_download_link args = {}
     return unless args[:document]
     label = icon("download", "Download")
-    link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id]
+    link_to label, download_path(args[:document]), class: args[:css_class], id: args[:css_id], data: args[:data]
   end
 
   # View helper
@@ -214,7 +214,7 @@ module CatalogHelper
   def link_to_admin_set document, options={}
     name = admin_set_title(document.admin_set)
     url =  search_action_url(add_facet_params(Ddr::Index::Fields::ADMIN_SET_FACET, document.admin_set))
-    link_to name, url, :class => options[:class]
+    link_to name, url, :class => options[:class], :id => "admin-set"
   end
 
 

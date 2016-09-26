@@ -106,8 +106,6 @@ class SolrDocument
     [struct_map_ordered_docs(type), local_id_order_component_docs].find { |val| val.present? }
   end
 
-
-
   private
 
   Restrictions = Struct.new(:max_download)
