@@ -24,10 +24,12 @@ module MetadataDisplayHelper
   end
 
   def display_edtf_date options={}
-    if date = Date.edtf(options[:value].first)
-      date.humanize
-    else
-      options[:value].first
+    options[:value].map do |date|
+      if edtf_date = Date.edtf(date)
+        edtf_date.humanize
+      else
+        date
+      end
     end
   end
 
