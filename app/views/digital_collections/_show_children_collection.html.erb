@@ -1,21 +1,22 @@
-<h3 class="feature-head">
-  <%= link_to collection_browse_items_url(@portal.collection) do %>
-    Items in This Collection <span class="text-muted">(<%= number_with_delimiter(@portal.item_count) %>)</span>
-  <% end %>
-</h3>
-
-<%# Show the first 6 items in a grid. Can specify a different number in a
-portal config for digital collections using setting "show_items". Use 0 to 
-not show this section at all.  %>
-<% show_items = 6 if local_assigns[:show_items].nil? %>
-<%= render_document_index_with_view("gallery", @portal.items[0..(show_items - 1)]) %>
-
-<% if @portal.item_count > show_items %>
-  <p class="browse-more">
+<div id="items-in-collection">
+  <h3 class="feature-head">
     <%= link_to collection_browse_items_url(@portal.collection) do %>
-      Browse all <%= number_with_delimiter(@portal.item_count) %> Items &raquo;
+      Items in This Digital Collection <span class="text-muted">(<%= number_with_delimiter(@portal.item_count) %>)</span>
     <% end %>
-  </p>
-<% end %>
+  </h3>
 
+  <%# Show the first 6 items in a grid. Can specify a different number in a
+  portal config for digital collections using setting "show_items". Use 0 to 
+  not show this section at all.  %>
+  <% show_items = 6 if local_assigns[:show_items].nil? %>
+  <%= render_document_index_with_view("gallery", @portal.items[0..(show_items - 1)]) %>
+
+  <% if @portal.item_count > show_items %>
+    <p class="browse-more">
+      <%= link_to collection_browse_items_url(@portal.collection) do %>
+        Browse all <%= number_with_delimiter(@portal.item_count) %> Items &raquo;
+      <% end %>
+    </p>
+  <% end %>
+</div>
 

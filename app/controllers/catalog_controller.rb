@@ -90,7 +90,7 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_index_field solr_name(:date, :stored_searchable), helper_method: 'display_edtf_date', separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
@@ -119,7 +119,7 @@ class CatalogController < ApplicationController
     config.add_show_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_show_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_show_field solr_name(:date, :stored_searchable), helper_method: 'display_edtf_date', separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
 
     config.add_show_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
@@ -204,7 +204,7 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} asc, title_tesi asc", :label => 'relevance'
+    config.add_sort_field "score desc, #{Ddr::Index::Fields::DATE_SORT} asc, #{Ddr::Index::Fields::TITLE} asc", :label => 'relevance'
     config.add_sort_field "#{Ddr::Index::Fields::TITLE} asc", :label => 'title'
     config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} asc", :label => 'date (old to new)'
     config.add_sort_field "#{Ddr::Index::Fields::DATE_SORT} desc", :label => 'date (new to old)'

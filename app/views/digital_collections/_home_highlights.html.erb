@@ -20,7 +20,7 @@
         <%- end %>
         <% if params[:collection].present? %>
           <div class="col-md-12">
-            <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path, class: "small text-muted" %></p>
+            <p class="text-right"><%= link_to 'View All Featured Items', featured_items_path, class: "small text-muted", id: "view-all-featured" %></p>
           </div>
         <% end %>
       </div>

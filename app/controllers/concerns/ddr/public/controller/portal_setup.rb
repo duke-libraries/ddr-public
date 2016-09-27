@@ -20,7 +20,7 @@ module Ddr
         end
 
         def parent_uris
-          Rails.cache.fetch("#{controller_name}/#{params[:collection]}/#{current_ability}", expires_in: 7.days) do
+          Rails.cache.fetch("#{controller_name}/#{params[:collection]}/#{current_ability.user}", expires_in: 1.hour) do
             parent_collection_uris.map { |id| [:is_governed_by, id] }
           end
         end

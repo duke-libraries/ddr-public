@@ -1,6 +1,6 @@
 <% unless has_search_parameters? %>
 
-  <% cache("home_showcase_#{params[:collection]}", expires_in: 30.minutes) do %>
+  <% cache("home_showcase_#{params[:collection]}_#{current_ability.user}", expires_in: 30.minutes) do %>
 
     <div class="container-fluid showcase-wrapper">
       <div class="row no-gutter">
@@ -8,9 +8,9 @@
           <h1 id="collection-title"<% if @portal.title.length >= 70 %> class="long-title"<% end %>>
           <%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) %>
           </h1>
-          <p class="collection-abstract"><%= @portal.abstract %> <%= link_to raw("More&nbsp;&raquo;"), {anchor: "about"}, class: "more-link", title: "Learn more about the collection" %></p>
+          <p class="collection-abstract"><%= @portal.abstract %> <%= link_to raw("More&nbsp;&raquo;"), {anchor: "about-collection"}, class: "more-link", title: "Learn more about the collection" %></p>
 
-              <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all") do %>
+              <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
                 Browse all <strong><%= number_with_delimiter(@portal.item_count) %></strong> Items
               <% end %>
         </div>

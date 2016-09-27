@@ -1,4 +1,3 @@
-
 <div id="home-branding" class="col-sm-12">
   <!-- Could have two branding templates -->
   <!-- One for the collection portal page -->
@@ -8,6 +7,7 @@
     <%= render 'home_showcase' %>
   <% else %>
     <% unless has_search_parameters? %>
+
     <%= render partial: 'collection_submast', locals: { document: @portal.collection } %>
       <!-- <h1><%# t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1> -->
     <% end %>

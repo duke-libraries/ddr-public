@@ -43,7 +43,6 @@ module DocumentModel
     document_model.try(:metadata_header) || "Item Info"
   end
 
-
   private
 
   def document_model

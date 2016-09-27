@@ -334,7 +334,7 @@ a.showcase-item-wrap, a.highlight-item-wrap {
   }
 }
 
-.featured-collections {
+#featured-collections {
   background: $gray-lighter;
   margin: 0;
   padding-top: 15px;
@@ -428,7 +428,7 @@ p + #source-collection {
   DEFAULT COLLECTION SHOW
 ------------------------- */
 
-.collection-description {
+#about-collection {
   margin-bottom: 30px;  
 }
 
@@ -642,6 +642,10 @@ image-based items */
 
   }
 
+}
+
+dl.document-metadata {
+  overflow-wrap: break-word;
 }
 
 

@@ -26,9 +26,9 @@
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <%# Only track analytics on production %>
+    <%# Only track analytics if configured. Preproduction tracks to separate GA account for testing. %>
 
-    <% if ENV['TRACK_GOOGLE_ANALYTICS'] == 'true' %>
+    <% if ENV['TRACK_GOOGLE_ANALYTICS'] == 'true' && defined?(ENV['GOOGLE_ANALYTICS_TRACKING_ID']) %>
       <%= render 'google_analytics' %>
     <% end %>
   </head>
