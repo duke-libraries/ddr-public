@@ -90,7 +90,7 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_index_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_index_field solr_name(:date, :stored_searchable), helper_method: 'display_edtf_date', separator: '; ', label: 'Date'
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
@@ -119,7 +119,7 @@ class CatalogController < ApplicationController
     config.add_show_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_show_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
     config.add_show_field solr_name(:creator, :stored_searchable), separator: '; ', label: 'Creator'
-    config.add_show_field solr_name(:date, :stored_searchable), separator: '; ', label: 'Date'
+    config.add_show_field solr_name(:date, :stored_searchable), helper_method: 'display_edtf_date', separator: '; ', label: 'Date'
     config.add_show_field solr_name(:type, :stored_searchable), separator: '; ', label: 'Type'
 
     config.add_show_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
