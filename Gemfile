@@ -26,7 +26,7 @@ gem 'prawn'
 gem 'fastimage'
 gem 'bootstrap-select-rails'
 gem 'nokogiri'
-gem 'edtf-humanize', '~> 0.0.4'
+gem 'edtf-humanize', '~> 0.0.7'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
