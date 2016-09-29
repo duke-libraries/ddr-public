@@ -147,22 +147,30 @@ class CatalogController < ApplicationController
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
         :qf => ["id",
-                solr_name(:title, :stored_searchable),
+                solr_name(:abstract, :stored_searchable),
+                solr_name(:category, :stored_searchable),
+                solr_name(:company, :stored_searchable),
                 solr_name(:creator, :stored_searchable),
                 solr_name(:contributor, :stored_searchable),
-                solr_name(:subject, :stored_searchable),
-                solr_name(:type, :stored_searchable),
+                solr_name(:description, :stored_searchable),
+                solr_name(:format, :stored_searchable),
+                solr_name(:identifier, :stored_searchable),
+                solr_name(:medium, :stored_searchable),
+                solr_name(:placement_company, :stored_searchable),
+                solr_name(:product, :stored_searchable),
+                solr_name(:publication, :stored_searchable),
                 solr_name(:publisher, :stored_searchable),
                 solr_name(:series, :stored_searchable),
-                solr_name(:description, :stored_searchable),
-                solr_name(:abstract, :stored_searchable),
-                solr_name(:format, :stored_searchable),
-                Ddr::Index::Fields::YEAR_FACET,
+                solr_name(:setting, :stored_searchable),
                 solr_name(:spatial, :stored_searchable),
+                solr_name(:subject, :stored_searchable),
+                solr_name(:title, :stored_searchable),
+                solr_name(:tone, :stored_searchable),
+                solr_name(:type, :stored_searchable),
+                Ddr::Index::Fields::ALL_TEXT,
                 Ddr::Index::Fields::LOCAL_ID,
-                solr_name(:identifier, :stored_searchable),
                 Ddr::Index::Fields::PERMANENT_ID,
-                Ddr::Index::Fields::ALL_TEXT].join(' ')
+                Ddr::Index::Fields::YEAR_FACET].join(' ')
       }
     end
 
