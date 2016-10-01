@@ -1,7 +1,7 @@
 class Thumbnail::MultiresCollection
 
   include Blacklight::Configurable
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
   include Ddr::Public::Controller::SolrQueryConstructor
   include Ddr::Public::Controller::IiifImagePaths
 

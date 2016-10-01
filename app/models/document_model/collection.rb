@@ -1,7 +1,7 @@
 class DocumentModel::Collection
 
   include Blacklight::Configurable
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
   include Ddr::Public::Controller::SolrQueryConstructor
   include DocumentModel::Searcher
 
