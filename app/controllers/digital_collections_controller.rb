@@ -12,7 +12,7 @@ class DigitalCollectionsController < CatalogController
   # CatalogController.
   skip_filter :enforce_show_permissions, only: :show
 
-  before_action :get_pid_from_params_id, only: [:show, :media, :feed]
+  before_action :set_params_id_to_pid, only: [:show, :media, :feed]
   before_action :enforce_show_permissions, only: :show
 
   configure_blacklight do |config|
@@ -55,18 +55,20 @@ class DigitalCollectionsController < CatalogController
   private
 
   def digital_collections_portal
-    @portal = Portal::DigitalCollections.new({ controller_name: controller_name, local_id: params[:collection], scope: self })
+    @portal = Portal::DigitalCollections.new({controller_name: controller_name,
+                                              local_id: params[:collection],
+                                              controller_scope: self })
   end
 
-  def get_pid_from_params_id
-    query_result = ActiveFedora::SolrService.query("#{Ddr::Index::Fields::LOCAL_ID}:\"#{params[:id]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:\"Item\"", rows: 1).first
-    if query_result.nil?
-      pid = params[:id]
-    else
-      doc = SolrDocument.new query_result
-      pid = doc.id
+  def set_params_id_to_pid
+    document = repository.search(local_id_query).documents.first
+    unless document.nil?
+      params[:id] = document.id
     end
-    params[:id] = pid
+  end
+
+  def local_id_query
+    search_builder.where("#{Ddr::Index::Fields::LOCAL_ID}:#{params[:id]}").append(:include_only_items)
   end
 
 end

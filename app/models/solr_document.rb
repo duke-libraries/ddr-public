@@ -29,15 +29,15 @@ class SolrDocument
   end
 
   def published?
-    get(Ddr::Index::Fields::WORKFLOW_STATE) == "published"
+    self[Ddr::Index::Fields::WORKFLOW_STATE] == "published"
   end
 
   def abstract
-    get("abstract_tesim")
+    Array(self["abstract_tesim"]).first
   end
 
   def description
-    get("description_tesim")
+    Array(self["description_tesim"]).first
   end
 
   def thumbnail

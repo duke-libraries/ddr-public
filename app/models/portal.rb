@@ -5,12 +5,12 @@ class Portal
   include Ddr::Public::Controller::SolrQueryConstructor
 
 
-  attr_accessor :local_id, :controller_name, :scope
+  attr_accessor :local_id, :controller_name, :controller_scope
 
   def initialize(args={})
-    @local_id        = args.fetch(:local_id, nil)
-    @controller_name = args.fetch(:controller_name, nil)
-    @scope = args.fetch(:scope, nil)
+    @local_id         = args.fetch(:local_id, nil)
+    @controller_name  = args.fetch(:controller_name, nil)
+    @controller_scope = args.fetch(:controller_scope, nil)
   end
 
 
@@ -40,7 +40,7 @@ class Portal
   end
 
   def parent_collections_search
-    query = search_builder.query({q: parent_collections_query, rows: '1000'})
+    query = search_builder.where(parent_collections_query).merge({rows: '1000'})
     @parent_collections_search ||= repository.search(query)
   end
 
@@ -59,7 +59,7 @@ class Portal
   end
 
   def child_items_search
-    query = search_builder.query({ q: child_items_query, rows: '100', sort: solr_sort })
+    query = search_builder.where(child_items_query).merge({rows: '100', sort: solr_sort})
     @child_items_search ||= repository.search(query)
   end
 
@@ -74,7 +74,7 @@ class Portal
   end
 
   def item_or_collection_documents_search(local_ids)
-    query = search_builder.query({ q: item_or_collection_documents_query(local_ids), rows: '100', sort: solr_sort })
+    query = search_builder.where(item_or_collection_documents_query(local_ids)).merge({rows: '100', sort: solr_sort})
     repository.search(query)
   end
 
@@ -84,7 +84,7 @@ class Portal
 
 
   def search_builder
-    @search_builder ||= SearchBuilder.new(query_processor_chain, @scope)
+    @search_builder ||= SearchBuilder.new(query_processor_chain, @controller_scope)
   end
 
   def query_processor_chain

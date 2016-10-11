@@ -26,7 +26,7 @@ class DocumentModel::Component
   private
 
   def collection_search
-    query = searcher.query({ q: collection_query, rows: '10' })
+    query = searcher.where(collection_query)
     repository.search(query)
   end
 
@@ -36,7 +36,7 @@ class DocumentModel::Component
   end
 
   def item_search
-    query = searcher.query({ q: item_query, rows: '10' })
+    query = searcher.where(item_query)
     repository.search(query)
   end
 

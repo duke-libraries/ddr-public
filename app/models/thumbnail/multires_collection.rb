@@ -43,8 +43,8 @@ class Thumbnail::MultiresCollection
 
   def item_document
     if configured_local_id
-      response, documents = get_search_results({ :q => item_query })
-      documents.first
+      search_builder = SearchBuilder.new([:add_query_to_solr], controller_scope).where(item_query)
+      controller_scope.repository.search(search_builder).documents.first
     else
       document.items.first if document.items
     end
@@ -52,6 +52,10 @@ class Thumbnail::MultiresCollection
 
   def configured_local_id
     document.thumbnail.try(:[], 'local_id')
+  end
+
+  def controller_scope
+    @controller_scope ||= CatalogController.new
   end
 
 end

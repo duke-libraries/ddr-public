@@ -4,10 +4,6 @@ module Ddr
       module SolrQueryConstructor
         extend ActiveSupport::Concern
 
-        def get_solr_search_results(args)
-          get_search_results(args)
-        end
-
         def children_query(values)
           ActiveFedora::SolrService.construct_query_for_rel(field_value_pairs(:is_governed_by, values), ' OR ')
         end
