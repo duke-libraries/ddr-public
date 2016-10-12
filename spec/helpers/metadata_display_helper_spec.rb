@@ -54,4 +54,14 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
+  describe "#auto_link_values" do
+    let (:display_strings_with_links) {["<a href=\"https://library.duke.edu\">https://library.duke.edu</a>", "this is not a link"]}
+    context "field contains some values should be linked and some that should not be linked" do
+      let (:metadata_field_values) {['https://library.duke.edu', 'this is not a link']}
+      it "should return a semicolon delimited list of values, the first of which is a link" do
+        expect(helper.auto_link_values({:value => metadata_field_values})).to match(display_strings_with_links)
+      end
+    end
+  end
+
 end

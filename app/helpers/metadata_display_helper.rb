@@ -60,5 +60,9 @@ module MetadataDisplayHelper
     display.join("; ")
   end
 
+  def auto_link_values options={}
+    options[:value].map { |value| auto_link(value) }
+  end
+
 
 end
