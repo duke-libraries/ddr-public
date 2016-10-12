@@ -303,6 +303,8 @@ GEM
       sprockets-rails (~> 2.0)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
+    rails_autolink (1.1.6)
+      rails (> 3.1)
     railties (4.1.14.1)
       actionpack (= 4.1.14.1)
       activesupport (= 4.1.14.1)
@@ -506,6 +508,7 @@ DEPENDENCIES
   orderly
   prawn
   rails (~> 4.1.13)
+  rails_autolink
   rspec-rails (~> 3.4)
   rubyzip (~> 1.1.7)
   sass-rails (~> 5.0.4)
