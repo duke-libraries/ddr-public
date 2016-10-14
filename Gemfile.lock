@@ -277,7 +277,7 @@ GEM
       rack (>= 1.0, < 3)
     omniauth-shibboleth (1.2.1)
       omniauth (>= 1.0.0)
-    openseadragon (0.2.0)
+    openseadragon (0.3.0)
       rails (> 3.2.0)
     orderly (0.0.2)
     orm_adapter (0.5.0)
@@ -504,7 +504,7 @@ DEPENDENCIES
   log4r
   mysql2
   nokogiri
-  openseadragon (~> 0.2.0)
+  openseadragon (~> 0.3.0)
   orderly
   prawn
   rails (~> 4.1.13)
