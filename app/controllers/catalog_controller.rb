@@ -14,7 +14,7 @@ class CatalogController < ApplicationController
 
   self.search_params_logic += [:include_only_published]
 
-  helper_method :get_search_results
+  helper_method :repository, :search_builder
 
   rescue_from CanCan::AccessDenied do |exception|
     if user_signed_in?
