@@ -43,7 +43,7 @@ class DocumentModel::Item
   end
 
   def component_search
-    query = searcher.where(component_query).merge({rows: 10000})
+    query = searcher.where(component_query).merge({rows: 10})
     repository.search(query)
   end
 

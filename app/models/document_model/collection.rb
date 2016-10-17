@@ -30,7 +30,7 @@ class DocumentModel::Collection
   private
 
   def items_search
-    query = searcher.where(items_query).merge({rows: 10000})
+    query = searcher.where(items_query).merge({rows: 10})
     repository.search(query)
   end
 
