@@ -34,8 +34,8 @@ module Ddr::Models
 
     def policy_role_filters
       if policy_role_policies.present?
-        rels = policy_role_policies.map { |pid| [:is_governed_by, pid] }
-        ActiveFedora::SolrService.construct_query_for_rel(rels, "OR")
+        policies = policy_role_policies.join('" OR "')
+        "#{Ddr::Index::Fields::IS_GOVERNED_BY}:(\"#{policies}\")"
       end
     end
 
