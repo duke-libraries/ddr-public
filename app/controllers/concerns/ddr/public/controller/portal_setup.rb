@@ -9,25 +9,15 @@ module Ddr
           base.search_params_logic += [:filter_by_parent_collections]
         end
 
-        def filter_by_parent_collections_query
-          @filter_by_parent_collections_query ||= ActiveFedora::SolrService.construct_query_for_rel(parent_uris, ' OR ')
+        def parent_collection_uris
+          @parent_collection_uris ||= portal_controller_setup.parent_collection_uris
         end
 
 
         private
 
-        def parent_uris
-          Rails.cache.fetch("#{controller_name}/#{params[:collection]}/#{current_ability.user}", expires_in: 1.hour) do
-            parent_collection_uris.map { |id| [:is_governed_by, id] }
-          end
-        end
-
         def prepend_view_path_for_portal_overrides
           @prepend_view_path_for_portal_overrides ||= prepend_view_path portal_controller_setup.view_path
-        end
-
-        def parent_collection_uris
-          @parent_collection_uris = portal_controller_setup.parent_collection_uris
         end
 
         def portal_controller_setup

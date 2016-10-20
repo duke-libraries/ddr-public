@@ -6,13 +6,13 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
-  include Ddr::Models::Catalog
   include Ddr::Public::Controller::ConfigureBlacklight
 
 
   before_action :authenticate_user!, if: :authentication_required?
+  before_action :enforce_show_permissions, only: :show
 
-  self.search_params_logic += [:include_only_published]
+  self.search_params_logic += [:include_only_published, :apply_access_controls]
 
   helper_method :repository, :search_builder
 
@@ -323,6 +323,10 @@ class CatalogController < ApplicationController
 
   def authentication_required?
     Ddr::Public.require_authentication
+  end
+
+  def enforce_show_permissions
+    authorize! :read, params[:id]
   end
 
 
