@@ -40,6 +40,10 @@ class SolrDocument
     Array(self["description_tesim"]).first
   end
 
+  def relation
+    Array(self["relation_tesim"])
+  end
+
   def thumbnail
     portal_doc_config.try(:[], 'collection_local_id').try(:[], self.local_id).try(:[], 'thumbnail_image')
   end

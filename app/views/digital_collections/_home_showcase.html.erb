@@ -13,6 +13,7 @@
               <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
                 Browse all <strong><%= number_with_delimiter(@portal.item_count) %></strong> Items
               <% end %>
+          <%= render partial: "home_showcase_link_list", locals: { document: @portal.collection } %>
         </div>
 
         <% showcase_images = Array(@portal.showcase_custom_images).concat Array(@portal.showcase.documents) %>

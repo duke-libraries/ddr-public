@@ -22,6 +22,8 @@
 en:
     ddr:
         public:
+            showcase_links:
+                :research_guide: "Research Guide"
             contact:
                 label: "Contact Us"
                 subject: "Duke Digital Repository Email Contact"
