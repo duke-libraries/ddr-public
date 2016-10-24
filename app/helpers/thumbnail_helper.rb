@@ -5,7 +5,7 @@ module ThumbnailHelper
   end
 
   def thumbnail_image_tag document, image_options = {}
-    image_tag(thumbnail_path(document), :alt => "Thumbnail", :class => "img-thumbnail")
+    image_tag(thumbnail_path(document), :alt => "Thumbnail", :class => "img-thumbnail", size: "175x175")
   end
 
   def thumbnail_path document
