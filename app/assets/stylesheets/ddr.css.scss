@@ -645,6 +645,43 @@ image-based items */
 
 }
 
+
+#documents.documents-list .document { // List view
+  & .documentHeader h3 {
+    font-size: 24px;
+    margin-bottom: 1em;
+  }
+  
+  & .document-thumbnail {
+    float: left;
+    padding-left: 0;
+    max-width: 100px;
+    max-height: 125px;
+    margin-right: 0;
+    @media (max-width: $screen-md) {
+     margin-right: 20px;
+    }
+  }
+
+  & .img-thumbnail {
+    padding: 0;
+    border: 0;
+    max-height: 125px;
+    & img {
+      max-height: 125px;
+    }
+  }
+  
+  & dl.document-metadata {
+    float: left;
+    width: calc(100% - 100px);
+    @media (max-width: $screen-md) {
+      width: calc(100% - 120px);
+    }
+  }
+
+}
+
 dl.document-metadata {
   overflow-wrap: break-word;
 }
