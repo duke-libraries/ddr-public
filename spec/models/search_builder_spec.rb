@@ -46,7 +46,7 @@ RSpec.describe SearchBuilder do
       before do
         allow(subject).to receive(:policy_role_policies) { ["test-13", "test-45"] }
       end
-      it "returns a list of CHANGE ME" do
+      it "returns a filter query that limits access based on policies and roles" do
         expect(subject.apply_access_controls({}))
           .to eq({:fq=>["_query_:\"{!q.op=OR df=resource_role_ssim v=$resource_q}\" OR _query_:\"{!q.op=OR df=is_governed_by_ssim v=$policy_q}\""],
             :policy_q=>["\"test-13\" \"test-45\""],
