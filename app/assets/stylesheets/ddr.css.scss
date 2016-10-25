@@ -263,6 +263,7 @@ body.blacklight-catalog-show #content {
 
   & .browse-all {
     margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   &.showcase-side {
@@ -640,6 +641,46 @@ image-based items */
       display: block;
     }
 
+  }
+
+}
+
+
+#documents.documents-list .document { // List view
+  & .documentHeader h3 {
+    font-size: 24px;
+    margin-bottom: 1em;
+  }
+  
+  & .document-thumbnail {
+    float: left;
+    padding-left: 0;
+    max-width: 100px;
+    width: 100px;
+    max-height: 125px;
+    margin-right: 0;
+    @media (max-width: $screen-md) {
+     margin-right: 20px;
+    }
+  }
+
+  & .img-thumbnail {
+    padding: 0;
+    border: 0;
+    max-height: 125px;
+    width: auto;
+    & img {
+      max-height: 125px;
+      width: auto;
+    }
+  }
+  
+  & dl.document-metadata {
+    float: left;
+    width: calc(100% - 100px);
+    @media (max-width: $screen-md) {
+      width: calc(100% - 120px);
+    }
   }
 
 }

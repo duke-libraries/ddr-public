@@ -20,21 +20,23 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-    ddr:
-        public:
-            contact:
-                label: "Contact Us"
-                subject: "Duke Digital Repository Email Contact"
-            help:
-                label: "Help"
-            license_title: "Copyright & Use"
-            portal:
-                digital_collections:
-                    title: "Duke Digital Collections"
-                    about: "Digitized historic photographs, advertisements, texts & more from Duke's unique library collections."
-                portal:
-                    title: "Duke Digital Repository Portals"
-                    about: "Browse collections that have a portal."
-                dvs:
-                    title: "Data and Visualization Services"
-                    about: "Provides consulting services and instruction that support data-driven research."
+  ddr:
+    public:
+      showcase_links:
+        research_guide: "Research Guide"
+      contact:
+        label: "Contact Us"
+        subject: "Duke Digital Repository Email Contact"
+      help:
+        label: "Help"
+      license_title: "Copyright & Use"
+      portal:
+        digital_collections:
+          title: "Duke Digital Collections"
+          about: "Digitized historic photographs, advertisements, texts & more from Duke's unique library collections."
+        portal:
+          title: "Duke Digital Repository Portals"
+          about: "Browse collections that have a portal."
+        dvs:
+          title: "Data and Visualization Services"
+          about: "Provides consulting services and instruction that support data-driven research."

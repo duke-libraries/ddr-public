@@ -26,10 +26,10 @@ module CatalogHelper
 
   def item_image_embed options={}
     image_tag = ""
-    response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
-    unless documents.empty?
-      multires_image_file_path = documents.first.multires_image_file_paths.first
-      image_tag = iiif_image_tag(multires_image_file_path, {:size => options[:size], :alt => documents.first.title, :class => options[:class]})
+    response = repository.search(search_builder.where("#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}").append(:include_only_items))
+    unless response.empty?
+      multires_image_file_path = response.documents.first.multires_image_file_paths.first
+      image_tag = iiif_image_tag(multires_image_file_path, {:size => options[:size], :alt => response.documents.first.title, :class => options[:class]})
     end
     image_tag
   end
@@ -37,9 +37,9 @@ module CatalogHelper
   # TODO: use solr query concerns
   def item_title_link options={}
     link = ""
-    response, documents = get_search_results({:q => "(#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}) AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"})
-    unless documents.empty?
-      link = link_to_document(documents.first)
+    response = repository.search(search_builder.where("#{Ddr::Index::Fields::LOCAL_ID}:#{options[:local_id]}").append(:include_only_items))
+    unless response.empty?
+      link = link_to_document(response.documents.first)
     end
     link
   end
@@ -175,8 +175,8 @@ module CatalogHelper
   end
 
   def find_collection_results
-    response, document_list = get_search_results(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Collection', params.merge({rows: 3})))
-    {documents: document_list, count: response.total}
+    response = repository.search(search_builder.with(params).append(:include_only_collections))
+    {documents: response.documents, count: response.total}
   end
 
   def get_blog_posts blog_url
@@ -251,10 +251,8 @@ module CatalogHelper
   def collections
     @collections ||=
       begin
-        response, docs = get_search_results(q: "active_fedora_model_ssi:Collection",
-                                            fl: "internal_uri_ssi,title_ssi",
-                                            rows: 9999)
-        docs.each_with_object({}) do |doc, memo|
+        response = repository.search(search_builder.where("active_fedora_model_ssi:Collection").merge({fl: "internal_uri_ssi,title_ssi", rows: 9999}))
+        response.documents.each_with_object({}) do |doc, memo|
           memo[doc["internal_uri_ssi"]] = doc["title_ssi"]
         end
       end

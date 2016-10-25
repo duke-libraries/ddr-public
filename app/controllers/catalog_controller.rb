@@ -6,15 +6,15 @@ class CatalogController < ApplicationController
 
   include Blacklight::Catalog
   include Hydra::Controller::ControllerBehavior
-  include Ddr::Models::Catalog
   include Ddr::Public::Controller::ConfigureBlacklight
 
 
   before_action :authenticate_user!, if: :authentication_required?
+  before_action :enforce_show_permissions, only: :show
 
-  self.search_params_logic += [:include_only_published]
+  self.search_params_logic += [:include_only_published, :apply_access_controls]
 
-  helper_method :get_search_results
+  helper_method :repository, :search_builder
 
   rescue_from CanCan::AccessDenied do |exception|
     if user_signed_in?
@@ -147,22 +147,34 @@ class CatalogController < ApplicationController
     config.add_search_field 'all_fields', :label => 'All Fields' do |field|
       field.solr_local_parameters = {
         :qf => ["id",
-                solr_name(:title, :stored_searchable),
+                solr_name(:abstract, :stored_searchable),
+                solr_name(:artist, :stored_searchable),
+                solr_name(:category, :stored_searchable),
+                solr_name(:company, :stored_searchable),
                 solr_name(:creator, :stored_searchable),
                 solr_name(:contributor, :stored_searchable),
-                solr_name(:subject, :stored_searchable),
-                solr_name(:type, :stored_searchable),
+                solr_name(:description, :stored_searchable),
+                solr_name(:folder, :stored_searchable),
+                solr_name(:format, :stored_searchable),
+                solr_name(:headline, :stored_searchable),
+                solr_name(:identifier, :stored_searchable),
+                solr_name(:medium, :stored_searchable),
+                solr_name(:placement_company, :stored_searchable),
+                solr_name(:product, :stored_searchable),
+                solr_name(:publication, :stored_searchable),
                 solr_name(:publisher, :stored_searchable),
                 solr_name(:series, :stored_searchable),
-                solr_name(:description, :stored_searchable),
-                solr_name(:abstract, :stored_searchable),
-                solr_name(:format, :stored_searchable),
-                Ddr::Index::Fields::YEAR_FACET,
+                solr_name(:setting, :stored_searchable),
                 solr_name(:spatial, :stored_searchable),
+                solr_name(:sponsor, :stored_searchable),
+                solr_name(:subject, :stored_searchable),
+                solr_name(:title, :stored_searchable),
+                solr_name(:tone, :stored_searchable),
+                solr_name(:type, :stored_searchable),
+                Ddr::Index::Fields::ALL_TEXT,
                 Ddr::Index::Fields::LOCAL_ID,
-                solr_name(:identifier, :stored_searchable),
                 Ddr::Index::Fields::PERMANENT_ID,
-                Ddr::Index::Fields::ALL_TEXT].join(' ')
+                Ddr::Index::Fields::YEAR_FACET].join(' ')
       }
     end
 
@@ -311,6 +323,10 @@ class CatalogController < ApplicationController
 
   def authentication_required?
     Ddr::Public.require_authentication
+  end
+
+  def enforce_show_permissions
+    authorize! :read, params[:id]
   end
 
 
