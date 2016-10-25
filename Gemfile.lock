@@ -111,7 +111,11 @@ GEM
     ddr-alerts (1.0.0)
       rails (~> 4.1.6)
     ddr-antivirus (2.1.1)
+<<<<<<< HEAD
     ddr-models (2.5.0.rc1)
+=======
+    ddr-models (2.5.0)
+>>>>>>> release-2.5.0
       active-fedora (~> 7.0)
       activeresource
       cancancan (~> 1.12)
@@ -484,7 +488,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.5.0.rc1)
+  ddr-models (= 2.5.0)
   devise
   edtf-humanize (~> 0.0.7)
   factory_girl_rails (~> 4.4)
