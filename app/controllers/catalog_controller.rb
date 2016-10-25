@@ -76,7 +76,7 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('lc1_letter', :facetable), :label => 'Call Number'
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
-    # config.add_facet_field Ddr::Index::Fields::ADMIN_SET_FACET.to_s, label: 'Collection Group', helper_method: 'admin_set_full_name', collapse: false, limit: 5
+    # config.add_facet_field Ddr::Index::Fields::ADMIN_SET_TITLE.to_s, label: 'Collection Group', collapse: false, limit: 5
     # config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 5
     # config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: 'Browse', show: false
 

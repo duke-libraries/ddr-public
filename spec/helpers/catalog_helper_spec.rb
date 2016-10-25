@@ -132,4 +132,15 @@ RSpec.describe CatalogHelper do
     end
   end
 
+  describe "#link_to_admin_set" do
+    let(:document) { SolrDocument.new(
+        'id'=>'changeme:10',
+        Ddr::Index::Fields::ADMIN_SET_TITLE => 'Title of Admin Set'
+        ) }
+    it "should return a link to a facet search" do
+      allow(helper).to receive(:facet_search_url).and_return("?f%5Badmin_set_title_ssi%5D%5B%5D=Title of Admin Set")
+      expect(helper.link_to_admin_set(document)).to eq("<a href=\"?f%5Badmin_set_title_ssi%5D%5B%5D=Title of Admin Set\" id=\"admin-set\">Title of Admin Set</a>")
+    end
+  end
+
 end
