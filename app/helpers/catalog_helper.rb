@@ -49,7 +49,9 @@ module CatalogHelper
     if @portal
       search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item'))
     else
-      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', params.merge("f[collection_facet_sim][]" => document.internal_uri, "f[admin_set_facet_sim][]" => document.admin_set)))
+      search_action_url(add_facet_params(Ddr::Index::Fields::ACTIVE_FEDORA_MODEL, 'Item', 
+        params.merge("f[#{Ddr::Index::Fields::COLLECTION_TITLE}][]" => document[Ddr::Index::Fields::COLLECTION_TITLE],
+                     "f[#{Ddr::Index::Fields::ADMIN_SET_TITLE}][]" => document[Ddr::Index::Fields::ADMIN_SET_TITLE])))
     end
   end
 

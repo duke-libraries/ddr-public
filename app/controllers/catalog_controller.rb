@@ -77,7 +77,7 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name('subject_geo', :facetable), :label => 'Region'
     # config.add_facet_field solr_name('subject_era', :facetable), :label => 'Era'
     # config.add_facet_field Ddr::Index::Fields::ADMIN_SET_TITLE.to_s, label: 'Collection Group', collapse: false, limit: 5
-    # config.add_facet_field Ddr::Index::Fields::COLLECTION_FACET.to_s, label: 'Collection', helper_method: 'collection_title', limit: 5
+    # config.add_facet_field Ddr::Index::Fields::COLLECTION_TITLE.to_s, label: 'Collection', limit: 5
     # config.add_facet_field Ddr::Index::Fields::ACTIVE_FEDORA_MODEL.to_s, label: 'Browse', show: false
 
     # Have BL send all facet field names to Solr, which has been the default

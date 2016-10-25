@@ -30,7 +30,6 @@
 
         <p><%= link_to raw('Collection Guide &raquo;'), finding_aid.url, class: 'text-muted' %></p>
 
-
     <% rescue OpenURI::HTTPError, EOFError => e %>
       <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
       <p class="small"><%= link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/" %><p>
