@@ -1,8 +1,8 @@
 <% cache("catalog_show_collection_item_context_#{@document.id}", expires_in: 7.days) do %>
   <div id="collection-context" class="text-center">
-    <% if @document.collection.admin_set.present? %>
+    <% if @document[Ddr::Index::Fields::ADMIN_SET_TITLE].present? %>
       <div class="text-muted text-uppercase small">Collection Group</div>
-      <strong><%= link_to_admin_set(@document.collection, { id: "admin-set" }) %></strong>
+      <strong><%= link_to_admin_set(@document) %></strong>
       <div class="vertical-model-separator">
         <span class="fa <%= collection ? 'fa-map-marker' : 'fa-circle' %>"></span>
       </div>

@@ -212,8 +212,8 @@ module CatalogHelper
   end
 
   def link_to_admin_set document, options={}
-    name = admin_set_title(document.admin_set)
-    url =  search_action_url(add_facet_params(Ddr::Index::Fields::ADMIN_SET_FACET, document.admin_set))
+    name = document[Ddr::Index::Fields::ADMIN_SET_TITLE]
+    url =  facet_search_url(Ddr::Index::Fields::ADMIN_SET_TITLE, name)
     link_to name, url, :class => options[:class], :id => "admin-set"
   end
 
@@ -238,6 +238,9 @@ module CatalogHelper
 
   private
 
+  def facet_search_url(field, value)
+    search_action_url(add_facet_params(field, value))
+  end
 
   def derivative_file_extension document
     case document.display_format
