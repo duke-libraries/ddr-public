@@ -3,12 +3,8 @@ module ApplicationHelper
 
   # Overrides corresponding method in Blacklight::FacetsHelperBehavior
   def render_facet_limit_list(paginator, solr_field, wrapping_element=:li)
-    case solr_field
-    when Ddr::Index::Fields::COLLECTION_FACET
-      # apply custom sort for 'Collection' facet
-      items = facet_display_value_sort(paginator.items, :collection_title)
-    when Ddr::Index::Fields::EAD_ID
-      # apply custom sort for 'Source Collection' facet
+    if solr_field == Ddr::Index::Fields::EAD_ID
+      # apply custom sort for 'EAD_ID_TITLE' facet
       items = facet_display_value_sort(paginator.items, :ead_id_title)
     else
       items = paginator.items
