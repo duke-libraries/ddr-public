@@ -1,11 +1,16 @@
 <% finding_aid = get_finding_aid(document) %>
 
 <% if finding_aid.present? %>
-  <div id="finding-aid" class="finding_aid buffer-bottom-40">
-    <div class="text-muted text-uppercase small strong">Source Collection</div>
-      <%= source_collection({ :document => document, :placement => 'left' })  %>
-      <% unless document.aspace_id.blank? %>
-        <p><a href="<%= finding_aid.url %>#aspace_<%= document.aspace_id %>" id="faid-deep-link" class="text-muted small">View Item in Context</a></p>
-      <% end %>
-  </div>
+  <% begin %>
+    <div id="finding-aid" class="finding_aid buffer-bottom-40">
+      <div class="text-muted text-uppercase small strong">Source Collection</div>
+        <%= source_collection({ :document => document, :placement => 'left' })  %>
+        <% unless document.aspace_id.blank? %>
+          <p><a href="<%= finding_aid.url %>#aspace_<%= document.aspace_id %>" id="faid-deep-link" class="text-muted small">View Item in Context</a></p>
+        <% end %>
+    </div>
+  <% rescue OpenURI::HTTPError, EOFError => e %>
+    <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
+  <% end %>
+
 <% end %>
