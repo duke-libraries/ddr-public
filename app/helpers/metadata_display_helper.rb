@@ -47,7 +47,7 @@ module MetadataDisplayHelper
           content: finding_aid_popover(finding_aid)
         }}
       end
-    rescue OpenURI::HTTPError => e
+    rescue OpenURI::HTTPError, EOFError => e
       Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
       link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/"
     end
