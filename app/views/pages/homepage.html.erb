@@ -1,0 +1,201 @@
+<div class="container">
+
+
+  <div class="row">
+    <div class="col col-sm-12 vert-margin">
+      <h1>Welcome to the Duke Digital Repository</h1>
+    </div>
+  </div>
+
+  <!-- intro -->
+  <div class="row">
+
+    <div class="col-md-5 feature">
+
+      <%= image_tag("homepage/home_collage.jpg", class: "img-responsive thumbnail", alt: "collage of repository items") %>
+
+    </div>
+
+    <div class="col-md-7 intro">
+
+        <p class="lead">The Duke Digital Repository (DDR) is a service of Duke University Libraries that supports the activities of the University's faculty, researchers, students, and library staff by preserving, securing, and providing access to digital resources.</p>
+
+        <p><a href="" class="btn btn-default btn-lg">Learn more about our process&nbsp;&raquo;</a></p>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col col-sm-12 vert-margin">
+      <hr>
+    </div>
+  </div>
+
+  <!-- Content -->
+
+  <div class="row row-flex row-flex-wrap">
+
+    <div class="col col-md-4">
+
+        <div class="well home-1">
+
+          <div class="home-feature">
+
+            <h2>Duke Data</h2>
+
+            <p class="vert-margin">liquam egestas lorem sed blandit semper. Mauris non enim commodo, imperdiet diam at, vestibulum nibh. Cras mollis ornare nulla sit amet fermentum. Proin ac orci id metus convallis faucibus. Nunc volutpat risus molestie ante consequat vestibulum.</p>
+
+            <%= button_tag 'Contact Us »', 'data-toggle' => 'modal', 'data-target' => '#dataContact', class: 'btn btn-primary' %>
+
+          </div>
+
+          <div class="caption"><small>From <a href="">Durham Aerial Imagery (USDA)</a></small></div>
+
+      </div>
+
+    </div>
+
+    <div class="col col-md-4">
+
+      <div class="well home-2">
+
+        <div class="home-feature">
+
+          <h2>Duke Publications</h2>
+
+          <p class="vert-margin">Etiam condimentum, sem tempor iaculis dictum, lectus sapien ultricies mauris, nec mattis est augue nec mi. Quisque posuere varius lacus, vel malesuada ipsum vulputate a. Donec non ultrices arcu. Phasellus ac fermentum risus, vel blandit risus.</p>
+
+          <%= button_tag 'Contact Us »', 'data-toggle' => 'modal', 'data-target' => '#pubContact', class: 'btn btn-primary' %>
+
+        </div>
+
+        <div class="caption"><small>Provided by <a href="">Duke ScholarWorks</a></small></div>
+
+      </div>
+
+    </div>
+
+      <!-- MODALS -->
+
+        <!-- Data Modal -->
+        <div class="modal fade" id="dataContact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <%= button_tag '×', 'data-dismiss' => 'modal', 'aria-hidden' => 'true', class: 'close' %>
+                <h4 class="modal-title" id="myModalLabel">Contact Us</h4>
+              </div>
+
+              <!-- Modal Body -->
+              <div class="modal-body">
+
+                <p class="lead">We can help you get your data stored in the repository!</p>
+
+                <%= form_tag do %>
+
+                  <div class="form-group">
+                    <%= label_tag(:name, "Name") %>
+                    <%= text_field_tag 'name', nil, placeholder: 'Enter your name', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= label_tag(:email, "Email address") %>
+                    <%= text_field_tag 'email', nil, placeholder: 'Enter your email', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= label_tag(:help, "How can we help?") %>
+                    <%= text_area_tag 'help', nil, class: 'form-control', rows: 5 %>
+                  </div>
+
+                <% end %>
+              </div>
+
+              <!-- Modal Footer -->
+              <div class="modal-footer">
+                <%= submit_tag 'Close', 'data-dismiss' => 'modal', class: 'btn btn-default' %>
+                <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- Pub Modal -->
+        <div class="modal fade" id="pubContact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <%= button_tag '×', 'data-dismiss' => 'modal', 'aria-hidden' => 'true', class: 'close' %>
+                <h4 class="modal-title" id="myModalLabel">Contact Us</h4>
+              </div>
+
+              <!-- Modal Body -->
+              <div class="modal-body">
+
+                <p class="lead">We can help you get your publications stored in the repository!</p>
+
+                <%= form_tag do %>
+
+                  <div class="form-group">
+                    <%= label_tag(:name, "Name") %>
+                    <%= text_field_tag 'name', nil, placeholder: 'Enter your name', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= label_tag(:email, "Email address") %>
+                    <%= text_field_tag 'email', nil, placeholder: 'Enter your email', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= label_tag(:help, "How can we help?") %>
+                    <%= text_area_tag 'help', nil, class: 'form-control', rows: 5 %>
+                  </div>
+
+                <% end %>
+
+              </div>
+
+              <!-- Modal Footer -->
+              <div class="modal-footer">
+                <%= submit_tag 'Close', 'data-dismiss' => 'modal', class: 'btn btn-default' %>
+                <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      <!--  /MODALS -->
+
+
+
+    <div class="col col-md-4">
+
+      <div class="well home-3">
+
+        <div class="home-feature">
+
+          <h2>Library Collections</h2>
+
+          <p class="vert-margin">Suspendisse pretium nunc ac turpis scelerisque maximus. Praesent at turpis ac mi euismod blandit at vel ligula. Suspendisse blandit purus ante, eu ultrices ante lacinia in. Morbi non mollis enim.</p>
+
+          <p><a href="" class="btn btn-info">Browse all Library collections &raquo;</a></p>
+
+        </div>
+
+        <div class="caption"><small>From <a href="">Caribbean Sea Migration</a></small></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
