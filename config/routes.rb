@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root to: "catalog#index"
+  # root to: "catalog#index"
 
   blacklight_for :catalog
 
@@ -67,5 +67,9 @@ Rails.application.routes.draw do
   # Static Pages
   get '/styleguide' => 'pages#styleguide'
   get '/copyright' => 'pages#copyright', :as => 'copyright'
+  get '/homepage' => 'pages#homepage'
+
+
+  root to: "pages#homepage"
 
 end
