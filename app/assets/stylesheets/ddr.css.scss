@@ -228,7 +228,7 @@ body.blacklight-catalog-show #content {
   background-color: rgba(0,0,0,0.8);
   color: white;
   padding: 30px !important;
-  
+
   &.collection-submast {
     margin: -21px -21px 25px -21px;
   }
@@ -430,7 +430,7 @@ p + #source-collection {
 ------------------------- */
 
 #about-collection {
-  margin-bottom: 30px;  
+  margin-bottom: 30px;
 }
 
 #collection-info {
@@ -502,7 +502,7 @@ p + #source-collection {
       padding: 15px;
     }
   }
-  
+
     & h4 {
       margin-top: 0;
     }
@@ -651,7 +651,7 @@ image-based items */
     font-size: 24px;
     margin-bottom: 1em;
   }
-  
+
   & .document-thumbnail {
     float: left;
     padding-left: 0;
@@ -674,7 +674,7 @@ image-based items */
       width: auto;
     }
   }
-  
+
   & dl.document-metadata {
     float: left;
     width: calc(100% - 100px);
@@ -769,7 +769,7 @@ dl.document-metadata {
       margin-top: 0;
     }
   }
-  
+
 
   .well {
 
@@ -793,7 +793,7 @@ dl.document-metadata {
     }
 
   }
-  
+
   hr.contact-separator {
     border-top: 2px solid $brand-success;
     clear: both;
@@ -837,14 +837,14 @@ dl.document-metadata {
     }
 
   }
-  
+
   .show-tools {
     margin-top: 40px;
   }
-  
+
   #documents + #source-collection {
     margin-top: 20px;
-  }  
+  }
 
   #blog-posts {
 
@@ -872,4 +872,98 @@ dl.document-metadata {
     & dt {
       color: #777;
     }
+  }
+
+
+  /* --------------------
+      Homepage Styles
+  ----------------------- */
+
+
+  .homepage #main-container .container {
+    width: 100%;
+  }
+
+  .homepage .vert-margin {
+    margin-bottom: 1em;
+  }
+
+  .homepage .well {
+    width: 100%;
+    background-position: center !important;
+    background-size: cover !important;
+  }
+
+  .homepage .well h2,
+  .homepage .well p,
+  .homepage .well small {
+    color: #fff;
+  }
+
+  .homepage .well h2 {
+    margin-top: 0;
+    font-size: 1.7em;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .homepage .well .btn {
+    width: 100%;
+  }
+
+  .homepage .well.home-1 {
+    background: url('/assets/homepage/home_data_background.jpg');
+  }
+
+  .homepage .well.home-2 {
+    background: url('/assets/homepage/home_publications_background.jpg');
+  }
+
+  .homepage .well.home-3 {
+    background: url('https://repository.duke.edu/iipsrv/iipsrv.fcgi?IIIF=/srv/repo_deriv/multires_image/2/8/63/28636827-3319-40da-9c00-8482ca3e6461/csmep031560010.ptif/pct:5,5,90,90/1200,/0/default.jpg');
+  }
+
+  .homepage .well .home-feature {
+    height: auto;
+    background-color: rgba(0,0,0,0.4);
+    overflow: visible;
+    padding: 20px;
+  }
+
+  .homepage .well .caption {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+  }
+
+  .homepage .well .caption small {
+    color: #d3d3d3;
+  }
+
+  .homepage .well .caption a {
+    color: #c3c3c3;
+    text-align: right;
+  }
+
+
+
+  /* Flexbox */
+
+  .row-flex, .row-flex > div[class*='col-'] {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex:1 1 auto;
+  }
+
+  .row-flex-wrap {
+  	-webkit-flex-flow: row wrap;
+      align-content: flex-start;
+      flex:0;
+  }
+
+  .row-flex > div[class*='col-'], .container-flex > div[class*='col-'] {
+  	 margin:-.2px; /* hack adjust for wrapping */
   }
