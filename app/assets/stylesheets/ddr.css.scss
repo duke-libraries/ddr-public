@@ -620,6 +620,10 @@ image-based items */
   & .img-thumbnail {
     padding: 0;
     border: none;
+    max-width: 175px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
   }
 
   & h3.index_title {
