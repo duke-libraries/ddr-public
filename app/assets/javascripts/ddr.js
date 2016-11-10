@@ -9,13 +9,17 @@ $(function () {
         $(('#')+$(this).attr('data-target-id')).fadeToggle();
     });
 
-
     // Activate tabs
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
-    })
+    });
 
+    // Link to activate tab from in page, e.g., another tab's content
+    $('a[data-toggle="tab"]:not(.nav-tabs *)').click(function (e) {
+        e.preventDefault();
+        $('a[href="' + $(this).attr("href") + '"]').tab('show');
+    });
 
     // Bookmarkable tabs
     $(document).ready(function() {
