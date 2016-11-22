@@ -12,8 +12,9 @@ class DigitalCollectionsController < CatalogController
   # CatalogController.
   skip_filter :enforce_show_permissions, only: :show
 
-  before_action :set_params_id_to_pid, only: [:show, :media, :feed]
+  before_action :set_params_id_to_pid, only: [:show, :media, :embed, :feed]
   before_action :enforce_show_permissions, only: :show
+  before_action :allow_iframe, only: :embed
 
   configure_blacklight do |config|
     config.view.gallery.default = true
@@ -43,6 +44,12 @@ class DigitalCollectionsController < CatalogController
     authorize! :read, @document.id
   end
 
+  def embed
+    response, @document = fetch(params[:id])
+    authorize! :read, @document.id
+    render layout: "embed"
+  end
+
   def about
     digital_collections_portal
   end
@@ -69,6 +76,10 @@ class DigitalCollectionsController < CatalogController
 
   def local_id_query
     search_builder.where("#{Ddr::Index::Fields::LOCAL_ID}:#{params[:id]}").append(:include_only_items)
+  end
+
+  def allow_iframe
+    response.headers.delete('X-Frame-Options')
   end
 
 end

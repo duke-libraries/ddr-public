@@ -1,0 +1,175 @@
+/* --------------------------------------------------------
+Styles for embedded media. These apply to media displayed
+within the src of an iframe provided in copyable embed code
+E.g., at:
+https://repository.duke.edu/dc/wdukesons/dscsi03002/embed
+---------------------------------------------------------- */
+
+.ddr-embed {
+
+  /* Multi-Image (Open Seadragon)          */
+  /* Extends and revises styles for viewer */
+  /* in use on item show pages
+  /* ------------------------------------- */
+
+  background-color: #333;
+
+  & #image-content {
+    height: calc(100vh - 65px);
+    max-height: calc(100vh - 65px);
+  }
+
+
+  & .openseadragon-container {
+
+    & #image-toolbar {
+
+      & .multi-image-nav {
+        @media (max-width: $screen-sm) {
+          margin-left: 50px !important;
+        }
+        @media (max-width: $screen-xs) {
+          margin-left: 0px !important;
+        }
+      }
+
+      & .zoom-nav {
+        float: left;
+      }
+
+      & .multi-image-nav + .zoom-nav {
+        @media (max-width: $screen-sm) {
+          clear: none;
+          float: left;
+          margin-left: 0px;
+        }
+      }
+
+      & #page-jumper-text {
+        @media (max-width: $screen-sm) {
+          width: 42px;
+          height: 28px;
+          padding: 0 0.6em;
+        }
+      }
+
+      & .page-indicator {
+        top: 1px;
+      }
+    }
+
+
+    & .referencestrip {
+
+      @media (max-width: $screen-sm) {
+        max-width: 50px !important;
+        @media (max-width: $screen-xs) {
+          display:none !important;
+          visibility: hidden !important;
+        }
+      }
+
+      & > div[id^="referencestrip"] {
+        @media (max-width: $screen-sm) {
+           max-width: 50px !important;
+           @media (max-width: $screen-xs) {
+             display:none !important;
+             visibility: hidden !important;
+           }
+         }
+      }
+
+    }
+
+    & .btn {
+
+      @media (max-width: $screen-sm) {
+        font-size: 12px;
+        margin-right: 1px;
+        margin-bottom: 1px;
+      }
+
+      & .btn-wrapper {
+        @media (max-width: $screen-sm) {
+          padding: 5px 8px;
+        }
+      }
+    }
+
+
+    & #btn-full-page {
+      @media (max-width: $screen-xs) {
+        display: none;
+      }
+    }
+
+    & #btn-more-options {
+      @media (max-width: $screen-xs) {
+        display: none;
+      }
+    }
+
+    & #seadragon-buttons {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      z-index:1200;
+    }
+
+  }
+
+}
+
+/* Title, Info, Sharing Bar */
+/* ------------------------ */
+
+#iframe-embed-title-row {
+  margin-bottom: 10px;
+}
+
+#iframe-embed-titlebar {
+  color: #ccc;
+  background-color: #222;
+  padding: 5px;
+  & a {
+    color: white;
+  }
+  & #iframe-embed-info-button, #iframe-embed-share-button {
+    cursor: pointer;
+    color: #ccc;
+    margin-right: 10px;
+    &:hover {
+      color: white;
+    };
+    &[aria-expanded='true'] {
+      color: $brand-success;
+    }
+  }
+}
+
+.iframe-embed-title.truncated-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#iframe-embed-info,
+#iframe-share-info {
+  transition: all 0.4s linear !important;
+}
+
+textarea#copyable-embed-code,
+textarea#copyable-permalink {
+  resize: none;
+  font-size: $font-size-small;
+  overflow-y: auto;
+}
+
+#share-menu {
+  padding: 3px 20px 20px 20px;
+  min-width: 360px;
+  & .dropdown-header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
