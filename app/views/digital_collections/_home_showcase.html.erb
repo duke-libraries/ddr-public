@@ -5,7 +5,7 @@
     <div class="container-fluid showcase-wrapper">
       <div class="row no-gutter">
         <div class="col-md-4 collection-start showcase-side">
-          <h1 id="collection-title"<% if @portal.title.length >= 70 %> class="long-title"<% end %>>
+          <h1 id="collection-title"<% if @portal.title.length >= 45 %> class="long-title"<% end %>>
           <%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) %>
           </h1>
           <p class="collection-abstract"><%= @portal.abstract %> <%= link_to raw("More&nbsp;&raquo;"), {anchor: "about-collection"}, class: "more-link", title: "Learn more about the collection" %></p>

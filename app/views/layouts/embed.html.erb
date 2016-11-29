@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duke Digital Repository Embed</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+  <%= content_for(:head) %>
+
+  <%# Separate GA account for embeds so as to not bloat visit stats every 
+  time iframe content is served up %>
+  <% if ENV['GOOGLE_ANALYTICS_EMBED_ID'].present? %>
+    <%= render partial: 'google_analytics', locals: { ga_property_id: ENV['GOOGLE_ANALYTICS_EMBED_ID'] } %>
+  <% end %>
+</head>
+<body class="ddr-embed">
+  <%= yield %>
+</body>
+</html>

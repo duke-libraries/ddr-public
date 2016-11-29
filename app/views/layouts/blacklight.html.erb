@@ -28,8 +28,8 @@
 
     <%# Only track analytics if configured. Preproduction tracks to separate GA account for testing. %>
 
-    <% if ENV['TRACK_GOOGLE_ANALYTICS'] == 'true' && defined?(ENV['GOOGLE_ANALYTICS_TRACKING_ID']) %>
-      <%= render 'google_analytics' %>
+    <% if ENV['GOOGLE_ANALYTICS_TRACKING_ID'].present? %>
+      <%= render partial: 'google_analytics', locals: { ga_property_id: ENV['GOOGLE_ANALYTICS_TRACKING_ID'] } %>
     <% end %>
   </head>
   <body class="<%= render_body_class %>">

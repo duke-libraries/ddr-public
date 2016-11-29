@@ -1,0 +1,45 @@
+<% cache("embed_image_#{params[:collection]}_#{params[:id]}", expires_in: 7.days) do %>
+  <%# ------------------------------------ %>
+  <%#   Multi-Res (Has One or More PTIFs)  %>
+  <%# ------------------------------------ %>
+  <% if tilesources = image_item_tilesources(document.multires_image_file_paths) %>
+
+    <%= javascript_tag do %>
+      var pagepaths = <%= raw document.multires_image_file_paths.to_json %>;
+    <% end %>
+    <div class="iframe-embed-image">
+      <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(document.multires_image_file_paths), imagecount: tilesources.length } %>
+    </div>
+    <nav id="iframe-embed-titlebar" class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container-fluid">
+        <div id="iframe-embed-title-row" class="row">
+          <div class="col-md-10 col-sm-10 col-xs-10 iframe-embed-title truncated-title">
+            <%= link_to document.title, purl_or_doclink(document), target: "_blank", class: "strong" %>
+           <br/>
+            <span class="small">Duke University Libraries</span>
+          </div>
+          <div class="col-md-2 col-sm-2 col-xs-2">
+            <div class="pull-right">
+              <a id="iframe-embed-info-button" data-toggle="collapse" data-target="#iframe-embed-info" aria-expanded="false"><%= icon('info-circle') %></a>
+              <a id="iframe-embed-share-button" data-toggle="collapse" data-target="#iframe-share-info" aria-expanded="false"><%= icon('share-alt') %></a>
+            </div>
+          </div>
+        </div>
+        <div id="iframe-embed-info" class="row collapse">
+          <div class="col-md-12">
+            <p>
+              <strong>Collection:</strong><br/>
+              <small><%= link_to_document document.collection, document.collection.title, target: "_blank", class: "iframe-embed-collection" %></small>
+            </p>
+          </div>
+        </div>
+        <div id="iframe-share-info" class="row collapse">
+          <div class="col-md-12">
+            <%= render partial: "embed_code_and_permalink", locals: { document: document } %>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  <% end %>
+<% end %>

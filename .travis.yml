@@ -7,8 +7,10 @@ rvm:
 - 2.1.5
 before_script:
 - cp config/log4r.yml.sample config/log4r.yml
+- git clone https://github.com/duke-libraries/ddr-portals.git
 cache: bundler
-script: bundle exec rake ci
+script:
+- bundle exec rake ci
 notifications:
   email:
   - lib-drs@duke.edu

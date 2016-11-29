@@ -3,15 +3,8 @@ module ApplicationHelper
 
   # Overrides corresponding method in Blacklight::FacetsHelperBehavior
   def render_facet_limit_list(paginator, solr_field, wrapping_element=:li)
-    case solr_field
-    when Ddr::Index::Fields::ADMIN_SET_FACET
-      # apply custom sort for 'admin set' facet
-      items = facet_display_value_sort(paginator.items, :admin_set_title)
-    when Ddr::Index::Fields::COLLECTION_FACET
-      # apply custom sort for 'Collection' facet
-      items = facet_display_value_sort(paginator.items, :collection_title)
-    when Ddr::Index::Fields::EAD_ID
-      # apply custom sort for 'Source Collection' facet
+    if solr_field == Ddr::Index::Fields::EAD_ID
+      # apply custom sort for 'EAD_ID_TITLE' facet
       items = facet_display_value_sort(paginator.items, :ead_id_title)
     else
       items = paginator.items
@@ -20,18 +13,6 @@ module ApplicationHelper
       map { |item| render_facet_item(solr_field, item) }.compact.
       map { |item| content_tag(wrapping_element,item)}
     )
-  end
-
-  # Facet field view helper
-  # Also used in custom sort for admin set facet
-  def admin_set_title(code)
-    admin_set_titles[code]
-  end
-
-  def admin_set_titles
-    Rails.cache.fetch("admin_set_titles", expires_in: 1.hour) do
-      Ddr::Models::AdminSet.all.each_with_object({}) { |a, memo| memo[a.code] = a.title }
-    end
   end
 
   def ead_id_title(code)

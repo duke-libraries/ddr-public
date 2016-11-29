@@ -462,7 +462,7 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :category => "'item options'",
     :action => "'image count'" 
     },
-  "#item-options a.dropdown-toggle" => {
+  "#item-options #download-dropdown" => {
     :category => "'item options'",
     :action => "'download'" 
     },
@@ -474,6 +474,20 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :category => "'file download'",
     :action => "'derivative file'",
     :label => "defaultLabel(link) + ' | ' + $(this).attr('href')"
+    },
+  "#item-options #share-dropdown" => {
+    :category => "'item options'",
+    :action => "'share'" 
+    },
+  "#item-options #copyable-embed-code" => {
+    :category => "'item options'",
+    :action => "'embed'",
+    :label => "'embed code box'"
+    },
+  "#item-options #copyable-permalink" => {
+    :category => "'item options'",
+    :action => "'permalink'",
+    :label => "'permalink box'"
     },
 
   #// Related Items
@@ -520,6 +534,25 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :action => "'page jumper'",
     :label => "'jump to page'",
     :document_listener => true
+    },
+
+    #// EMBEDDED UI FOR OPEN SEADRAGON
+    #// =============================
+    ".iframe-embed-title" => {
+      :category => "'embedded item info'",
+      :action => "'title'"
+    },
+    ".iframe-embed-collection" => {
+      :category => "'embedded item info'",
+      :action => "'collection'"
+    },
+    "#iframe-embed-info-button" => {
+      :category => "'embedded item info'",
+      :action => "'info button'"
+    },
+    "#iframe-embed-share-button" => {
+      :category => "'embedded item info'",
+      :action => "'share button'"
     },
 
   #// JWPLAYER AUDIO & VIDEO PLAYER

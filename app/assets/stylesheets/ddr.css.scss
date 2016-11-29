@@ -424,6 +424,13 @@ p + #source-collection {
   }
 }
 
+/* ----------------------
+  FEATURED ITEMS
+------------------------- */
+
+#documents .document.highlight .caption {
+  clear:both;
+}
 
 /* ----------------------
   DEFAULT COLLECTION SHOW
@@ -484,6 +491,11 @@ p + #source-collection {
   & .index-document-functions {
     display: none; /* See https://github.com/duke-libraries/ddr-public/issues/414 */
   }
+}
+
+/* metadata values with paragraph breaks */
+#item-info dl dd p:last-of-type {
+  margin-bottom: 0;
 }
 
 
@@ -620,6 +632,10 @@ image-based items */
   & .img-thumbnail {
     padding: 0;
     border: none;
+    max-width: 175px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
   }
 
   & h3.index_title {
