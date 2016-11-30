@@ -1,3 +1,26 @@
+GIT
+  remote: git://github.com/duke-libraries/ddr-models.git
+  revision: f5f493255f29f74fcc9a85f78d754ce95ee54f19
+  branch: DDR-321
+  specs:
+    ddr-models (2.6.0.pre)
+      active-fedora (~> 7.0)
+      activeresource
+      cancancan (~> 1.12)
+      ddr-antivirus (~> 2.1.1)
+      devise (~> 3.4)
+      ezid-client (~> 1.4.2)
+      grouper-rest-client
+      hashie (~> 3.4, < 3.4.4)
+      hydra-core (~> 7.2)
+      hydra-validations (~> 0.5)
+      net-ldap (~> 0.11)
+      omniauth-shibboleth (~> 1.2.0)
+      rails (~> 4.1.6)
+      rdf-vocab (~> 0.8)
+      resque (~> 1.25)
+      virtus (~> 1.0.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -111,23 +134,6 @@ GEM
     ddr-alerts (1.0.0)
       rails (~> 4.1.6)
     ddr-antivirus (2.1.1)
-    ddr-models (2.5.0)
-      active-fedora (~> 7.0)
-      activeresource
-      cancancan (~> 1.12)
-      ddr-antivirus (~> 2.1.1)
-      devise (~> 3.4)
-      ezid-client (~> 1.4.2)
-      grouper-rest-client
-      hashie (~> 3.4, < 3.4.4)
-      hydra-core (~> 7.2)
-      hydra-validations (~> 0.5)
-      net-ldap (~> 0.11)
-      omniauth-shibboleth (~> 1.2.0)
-      rails (~> 4.1.6)
-      rdf-vocab (~> 0.8)
-      resque (~> 1.25)
-      virtus (~> 1.0.5)
     debug_inspector (0.0.2)
     deprecation (0.2.2)
       activesupport
@@ -351,7 +357,7 @@ GEM
       rdf (~> 1.1, >= 1.1.9, < 1.99)
     rdoc (4.2.0)
       json (~> 1.4)
-    redis (3.3.1)
+    redis (3.3.2)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     ref (1.0.5)
@@ -484,7 +490,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.0.0)
-  ddr-models (= 2.5.0)
+  ddr-models!
   devise
   edtf-humanize (~> 0.0.7)
   factory_girl_rails (~> 4.4)
