@@ -5,6 +5,35 @@ RSpec.describe CatalogHelper do
   let(:content_size) { "66.5 MB" }
   let(:permanent_url) { "http://id.library.duke.edu/ark:/99999/fk4zzz" }
 
+  describe "#has_two_or_more_multires_images?" do
+    let(:document) { SolrDocument.new(
+                'id'=>'changeme:10',
+                ) }
+    before { allow(document).to receive(:multires_image_file_paths) { file_paths } }
+
+    context "document does not have any multires images" do
+      let(:file_paths) {}
+      it "should return false" do
+        expect(helper.has_two_or_more_multires_images?(document)).to be_falsey
+      end
+    end
+
+    context "document has a single multires image" do
+      let(:file_paths) { ['path/to/image/1'] }
+      it "should return false" do
+        expect(helper.has_two_or_more_multires_images?(document)).to be_falsey
+      end
+    end
+
+    context "document has two multires images" do
+      let(:file_paths) { ['path/to/image/1', 'path/to/image/2'] }
+      it "should return true" do
+        expect(helper.has_two_or_more_multires_images?(document)).to be_truthy
+      end
+    end
+
+  end
+
   describe "#file_info" do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',
