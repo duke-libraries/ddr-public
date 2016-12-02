@@ -14,8 +14,8 @@ module CatalogHelper
     document[:active_fedora_model_ssi] == "Collection"
   end
 
-  def is_multi_image? document
-    document.multires_image_file_paths.length > 1
+  def has_two_or_more_multires_images? document
+    document.multires_image_file_paths.present? && document.multires_image_file_paths.length > 1
   end
 
   # Facet field view helper

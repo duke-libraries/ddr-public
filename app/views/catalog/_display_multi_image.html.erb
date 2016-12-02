@@ -1,43 +1,46 @@
 <% cache("display_multi_image_#{params[:collection]}_#{params[:id]}", expires_in: 7.days) do %>
 
-  <%# default partial to display solr document fields in catalog show view -%>
+  <% if @document.multires_image_file_paths.present? %>
 
-  <%# --------------------------- %>
-  <%#   Multi-Page / Multi-Image  %>
-  <%# --------------------------- %>
+    <%# default partial to display solr document fields in catalog show view -%>
 
-  <% if is_multi_image?(@document) %>
+    <%# --------------------------- %>
+    <%#   Multi-Page / Multi-Image  %>
+    <%# --------------------------- %>
 
-    <%# For search engine indexing & graceful degradation, %>
-    <%# show the first image in <img> and make links to the rest %>
-    <noscript>
-      <%= render partial: "show_image_derivative", locals: { image_path: document.first_multires_image_file_path } %>
+    <% if has_two_or_more_multires_images?(@document) %>
 
-      <h3>Images for this Item</h3>
-      <ul>
-        <% document.multires_image_file_paths.each do |path| %>
-          <% unless path.blank? %>
-            <li><%= link_to File.basename(path, File.extname(path)), iiif_image_path(path, {:size => '!850,850'}) %></li>
+      <%# For search engine indexing & graceful degradation, %>
+      <%# show the first image in <img> and make links to the rest %>
+      <noscript>
+        <%= render partial: "show_image_derivative", locals: { image_path: document.first_multires_image_file_path } %>
+
+        <h3>Images for this Item</h3>
+        <ul>
+          <% document.multires_image_file_paths.each do |path| %>
+            <% unless path.blank? %>
+              <li><%= link_to File.basename(path, File.extname(path)), iiif_image_path(path, {:size => '!850,850'}) %></li>
+            <% end %>
           <% end %>
-        <% end %>
-      </ul>
-    </noscript>
+        </ul>
+      </noscript>
 
-    <%# Make the array of page image paths accessible to JS for use by the download buttons %>
-    <%= javascript_tag do %>
-      var pagepaths = <%= raw document.multires_image_file_paths.to_json %>;
+      <%# Make the array of page image paths accessible to JS for use by the download buttons %>
+      <%= javascript_tag do %>
+        var pagepaths = <%= raw document.multires_image_file_paths.to_json %>;
+      <% end %>
     <% end %>
 
-  <% end %>
+    <%# ------------------------------------ %>
+    <%#   Multi-Res (Has One or More PTIFs)  %>
+    <%# ------------------------------------ %>
 
-  <%# ------------------------------------ %>
-  <%#   Multi-Res (Has One or More PTIFs)  %>
-  <%# ------------------------------------ %>
+    <% if tilesources = image_item_tilesources(document.multires_image_file_paths) %>
 
-  <% if tilesources = image_item_tilesources(document.multires_image_file_paths) %>
+      <%= render partial: "item_options", locals: { image_path: document.first_multires_image_file_path, imagecount: tilesources.length } %>
+      <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(document.multires_image_file_paths), imagecount: tilesources.length } %>
 
-    <%= render partial: "item_options", locals: { image_path: document.first_multires_image_file_path, imagecount: tilesources.length } %>
-    <%= render partial: "show_seadragon", locals: { aspectratio: image_item_aspectratio(document.multires_image_file_paths), imagecount: tilesources.length } %>
+    <% end %>
 
   <% end %>
 
