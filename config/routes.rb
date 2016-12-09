@@ -17,7 +17,6 @@ Rails.application.routes.draw do
     get "dc/:collection/featured", to: "digital_collections#featured", as: "featured_items"
     get "dc/:collection/about", :to => "digital_collections#about", as: "digital_collections_about"
     get "dc/:collection/:id/media", :to => "digital_collections#media", constraints: { format: 'json' }
-    get "dc/:collection/:id/embed", :to => "digital_collections#embed", as: "embed"
     get "dc/:collection/:id/feed", :to => "digital_collections#feed", constraints: { format: 'xml' }
     get "dc/:collection/:id", to: "digital_collections#show"
     get "dc/:collection", to: "digital_collections#index", as: "digital_collections"

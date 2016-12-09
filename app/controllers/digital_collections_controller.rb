@@ -12,9 +12,9 @@ class DigitalCollectionsController < CatalogController
   # CatalogController.
   skip_filter :enforce_show_permissions, only: :show
 
-  before_action :set_params_id_to_pid, only: [:show, :media, :embed, :feed]
+  before_action :set_params_id_to_pid, only: [:show, :media, :feed]
   before_action :enforce_show_permissions, only: :show
-  before_action :allow_iframe, only: :embed
+  before_action :allow_iframe, only: :show
 
   configure_blacklight do |config|
     config.view.gallery.default = true
@@ -34,6 +34,15 @@ class DigitalCollectionsController < CatalogController
     index
   end
 
+  def show
+    if is_embed?
+      response, @document = fetch(params[:id])
+      render layout: "embed"
+    else
+      super
+    end
+  end
+
   def feed
     response, @document = fetch(params[:id])
     authorize! :read, @document.id
@@ -42,12 +51,6 @@ class DigitalCollectionsController < CatalogController
   def media
     response, @document = fetch(params[:id])
     authorize! :read, @document.id
-  end
-
-  def embed
-    response, @document = fetch(params[:id])
-    authorize! :read, @document.id
-    render layout: "embed"
   end
 
   def about
@@ -79,7 +82,13 @@ class DigitalCollectionsController < CatalogController
   end
 
   def allow_iframe
-    response.headers.delete('X-Frame-Options')
+    if is_embed?
+      response.headers.delete('X-Frame-Options')
+    end
+  end
+
+  def is_embed?
+    params[:embed] == 'true'
   end
 
 end
