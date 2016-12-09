@@ -72,16 +72,16 @@ class DigitalCollectionsController < CatalogController
 
   def authorize_portal_page
     if @document_list.blank? && user_signed_in?
-      forbidden
+      not_found
     elsif @document_list.blank?
       authenticate_user!
     end
   end
 
   def set_params_id_to_pid
-    result = ActiveFedora::SolrService.query(local_id_query, rows: 1).first
-    document = SolrDocument.new result
-    unless document.nil?
+    result = ActiveFedora::SolrService.query(local_id_query, rows: 1)
+    unless result.blank?
+      document = SolrDocument.new result.first
       params[:id] = document.id
     end
   end

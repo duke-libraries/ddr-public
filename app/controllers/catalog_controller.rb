@@ -347,12 +347,20 @@ class CatalogController < ApplicationController
     render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
   end
 
+  def not_found
+    render file: "#{Rails.root}/public/404", status: 404, layout: false
+  end
+
   def authentication_required?
     Ddr::Public.require_authentication
   end
 
   def enforce_show_permissions
-    authorize! :read, params[:id]
+    begin
+      authorize! :read, params[:id]
+    rescue SolrDocument::NotFound
+      not_found
+    end
   end
 
 
