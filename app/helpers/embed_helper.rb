@@ -10,10 +10,7 @@ module EmbedHelper
 
   def iframe_src_path document, options = {}
     path = purl_or_doclink(document).sub(/^https?:/,'') # make protocol-relative
-    path + '/embed'
+    path + '?embed=true'
   end
-
-  private
-
 
 end

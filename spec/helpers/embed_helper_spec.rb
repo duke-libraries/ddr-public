@@ -5,14 +5,14 @@ RSpec.describe EmbedHelper do
     let(:document) { SolrDocument.new( {'id'=>'changeme:10' } ) }
     params = { controller: 'digital_collections' }
     context "the digital collections item is an image" do
-      it "should be embeddable" do      
+      it "should be embeddable" do
         document = double("document", :display_format => "image")
         allow(helper).to receive(:params).and_return(params)
         expect(helper.embeddable?(document)).to be true
       end
     end
     context "the digital collections item has no display format" do
-      it "should not be embeddable" do      
+      it "should not be embeddable" do
         document = double("document", :display_format => nil)
         allow(helper).to receive(:params).and_return(params)
         expect(helper.embeddable?(document)).to be false
@@ -43,13 +43,13 @@ RSpec.describe EmbedHelper do
     context "item has a permalink with https" do
       it "should return a protocol relative path to embedded view" do
         document = double("document", :permanent_url => "https://idn.duke.edu/ark:/99999/fk4yyyyy")
-        expect(helper.iframe_src_path(document)).to eq("//idn.duke.edu/ark:/99999/fk4yyyyy/embed")
+        expect(helper.iframe_src_path(document)).to eq("//idn.duke.edu/ark:/99999/fk4yyyyy?embed=true")
       end
     end
     context "item has a permalink with http" do
       it "should return a protocol relative path to embedded view" do
         document = double("document", :permanent_url => "http://idn.duke.edu/ark:/99999/fk4yyyyy")
-        expect(helper.iframe_src_path(document)).to eq("//idn.duke.edu/ark:/99999/fk4yyyyy/embed")
+        expect(helper.iframe_src_path(document)).to eq("//idn.duke.edu/ark:/99999/fk4yyyyy?embed=true")
       end
     end
   end
