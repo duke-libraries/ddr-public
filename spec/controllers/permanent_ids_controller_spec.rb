@@ -33,7 +33,14 @@ RSpec.describe PermanentIdsController do
         get :show, permanent_id: permanent_id
         expect(response).to redirect_to(catalog_path({"id"=>"test:1"}))
       end
+
+      it "should redirect to the catalog show view with an allowable parameter" do
+        get :show, permanent_id: permanent_id, embed: 'true'
+        expect(response).to redirect_to(catalog_path({"id"=>"test:1"}) + "?embed=true")
+      end
+
     end
+
   end
 
 end
