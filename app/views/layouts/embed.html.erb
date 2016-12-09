@@ -15,7 +15,7 @@
 </head>
 <body class="ddr-embed">
   <% case @document.display_format %>
-  <% when 'multi_image' || 'image' || 'folder' %>
+  <% when /^(image|multi_image|folder)$/ %>
     <%= render partial: 'embed_image_item', locals: {document: @document} %>
   <% end %>
 </body>
