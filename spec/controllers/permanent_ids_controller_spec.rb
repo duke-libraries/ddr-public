@@ -4,11 +4,10 @@ RSpec.describe PermanentIdsController do
 
   describe "#show" do
     let!(:permanent_id) { "ark:/99999/fk4yyyyy" }
-    let!(:query_params) { {q: "#{Ddr::Index::Fields::PERMANENT_ID}:\"#{permanent_id}\"", rows: 1} }
 
     describe "when the object does not exist" do
       before do
-        allow(controller).to receive(:query_solr).with(query_params) do
+        allow(controller).to receive(:permanent_id_search) do
           double(total: 0)
         end
       end
@@ -22,8 +21,8 @@ RSpec.describe PermanentIdsController do
     describe "when the object exists" do
 
       before do
-        allow(controller).to receive(:query_solr).with(query_params) do
-          double(total: 1, documents: [{"id"=>"test:1"}])
+        allow(controller).to receive(:permanent_id_search) do
+          double(total: 1, documents: [{"id"=>"test:"}])
         end
         document_or_object_url = double("document_or_object_url")
         allow(controller).to receive(:document_or_object_url).and_return('/catalog/test:1')
