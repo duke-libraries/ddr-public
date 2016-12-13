@@ -3,22 +3,27 @@ module RelatedItemsHelper
   def related_item_documents document
     related_item_documents = document.item_relators.map do |item_relator|
       relator_field = constantize_solr_field_name({solr_field: item_relator["field"]})
-      solr_documents = facet_field_value_matches(document.id, relator_field)
+      solr_documents = field_value_document_matches(document.id, relator_field)
       unless solr_documents.blank?
         { item_relator['name'] => solr_documents }
       end
     end
-    related_item_documents.reduce(:merge) || {}
+    related_item_documents.compact.reduce({}, :merge)
   end
 
   private
 
-  def facet_field_value_matches document_id, relator_field
+  def field_value_document_matches document_id, relator_field
     relator_field_values = relator_field_values(document_id, relator_field)
     unless relator_field_values.blank?
-      relator_field_items = relator_field_values.map { |value| relator_field_query(relator_field, value) }
-      related_items_solr_documents(document_id, relator_field_items)
+      all_related_documents = relator_field_values.map { |value| relator_field_query(relator_field, value) }
+      remove_document_by_id(document_id, all_related_documents)
     end
+  end
+
+  def relator_field_values document_id, relator_field
+    facet_values_and_counts = document_facet_field_values_and_counts(document_id, relator_field)
+    Hash[*facet_values_and_counts].keys
   end
 
   def relator_field_query relator_field, value
@@ -27,16 +32,15 @@ module RelatedItemsHelper
     response.documents
   end
 
-  def related_items_solr_documents document_id, relator_field_items
-    items = relator_field_items.map{ |items| items.delete_if { |item| item['id'] == document_id } }
-    items.first.map { |item| SolrDocument.new(item) }
+  # Removes any SolrDocument in the all_related_documents array if it
+  # matches the supplied document ID.
+  def remove_document_by_id document_id, all_related_documents
+    documents = all_related_documents.map{ |items| items.delete_if { |item| item['id'] == document_id } }
+    documents.first.map { |item| SolrDocument.new(item) }
   end
 
-  def relator_field_values document_id, relator_field
-    facet_values_and_counts = document_facet_field_values_and_counts(document_id, relator_field)
-    Hash[*facet_values_and_counts].keys
-  end
-
+  # Queries Solr for a document by id and returns the solr field matches and counts
+  # for the specified facet field.
   def document_facet_field_values_and_counts document_id, solr_field
     query = ActiveFedora::SolrService.construct_query_for_pids([document_id])
     response = repository.search(search_builder.where(query).merge({fl: "id", 'facet.field' => solr_field}))

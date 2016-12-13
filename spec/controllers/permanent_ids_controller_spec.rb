@@ -22,7 +22,7 @@ RSpec.describe PermanentIdsController do
 
       before do
         allow(controller).to receive(:permanent_id_search) do
-          double(total: 1, documents: [{"id"=>"test:"}])
+          double(total: 1, documents: [{"id"=>"test:1"}])
         end
         document_or_object_url = double("document_or_object_url")
         allow(controller).to receive(:document_or_object_url).and_return('/catalog/test:1')
