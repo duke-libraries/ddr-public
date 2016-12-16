@@ -163,7 +163,7 @@ class SolrDocument
   end
 
   def local_id_order_component_docs
-    components.sort { |a,b| a.local_id <=> b.local_id } if components.present?
+    components.sort { |a,b| a.local_id.to_s <=> b.local_id.to_s } if components.present?
   end
 
   def ordered_documents(pids)
