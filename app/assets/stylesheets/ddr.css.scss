@@ -941,9 +941,22 @@ dl.document-metadata {
 
   .homepage .well .home-feature {
     height: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.5);
     overflow: visible;
     padding: 20px;
+  }
+
+  .homepage .home-feature .vert-margin a {
+    text-decoration: none;
+    color: #fff;
+    background-color: rgba(119,135,10,0.5); /* 35,95,136 */
+    margin: 0 -2px 0 -2px;
+    padding: 0 2px 0 2px;
+  }
+
+  .homepage .home-feature .vert-margin a:hover {
+    color: #fff;
+    background-color: rgba(119,135,10,1);
   }
 
   .homepage .well .caption {
