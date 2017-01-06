@@ -14,7 +14,7 @@ class Thumbnail::RepositoryGenerated
 
   def thumbnail_path
     if repository_generated_thumbnail?
-      Rails.application.routes.url_helpers.thumbnail_path(document)
+      Rails.application.routes.url_helpers.thumbnail_path(document.id)
     end
   end
 
