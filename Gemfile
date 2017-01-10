@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
+ruby '2.3.1'
 
-gem 'rails', '~> 4.1.13'
-gem 'blacklight', '5.16'
+gem 'rails', '4.2.7'
+gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
-gem 'ddr-alerts', '~> 1.0.0'
+gem 'ddr-alerts', git: 'https://github.com/duke-libraries/ddr-alerts', ref: '01408a82f13292b655b3c561688cf824cbd14549'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.5.0'
+gem 'ddr-models', git: 'https://github.com/duke-libraries/ddr-models', ref: 'e0ed623a3722ca9583f2531f97dd5f20c126293d'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -28,6 +29,11 @@ gem 'bootstrap-select-rails'
 gem 'nokogiri'
 gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
+
+# Rails 4.2+
+gem 'responders', '~> 2.0'
+gem 'web-console', '~> 2.0', group: :development
+gem 'sprockets-rails', '>= 2.1.4'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 

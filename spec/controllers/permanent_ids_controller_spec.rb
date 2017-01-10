@@ -22,7 +22,7 @@ RSpec.describe PermanentIdsController do
 
       before do
         allow(controller).to receive(:permanent_id_search) do
-          double(total: 1, documents: [{"id"=>"test:1"}])
+          double(total: 1, documents: [{id: "test:1"}])
         end
         document_or_object_url = double("document_or_object_url")
         allow(controller).to receive(:document_or_object_url).and_return('/catalog/test:1')
@@ -30,12 +30,12 @@ RSpec.describe PermanentIdsController do
 
       it "should redirect to the catalog show view" do
         get :show, permanent_id: permanent_id
-        expect(response).to redirect_to(catalog_path({"id"=>"test:1"}))
+        expect(response).to redirect_to(catalog_path({id: "test:1"}))
       end
 
       it "should redirect to the catalog show view with an allowable parameter" do
         get :show, permanent_id: permanent_id, embed: 'true'
-        expect(response).to redirect_to(catalog_path({"id"=>"test:1"}) + "?embed=true")
+        expect(response).to redirect_to(catalog_path({id: "test:1"}) + "?embed=true")
       end
 
     end
