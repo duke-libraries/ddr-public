@@ -19,7 +19,7 @@ class PermanentIdsController < ApplicationController
   end
 
   def permanent_id_search
-    repository.search(search_builder.where(permanent_id_query).merge({rows: 1}))
+    repository.search(search_builder.where(permanent_id_query).merge({rows: 1}).append(:include_only_published))
   end
 
   def permanent_id_query
