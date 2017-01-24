@@ -52,8 +52,8 @@ class SolrDocument
     portal_view_config.try(:[], 'derivative_url_prefixes')
   end
 
-  def item_relators
-    portal_view_config.try(:[], 'item_relators')
+  def related_items
+    item_relator_config ? item_relator_config.map { |config| RelatedItem.new({document: self, config: config}) } : []
   end
 
   def restrictions
@@ -113,6 +113,10 @@ class SolrDocument
   private
 
   Restrictions = Struct.new(:max_download)
+
+  def item_relator_config
+    portal_view_config.try(:[], 'item_relators')
+  end
 
   def max_download
     portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
