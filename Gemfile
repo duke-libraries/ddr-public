@@ -45,6 +45,7 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem "rspec-rails", "~> 3.4"
+  gem "rspec-its"
   gem 'capybara', '~> 2.0'
   gem "jettywrapper", "~> 1.8" # 1.x - fcrepo3 / 2.x - fcrepo4
   gem 'factory_girl_rails', '~> 4.4'
