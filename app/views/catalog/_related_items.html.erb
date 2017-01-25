@@ -2,7 +2,7 @@
   <% @document.related_items.each do |related_item| %>
     <% if related_item.related_documents.present? %>
       <% if related_item.related_documents.count > 3 %>
-        <h3><%= link_to_if(related_item.related_documents.count > 3, "#{related_item.name} (#{related_item.related_documents.count + 1 })", search_action_path(related_item.solr_params)) %></h3>
+        <h3><%= link_to("#{related_item.name} (#{related_item.related_documents.count + 1 })", search_action_path(related_item.solr_params)) %></h3>
       <% else %>
         <h3><%= related_item.name %></h3>
       <% end %>

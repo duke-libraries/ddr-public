@@ -13,10 +13,10 @@ class RelatedItem
                 :solr_params
 
   def initialize args={}
-    @document          = args[:document]
-    @config            = args[:config]
-    @name              = relation_name
-    @solr_field        = solr_field_name
+    @document   = args[:document]
+    @config     = args[:config]
+    @name       = relation_name
+    @solr_field = solr_field_name
   end
 
   def solr_values
@@ -24,16 +24,33 @@ class RelatedItem
   end
 
   def related_documents
-    @rel_docs ||= self.solr_values.map do |value|
-      relator_field_query(@solr_field, value)
-    end.flatten.uniq {|doc| doc.id }.delete_if { |doc| doc.id == @document.id }
+    @rel_docs ||= title_sorted_documents
   end
 
   def solr_params
-    {"f" => {@solr_field => self.solr_values}}
+    {"f" => {@solr_field => self.solr_values}, "sort" => "#{Ddr::Index::Fields::TITLE} asc"}
   end
 
+
   private
+
+  def title_sorted_documents
+    delete_self.sort { |a,b| a.title <=> b.title }
+  end
+
+  def delete_self
+    remove_duplicates.delete_if { |doc| doc.id == @document.id }
+  end
+
+  def remove_duplicates
+    related_documents_results.flatten.uniq { |doc| doc.id }
+  end
+
+  def related_documents_results
+    self.solr_values.map do |value|
+      relator_field_query(@solr_field, value)
+    end
+  end
 
   def relation_name
     @config["name"]

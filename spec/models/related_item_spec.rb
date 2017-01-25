@@ -2,9 +2,10 @@ require 'spec_helper'
 
 RSpec.describe RelatedItem do
 
-  let(:doc1) { SolrDocument.new('id' => 'changeme:2') }
-  let(:doc2) { SolrDocument.new('id' => 'changeme:3') }
-  let(:docs_list) { [doc1, doc2] }
+  let(:doc1) { SolrDocument.new('id' => 'changeme:1', 'title' => 'A') }
+  let(:doc2) { SolrDocument.new('id' => 'changeme:2', 'title' => 'B') }
+  let(:doc3) { SolrDocument.new('id' => 'changeme:3', 'title' => 'C') }
+  let(:docs_list) { [doc1, doc2, doc3] }
   let(:config) { {"name"=>"Related Items", "field"=>[:series_facet, :facetable]} }
   let(:facet_vals_counts) { ["West Campus", "10", "SNCC and Civil Rights Movement", "5"] }
 
@@ -18,6 +19,6 @@ RSpec.describe RelatedItem do
   its(:name) { is_expected.to eq("Related Items") }
   its(:solr_field) { is_expected.to eq("series_facet_sim")}
   its(:solr_values) { is_expected.to eq(["West Campus", "SNCC and Civil Rights Movement"])}
-  its(:solr_params) { is_expected.to eq({"f" => {"series_facet_sim" => ["West Campus", "SNCC and Civil Rights Movement"]}}) }
-  its(:related_documents) { is_expected.to eq([doc2]) }
+  its(:solr_params) { is_expected.to eq({"f" => {"series_facet_sim" => ["West Campus", "SNCC and Civil Rights Movement"]}, "sort"=>"title_ssi asc"}) }
+  its(:related_documents) { is_expected.to eq([doc2, doc3]) }
 end
