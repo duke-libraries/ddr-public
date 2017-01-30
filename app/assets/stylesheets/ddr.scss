@@ -920,7 +920,7 @@ dl.document-metadata {
     color: white;
     padding: 30px !important;
     position: absolute;
-    top: 160px;
+    top: 120px;
     right: 20px;
     margin-left: 20px;
   }
@@ -941,6 +941,18 @@ dl.document-metadata {
   .homepage-intro p a {
     color: #e3e3e3;
     font-weight: strong;
+  }
+
+  .homepage-intro p:last-of-type {
+    border-top: 1px solid rgba(255,255,255,.25);
+    margin-top: 1em;
+    text-align: right;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .homepage-intro p:last-of-type a {
+    font-size: 75%;
   }
 
   .homepage-intro .btn-primary {
@@ -1096,7 +1108,8 @@ dl.document-metadata {
     margin-bottom: .75em;
   }
 
-  .footer li a {
+  .footer li a,
+  .footer p a {
     line-height: 1.2em;
     color: #666;
   }
