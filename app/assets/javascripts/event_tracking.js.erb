@@ -701,7 +701,7 @@ var eventTracking = (function () {
 
   function sendEventData(ga_event) {
 
-    <% if ENV['TRACK_GOOGLE_ANALYTICS'] == 'true' && defined?(ENV['GOOGLE_ANALYTICS_TRACKING_ID']) %>
+    <% if ENV['GOOGLE_ANALYTICS_TRACKING_ID'].present? %>
       sendDataToGoogleAnalytics(ga_event);
     <% end %>
     <% if ENV['GOOGLE_ANALYTICS_DEBUG'] == 'true' %>
