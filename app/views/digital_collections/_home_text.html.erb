@@ -21,6 +21,10 @@
   <%= render partial: 'show_finding_aid_full', locals: { document: @portal.collection } %>    
 <% end %>
 
+<% if @portal.collection.sponsor.present? %>
+  <%= render partial: 'show_collection_sponsor', locals: { document: @portal.collection } %>
+<% end %>
+
 <%# Only show the first few items from the collection if there are no highlights defined. %>
 <% if @portal.item_highlights.documents.blank? and @portal.show_items != 0 %>
   <%= render partial: "show_children_collection", locals: { show_items: @portal.show_items } %>
