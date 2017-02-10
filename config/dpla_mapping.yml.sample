@@ -13,6 +13,9 @@ dpla_fields:
     - solr_field: 
       - :creator
       - :stored_searchable
+    - solr_field:
+      - :company
+      - :stored_searchable
   'dc:date':
     - solr_field:
       - :date
@@ -50,6 +53,9 @@ dpla_fields:
   'dc:subject':
     - solr_field:
       - :subject
+      - :stored_searchable
+    - solr_field:
+      - :product
       - :stored_searchable
   'dc:title':
     - solr_field:
