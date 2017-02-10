@@ -29,10 +29,11 @@ class CatalogController < ApplicationController
   configure_blacklight do |config|
     config.search_builder_class = SearchBuilder
     config.show.route = {}
-          config.view.gallery.partials = [:index_header, :index]
 
-          config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
-          config.show.partials.insert(1, :openseadragon)
+    config.view.gallery.partials = [:index_header, :index]
+
+    config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
+    config.show.partials.insert(1, :openseadragon)
 
     config.default_solr_params = {
       :qt => 'search',
