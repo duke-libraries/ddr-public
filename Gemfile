@@ -28,6 +28,7 @@ gem 'bootstrap-select-rails'
 gem 'nokogiri'
 gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
+gem 'ruby-progressbar'
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
