@@ -444,6 +444,7 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+    ruby-progressbar (1.8.1)
     rubydora (1.9.1)
       activemodel
       activesupport
@@ -570,6 +571,7 @@ DEPENDENCIES
   responders (~> 2.0)
   rspec-its
   rspec-rails (~> 3.4)
+  ruby-progressbar
   rubyzip (~> 1.1.7)
   sass-rails (~> 5.0.4)
   sdoc (~> 0.4.0)

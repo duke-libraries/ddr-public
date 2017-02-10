@@ -1,5 +1,5 @@
 namespace :ddr_public do
-  
+
   namespace :config do
     desc "Copy sample config files"
     task :samples do
@@ -36,7 +36,7 @@ namespace :ddr_public do
       Dir.glob(File.join(sitemap_dir, "*.xml")).reject{|f| f[File.join(sitemap_dir, "repository.xml")] }.each do |filepath|
         sitemap_file_paths << filepath
       end
-      
+
       sitemap_file_paths.each do |sitemap_file_path|
         files << File.basename(sitemap_file_path)
       end
@@ -59,21 +59,26 @@ namespace :ddr_public do
 
     desc "Generate an XML sitemap for a collection. Takes a collection pid as an argument."
     task :generate, [:collection_pid] => :environment do |t, args|
-      
+
       create_sitemaps_public_dir
-      
+
       collection = Collection.find(args.collection_pid)
 
+      prog_meter = ProgressBar.create(format: "%a %e %P% Processed: %c of %C Items", :total => collection.items.count)
+
       sitemap_filename = collection.local_id
-      
+
       urls = []
       urls << full_document_url(collection.pid)
 
       collection.items(response_format: :solr).each do |item_doc|
         item = Item.find(item_doc["id"])
         if item.workflow_state == "published"
-          urls << full_document_url(item.pid)
+          url = full_document_url(item.pid)
+          prog_meter.log url
+          urls << url
         end
+        prog_meter.increment
       end
 
       sitemap_builder = Nokogiri::XML::Builder.new do |xml|
@@ -92,8 +97,8 @@ namespace :ddr_public do
 
     def create_sitemaps_public_dir
       dirname = File.dirname(sitemaps_dir_path)
-      unless File.directory?(sitemaps_dir_path)
-        FileUtils.mkdir_p(sitemaps_dir_path)
+      unless File.directory?(dirname)
+        FileUtils.mkdir_p(dirname)
       end
     end
 
@@ -104,7 +109,6 @@ namespace :ddr_public do
     def full_document_url pid
       solr_doc = SolrDocument.find(pid)
       url_for_sitemap = "#{ENV['ROOT_URL']}" + document_url(solr_doc)
-      puts url_for_sitemap
       url_for_sitemap
     end
 
@@ -162,7 +166,7 @@ namespace :ddr_public do
   # https://github.com/OregonDigital/oregondigital/blob/master/lib/tasks/pull_content.rake
   # http://www.apache.org/licenses/LICENSE-2.0
   namespace :ddr_portals do
-    
+
     DDR_PORTALS_REPO = "https://github.com/duke-libraries/ddr-portals.git"
     DDR_PORTALS_PATH = Rails.root.join('ddr-portals')
     GITFILE = "#{DDR_PORTALS_PATH}/.git"
@@ -189,7 +193,7 @@ namespace :ddr_public do
         next if set_repo_path =~ /^\./
 
         setname = File.basename(set_repo_path)
-        
+
         dir = set_repo_path + "/views"
         sh "ln -s #{dir} #{PORTAL_VIEW_PATH}/#{setname}" if File.directory?(dir)
 
@@ -214,7 +218,7 @@ namespace :ddr_public do
     task :clean => [:environment, :clean_links] do
       sh "rm -rf #{DDR_PORTALS_PATH}"
     end
-      
+
   end
 
   Rake::Task["ddr_public:sitemap:generate"].enhance do
