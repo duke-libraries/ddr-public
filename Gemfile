@@ -29,6 +29,7 @@ gem 'bootstrap-select-rails'
 gem 'nokogiri'
 gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
+gem 'ruby-progressbar'
 
 # Rails 4.2+
 gem 'responders', '~> 2.0'
