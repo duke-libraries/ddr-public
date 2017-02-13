@@ -45,7 +45,7 @@ RSpec.describe MetadataDisplayHelper do
   end
 
   describe "#language_display" do
-    let (:language_display_string) {["Afar", "Abkhaz", "ack"]}
+    let (:language_display_string) {["Afar", "Abkhazian", "ack"]}
     context "language field contains multiple language codes, one of which not have a translation" do
       let (:language_metadata) {["aar", "abk", "ack"]}
       it "should return an array of translated language codes where possible" do
