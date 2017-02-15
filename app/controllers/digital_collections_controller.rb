@@ -16,6 +16,8 @@ class DigitalCollectionsController < CatalogController
   before_action :enforce_show_permissions, only: [:show, :media, :feed]
   before_action :allow_iframe, only: :show
 
+  layout 'digital_collections'
+
   configure_blacklight do |config|
     config.view.gallery.default = true
   end

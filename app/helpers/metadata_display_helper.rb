@@ -33,6 +33,17 @@ module MetadataDisplayHelper
     end
   end
 
+  def collection_sponsor options={}
+    adopt_url = "http://library.duke.edu/about/adopt-digital-collection"
+    document = options[:document]
+    placement = options[:placement] ? options[:placement] : 'top'
+    link_to document.sponsor_display, adopt_url, { data: {
+      toggle: 'tooltip',
+      placement: placement,
+      title: 'Digital preservation for this collection is supported through our Adopt a Digital Collection program. Click to learn more.'
+    }}
+  end
+
   def source_collection options={}
     document = options[:document]
     placement = options[:placement] ? options[:placement] : 'top'
