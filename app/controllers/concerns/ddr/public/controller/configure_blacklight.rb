@@ -44,6 +44,7 @@ module Ddr
                 :sort => field['sort'],
                 :range => field['range'],
                 :helper_method => field['helper_method'],
+                :accessor => field['accessor'],
                 :link_to_search => if field['link_to_search'] then constantize_solr_field_name({solr_field: field['link_to_search']}) end
                 )
             end

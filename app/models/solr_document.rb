@@ -23,6 +23,12 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Document::DublinCore)
 
+  def sponsor_display
+    sponsor_display ||= self['sponsor_tesim'] ||
+                        self.parent['sponsor_tesim'] ||
+                        self.collection['sponsor_tesim'] ||
+                        I18n.t('ddr.public.call_to_sponsor', default: 'Sponsor this collection.')
+  end
 
   def controller_scope
     ApplicationController.try(:current)
