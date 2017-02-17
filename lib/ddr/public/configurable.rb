@@ -2,7 +2,7 @@ module Ddr
   module Public
     module Configurable
       extend ActiveSupport::Concern
-      
+
       included do
 
         # Contact email address
@@ -18,6 +18,8 @@ module Ddr
         mattr_accessor :require_authentication
 
         mattr_accessor :thumbnails
+
+        mattr_accessor :adopt_url
 
       end
 
