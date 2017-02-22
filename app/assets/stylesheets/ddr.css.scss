@@ -475,6 +475,15 @@ p + #source-collection {
   opacity: 0.6;
 }
 
+.collection-sponsor {
+  padding: 12px 19px 7px 19px;
+  & .collection-sponsor-text {
+    margin-left:10px;
+    margin-top: 3px;
+  }
+}
+
+
 #related-items {
   & .popover { /* Obscure links in popover metadata */
     & a {
@@ -1087,6 +1096,17 @@ dl.document-metadata {
       margin-right: 20%;
     }
 
+  }
+
+
+  /* --------------------
+      Footer Styles
+  ----------------------- */
+
+  .footer {
+    background: #eee;
+    margin-bottom: 0;
+    border: 0;
   }
 
 

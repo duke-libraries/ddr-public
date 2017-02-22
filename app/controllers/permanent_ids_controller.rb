@@ -4,8 +4,7 @@ class PermanentIdsController < ApplicationController
   include BlacklightHelper
 
   def show
-    permanent_id = params.require(:permanent_id)
-    response = query_solr(q: "#{Ddr::Index::Fields::PERMANENT_ID}:\"#{permanent_id}\"", rows: 1)
+    response = permanent_id_search
     if response.total == 0
       render file: "#{Rails.root}/public/404", layout: false, status: 404
     else
@@ -14,6 +13,18 @@ class PermanentIdsController < ApplicationController
   end
 
   private
+
+  def permanent_id
+    params.require(:permanent_id)
+  end
+
+  def permanent_id_search
+    repository.search(search_builder.where(permanent_id_query).merge({rows: 1}).append(:include_only_published))
+  end
+
+  def permanent_id_query
+    "#{Ddr::Index::Fields::PERMANENT_ID}:\"#{permanent_id}\""
+  end
 
   def redirect_url(response)
     document_or_object_url(response.documents.first) + passthrough_params.to_s

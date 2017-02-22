@@ -10,11 +10,13 @@ class DigitalCollectionsController < CatalogController
   # This has to run after get_pid_from_params_id
   # So we're skipping the filter inherited from
   # CatalogController.
-  skip_filter :enforce_show_permissions, only: :show
+  skip_filter :enforce_show_permissions
 
   before_action :set_params_id_to_pid, only: [:show, :media, :feed]
-  before_action :enforce_show_permissions, only: :show
   before_action :allow_iframe, only: :show
+  before_action :enforce_show_permissions, only: [:show, :media, :feed]
+
+  layout 'digital_collections'
 
   configure_blacklight do |config|
     config.view.gallery.default = true
@@ -24,7 +26,7 @@ class DigitalCollectionsController < CatalogController
     super
 
     digital_collections_portal
-    authorize! :read, @portal.collection.id if @portal.collection
+    authorize_portal_page
   end
 
   # Action exists to distinguish between the collection
@@ -70,15 +72,24 @@ class DigitalCollectionsController < CatalogController
                                               controller_scope: self })
   end
 
+  def authorize_portal_page
+    if @document_list.blank? && user_signed_in?
+      forbidden
+    elsif @document_list.blank?
+      authenticate_user!
+    end
+  end
+
   def set_params_id_to_pid
-    document = repository.search(local_id_query).documents.first
+    result = ActiveFedora::SolrService.query(local_id_query, rows: 1).first
+    document = SolrDocument.new result
     unless document.nil?
       params[:id] = document.id
     end
   end
 
   def local_id_query
-    search_builder.where("#{Ddr::Index::Fields::LOCAL_ID}:#{params[:id]}").append(:include_only_items)
+    "#{Ddr::Index::Fields::LOCAL_ID}:\"#{params[:id]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:\"Item\""
   end
 
   def allow_iframe

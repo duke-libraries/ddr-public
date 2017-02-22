@@ -133,12 +133,33 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :action => "'alerts'"      
     },
 
+  #// Aptman Footer
+  "#aptman a" => {
+    :category => "'footer'",
+    :action => "'adopt a collection'"
+    },
+
   #// Footer
   ".footer a" => {
     :category => "'footer'",
-    :action => "'lib home'"
+    :action => "'footer links'"
     },
 
+  #// DDR HOMEPAGE
+  #// ==============================
+
+  ".homepage-intro a" => {
+    :category => "'homepage'",
+    :action => "'homepage intro'"
+    },
+  ".home-mission a" => {
+    :category => "'homepage'",
+    :action => "'homepage mission'"
+    },
+  ".homepage-content a" => {
+    :category => "'homepage'",
+    :action => "'program areas'"
+    },
 
   #// COLLECTION HOMEPAGES & PORTALS
   #// ==============================
@@ -219,6 +240,12 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
   "#about-collection a" => {
     :category => "'collection home'",
     :action => "'about the collection'"
+    },
+
+  #// Adopt a Collection
+  ".collection-sponsor a" => {
+    :category => "'collection home'",
+    :action => "'adopt a collection'"
     },
 
   #// Archival Collection Guide

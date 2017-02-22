@@ -5,4 +5,5 @@ Ddr::Public.configure do |config|
   config.help_url = Rails.env.test? ? "http://www.loc.gov" : ENV['HELP_URL']
   config.require_authentication = ENV['REQUIRE_AUTHENTICATION']
   config.thumbnails = ENV['THUMBNAILS']
+  config.adopt_url = ENV['ADOPT_URL']
 end

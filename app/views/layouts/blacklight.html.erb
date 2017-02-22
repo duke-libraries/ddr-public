@@ -48,6 +48,9 @@
     <div class="row">
       <%= yield %>
     </div>
+
+    <%= yield(:subcontent) if content_for? :subcontent %>
+
   </div>
 
   <%= render :partial => 'shared/footer' %>

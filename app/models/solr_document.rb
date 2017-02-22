@@ -23,7 +23,6 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Document::DublinCore)
 
-
   def controller_scope
     ApplicationController.try(:current)
   end
@@ -38,6 +37,17 @@ class SolrDocument
 
   def description
     Array(self["description_tesim"]).first
+  end
+
+  def sponsor
+    Array(self["sponsor_tesim"]).first
+  end
+
+  def sponsor_display
+    sponsor_display ||= self.sponsor ||
+                        self.parent.sponsor ||
+                        self.collection.sponsor ||
+                        I18n.t('ddr.public.call_to_sponsor', default: 'Sponsor this Digital Collection')
   end
 
   def relation
