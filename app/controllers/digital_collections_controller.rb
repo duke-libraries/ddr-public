@@ -73,9 +73,9 @@ class DigitalCollectionsController < CatalogController
   end
 
   def authorize_portal_page
-    if @document_list.blank? && user_signed_in?
+    if @portal.collections.blank? && user_signed_in?
       forbidden
-    elsif @document_list.blank?
+    elsif @portal.collections.blank?
       authenticate_user!
     end
   end
