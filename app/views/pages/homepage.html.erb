@@ -43,7 +43,9 @@
               </div>
             </div>
             <div class="col col-md-6">
-              <a href="mailto:repository-help@duke.edu" class="btn btn-primary">Contact Us</a>
+
+              <%= mail_to Ddr::Public.contact_email, "Contact Us", class: "btn btn-primary" %>
+
               <div class="text-center">
                 <p class="text-muted">with your questions or inquiries</p>
               </div>

@@ -13,8 +13,14 @@ class DigitalCollectionsController < CatalogController
   skip_filter :enforce_show_permissions
 
   before_action :set_params_id_to_pid, only: [:show, :media, :feed]
+<<<<<<< HEAD
   before_action :enforce_show_permissions, only: [:show, :media, :feed]
+=======
+>>>>>>> hotfix-2.5.12
   before_action :allow_iframe, only: :show
+  before_action :enforce_show_permissions, only: [:show, :media, :feed]
+
+  layout 'digital_collections'
 
   layout 'digital_collections'
 
@@ -73,9 +79,9 @@ class DigitalCollectionsController < CatalogController
   end
 
   def authorize_portal_page
-    if @document_list.blank? && user_signed_in?
-      not_found
-    elsif @document_list.blank?
+    if @portal.collections.blank? && user_signed_in?
+      forbidden
+    elsif @portal.collections.blank?
       authenticate_user!
     end
   end
