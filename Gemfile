@@ -30,14 +30,11 @@ gem 'nokogiri'
 gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
 gem 'ruby-progressbar'
-<<<<<<< HEAD
 
 # Rails 4.2+
 gem 'responders', '~> 2.0'
 gem 'web-console', '~> 2.0', group: :development
 gem 'sprockets-rails', '>= 2.1.4'
-=======
->>>>>>> hotfix-2.5.12
 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
