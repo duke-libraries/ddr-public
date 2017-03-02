@@ -4,6 +4,8 @@
     <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-html="true" data-placement="right" data-title="Rails Env: &lt;strong&gt;<%= Rails.env %>&lt;/strong&gt;"></i> 
       <span class="preview-alert-msg"><%= ENV['DDR_PUBLIC_PREVIEW'] %></span> 
       <span class="preview-alert-msg"> | </span>
+      <span class="preview-alert-msg">DDR-Public <strong>v<%= Ddr::Public::VERSION %></strong></span>
+      <span class="preview-alert-msg"> | </span>
       <span class="preview-alert-msg">Git branch: <strong><%= git_branch_info %></strong></span>
   </small>
 </div>
