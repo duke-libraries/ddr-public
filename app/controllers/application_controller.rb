@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
 
+  # Needed so that a SolrDocument can know about its
+  # active controller scope. Any additional queries can then
+  # use the same search builder context.
   cattr_accessor :current
   before_filter { ApplicationController.current = self }
   after_filter  { ApplicationController.current = nil  }
