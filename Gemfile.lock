@@ -131,6 +131,7 @@ GEM
       railties (>= 3.1)
     builder (3.2.2)
     bump (0.5.3)
+    byebug (9.0.6)
     cancancan (1.15.0)
     capybara (2.11.0)
       addressable
@@ -547,6 +548,7 @@ DEPENDENCIES
   bootstrap-select-rails
   bootswatch-rails
   bump
+  byebug
   capybara (~> 2.0)
   coffee-rails (~> 4.0.0)
   database_cleaner

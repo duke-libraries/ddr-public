@@ -18,8 +18,6 @@ class DigitalCollectionsController < CatalogController
 
   layout 'digital_collections'
 
-  layout 'digital_collections'
-
   configure_blacklight do |config|
     config.view.gallery.default = true
   end
@@ -45,6 +43,7 @@ class DigitalCollectionsController < CatalogController
     else
       super
     end
+    verify_collection_slug
   end
 
   def feed
@@ -79,6 +78,12 @@ class DigitalCollectionsController < CatalogController
       forbidden
     elsif @portal.collections.blank?
       authenticate_user!
+    end
+  end
+
+  def verify_collection_slug
+    unless @document.collection.local_id == params['collection']
+      not_found
     end
   end
 
