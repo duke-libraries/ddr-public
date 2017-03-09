@@ -81,9 +81,9 @@ class DigitalCollectionsController < CatalogController
   end
 
   def set_params_id_to_pid
-    result = ActiveFedora::SolrService.query(local_id_query, rows: 1).first
-    document = SolrDocument.new result
-    unless document.nil?
+    result = ActiveFedora::SolrService.query(local_id_query, rows: 1)
+    unless result.blank?
+      document = SolrDocument.new result.first
       params[:id] = document.id
     end
   end
