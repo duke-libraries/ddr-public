@@ -1,5 +1,5 @@
 module Ddr
   module Public
-    VERSION = "2.5.13.post"
+    VERSION = "2.5.14.post"
   end
 end
