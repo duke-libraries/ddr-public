@@ -64,24 +64,4 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
-  describe "#separate_with_p" do
-    let (:display_values_with_p_markup) { "<p>This is my first value.</p>\n\n<p>This is my second value.</p>\n\n<p>This is my third value.</p>" }
-    context "field has multiple values" do
-      let (:metadata_field_values) {["This is my first value.", "This is my second value.", "This is my third value."]}
-      it "should return a string with each of the values wrapped in a <p> element" do
-        expect(helper.separate_with_p({:value => metadata_field_values})).to match(display_values_with_p_markup)
-      end
-    end
-  end
-
-  describe "#separate_with_br" do
-    let (:display_values_with_br_markup) { "<div>This is my first value.\n<br />This is my second value.\n<br />This is my third value.</div>" }
-    context "field has multiple values" do
-      let (:metadata_field_values) {["This is my first value.", "This is my second value.", "This is my third value."]}
-      it "should return a single <div> with each of the values separated by a <br /> element" do
-        expect(helper.separate_with_br({:value => metadata_field_values})).to match(display_values_with_br_markup)
-      end
-    end
-  end
-
 end
