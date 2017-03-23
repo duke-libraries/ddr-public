@@ -26,7 +26,7 @@ class Thumbnail::MultiresComponent
   private
 
   def component_multires_image_file_path?
-    component_multires_image_file_path ? true : false
+    component_multires_image_file_path.present?
   end
 
   def component_multires_image_file_path

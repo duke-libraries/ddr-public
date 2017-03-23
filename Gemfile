@@ -6,7 +6,7 @@ gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', git: 'https://github.com/duke-libraries/ddr-alerts', ref: '01408a82f13292b655b3c561688cf824cbd14549'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', git: 'https://github.com/duke-libraries/ddr-models', ref: 'e0ed623a3722ca9583f2531f97dd5f20c126293d'
+gem 'ddr-models', git: 'https://github.com/duke-libraries/ddr-models', ref: '2d6004419e4584d3b82b4d2d1d3f486fc0ea70f6'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
