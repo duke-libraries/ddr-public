@@ -70,11 +70,11 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean
     ActiveFedora::Base.destroy_all
-    Ddr::Models.external_file_store = Dir.mktmpdir
+    Ddr::Datastreams::ExternalFileDatastream.file_store = Dir.mktmpdir
   end
   config.after(:suite) do
-    if Dir.exists?(Ddr::Models.external_file_store)
-      FileUtils.remove_entry_secure Ddr::Models.external_file_store
+    if Dir.exists?(Ddr::Datastreams::ExternalFileDatastream.file_store)
+      FileUtils.remove_entry_secure Ddr::Datastreams::ExternalFileDatastream.file_store
     end
   end
   config.after(:each) { ActiveFedora::Base.destroy_all }
