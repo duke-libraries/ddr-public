@@ -1,4 +1,4 @@
-<% if is_multi_image?(@document) %>
+<% if has_two_or_more_multires_images?(@document) %>
   <li class="dropdown-header">All Images <span class="text-muted">(<%= imagecount %>)</span></li>
 
   <li><%= multi_image_download_button(@document, { label: "PDF", action: "pdf_images" }) %></li>

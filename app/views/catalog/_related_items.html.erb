@@ -1,8 +1,15 @@
-<% if @document.item_relators %>
   <div id="related-items">
-  <% related_item_documents(@document).each do |relation_name, docs| %>
-    <h3><%= relation_name %></h3>
-    <%= render_document_index_with_view("gallery", docs) %>
+  <% @document.related_items.each do |related_item| %>
+    <% if related_item.related_documents.present? %>
+      <% if related_item.related_documents.count > 3 %>
+        <h3><%= link_to("#{related_item.name} (#{related_item.related_documents.count + 1 })", search_action_path(related_item.solr_query)) %></h3>
+      <% else %>
+        <h3><%= related_item.name %></h3>
+      <% end %>
+      <%= render_document_index_with_view("gallery", related_item.related_documents[0..2]) %>
+      <% if related_item.related_documents.count > 3 %>
+        <%= link_to("See all #{related_item.related_documents.count + 1} #{related_item.name.pluralize}", search_action_path(related_item.solr_query)) %>
+      <% end %>
+    <% end %>
   <% end %>
   </div>
-<% end %>

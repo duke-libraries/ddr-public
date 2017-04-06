@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
+ruby '2.3.1'
 
-gem 'rails', '~> 4.1.13'
-gem 'blacklight', '5.16'
+gem 'rails', '4.2.7'
+gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
-gem 'ddr-alerts', '~> 1.0.0'
+gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.5.0'
+gem 'ddr-models', '2.7.0'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -30,16 +31,24 @@ gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
 gem 'ruby-progressbar'
 
+# Rails 4.2+
+gem 'responders', '~> 2.0'
+gem 'web-console', '~> 2.0', group: :development
+gem 'sprockets-rails', '>= 2.1.4'
+
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'bump'
+  gem 'byebug'
 end
 
 group :development, :test do
   gem 'sqlite3'
   gem "rspec-rails", "~> 3.4"
+  gem "rspec-its"
   gem 'capybara', '~> 2.0'
   gem "jettywrapper", "~> 1.8" # 1.x - fcrepo3 / 2.x - fcrepo4
   gem 'factory_girl_rails', '~> 4.4'

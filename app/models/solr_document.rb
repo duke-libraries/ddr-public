@@ -8,6 +8,14 @@ class SolrDocument
 
   include Ddr::Models::SolrDocument
 
+  extend Forwardable
+
+  def_delegators :structures,
+                 :derivative_ids,
+                 :multires_image_file_paths,
+                 :first_multires_image_file_path,
+                 :ordered_component_docs
+
   # self.unique_key = 'id'
 
   # Email uses the semantic field mappings below to generate the body of an email.
@@ -62,8 +70,8 @@ class SolrDocument
     portal_view_config.try(:[], 'derivative_url_prefixes')
   end
 
-  def item_relators
-    portal_view_config.try(:[], 'item_relators')
+  def related_items
+    item_relator_config ? item_relator_config.map { |config| RelatedItem.new({document: self, config: config}) } : []
   end
 
   def restrictions
@@ -97,118 +105,21 @@ class SolrDocument
     end
   end
 
-
-  # This assumes that the derivative IDs are the local_ids of an item's components
-  def derivative_ids(type='default')
-    ordered_component_docs(type).map { |doc| doc.local_id }.compact
+  def structures
+    @structures ||= Structure.new(structure: self.structure, id: self.id)
   end
 
-  def multires_image_file_paths
-    @multires_image_file_paths ||= find_multires_image_file_paths
-  end
-
-  def first_multires_image_file_path
-    @first_multires_image_file_path ||= find_first_multires_image_file_path
-  end
-
-
-  def ordered_component_pids(type='default')
-    [struct_map_ordered_pids(type), local_id_order_component_pids].find { |val| val.present? }
-  end
-
-  def ordered_component_docs(type='default')
-    [struct_map_ordered_docs(type), local_id_order_component_docs].find { |val| val.present? }
-  end
 
   private
 
   Restrictions = Struct.new(:max_download)
 
+  def item_relator_config
+    portal_view_config.try(:[], 'item_relators')
+  end
+
   def max_download
     portal_view_config.try(:[], 'restrictions').try(:[], 'max_download')
-  end
-
-  def find_multires_image_file_paths
-    docs = ordered_component_docs('Images')
-    if docs.present?
-      docs.map { |doc| doc.multires_image_file_path }.compact
-    else
-      nil
-    end
-  end
-
-  def find_first_multires_image_file_path
-    pids = ordered_component_pids('Images')
-    if pids.present?
-      self.class.find(pids.first).multires_image_file_path
-    else
-      nil
-    end
-  end
-
-  def struct_map_ordered_docs(type='default')
-    pids = struct_map_ordered_pids(type)
-    ordered_documents(pids) if pids.present?
-  end
-
-  def struct_map_ordered_pids(type='default')
-    if struct_map.present?
-      fptrs.any? ? fptrs : nested_fprts(type)
-    end
-  end
-
-  def nested_fprts(type='default')
-    type_div = struct_map['divs'].select { |div| div['type'] == type }.first || {}
-    if type_div.any?
-      type_div['divs'].map { |div| div['fptrs'] }.flatten.compact
-    end
-  end
-
-  def fptrs
-    struct_map['divs'].map { |div| div['fptrs'] }.flatten.compact
-  end
-
-  def local_id_order_component_pids
-    local_id_order_component_docs.map(&:id) if components.present?
-  end
-
-  def local_id_order_component_docs
-    components.sort { |a,b| a.local_id <=> b.local_id } if components.present?
-  end
-
-  def ordered_documents(pids)
-    solr_documents = response_to_solr_docs(pids)
-    pids.map{ |pid| solr_documents.find{ |doc| doc["id"] == pid } }
-  end
-
-  def response_to_solr_docs(pids)
-    merged_response_docs(pids).map { |doc| SolrDocument.new(doc) }
-  end
-
-  def merged_response_docs(pids)
-    pids_searches(pids).map { |response| response['response']['docs']}.flatten
-  end
-
-  def pids_searches(pids)
-    pids_queries(pids).map { |query| pids_search(query) }
-  end
-
-  def pids_queries(pids)
-    sliced_pids(pids).map { |pids| pids_query(pids) }
-  end
-
-  # NOTE: Dividing long array of pids into multiple arrays of 100
-  #       pids each so as not to exceed request size limits.
-  def sliced_pids(pids)
-    pids.each_slice(100).to_a
-  end
-
-  def pids_search(query)
-    ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q=>query, :qt=>'standard' , :rows=>100} )
-  end
-
-  def pids_query(pids)
-    ActiveFedora::SolrService.construct_query_for_pids(pids)
   end
 
   def effective_configs

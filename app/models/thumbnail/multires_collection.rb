@@ -30,7 +30,7 @@ class Thumbnail::MultiresCollection
   private
 
   def collection_multires_image_file_path?
-    collection_multires_image_file_path ? true : false
+    collection_multires_image_file_path.present?
   end
 
   def collection_multires_image_file_path

@@ -444,6 +444,10 @@ p + #source-collection {
   & dl { /* Metadata display for collection show */
     margin-bottom: 30px;
   }
+
+  ul {
+    list-style: none;
+  }
 }
 
 .browse-more {
@@ -505,6 +509,39 @@ p + #source-collection {
 /* metadata values with paragraph breaks */
 #item-info dl dd p:last-of-type {
   margin-bottom: 0;
+}
+
+#item-info dd {
+  margin-bottom: 7px;
+}
+
+/* metadata values in lists */
+#item-info ul {
+
+  li { padding-left: 0; margin-bottom: 8px; }
+
+  column-count: 1;
+  column-gap: 20px;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  line-height: 1.25em;
+
+}
+
+#item-info ul.many-metadata-values {
+  @media (min-width: $screen-sm-min) {
+    column-count: 2;
+  }
+
+  @media (min-width: $screen-lg-min) {
+    column-count: 3;
+  }
+}
+
+#item-info ul.long-metadata-values li {
+  line-height: 1.42857143;
+  margin: 0 0 11px;
 }
 
 

@@ -5,6 +5,35 @@ RSpec.describe CatalogHelper do
   let(:content_size) { "66.5 MB" }
   let(:permanent_url) { "http://id.library.duke.edu/ark:/99999/fk4zzz" }
 
+  describe "#has_two_or_more_multires_images?" do
+    let(:document) { SolrDocument.new(
+                'id'=>'changeme:10',
+                ) }
+    before { allow(document).to receive(:multires_image_file_paths) { file_paths } }
+
+    context "document does not have any multires images" do
+      let(:file_paths) {}
+      it "should return false" do
+        expect(helper.has_two_or_more_multires_images?(document)).to be_falsey
+      end
+    end
+
+    context "document has a single multires image" do
+      let(:file_paths) { ['path/to/image/1'] }
+      it "should return false" do
+        expect(helper.has_two_or_more_multires_images?(document)).to be_falsey
+      end
+    end
+
+    context "document has two multires images" do
+      let(:file_paths) { ['path/to/image/1', 'path/to/image/2'] }
+      it "should return true" do
+        expect(helper.has_two_or_more_multires_images?(document)).to be_truthy
+      end
+    end
+
+  end
+
   describe "#file_info" do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',
@@ -117,7 +146,7 @@ RSpec.describe CatalogHelper do
     context "blog post has no images" do
       let(:post) { { "url"=>"https:\/\/blogs.library.duke.edu\/bitstreams\/2014\/10\/24\/collection-announcement\/", "title"=>"Announcing My New Digital Collection", "excerpt"=>"<p>We have just launched an amazing new collection. &hellip; <\/p>\n", "date"=>"2014-10-24 16:29:48", "author"=>{ "slug"=>"abc123duke-edu", "name"=>"John Doe" } } }
       it "should return a default generic image URL" do
-        expect(helper.blog_post_thumb(post)).to match('devillogo-150-square.jpg')
+        expect(helper.blog_post_thumb(post)).to match(/devillogo-150-square.*\.jpg/)
       end
     end
   end
@@ -139,7 +168,7 @@ RSpec.describe CatalogHelper do
         ) }
     it "should return a link to a facet search" do
       allow(helper).to receive(:facet_search_url).and_return("?f%5Badmin_set_title_ssi%5D%5B%5D=Title of Admin Set")
-      expect(helper.link_to_admin_set(document)).to eq("<a href=\"?f%5Badmin_set_title_ssi%5D%5B%5D=Title of Admin Set\" id=\"admin-set\">Title of Admin Set</a>")
+      expect(helper.link_to_admin_set(document)).to eq("<a id=\"admin-set\" href=\"?f%5Badmin_set_title_ssi%5D%5B%5D=Title of Admin Set\">Title of Admin Set</a>")
     end
   end
 

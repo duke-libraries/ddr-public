@@ -28,7 +28,7 @@
     ga('set','dimension3','<%= ga_document_model(@portal.collection) %>'); // DDR Document Model
     ga('set','dimension4','<%= ga_admin_set(@portal.collection) %>'); // DDR Admin Set
   <%- end -%>
-  <% if !params[:q].blank? || !params[:f].blank? || !params[:search_field].blank? %>
+  <% if has_search_parameters? %>
     ga('set','dimension1','search results'); // DDR View Type
   <%- end %>
  <%# // TODO: Consider other dimensions? E.g., controller_name or params[:collection] %>

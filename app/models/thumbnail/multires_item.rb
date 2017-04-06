@@ -26,7 +26,7 @@ class Thumbnail::MultiresItem
   private
 
   def item_multires_image_file_path?
-    item_multires_image_file_path ? true : false
+    item_multires_image_file_path.present?
   end
 
   def item_multires_image_file_path

@@ -58,4 +58,8 @@ module ApplicationHelper
     branch_name
   end
 
+    def has_search_parameters?
+      !params[:q].blank? || !params[:f].blank? || !params[:search_field].blank?
+    end
+
 end

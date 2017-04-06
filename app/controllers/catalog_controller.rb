@@ -95,8 +95,8 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name(:type, :stored_searchable), separator: '; ', label:'Type'
     config.add_index_field Ddr::Index::Fields::PERMANENT_URL.to_s, helper_method: 'permalink', label: 'Permalink'
     config.add_index_field Ddr::Index::Fields::MEDIA_TYPE.to_s, helper_method: 'file_info', label: 'File'
-    config.add_index_field :isPartOf_ssim, helper_method: 'descendant_of', label: 'Part of'
-    config.add_index_field :isMemberOfCollection_ssim, helper_method: 'descendant_of', label: 'Collection'
+    config.add_index_field Ddr::Index::Fields::IS_PART_OF.to_s, helper_method: 'descendant_of', label: 'Part of'
+    config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
     config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     config.default_document_solr_params = {
@@ -149,29 +149,55 @@ class CatalogController < ApplicationController
       field.solr_local_parameters = {
         :qf => ["id",
                 solr_name(:abstract, :stored_searchable),
+                solr_name(:alternative ,:stored_searchable),
                 solr_name(:artist, :stored_searchable),
+                solr_name(:box_number ,:stored_searchable),
+                solr_name(:call_number ,:stored_searchable),
                 solr_name(:category, :stored_searchable),
                 solr_name(:company, :stored_searchable),
+                solr_name(:composer ,:stored_searchable),
                 solr_name(:creator, :stored_searchable),
                 solr_name(:contributor, :stored_searchable),
                 solr_name(:description, :stored_searchable),
+                solr_name(:dedicatee ,:stored_searchable),
+                solr_name(:engraver ,:stored_searchable),
+                solr_name(:extent ,:stored_searchable),
                 solr_name(:folder, :stored_searchable),
                 solr_name(:format, :stored_searchable),
+                solr_name(:genre ,:stored_searchable),
                 solr_name(:headline, :stored_searchable),
                 solr_name(:identifier, :stored_searchable),
+                solr_name(:illustrated,:stored_searchable),
+                solr_name(:illustrator,:stored_searchable),
+                solr_name(:instrumentation ,:stored_searchable),
+                solr_name(:interviewer_name ,:stored_searchable),
+                solr_name(:issue_number ,:stored_searchable),
+                solr_name(:lithographer ,:stored_searchable),
+                solr_name(:lyricist ,:stored_searchable),
                 solr_name(:medium, :stored_searchable),
+                solr_name(:negative_number ,:stored_searchable),
+                solr_name(:oclc_number ,:stored_searchable),
+                solr_name(:performer ,:stored_searchable),
                 solr_name(:placement_company, :stored_searchable),
+                solr_name(:print_number ,:stored_searchable),
+                solr_name(:producer ,:stored_searchable),
                 solr_name(:product, :stored_searchable),
+                solr_name(:provenance ,:stored_searchable),
                 solr_name(:publication, :stored_searchable),
                 solr_name(:publisher, :stored_searchable),
+                solr_name(:rights ,:stored_searchable),
+                solr_name(:roll_number ,:stored_searchable),
                 solr_name(:series, :stored_searchable),
                 solr_name(:setting, :stored_searchable),
                 solr_name(:spatial, :stored_searchable),
                 solr_name(:sponsor, :stored_searchable),
                 solr_name(:subject, :stored_searchable),
+                solr_name(:subseries ,:stored_searchable),
+                solr_name(:temporal ,:stored_searchable),
                 solr_name(:title, :stored_searchable),
                 solr_name(:tone, :stored_searchable),
                 solr_name(:type, :stored_searchable),
+                solr_name(:volume ,:stored_searchable),
                 Ddr::Index::Fields::ALL_TEXT,
                 Ddr::Index::Fields::LOCAL_ID,
                 Ddr::Index::Fields::PERMANENT_ID,
@@ -322,12 +348,20 @@ class CatalogController < ApplicationController
     render :file => "#{Rails.root}/public/403", :formats => [:html], :status => 403, :layout => false
   end
 
+  def not_found
+    render file: "#{Rails.root}/public/404", status: 404, layout: false
+  end
+
   def authentication_required?
     Ddr::Public.require_authentication
   end
 
   def enforce_show_permissions
-    authorize! :read, params[:id]
+    begin
+      authorize! :read, params[:id]
+    rescue SolrDocument::NotFound
+      not_found
+    end
   end
 
 

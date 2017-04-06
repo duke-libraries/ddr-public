@@ -13,10 +13,10 @@ RSpec.describe Thumbnail::RepositoryGenerated do
 
     it "has a repository thumbnail path" do
       document = double("Document")
-      allow(Rails.application.routes.url_helpers).to receive(:thumbnail_path).and_return("/path/to/thumbnail")
       allow(document).to receive(:has_thumbnail?) { true }
+      allow(document).to receive(:id) {'changeme:123'}
       custom = Thumbnail::RepositoryGenerated.new({document: document})
-      expect(custom.thumbnail_path).to eq '/path/to/thumbnail'
+      expect(custom.thumbnail_path).to eq '/thumbnail/changeme:123'
     end
 
     it "does not have a repository thumbnail" do

@@ -45,7 +45,7 @@ RSpec.describe MetadataDisplayHelper do
   end
 
   describe "#language_display" do
-    let (:language_display_string) {["Afar", "Abkhaz", "ack"]}
+    let (:language_display_string) {["Afar", "Abkhazian", "ack"]}
     context "language field contains multiple language codes, one of which not have a translation" do
       let (:language_metadata) {["aar", "abk", "ack"]}
       it "should return an array of translated language codes where possible" do
@@ -60,26 +60,6 @@ RSpec.describe MetadataDisplayHelper do
       let (:metadata_field_values) {['https://library.duke.edu', 'this is not a link']}
       it "should return an array of values, the first of which is a link" do
         expect(helper.auto_link_values({:value => metadata_field_values})).to match(display_strings_with_links)
-      end
-    end
-  end
-
-  describe "#separate_with_p" do
-    let (:display_values_with_p_markup) { "<p>This is my first value.</p>\n\n<p>This is my second value.</p>\n\n<p>This is my third value.</p>" }
-    context "field has multiple values" do
-      let (:metadata_field_values) {["This is my first value.", "This is my second value.", "This is my third value."]}
-      it "should return a string with each of the values wrapped in a <p> element" do
-        expect(helper.separate_with_p({:value => metadata_field_values})).to match(display_values_with_p_markup)
-      end
-    end
-  end
-
-  describe "#separate_with_br" do
-    let (:display_values_with_br_markup) { "<div>This is my first value.\n<br />This is my second value.\n<br />This is my third value.</div>" }
-    context "field has multiple values" do
-      let (:metadata_field_values) {["This is my first value.", "This is my second value.", "This is my third value."]}
-      it "should return a single <div> with each of the values separated by a <br /> element" do
-        expect(helper.separate_with_br({:value => metadata_field_values})).to match(display_values_with_br_markup)
       end
     end
   end

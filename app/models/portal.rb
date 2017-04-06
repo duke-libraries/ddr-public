@@ -79,7 +79,7 @@ class Portal
   end
 
   def solr_sort
-    "#{Ddr::Index::Fields::DATE_SORT} asc"
+    "score desc, #{Ddr::Index::Fields::DATE_SORT} asc, #{Ddr::Index::Fields::TITLE} asc"
   end
 
 

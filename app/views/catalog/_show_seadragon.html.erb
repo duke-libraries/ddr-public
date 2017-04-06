@@ -5,7 +5,7 @@ We may want to refactor into separate partials. %>
   <div id="image-toolbar">
     <div id="image-toolbar-inner">
 
-    <% if is_item?(@document) && is_multi_image?(@document) %>
+    <% if is_item?(@document) && has_two_or_more_multires_images?(@document) %>
       <div class="multi-image-nav">
         <button id="btn-prev" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Prev" aria-label="Prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></span></button>
         <button id="btn-next" class="seadragon-prevnext btn" type="button"><span class="btn-wrapper" data-toggle="tooltip" data-placement="bottom" title="Next" aria-label="Next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></button>
@@ -71,7 +71,7 @@ $(document).ready(function(e){
   <% elsif is_component?(@document) %>
     tileSources: <%= image_component_tilesource(@document).to_json.html_safe %>,
   <% end %>
-  <% if is_item?(@document) && is_multi_image?(@document) %>
+  <% if is_item?(@document) && has_two_or_more_multires_images?(@document) %>
     sequenceMode: true,
     showReferenceStrip:  true,
     referenceStripScroll: 'vertical',
