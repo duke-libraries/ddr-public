@@ -4,9 +4,9 @@ ruby '2.3.1'
 gem 'rails', '4.2.7'
 gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
-gem 'ddr-alerts', git: 'https://github.com/duke-libraries/ddr-alerts', ref: '01408a82f13292b655b3c561688cf824cbd14549'
+gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', git: 'https://github.com/duke-libraries/ddr-models', ref: '2d6004419e4584d3b82b4d2d1d3f486fc0ea70f6'
+gem 'ddr-models', '2.7.0'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'

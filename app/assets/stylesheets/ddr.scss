@@ -444,6 +444,10 @@ p + #source-collection {
   & dl { /* Metadata display for collection show */
     margin-bottom: 30px;
   }
+
+  ul {
+    list-style: none;
+  }
 }
 
 .browse-more {

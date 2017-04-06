@@ -1,29 +1,31 @@
-<% cache("show_research_help_#{document.id}", expires_in: 7.days) do %>
-  <% research_help = get_research_help(document) %>
-  <% if research_help %>
-  <div id="research-help" class="buffer-bottom-40">
-    <h4><span class="contact-devil-logo"></span><%= research_help_title(research_help) %></h4>
+<% if document.present? %>
+  <% cache("show_research_help_#{document.id}", expires_in: 7.days) do %>
+    <% research_help = get_research_help(document) %>
+    <% if research_help %>
+    <div id="research-help" class="buffer-bottom-40">
+      <h4><span class="contact-devil-logo"></span><%= research_help_title(research_help) %></h4>
 
-    <% if research_help.ask.present? || research_help.email.present? || research_help.phone.present? %>
+      <% if research_help.ask.present? || research_help.email.present? || research_help.phone.present? %>
 
-      <div class="dropdown">
-        <a href="#" data-target="#" role="button" id="dLabel" data-toggle="dropdown" class="dropdown-toggle small text-muted" aria-haspopup="true" aria-expanded="false">Contact</a><br/>
+        <div class="dropdown">
+          <a href="#" data-target="#" role="button" id="dLabel" data-toggle="dropdown" class="dropdown-toggle small text-muted" aria-haspopup="true" aria-expanded="false">Contact</a><br/>
 
-         <ul class="dropdown-menu" aria-labelledby="dLabel">
+           <ul class="dropdown-menu" aria-labelledby="dLabel">
 
-          <% if research_help.ask.present? %>
-            <li><a href="<%= research_help.ask %>?&amp;referrer=<%= request.original_url %>" class="small" data-ga-label="ask a question"><%= icon('comment', class: 'text-muted') %> Ask a Question</a></li>
-          <% elsif research_help.email.present? %>
-            <li><a href="mailto:<%= research_help.email %>" class="small" data-ga-label="email"><%= icon('envelope', class: 'text-muted') %> <%= research_help.email %></a></li>
-          <% end %>
-          <% if research_help.phone.present? %>
-            <li><a href="tel:+1-<%= research_help.phone %>" class="small" data-ga-label="phone number"><%= icon('phone', class: 'text-muted') %> <%= research_help.phone %></a></li>
-          <% end %>
-        </ul>
-      </div>
+            <% if research_help.ask.present? %>
+              <li><a href="<%= research_help.ask %>?&amp;referrer=<%= request.original_url %>" class="small" data-ga-label="ask a question"><%= icon('comment', class: 'text-muted') %> Ask a Question</a></li>
+            <% elsif research_help.email.present? %>
+              <li><a href="mailto:<%= research_help.email %>" class="small" data-ga-label="email"><%= icon('envelope', class: 'text-muted') %> <%= research_help.email %></a></li>
+            <% end %>
+            <% if research_help.phone.present? %>
+              <li><a href="tel:+1-<%= research_help.phone %>" class="small" data-ga-label="phone number"><%= icon('phone', class: 'text-muted') %> <%= research_help.phone %></a></li>
+            <% end %>
+          </ul>
+        </div>
 
-    <% end %>
-    <hr class="contact-separator"/>
-  </div>
+      <% end %>
+      <hr class="contact-separator"/>
+    </div>
+    <%- end %>
   <%- end %>
 <%- end %>
