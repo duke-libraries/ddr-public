@@ -1,5 +1,5 @@
 <% if @portal.collection %>
   <%= render partial: 'show_research_help', locals: { document: @portal.collection }  %>
-  <%= render partial: 'show_collection_context', locals: { document: @portal.collection } %>
+  <%= render partial: 'collection_context_brief.html.erb', locals: { collection_document: @portal.collection } %>
   <%= render partial: 'show_finding_aid', locals: { document: @portal.collection } %>
 <% end %>

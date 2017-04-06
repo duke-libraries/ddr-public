@@ -1,0 +1,14 @@
+<% if @document[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == 'Item' %>
+  <div class="text-muted text-uppercase small">This Item</div>
+<% elsif @document[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == 'Component' %>
+  <div class="text-muted text-uppercase small">Item</div>
+  <% if @document.item.present? %>
+    <p class="strong"><%= link_to_document @document.item, @document.item.title, :id => "parent-item" %></p>
+  <% else %>
+    <p class="strong">Item Missing</p>
+  <% end %>
+  <div class="vertical-model-separator">
+    <span class="fa fa-map-marker"></span>
+  </div>
+  <div class="text-muted text-uppercase small">This File</div>
+<% end -%>

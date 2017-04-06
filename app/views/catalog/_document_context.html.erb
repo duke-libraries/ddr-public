@@ -1,0 +1,7 @@
+<% cache("catalog_document_context_#{@document.id}", expires_in: 7.days) do %>
+  <div id="collection-context" class="text-center">
+    <%= render 'document_context_collection_group' %>
+    <%= render 'document_context_collection' %>
+    <%= render 'document_context_item' %>
+  </div>
+<% end %>

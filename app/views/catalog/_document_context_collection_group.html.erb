@@ -1,0 +1,7 @@
+<% if @document[Ddr::Index::Fields::ADMIN_SET_TITLE].present? %>
+  <div class="text-muted text-uppercase small">Collection Group</div>
+  <strong><%= link_to_admin_set(@document) %></strong>
+  <div class="vertical-model-separator">
+    <span class="fa <%= @document[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == 'Collection' ? 'fa-map-marker' : 'fa-circle' %>"></span>
+  </div>
+<% end -%>

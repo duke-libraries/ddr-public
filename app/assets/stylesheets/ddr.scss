@@ -856,7 +856,7 @@ dl.document-metadata {
 
   }
 
-  hr.contact-separator {
+  hr.contact-separator, hr.collection-context-separator {
     border-top: 2px solid $brand-success;
     clear: both;
   }
