@@ -73,4 +73,8 @@ module MetadataDisplayHelper
     options[:value].map { |value| auto_link(value) }
   end
 
+  def link_to_doi options={}
+    options[:value].map { |value| link_to(value, "#{Ddr::Public.doi_resolver}#{value}") }
+  end
+
 end

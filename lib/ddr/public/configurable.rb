@@ -21,6 +21,8 @@ module Ddr
 
         mattr_accessor :adopt_url
 
+        mattr_accessor :doi_resolver
+
       end
 
       module ClassMethods

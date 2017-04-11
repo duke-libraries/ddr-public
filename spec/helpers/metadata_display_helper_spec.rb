@@ -64,4 +64,15 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
+  describe "#link_to_doi" do
+    let(:linked_doi) { ["<a href=\"https://dx.doi.org/doi:10.NNNN/NNNNNNNN\">doi:10.NNNN/NNNNNNNN</a>"] }
+    context "field contains a DOI" do
+      before { Ddr::Public.doi_resolver = "https://dx.doi.org/"}
+      let (:metadata_field_values) {["doi:10.NNNN/NNNNNNNN"]}
+      it "should return an array of linked DOI values" do
+        expect(helper.link_to_doi({:value => metadata_field_values})).to match(linked_doi)
+      end
+    end
+  end
+
 end
