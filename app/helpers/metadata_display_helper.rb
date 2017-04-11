@@ -73,19 +73,4 @@ module MetadataDisplayHelper
     options[:value].map { |value| auto_link(value) }
   end
 
-  def separate_with_p options={}
-    # combined = options[:value].join("\n\n")
-    # simple_format(combined) # wraps each value in <p></p>
-    ActiveSupport::Deprecation.warn("#separate_with_p returns values unchanged and no longer wraps values in p tags")
-    options[:value]
-  end
-
-  def separate_with_br options={}
-    # combined = options[:value].join("\n")
-    # simple_format(combined, {}, wrapper_tag: "div") # adds <br/> between values
-    ActiveSupport::Deprecation.warn("#separate_with_br returns values unchanged no longer adds breaks between values")
-    options[:value]
-  end
-
-
 end
