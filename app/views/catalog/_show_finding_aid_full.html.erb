@@ -1,4 +1,4 @@
-<% cache("finding_aid_full_#{document.ead_id}", expires_in: 7.days) do %>
+<% cache("finding_aid_full_#{document.ead_id}", expires_in: 1.day) do %>
   <% finding_aid = get_finding_aid(document) %>
   <% if finding_aid.present? %>
 
