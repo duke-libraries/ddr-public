@@ -1,4 +1,4 @@
-<% cache("display_multi_image_#{params[:collection]}_#{params[:id]}", expires_in: 7.days) do %>
+<% cache("display_multi_image_#{params[:collection]}_#{params[:id]}", expires_in: 1.day) do %>
 
   <% if @document.multires_image_file_paths.present? %>
 
@@ -44,6 +44,6 @@
 
   <% end %>
 
-  <%= render partial: "show_default", locals: {document: document} %>
-
 <% end %>
+
+<%= render partial: "show_default", locals: {document: document} %>
