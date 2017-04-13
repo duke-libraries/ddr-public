@@ -105,8 +105,4 @@ class DigitalCollectionsController < CatalogController
     end
   end
 
-  def is_embed?
-    params[:embed] == 'true'
-  end
-
 end
