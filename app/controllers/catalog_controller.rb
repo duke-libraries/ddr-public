@@ -14,7 +14,7 @@ class CatalogController < ApplicationController
 
   self.search_params_logic += [:include_only_published, :apply_access_controls]
 
-  helper_method :repository, :search_builder, :is_embed?
+  helper_method :repository, :search_builder
 
   rescue_from CanCan::AccessDenied do |exception|
     if user_signed_in?
@@ -339,10 +339,6 @@ class CatalogController < ApplicationController
 
     send_data pdf.render, filename: itemid+'.pdf', type: 'application/pdf'
 
-  end
-
-  def is_embed?
-    params[:embed] == 'true'
   end
 
 
