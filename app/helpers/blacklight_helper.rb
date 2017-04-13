@@ -35,6 +35,10 @@ module BlacklightHelper
     has_user_authentication_provider? and current_or_guest_user.present? and not is_embed?
   end
 
+  def is_embed?
+    params[:embed] == 'true'
+  end
+
 
   def presenter_class
     DdrPublicDocumentPresenter

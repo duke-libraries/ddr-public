@@ -99,6 +99,10 @@ class DigitalCollectionsController < CatalogController
     "#{Ddr::Index::Fields::LOCAL_ID}:\"#{params[:id]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:\"Item\""
   end
 
+  def is_embed?
+    params[:embed] == 'true'
+  end
+
   def allow_iframe
     if is_embed?
       response.headers.delete('X-Frame-Options')
