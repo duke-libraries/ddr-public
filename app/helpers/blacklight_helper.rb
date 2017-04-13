@@ -31,6 +31,10 @@ module BlacklightHelper
     body_class
   end
 
+  def render_bookmarks_control?
+    has_user_authentication_provider? and current_or_guest_user.present? and not is_embed?
+  end
+
 
   def presenter_class
     DdrPublicDocumentPresenter
