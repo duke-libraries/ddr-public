@@ -552,6 +552,31 @@ p + #source-collection {
   margin: 0 0 11px;
 }
 
+/* ---------------------
+    RIGHTS STATEMENTS
+---------------------- */
+
+.rights-display-download {
+ display: block;
+ padding: 3px 20px;
+}
+
+.rights-reuse-text {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.rights-more-info {
+  display: inline-block;
+  margin-top: 8px;
+  & a {
+    color: $gray-light;
+  }
+  & .popover {
+    min-width: 300px;
+  }
+}
+
 
 /* -------------
     FACETS
