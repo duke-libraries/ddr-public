@@ -532,12 +532,20 @@ p + #source-collection {
 #item-info ul.many-metadata-values {
   @media (min-width: $screen-sm-min) {
     column-count: 2;
+    margin-bottom: 1em;
   }
 
   @media (min-width: $screen-lg-min) {
     column-count: 3;
   }
 }
+
+#item-info ul.many-metadata-values li {
+  display: inline-block;
+  width: 100%;
+}
+
+
 
 #item-info ul.long-metadata-values li {
   line-height: 1.42857143;
