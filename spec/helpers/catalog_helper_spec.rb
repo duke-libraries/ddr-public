@@ -172,4 +172,40 @@ RSpec.describe CatalogHelper do
     end
   end
 
+  describe "#research_guide" do
+    before(:context) { Ddr::Public.research_guides = "guides.library.duke.edu" }
+    context "value is an empty array" do
+      let(:values) { [] }
+      it "should return nil" do
+        expect(helper.research_guide(values)).to be_nil
+      end
+    end
+    context "single value that is not a research guide" do
+      let(:values) { ["ark:/99999/fk4bz6gb1w"] }
+      it "should return nil" do
+        expect(helper.research_guide(values)).to be_nil
+      end
+    end
+    context "single value that is a research guide" do
+      let(:values) { ["http://guides.library.duke.edu/baz"] }
+      it "should return the research guide URL" do
+        expect(helper.research_guide(values)).to eq("http://guides.library.duke.edu/baz")
+      end
+    end
+    context "multiple values with more than one research guide" do
+      let(:values) { ["http://guides.library.duke.edu/baz",
+                      "http://guides.library.duke.edu/foo"] }
+      it "should return the first research guide URL" do
+        expect(helper.research_guide(values)).to eq("http://guides.library.duke.edu/baz")
+      end
+    end
+    context "multiple values without any research guides" do
+      let(:values) { ["ark:/99999/fk4bz6gb1w",
+                      "ark:/99999/hjkfdsieop"] }
+      it "should return nil" do
+        expect(helper.research_guide(values)).to be_nil
+      end
+    end
+  end
+
 end

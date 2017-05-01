@@ -7,4 +7,5 @@ Ddr::Public.configure do |config|
   config.thumbnails = ENV['THUMBNAILS']
   config.adopt_url = ENV['ADOPT_URL']
   config.doi_resolver = ENV['DOI_RESOLVER']
+  config.research_guides = ENV['RESEARCH_GUIDES']
 end

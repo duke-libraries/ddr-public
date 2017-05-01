@@ -219,6 +219,9 @@ module CatalogHelper
     link_to name, url, :class => options[:class], :id => "admin-set"
   end
 
+  def research_guide values=[]
+    values.select { |value| is_research_guide? value }.first if values.present?
+  end
 
   # DPLA Feed document helper
   def source_collection_title document
@@ -280,6 +283,16 @@ module CatalogHelper
     end
     section << '</p>'
     return section
+  end
+
+  def is_research_guide? value
+    research_guides_whitelist.map do |config|
+      value =~ /^https?:\/\/#{Regexp.quote(config).chomp('/')}\/.*/
+    end.compact.present?
+  end
+
+  def research_guides_whitelist
+    String(Ddr::Public.research_guides).split(/,\s?/)
   end
 
 end
