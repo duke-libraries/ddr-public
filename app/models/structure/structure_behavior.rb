@@ -13,7 +13,11 @@ module Structure::StructureBehavior
   end
 
   def docs
-    ordered_documents(pids) if pids.present? || []
+    if pids.present?
+      ordered_documents(pids)
+    else
+      []
+    end
   end
 
   def local_ids
@@ -22,6 +26,7 @@ module Structure::StructureBehavior
 
 
   private
+
 
   def find_multires_image_file_paths
     if docs.present?
@@ -67,9 +72,10 @@ module Structure::StructureBehavior
   end
 
   def pids_search(query)
-    ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q=>query,
-                                                                      :qt=>'standard',
-                                                                      :rows=>100} )
+    query_with_published_filter = %((#{query}) AND _query_:"{!raw f=Ddr::Index::Fields::WORKFLOW_STATE}published")
+    ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q => query_with_published_filter,
+                                                                      :qt => 'standard',
+                                                                      :rows => 100} )
   end
 
   def pids_query(pids)
