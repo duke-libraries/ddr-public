@@ -72,7 +72,7 @@ module Structure::StructureBehavior
   end
 
   def pids_search(query)
-    query_with_published_filter = %((#{query}) AND _query_:"{!raw f=Ddr::Index::Fields::WORKFLOW_STATE}published")
+    query_with_published_filter = %((#{query}) AND _query_:"{!raw f=#{Ddr::Index::Fields::WORKFLOW_STATE}}published")
     ActiveFedora::SolrService.instance.conn.post('select', :params=> {:q => query_with_published_filter,
                                                                       :qt => 'standard',
                                                                       :rows => 100} )
