@@ -16,6 +16,8 @@ class DigitalCollectionsController < CatalogController
   before_action :allow_iframe, only: :show
   before_action :enforce_show_permissions, only: [:show, :media, :feed]
 
+  self.search_params_logic += [:exclude_components]
+
   layout 'digital_collections'
 
   configure_blacklight do |config|

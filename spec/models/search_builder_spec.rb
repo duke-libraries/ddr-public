@@ -42,6 +42,13 @@ RSpec.describe SearchBuilder do
       end
     end
 
+    describe "#exclude_components" do
+      it "returns a filter query that filters components from search results" do
+        expect(subject.exclude_components({}))
+          .to eq(["-active_fedora_model_ssi:Component"])
+      end
+    end
+
     describe "apply_access_controls" do
       before do
         allow(subject).to receive(:policy_role_policies) { ["test-13", "test-45"] }
