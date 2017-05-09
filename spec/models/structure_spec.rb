@@ -23,7 +23,7 @@ RSpec.describe Structure do
 
   end
 
-  context "Object has nested structural metadata" do
+  context "Object has nested structural metadata with images" do
     let(:structure) {{"default"=>{"type"=>"default", "contents"=>
       [{"id"=>"dukechapel_dcrst003606-images", "type"=>"Images", "label"=>"Multires Images", "contents"=>[
         {"order"=>"1", "contents"=>[{"repo_id"=>"changeme:1030"}]},
@@ -52,6 +52,27 @@ RSpec.describe Structure do
 
     it "should have an id for the files group" do
       expect(subject.files.id).to eq("dukechapel_dcrst003606-documents")
+    end
+
+  end
+
+  context "Object has nested structural metadata with AV and documents" do
+    let(:structure) {{"default"=>{"type"=>"default", "contents"=>
+      [{"id"=>"dukechapel_dcrau001201-media", "type"=>"Media", "contents"=>[
+        {"order"=>"1", "contents"=>[{"repo_id"=>"changeme:1900"}]},
+        {"order"=>"2", "contents"=>[{"repo_id"=>"changeme:1901"}]},
+        {"order"=>"3", "contents"=>[{"repo_id"=>"changeme:1902"}]}]},
+      {"id"=>"dukechapel_dcrau001201-documents", "type"=>"Documents", "contents"=>[
+        {"order"=>"1", "label"=>"Transcript", "contents"=>[{"repo_id"=>"changeme:1905"}]}]}]}}}
+
+    subject { described_class.new({structure: structure}) }
+
+    it "should have some pids for media objects" do
+      expect(subject.media.pids).to eq(["changeme:1900", "changeme:1901", "changeme:1902"])
+    end
+
+    it "should have an id for the media group" do
+      expect(subject.media.id).to eq("dukechapel_dcrau001201-media")
     end
 
   end

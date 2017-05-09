@@ -3,4 +3,11 @@
   <%= render partial: "show_seadragon", locals: { aspectratio: image_component_aspectratio(@document) } %>
 <%- end %>
 
+<% if @document.streamable? %>
+    <%= render partial: "display_jwplayer", locals: jwplayer_locals({
+        derivatives: Array(document.stream_url),
+        media_type: document.streamable_media_type,
+        media_mode: media_mode(document.streamable_media_type)}) %>
+<%- end %>
+
 <%= render partial: "show_default", locals: {document: document} %>

@@ -17,6 +17,10 @@ class Structure
     @files ||= Structure::Group.new(structure: @structure, type: 'Documents')
   end
 
+  def media
+    @media ||= Structure::Group.new(structure: @structure, type: 'Media')
+  end
+
   def multires_image_file_paths
     if default.docs.any?
       docs = default.docs
@@ -38,6 +42,17 @@ class Structure
     end
     doc = SolrDocument.find(pids.first) if pids.present?
     @first_multires_image_file_path ||= doc.present? ? doc.multires_image_file_path : nil
+  end
+
+  def media_paths
+    if default.docs.any?
+      docs = default.docs
+    elsif media.docs.any?
+      docs = media.docs
+    else
+      docs = local_id_ordered_components
+    end
+    @media_paths ||= docs.map { |doc| doc.stream_url }.compact
   end
 
   def ordered_component_docs
