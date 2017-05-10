@@ -99,10 +99,6 @@ class CatalogController < ApplicationController
     config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
     config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
-    config.default_document_solr_params = {
-      fq: ["#{Ddr::Index::Fields::WORKFLOW_STATE}:published"]
-    }
-
     # partials for show view
     config.show.partials = [:show_header, :show, :show_children, :show_bottom]
 
@@ -255,15 +251,6 @@ class CatalogController < ApplicationController
     config.spell_max = 5
 
   end
-
-
-
-  def exclude_components(solr_parameters, user_parameters)
-      solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
-  end
-
-
 
   def zip_images
     image_list = params[:image_list].split('||')

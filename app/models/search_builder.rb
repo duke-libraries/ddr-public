@@ -15,6 +15,11 @@ class SearchBuilder < Blacklight::Solr::SearchBuilder
     solr_parameters[:fq] << "#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"
   end
 
+  def exclude_components(solr_parameters)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
+  end
+
   def filter_by_parent_collections(solr_parameters)
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << portal_filters
