@@ -14,7 +14,7 @@ module Structure::StructureBehavior
 
   def docs
     if pids.present?
-      ordered_documents(pids)
+      ordered_documents(pids).compact
     else
       []
     end
@@ -62,7 +62,7 @@ module Structure::StructureBehavior
   end
 
   def pids_queries(pids)
-    sliced_pids(pids).map { |pids| pids_query(pids) }
+    sliced_pids(pids).map { |pid_group| pids_query(pid_group) }
   end
 
   # NOTE: Dividing long array of pids into multiple arrays of 100
