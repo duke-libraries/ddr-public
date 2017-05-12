@@ -9,7 +9,7 @@ module Structure::StructureBehavior
   end
 
   def docs_list
-    docs.zip(labels, order).map { |h| Hash[doc: h[0], label: h[1], order: h[2]] }
+    zip_docs_labels_and_order.select { |doc_list_item| doc_list_item[:doc].present? }
   end
 
   def docs
@@ -26,6 +26,10 @@ module Structure::StructureBehavior
 
 
   private
+
+  def zip_docs_labels_and_order
+    ordered_documents(pids).zip(labels, order).map { |h| Hash[doc: h[0], label: h[1], order: h[2]] }
+  end
 
 
   def find_multires_image_file_paths
