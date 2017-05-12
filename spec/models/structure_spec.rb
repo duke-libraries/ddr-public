@@ -13,13 +13,6 @@ RSpec.describe Structure do
 
     subject { described_class.new({structure: structure}) }
 
-    it "should have a list of documents with attributes" do
-      expect(subject.default).to eq([{:doc=>nil, :label=>nil, :order=>"1"},
-                                     {:doc=>nil, :label=>nil, :order=>"2"},
-                                     {:doc=>nil, :label=>"This Thing", :order=>"3"},
-                                     {:doc=>nil, :label=>nil, :order=>"4"}])
-    end
-
     it "should return an empty array if the structure is absent" do
       expect(subject.images).to eq([])
     end
@@ -40,12 +33,6 @@ RSpec.describe Structure do
         {"order"=>"1", "contents"=>[{"repo_id"=>"changeme:1029"}]}]}]}}}
 
     subject { described_class.new({structure: structure}) }
-
-    it "should have a list of documents with attributes" do
-      expect(subject.images).to eq([{:doc=>nil, :label=>nil, :order=>"1"},
-                                    {:doc=>nil, :label=>"This Image", :order=>"2"},
-                                    {:doc=>nil, :label=>nil, :order=>"3"}])
-    end
 
     it "should return an empty array if the structure is absent" do
       expect(subject.default).to eq([])
