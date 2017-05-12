@@ -48,7 +48,7 @@ dpla_fields:
       - :stored_searchable
   'dc:rights':
     - solr_field:
-      - :rights
+      - :rights_note
       - :stored_searchable
   'dc:subject':
     - solr_field:
