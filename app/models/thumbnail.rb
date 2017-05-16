@@ -31,6 +31,9 @@ class Thumbnail
       thumbnails = local_configuration.split(/\W+/).map do |thumbnail|
         "Thumbnail::#{thumbnail}".safe_constantize
       end
+      unless document[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == "Item"
+        thumbnails.delete(Thumbnail::MultiresItem)
+      end
       thumbnails.push default_thumbnails
     end
   end
