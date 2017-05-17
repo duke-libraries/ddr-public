@@ -44,16 +44,6 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
-  describe "#language_display" do
-    let (:language_display_string) {["Afar", "Abkhazian", "ack"]}
-    context "language field contains multiple language codes, one of which not have a translation" do
-      let (:language_metadata) {["aar", "abk", "ack"]}
-      it "should return an array of translated language codes where possible" do
-        expect(helper.language_display({:value => language_metadata})).to match(language_display_string)
-      end
-    end
-  end
-
   describe "#auto_link_values" do
     let (:display_strings_with_links) {["<a href=\"https://library.duke.edu\">https://library.duke.edu</a>", "this is not a link"]}
     context "field contains some values should be linked and some that should not be linked" do

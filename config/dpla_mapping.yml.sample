@@ -39,9 +39,8 @@ dpla_fields:
       - :stored_sortable
   'dc:language':
     - solr_field:
-      - :language
+      - :language_name
       - :stored_searchable
-      helper_method: :language_display
   'dc:publisher':
     - solr_field:
       - :publisher
