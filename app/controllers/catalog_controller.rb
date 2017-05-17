@@ -170,6 +170,7 @@ class CatalogController < ApplicationController
                 solr_name(:interviewer_name, :stored_searchable),
                 solr_name(:isPartOf, :stored_searchable),
                 solr_name(:issue_number, :stored_searchable),
+                solr_name(:language_name, :stored_searchable),
                 solr_name(:lithographer, :stored_searchable),
                 solr_name(:lyricist, :stored_searchable),
                 solr_name(:medium, :stored_searchable),

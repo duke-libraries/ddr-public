@@ -63,12 +63,6 @@ module MetadataDisplayHelper
     end
   end
 
-  def language_display options={}
-    options[:value].map do |language_code|
-      t("ddr.language_codes.#{language_code}", :default => language_code)
-    end
-  end
-
   def auto_link_values options={}
     options[:value].map { |value| auto_link(value) }
   end
