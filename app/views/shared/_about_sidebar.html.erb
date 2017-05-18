@@ -3,3 +3,8 @@
   <%= render partial: 'collection_context_brief.html.erb', locals: { collection_document: @portal.collection } %>
   <%= render partial: 'show_finding_aid', locals: { document: @portal.collection } %>
 <% end %>
+
+<%= content_for :page_title, [  'About',
+                                @portal.html_title_context,
+                                @portal.collection.admin_set_title, 
+                                application_name].join(' / ') %>

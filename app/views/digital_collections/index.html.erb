@@ -9,7 +9,7 @@
     <% unless has_search_parameters? %>
 
     <%= render partial: 'collection_submast', locals: { document: @portal.collection } %>
-      <!-- <h1><%# t("ddr.public.portal.#{params[:collection] || controller_name}.title") %></h1> -->
+
     <% end %>
   <% end %>
 </div>
@@ -35,11 +35,10 @@
 
     <%# set the html title for collection portal page -%>
     <% if @portal.collection %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
-    <% else %>
-      <%= content_for :page_title, t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => t("blacklight.welcome"))  %>
+      <%= content_for :page_title, @portal.collection.html_title %>
     <% end %>
   <% else %>
     <%= render 'search_results' %>
+    <%= content_for :page_title, search_results_html_title(@portal) %>
   <% end %>
 </div>

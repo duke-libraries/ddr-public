@@ -47,6 +47,10 @@ module DocumentModel
     @directory_siblings ||= document_model.try(:directory_siblings)
   end
 
+  def html_title
+    document_model.try(:html_title) || I18n.t('blacklight.application_name')
+  end
+
   def metadata_header
     document_model.try(:metadata_header) || "Item Info"
   end
