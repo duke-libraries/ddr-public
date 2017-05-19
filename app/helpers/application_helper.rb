@@ -21,7 +21,7 @@ module ApplicationHelper
         Timeout.timeout(2) do
           Ddr::Models::FindingAid.new(code).collection_title
         end
-      rescue OpenURI::HTTPError, Timeout::Error, EOFError => e
+      rescue => e
         Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
         code
       end

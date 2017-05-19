@@ -47,17 +47,19 @@ module MetadataDisplayHelper
     document = options[:document]
     placement = options[:placement] ? options[:placement] : 'top'
     begin
-      Rails.cache.fetch("source_collection_#{document.pid}_#{placement}", expires_in: 7.days) do
-        finding_aid = document.finding_aid
-        link_to finding_aid.collection_title, finding_aid.url, { data: {
-          toggle: 'popover',
-          placement: placement,
-          html: true,
-          title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide',
-          content: finding_aid_popover(finding_aid)
-        }}
+      Timeout.timeout(2) do
+        Rails.cache.fetch("source_collection_#{document.pid}_#{placement}", expires_in: 7.days) do
+          finding_aid = document.finding_aid
+          link_to finding_aid.collection_title, finding_aid.url, { data: {
+            toggle: 'popover',
+            placement: placement,
+            html: true,
+            title: ''+ image_tag("ddr/archival-box.png", :class=>"collection-guide-icon") + 'Source Collection Guide',
+            content: finding_aid_popover(finding_aid)
+          }}
+        end
       end
-    rescue OpenURI::HTTPError, EOFError => e
+    rescue => e
       Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
       link_to "Search Collection Guides", "http://library.duke.edu/rubenstein/findingaids/"
     end
