@@ -104,9 +104,11 @@ module CatalogHelper
   def get_finding_aid(document)
     begin
       Timeout.timeout(2) do
-        document.finding_aid
+        fa = document.finding_aid
+        document.finding_aid.title if fa
+        fa
       end
-    rescue OpenURI::HTTPError, Timeout::Error => e
+    rescue => e
       Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
       false
     end
