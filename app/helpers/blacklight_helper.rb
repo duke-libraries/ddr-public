@@ -1,6 +1,14 @@
 module BlacklightHelper
   include Blacklight::BlacklightHelperBehavior
 
+  def show_solr_document_url doc, options = {}
+    if doc.public_collection.present?
+      url_for controller: doc.public_controller, action: doc.public_action, collection: doc.public_collection, id: doc.public_id, only_path: false
+    else
+      url_for controller: doc.public_controller, action: doc.public_action, id: doc.public_id, only_path: false
+    end
+  end
+
   def link_to_document(doc, field_or_opts = nil, opts={:counter => nil})
     field = field_or_opts || document_show_link_field(doc)
     label = presenter(doc).render_document_index_label field, opts
