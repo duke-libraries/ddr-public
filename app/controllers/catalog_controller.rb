@@ -145,6 +145,7 @@ class CatalogController < ApplicationController
       field.solr_local_parameters = {
         :qf => ["id",
                 solr_name(:abstract, :stored_searchable),
+                solr_name(:affiliation, :stored_searchable),
                 solr_name(:alternative, :stored_searchable),
                 solr_name(:artist, :stored_searchable),
                 solr_name(:bibliographicCitation, :stored_searchable),
