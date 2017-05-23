@@ -4,7 +4,8 @@
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover({ trigger: 'hover'});
-    $('[data-toggle="popover-click"]').popover({ trigger: 'click'});
+    $('[data-toggle="popover-click"]').popover({ trigger: 'focus'});
+    $('[data-toggle="popover-click"]').on('click', function(e) {e.preventDefault(); return true;});
     $('[data-toggle="fade-element"]').hover(function(e){
         $(('#')+$(this).attr('data-target-id')).fadeToggle();
     });
@@ -64,6 +65,11 @@ $(function () {
       },
       placement: 'auto bottom',
       html: true
+    });
+
+    // Enable popover from Download dropdown menu without closing it
+    $(document).on('click', '#download-menu.dropdown-menu', function (e) {
+      e.stopPropagation();
     });
 
 });
