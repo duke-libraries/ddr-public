@@ -1,3 +1,28 @@
+GIT
+  remote: git://github.com/duke-libraries/ddr-models.git
+  revision: 7865f049dca50fc151d821a0bd3c521d94a07c0d
+  ref: 7865f049dca50fc151d821a0bd3c521d94a07c0d
+  specs:
+    ddr-models (2.9.0.pre)
+      active-fedora (>= 7.3.1, < 8)
+      activeresource
+      cancancan (~> 1.12)
+      ddr-antivirus (~> 2.1.1)
+      devise (~> 3.4)
+      edtf (~> 3.0)
+      ezid-client (~> 1.6)
+      grouper-rest-client
+      hashie (~> 3.4, < 3.4.4)
+      hydra-core (~> 7.2)
+      hydra-validations (~> 0.5)
+      net-ldap (~> 0.11)
+      omniauth-shibboleth (~> 1.2.0)
+      rails (>= 4.2.7, < 5)
+      rdf-vocab (~> 0.8)
+      resque (~> 1.25)
+      rubydora (~> 2.0)
+      virtus (~> 1.0.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -126,25 +151,6 @@ GEM
     ddr-alerts (1.1.0)
       rails (~> 4.2)
     ddr-antivirus (2.1.1)
-    ddr-models (2.8.0)
-      active-fedora (>= 7.3.1, < 8)
-      activeresource
-      cancancan (~> 1.12)
-      ddr-antivirus (~> 2.1.1)
-      devise (~> 3.4)
-      edtf (~> 3.0)
-      ezid-client (~> 1.6)
-      grouper-rest-client
-      hashie (~> 3.4, < 3.4.4)
-      hydra-core (~> 7.2)
-      hydra-validations (~> 0.5)
-      net-ldap (~> 0.11)
-      omniauth-shibboleth (~> 1.2.0)
-      rails (>= 4.2.7, < 5)
-      rdf-vocab (~> 0.8)
-      resque (~> 1.25)
-      rubydora (~> 2.0)
-      virtus (~> 1.0.5)
     debug_inspector (0.0.2)
     deprecation (0.2.2)
       activesupport
@@ -234,6 +240,7 @@ GEM
     json-ld (1.99.2)
       multi_json (~> 1.11)
       rdf (~> 1.99)
+    jstree-rails-4 (3.3.4)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
@@ -339,8 +346,8 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
+    rails-observers (0.1.5)
+      activemodel (>= 4.0)
     rails_autolink (1.1.6)
       rails (> 3.1)
     railties (4.2.7)
@@ -550,7 +557,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.1.0)
-  ddr-models (~> 2.8.0)
+  ddr-models!
   devise
   edtf-humanize (~> 0.0.7)
   factory_girl_rails (~> 4.4)
@@ -560,6 +567,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jettywrapper (~> 1.8)
   jquery-rails
+  jstree-rails-4 (~> 3.3.4)
   launchy
   log4r
   mysql2

@@ -6,7 +6,7 @@ RSpec.describe Thumbnail::Default do
     SolrDocument.new({
       'id' => 'changeme:1',
       'display_format_ssi' => 'none',
-      'active_fedora_model_ssi' => 'none'
+      'active_fedora_model_ssi' => 'Item'
       })}
 
   let(:multi_field_document) {
@@ -15,6 +15,8 @@ RSpec.describe Thumbnail::Default do
       'display_format_ssi' => 'video',
       'active_fedora_model_ssi' => 'Collection'
       })}
+
+  before { allow(basic_document).to receive(:components) { [] } }
 
   it "has a thumbnail for any document" do
     default = Thumbnail::Default.new({document: basic_document})

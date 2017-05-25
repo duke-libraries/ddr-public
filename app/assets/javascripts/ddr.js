@@ -72,6 +72,11 @@ $(function () {
       e.stopPropagation();
     });
 
+    // Make js tree links active
+    $('.directory-tree').on('activate_node.jstree', function(e,data){
+        window.location.href = data.node.a_attr.href;
+    });
+
 });
 
 

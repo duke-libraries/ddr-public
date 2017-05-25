@@ -30,7 +30,37 @@ class DocumentModel::Item
     end
   end
 
+  def parent_directories
+    if dir_and_sibling_hash_from_collection
+      dir_and_sibling_hash_from_collection[:parent_directories]
+    end
+  end
+
+  def directory_siblings
+    if dir_and_sibling_hash_from_collection
+      dir_sibling_search.documents.sort { |a,b| a.title <=> b.title }
+    end
+  end
+
   private
+
+  def dir_and_sibling_hash_from_collection
+    collection.structures.directories.item_pid_lookup[document.pid]
+  end
+
+  def directory_sibling_pids
+    dir_and_sibling_hash_from_collection[:files] if dir_and_sibling_hash_from_collection
+  end
+
+  def dir_sibling_search
+    query = searcher.where(dir_sibling_query).merge({rows: 1000})
+    repository.search(query)
+  end
+
+  def dir_sibling_query
+    field_pairs = field_value_pairs(Ddr::Index::Fields::ID, directory_sibling_pids)
+    construct_query(field_pairs, "OR")
+  end
 
   def collection_search
     query = searcher.where(collection_query)
