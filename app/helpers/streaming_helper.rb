@@ -1,0 +1,41 @@
+module StreamingHelper
+
+  # Temporarily account for manually configured AV derivative locations
+  # until all can be migrated to DDR
+
+  def stream_urls document
+    if derivative_urls(document).present?
+      derivative_urls(document) # legacy non-DDR derivatives
+    else
+      document.media_paths # streamable media derivatives in DDR
+    end
+  end
+
+  def jwplayer_locals options={}
+    case options[:media_mode]
+      when 'audio'
+        options[:height] = '30'
+      when 'video'
+        options[:aspectratio] = '4:3'
+    end
+    locals = {
+      derivatives: options[:derivatives],
+      width: options[:width] ||= '100%',
+      height: options[:height],
+      aspectratio: options[:aspectratio],
+      media_type: options[:media_type],
+      media_mode: options[:media_mode]
+    }
+    locals
+  end
+
+  def media_mode mimetype
+    case mimetype
+      when 'audio/mpeg','audio/mp4','audio/ogg'
+        'audio'
+      when 'video/mp4','video/webm','video/flv','application/mp4'
+        'video'
+    end
+  end
+
+end

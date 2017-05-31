@@ -59,6 +59,9 @@ Rails.application.routes.draw do
   post 'download/images/:id' => 'catalog#zip_images'
   post 'download/images-pdf/:id' => 'catalog#pdf_images'
 
+  # Streamable Media
+  get 'stream/:id' => 'stream#show', as: 'stream', constraints: {id: id_constraint}
+
   # Permanent IDs
   get 'id/*permanent_id' => 'permanent_ids#show'
 
