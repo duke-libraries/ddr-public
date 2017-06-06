@@ -18,5 +18,5 @@ RSpec.describe RelatedItem::IdReference do
 
   its(:name) { is_expected.to eq("Related Items") }
   its(:related_documents) { is_expected.to eq([doc1, doc2, doc3]) }
-  its(:solr_query) { is_expected.to eq({"f"=>{"permanent_id_ssi"=>"\"ark:/99999/1111 OR ark:/99999/2222\""}, "sort"=>"title_ssi asc"}) }
+  its(:solr_query) { is_expected.to eq({"id_related_items"=>"changeme:1|series_facet_sim|permanent_id_ssi", "sort"=>"title_ssi asc", "q"=>"", "search_field"=>"all_fields"}) }
 end
