@@ -2,6 +2,9 @@ class RelatedItem::SharedValue
 
   include RelatedItem::RelatedItemBehavior
 
+  def solr_query
+    {"f" => { solr_query_field => solr_query_values }, "sort" => sort} if solr_query_values.present?
+  end
 
   private
 

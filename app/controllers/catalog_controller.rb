@@ -12,7 +12,9 @@ class CatalogController < ApplicationController
   before_action :authenticate_user!, if: :authentication_required?
   before_action :enforce_show_permissions, only: :show
 
-  self.search_params_logic += [:include_only_published, :apply_access_controls]
+  self.search_params_logic += [:include_only_published,
+                               :apply_access_controls,
+                               :filter_by_related_items]
 
   helper_method :repository, :search_builder
 

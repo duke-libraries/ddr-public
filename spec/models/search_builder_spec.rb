@@ -61,4 +61,36 @@ RSpec.describe SearchBuilder do
       end
     end
 
+    describe '#filter_by_related_items' do
+
+      let(:document) { SolrDocument.new(
+                    'id'=>'changeme:1',
+                    'isFormatOf_ssi' => ["ark:/99999/fk41n8cr9s", "ark:/99999/fk4xw4q151"]
+                 ) }
+
+      before { allow(SolrDocument).to receive(:find).with('changeme:1') { document } }
+
+      context 'related_items_q is a applied' do
+
+        let(:builder_with_params) { subject.with({id_related_items: "changeme:1|isFormatOf_ssi|permanent_id_ssi"}) }
+
+        it 'should apply the related items query' do
+          expect(builder_with_params.filter_by_related_items({}))
+            .to eq({:fq=>["_query_:\"{!q.op=OR df=permanent_id_ssi v=$related_items_q}\""],
+              :related_items_q=>["\"ark:/99999/fk41n8cr9s\" \"ark:/99999/fk4xw4q151\""]})
+        end
+
+      end
+
+      context 'related_items_q is not applied' do
+
+        let(:builder_with_params) { subject.with({}) }
+
+        it 'should not apply the related items query' do
+          expect(builder_with_params.filter_by_related_items({}).to_s).to include('')
+        end
+
+      end
+    end
+
 end
