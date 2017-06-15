@@ -11,6 +11,7 @@ class CatalogController < ApplicationController
 
   before_action :authenticate_user!, if: :authentication_required?
   before_action :enforce_show_permissions, only: :show
+  before_action :allow_iframe, only: :show
 
   self.search_params_logic += [:include_only_published,
                                :apply_access_controls,
@@ -256,6 +257,14 @@ class CatalogController < ApplicationController
 
   end
 
+  def show
+    super
+    if is_embed?
+      response, @document = fetch(params[:id])
+      render layout: "embed"
+    end
+  end
+
   def zip_images
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
@@ -333,6 +342,19 @@ class CatalogController < ApplicationController
   end
 
 
+  private
+
+  def is_embed?
+    params[:embed] == 'true'
+  end
+
+  def allow_iframe
+    if is_embed?
+      response.headers.delete('X-Frame-Options')
+    end
+  end
+
+
   protected
 
   def forbidden
@@ -354,6 +376,5 @@ class CatalogController < ApplicationController
       not_found
     end
   end
-
 
 end

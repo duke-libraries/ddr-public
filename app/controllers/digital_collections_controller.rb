@@ -13,7 +13,6 @@ class DigitalCollectionsController < CatalogController
   skip_filter :enforce_show_permissions
 
   before_action :set_params_id_to_pid, only: [:show, :media, :feed]
-  before_action :allow_iframe, only: :show
   before_action :enforce_show_permissions, only: [:show, :media, :feed]
 
   self.search_params_logic += [:exclude_components]
@@ -39,12 +38,7 @@ class DigitalCollectionsController < CatalogController
   end
 
   def show
-    if is_embed?
-      response, @document = fetch(params[:id])
-      render layout: "embed"
-    else
-      super
-    end
+    super
     verify_collection_slug
   end
 
@@ -99,16 +93,6 @@ class DigitalCollectionsController < CatalogController
 
   def local_id_query
     "#{Ddr::Index::Fields::LOCAL_ID}:\"#{params[:id]}\" AND #{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:\"Item\""
-  end
-
-  def is_embed?
-    params[:embed] == 'true'
-  end
-
-  def allow_iframe
-    if is_embed?
-      response.headers.delete('X-Frame-Options')
-    end
   end
 
 end
