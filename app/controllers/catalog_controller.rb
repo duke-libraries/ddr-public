@@ -12,7 +12,9 @@ class CatalogController < ApplicationController
   before_action :authenticate_user!, if: :authentication_required?
   before_action :enforce_show_permissions, only: :show
 
-  self.search_params_logic += [:include_only_published, :apply_access_controls]
+  self.search_params_logic += [:include_only_published,
+                               :apply_access_controls,
+                               :filter_by_related_items]
 
   helper_method :repository, :search_builder
 
@@ -99,10 +101,6 @@ class CatalogController < ApplicationController
     config.add_index_field Ddr::Index::Fields::IS_MEMBER_OF_COLLECTION.to_s, helper_method: 'descendant_of', label: 'Collection'
     config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
-    config.default_document_solr_params = {
-      fq: ["#{Ddr::Index::Fields::WORKFLOW_STATE}:published"]
-    }
-
     # partials for show view
     config.show.partials = [:show_header, :show, :show_children, :show_bottom]
 
@@ -149,55 +147,59 @@ class CatalogController < ApplicationController
       field.solr_local_parameters = {
         :qf => ["id",
                 solr_name(:abstract, :stored_searchable),
-                solr_name(:alternative ,:stored_searchable),
+                solr_name(:affiliation, :stored_searchable),
+                solr_name(:alternative, :stored_searchable),
                 solr_name(:artist, :stored_searchable),
-                solr_name(:box_number ,:stored_searchable),
-                solr_name(:call_number ,:stored_searchable),
+                solr_name(:bibliographicCitation, :stored_searchable),
+                solr_name(:box_number, :stored_searchable),
+                solr_name(:call_number, :stored_searchable),
                 solr_name(:category, :stored_searchable),
                 solr_name(:company, :stored_searchable),
-                solr_name(:composer ,:stored_searchable),
+                solr_name(:composer, :stored_searchable),
                 solr_name(:creator, :stored_searchable),
                 solr_name(:contributor, :stored_searchable),
                 solr_name(:description, :stored_searchable),
-                solr_name(:dedicatee ,:stored_searchable),
-                solr_name(:engraver ,:stored_searchable),
-                solr_name(:extent ,:stored_searchable),
+                solr_name(:dedicatee, :stored_searchable),
+                solr_name(:engraver, :stored_searchable),
+                solr_name(:extent, :stored_searchable),
                 solr_name(:folder, :stored_searchable),
                 solr_name(:format, :stored_searchable),
-                solr_name(:genre ,:stored_searchable),
+                solr_name(:genre, :stored_searchable),
                 solr_name(:headline, :stored_searchable),
                 solr_name(:identifier, :stored_searchable),
                 solr_name(:illustrated,:stored_searchable),
                 solr_name(:illustrator,:stored_searchable),
-                solr_name(:instrumentation ,:stored_searchable),
-                solr_name(:interviewer_name ,:stored_searchable),
-                solr_name(:issue_number ,:stored_searchable),
-                solr_name(:lithographer ,:stored_searchable),
-                solr_name(:lyricist ,:stored_searchable),
+                solr_name(:instrumentation, :stored_searchable),
+                solr_name(:interviewer_name, :stored_searchable),
+                solr_name(:isPartOf, :stored_searchable),
+                solr_name(:issue_number, :stored_searchable),
+                solr_name(:language_name, :stored_searchable),
+                solr_name(:lithographer, :stored_searchable),
+                solr_name(:lyricist, :stored_searchable),
                 solr_name(:medium, :stored_searchable),
-                solr_name(:negative_number ,:stored_searchable),
-                solr_name(:oclc_number ,:stored_searchable),
-                solr_name(:performer ,:stored_searchable),
+                solr_name(:negative_number, :stored_searchable),
+                solr_name(:oclc_number, :stored_searchable),
+                solr_name(:performer, :stored_searchable),
                 solr_name(:placement_company, :stored_searchable),
-                solr_name(:print_number ,:stored_searchable),
-                solr_name(:producer ,:stored_searchable),
+                solr_name(:print_number, :stored_searchable),
+                solr_name(:producer, :stored_searchable),
                 solr_name(:product, :stored_searchable),
-                solr_name(:provenance ,:stored_searchable),
+                solr_name(:provenance, :stored_searchable),
                 solr_name(:publication, :stored_searchable),
                 solr_name(:publisher, :stored_searchable),
-                solr_name(:rights ,:stored_searchable),
-                solr_name(:roll_number ,:stored_searchable),
+                solr_name(:rights, :stored_searchable),
+                solr_name(:roll_number, :stored_searchable),
                 solr_name(:series, :stored_searchable),
                 solr_name(:setting, :stored_searchable),
                 solr_name(:spatial, :stored_searchable),
                 solr_name(:sponsor, :stored_searchable),
                 solr_name(:subject, :stored_searchable),
-                solr_name(:subseries ,:stored_searchable),
-                solr_name(:temporal ,:stored_searchable),
+                solr_name(:subseries, :stored_searchable),
+                solr_name(:temporal, :stored_searchable),
                 solr_name(:title, :stored_searchable),
                 solr_name(:tone, :stored_searchable),
                 solr_name(:type, :stored_searchable),
-                solr_name(:volume ,:stored_searchable),
+                solr_name(:volume, :stored_searchable),
                 Ddr::Index::Fields::ALL_TEXT,
                 Ddr::Index::Fields::LOCAL_ID,
                 Ddr::Index::Fields::PERMANENT_ID,
@@ -254,43 +256,32 @@ class CatalogController < ApplicationController
 
   end
 
-
-
-  def exclude_components(solr_parameters, user_parameters)
-      solr_parameters[:fq] ||= []
-      solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
-  end
-
-
-
   def zip_images
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
+    temp_file = Tempfile.new("ddr-zip-#{Time.now.utc}")
+    zip_filename = "#{itemid}.zip"
 
-    # Combination of these techniques:
-    #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
-    #   https://github.com/rubyzip/rubyzip#basic-zip-archive-creation
+    # See http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
 
-    t = Tempfile.new("temp-ddr-#{Time.now.utc}")
-    Zip::OutputStream.open(t.path) do |z|
-      image_list.each_with_index do |item, index|
-        path = item.to_s
-        ptifname = path.split(".ptif")[0]
-        filename = File.basename(ptifname)
-        z.put_next_entry("#{index+1}-" + filename + ".jpg")
-
-        url1 = item
-        url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
-        z.print IO.read(url1_data)
-
-        # TODO: update a progress bar to indicate status.
-        # TODO: write a test for this feature.
-
+    begin
+      Zip::OutputStream.open(temp_file) { |z| }
+      Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
+        image_list.each_with_index do |img_path, index|
+          filename = "#{itemid}-#{index+1}.jpg"
+          img_data = open(img_path, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
+          zipfile.add(filename, img_data)
+        end
       end
 
-      send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => itemid+".zip"
-      t.close
+      zip_data = File.read(temp_file.path)
+      send_data(zip_data, type: "application/zip", disposition: "attachment", filename: zip_filename)
+
+    ensure
+      temp_file.close
+      temp_file.unlink
     end
+
   end
 
   def pdf_images

@@ -1,8 +1,8 @@
 <div class="collection-start collection-submast">
   <h1 id="collection-title"><%= document.title %></h1>
-  
+
   <% if document.abstract.present? %>
-    <p class="collection-abstract"><%= document.abstract %></p>
+    <div class="collection-abstract"><%= simple_format(document.abstract) %></div>
   <% end %>
 
   <% if document.item_count > 1 %>
@@ -11,4 +11,5 @@
     <% end %>
   <% end %>
 
+  <%= render partial: "home_showcase_link_list", locals: { document: document } %>
 </div>

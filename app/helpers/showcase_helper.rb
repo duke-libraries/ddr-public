@@ -28,6 +28,12 @@ module ShowcaseHelper
     end
   end
 
+  def showcase_abstract_more options={}
+    if @portal.abstract.present? and @portal.description.present?
+        link_to raw("More&nbsp;&raquo;"), { anchor: "about-collection" }, class: "more-link", title: "Learn more about the collection"
+    end
+  end
+
 
   private
 

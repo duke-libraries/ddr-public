@@ -1,4 +1,4 @@
-<% cache("finding_aid_full_#{document.ead_id}", expires_in: 7.days) do %>
+<% cache("finding_aid_full_#{document.ead_id}", expires_in: 1.day) do %>
   <% finding_aid = get_finding_aid(document) %>
   <% if finding_aid.present? %>
 
@@ -10,21 +10,21 @@
 
       <h4>
         <%= link_to finding_aid.collection_title, finding_aid.url %>
-        <% if finding_aid.collection_date_span %>
+        <% if finding_aid.collection_date_span.present? %>
           <span class="small"> <%= finding_aid.collection_date_span %></span>
         <% end %>
       </h4>
 
       <p class="text-muted">
-        <% if finding_aid.collection_number %>
+        <% if finding_aid.collection_number.present? %>
           Collection #<%= finding_aid.collection_number %> |
         <% end %>
-        <% if finding_aid.extent %>
+        <% if finding_aid.extent.present? %>
           <%= finding_aid.extent %>
         <% end %>
       </p>
 
-      <% if finding_aid.abstract %>
+      <% if finding_aid.abstract.present? %>
         <p><span class="text-muted text-uppercase small strong">ABSTRACT</span><br/><%= finding_aid.abstract %></p>
       <% end %>
 

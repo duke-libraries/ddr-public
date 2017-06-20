@@ -39,16 +39,15 @@ dpla_fields:
       - :stored_sortable
   'dc:language':
     - solr_field:
-      - :language
+      - :language_name
       - :stored_searchable
-      helper_method: :language_display
   'dc:publisher':
     - solr_field:
       - :publisher
       - :stored_searchable
   'dc:rights':
     - solr_field:
-      - :rights
+      - :rights_note
       - :stored_searchable
   'dc:subject':
     - solr_field:

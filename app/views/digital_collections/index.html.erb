@@ -20,7 +20,7 @@
     <%= render partial: 'show_research_help', locals: { document: @portal.collection }  %>
 
     <% if has_search_parameters? %>
-      <%= render partial: 'show_collection_context', locals: { document: @portal.collection } %>
+      <%= render partial: 'collection_context_brief', locals: { collection_document: @portal.collection}  %>
     <% end %>
 
   <% end %>

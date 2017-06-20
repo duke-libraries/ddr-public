@@ -1,8 +1,10 @@
-<% cache("display_audio_#{params[:collection]}_#{params[:id]}", expires_in: 7.days) do %>
-
-  <%= render partial: "item_options", locals: { derivatives: derivative_urls(document) } %>  
-  <%= render partial: "display_jwplayer", locals: { derivatives: derivative_urls(document), width: "100%", height: 30  } %> 
-
-  <%= render partial: "show_default", locals: {document: document} %>
-
+<% cache("display_audio_#{params[:collection]}_#{params[:id]}", expires_in: 1.day) do %>
+  <%= render partial: "item_options", locals: { derivatives: stream_urls(document) } %>
+  <%= render partial: "display_jwplayer", locals: jwplayer_locals({
+      derivatives: stream_urls(document),
+      media_type: 'audio/mpeg',
+      media_mode: 'audio'}) %>
 <% end %>
+
+<%= render partial: "show_default", locals: {document: document} %>
+

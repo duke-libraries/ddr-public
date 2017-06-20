@@ -532,6 +532,7 @@ p + #source-collection {
 #item-info ul.many-metadata-values {
   @media (min-width: $screen-sm-min) {
     column-count: 2;
+    margin-bottom: 1em;
   }
 
   @media (min-width: $screen-lg-min) {
@@ -539,9 +540,41 @@ p + #source-collection {
   }
 }
 
+#item-info ul.many-metadata-values li {
+  display: inline-block;
+  width: 100%;
+}
+
+
+
 #item-info ul.long-metadata-values li {
   line-height: 1.42857143;
   margin: 0 0 11px;
+}
+
+/* ---------------------
+    RIGHTS STATEMENTS
+---------------------- */
+
+.rights-display-download {
+ display: block;
+ padding: 3px 20px;
+}
+
+.rights-reuse-text {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.rights-more-info {
+  display: inline-block;
+  margin-top: 8px;
+  & a {
+    color: $gray-light;
+  }
+  & .popover {
+    min-width: 300px;
+  }
 }
 
 
@@ -856,7 +889,7 @@ dl.document-metadata {
 
   }
 
-  hr.contact-separator {
+  hr.contact-separator, hr.collection-context-separator {
     border-top: 2px solid $brand-success;
     clear: both;
   }

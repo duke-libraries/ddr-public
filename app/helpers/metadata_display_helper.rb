@@ -65,29 +65,12 @@ module MetadataDisplayHelper
     end
   end
 
-  def language_display options={}
-    options[:value].map do |language_code|
-      t("ddr.language_codes.#{language_code}", :default => language_code)
-    end
-  end
-
   def auto_link_values options={}
     options[:value].map { |value| auto_link(value) }
   end
 
-  def separate_with_p options={}
-    # combined = options[:value].join("\n\n")
-    # simple_format(combined) # wraps each value in <p></p>
-    ActiveSupport::Deprecation.warn("#separate_with_p returns values unchanged and no longer wraps values in p tags")
-    options[:value]
+  def link_to_doi options={}
+    options[:value].map { |value| link_to(value, "#{Ddr::Public.doi_resolver}#{value}") }
   end
-
-  def separate_with_br options={}
-    # combined = options[:value].join("\n")
-    # simple_format(combined, {}, wrapper_tag: "div") # adds <br/> between values
-    ActiveSupport::Deprecation.warn("#separate_with_br returns values unchanged no longer adds breaks between values")
-    options[:value]
-  end
-
 
 end

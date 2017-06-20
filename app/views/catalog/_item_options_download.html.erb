@@ -4,6 +4,23 @@
       <span class="glyphicon glyphicon-save"></span> Download <span class="caret"></span>
     </a>
     <ul id="download-menu" class="dropdown-menu">
+    <% if @document.rights.present? %>
+      <li class="dropdown-header">Rights</li>
+      <li>
+        <span class="rights-display-download">
+          <%= rights_display(document: @document) %>
+          <% if @document.rights_note.present? %>
+            <br/>
+            <span class="rights-more-info">
+              <a href="#" data-toggle="popover-click" data-trigger="focus" data-content="<%= @document.rights_note %>">More Rights Info</a>
+            </span>
+          <% end -%>
+        </span>
+      </li>
+      <li class="divider"></li>
+
+      <% end %>
+
       <%= render partial: 'item_options_download_' + @document.display_format, locals: local_assigns %>
     </ul>
   </li>

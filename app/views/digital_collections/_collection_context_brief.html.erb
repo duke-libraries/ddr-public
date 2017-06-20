@@ -1,0 +1,7 @@
+<% cache("dc_collection_context_brief_#{collection_document.id}", expires_in: 1.day) do %>
+  <div id="collection-context" class="buffer-bottom-40">
+    <h4><%= link_to_document collection_document, collection_document.title, :id => "parent-collection" %></h4>
+    <p class="small"><%= truncate(collection_document.abstract, :length => 180, :separator => ' ') %></p>
+    <a class="text-muted text-uppercase small" id="more-digital-collections" href="http://library.duke.edu/digitalcollections">More Duke Digital Collections &raquo;</a>
+  </div>
+<% end %>

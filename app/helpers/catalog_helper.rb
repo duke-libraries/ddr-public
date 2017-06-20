@@ -137,7 +137,7 @@ module CatalogHelper
   def render_search_scope_dropdown params={}
     active_search_scopes = []
 
-    if request.path =~ /^\/dc\/(?!facet).*$/
+    if request.path =~ /^\/dc.*$/ && params[:collection].present?
       active_search_scopes << ["This Collection", digital_collections_url(params[:collection])]
     end
 
@@ -145,7 +145,7 @@ module CatalogHelper
       active_search_scopes << ["Digital Collections", digital_collections_index_portal_url]
     end
 
-    if request.path =~ /^\/portal\/(?!facet).*$/
+    if request.path =~ /^\/portal.*$/ && params[:collection].present?
       active_search_scopes << ["This Portal", portal_url(params[:collection])]
     end
 
@@ -221,6 +221,9 @@ module CatalogHelper
     link_to name, url, :class => options[:class], :id => "admin-set"
   end
 
+  def research_guide values=[]
+    values.select { |value| is_research_guide? value }.first if values.present?
+  end
 
   # DPLA Feed document helper
   def source_collection_title document
@@ -234,8 +237,11 @@ module CatalogHelper
 
 
   def derivative_urls document
-    document.derivative_ids.map do |id|
-      "#{document.derivative_url_prefixes[document.display_format]}#{id}.#{derivative_file_extension(document)}"
+    if document.derivative_url_prefixes.present?
+      ActiveSupport::Deprecation.warn("Support for external AV derivatives via derivative_urls is deprecated. The method will be removed in DDR-Public v2.8.0.")
+      document.derivative_ids.map do |id|
+          "#{document.derivative_url_prefixes[document.display_format]}#{id}.#{derivative_file_extension(document)}"
+      end
     end
   end
 
@@ -282,6 +288,16 @@ module CatalogHelper
     end
     section << '</p>'
     return section
+  end
+
+  def is_research_guide? value
+    research_guides_whitelist.map do |config|
+      value =~ /^https?:\/\/#{Regexp.quote(config).chomp('/')}\/.*/
+    end.compact.present?
+  end
+
+  def research_guides_whitelist
+    String(Ddr::Public.research_guides).split(/,\s?/)
   end
 
 end

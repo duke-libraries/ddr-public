@@ -489,6 +489,27 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :category => "'item options'",
     :action => "'image count'" 
     },
+
+  "#item-options #file-dropdown" => {
+    :category => "'item options'",
+    :action => "'file link'" 
+    },
+  "#item-options #file-menu input[type=submit]" => {
+    :category => "'item options'",
+    :action => "'file link'"
+    },
+  "#item-options #file-menu a" => {
+    :category => "'item options'",
+    :action => "'file link'",
+    :label => "defaultLabel(link) + ' | ' + $(this).attr('href')"
+    },
+  "#item-options #file-link a" => {
+    :category => "'item options'",
+    :action => "'file link'",
+    :label => "defaultLabel(link) + ' | ' + $(this).attr('href')"
+    },
+
+
   "#item-options #download-dropdown" => {
     :category => "'item options'",
     :action => "'download'" 

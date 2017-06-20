@@ -44,22 +44,23 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
-  describe "#language_display" do
-    let (:language_display_string) {["Afar", "Abkhazian", "ack"]}
-    context "language field contains multiple language codes, one of which not have a translation" do
-      let (:language_metadata) {["aar", "abk", "ack"]}
-      it "should return an array of translated language codes where possible" do
-        expect(helper.language_display({:value => language_metadata})).to match(language_display_string)
-      end
-    end
-  end
-
   describe "#auto_link_values" do
     let (:display_strings_with_links) {["<a href=\"https://library.duke.edu\">https://library.duke.edu</a>", "this is not a link"]}
     context "field contains some values should be linked and some that should not be linked" do
       let (:metadata_field_values) {['https://library.duke.edu', 'this is not a link']}
       it "should return an array of values, the first of which is a link" do
         expect(helper.auto_link_values({:value => metadata_field_values})).to match(display_strings_with_links)
+      end
+    end
+  end
+
+  describe "#link_to_doi" do
+    let(:linked_doi) { ["<a href=\"https://dx.doi.org/doi:10.NNNN/NNNNNNNN\">doi:10.NNNN/NNNNNNNN</a>"] }
+    context "field contains a DOI" do
+      before { Ddr::Public.doi_resolver = "https://dx.doi.org/"}
+      let (:metadata_field_values) {["doi:10.NNNN/NNNNNNNN"]}
+      it "should return an array of linked DOI values" do
+        expect(helper.link_to_doi({:value => metadata_field_values})).to match(linked_doi)
       end
     end
   end

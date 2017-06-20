@@ -1,116 +1,120 @@
-<%# NOTE: this partial supports both audio or video items.
-Either can have one or multiple files.  %>
+<% if derivatives.present? %>
 
-<div id="jwplayer-element">Loading the media player...</div>
+  <%# NOTE: this partial supports both audio or video items.
+  Either can have one or multiple files.  %>
 
-<% @derivcount = derivatives.count %>
+  <div id="jwplayer-element">Loading the media player...</div>
 
-<%# Instantiate JW Player with a playlist. Single-component A/V is %>
-<%# also treated as a playlist with one item. %>
+  <% @derivcount = derivatives.count %>
 
-<%= javascript_tag do %>
-  var playerInstance = jwplayer("jwplayer-element");
-  playerInstance.setup({
-    <% if defined?(width) %>
-      width: "<%= width %>",
-    <% end %>
-    <% if defined?(height) %>
-      height: <%= height %>,
-    <% end %>
-    <% if defined?(aspectratio) %>
-      aspectratio: "<%= aspectratio %>",
-    <% end %>
-    skin: {
-      name: "seven",
-      active: "#a1b70d",
-      inactive: "white",
-      background: "#333"
-    },
-    playlist: [
-      <% derivatives.each_with_index do |url,index| %>
-        {
-          file: "<%= url %>",
-          <% if @derivcount > 1 %>
-          title: "Part <%= index + 1 %> of <%= @derivcount %>",
+
+  <%# Instantiate JW Player with a playlist. Single-component A/V is %>
+  <%# also treated as a playlist with one item. %>
+
+  <%= javascript_tag do %>
+    var playerInstance = jwplayer("jwplayer-element");
+    playerInstance.setup({
+          width: "<%= width %>",
+        <% if local_assigns[:height].present? %>
+          height: "<%= height %>",
+        <% end %>
+        <% if local_assigns[:aspectratio].present? %>
+          aspectratio: "<%= aspectratio %>",
+        <% end %>
+
+        skin: {
+          name: "seven",
+          active: "#a1b70d",
+          inactive: "white",
+          background: "#333"
+        },
+        playlist: [
+          <% derivatives.each_with_index do |url,index| %>
+            {
+              file: "<%= url %>",
+              <% if local_assigns[:media_type].present? %>
+                type: "<%= media_type %>",
+              <% end %>
+              <% if @derivcount > 1 %>
+              title: "Part <%= index + 1 %> of <%= @derivcount %>"
+              <% end %>
+            }<% unless url == derivatives.last %>,<% end %>
           <% end %>
-          tracks: [{
-            //file: "/path/to/captions.vtt" ...etc...
-          }]          
-        }<% unless url == derivatives.last %>,<% end %>
-      <% end %>
-    ]
-  });
+        ]
+    });
 
-  <%# Trigger events that GA Event Tracking listeners can detect %>
-  <%# https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/ %>
-  playerInstance.on('play', function(){
-    if(playerInstance.getPosition() == 0) { <%# only track if play from beginning of file %>
-      $('#jwplayer-element').trigger('play');
-    }
-  });
-  playerInstance.on('complete', function(){
-    $('#jwplayer-element').trigger('complete');
-  });
-  playerInstance.on('seeked', function(){
-    $('#jwplayer-element').trigger('seeked');
-  });
-  playerInstance.on('fullscreen', function(){
-    $('#jwplayer-element').trigger('fullscreen');
-  });
-  playerInstance.on('playlistItem', function(){
-    if(playerInstance.getPlaylistIndex() > 0) { 
-      $ ('#jwplayer-element').trigger('playlist-item-change');
-    }
-  });
-  playerInstance.on('playlistComplete', function(){
-    if(playerInstance.getPlaylist().length > 1) { 
-      $('#jwplayer-element').trigger('playlist-complete');
-    }
-  });
+    <%# Trigger events that GA Event Tracking listeners can detect %>
+    <%# https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/ %>
+    playerInstance.on('play', function(){
+      if(playerInstance.getPosition() == 0) { <%# only track if play from beginning of file %>
+        $('#jwplayer-element').trigger('play');
+      }
+    });
+    playerInstance.on('complete', function(){
+      $('#jwplayer-element').trigger('complete');
+    });
+    playerInstance.on('seeked', function(){
+      $('#jwplayer-element').trigger('seeked');
+    });
+    playerInstance.on('fullscreen', function(){
+      $('#jwplayer-element').trigger('fullscreen');
+    });
+    playerInstance.on('playlistItem', function(){
+      if(playerInstance.getPlaylistIndex() > 0) {
+        $ ('#jwplayer-element').trigger('playlist-item-change');
+      }
+    });
+    playerInstance.on('playlistComplete', function(){
+      if(playerInstance.getPlaylist().length > 1) {
+        $('#jwplayer-element').trigger('playlist-complete');
+      }
+    });
 
-  <%# If there are multiple A/V derivatives, use JS API to navigate
-  <%# playlist with external controls. %>
-  <%# See https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/#playlist %>
+    <%# If there are multiple A/V derivatives, use JS API to navigate
+    <%# playlist with external controls. %>
+    <%# See https://developer.jwplayer.com/jw-player/docs/developer-guide/api/javascript_api_reference/#playlist %>
+
+    <% if @derivcount > 1 %>
+      playerInstance.on('ready', function(){
+        $('ul.av-playlist-pagination li a').click(function(e){
+          e.preventDefault();
+          if(!$(this).hasClass("disabled")) {
+            playerInstance.playlistItem($(this).data('index'));
+          }
+        });
+      });
+
+      playerInstance.on('playlistItem', function(){
+        $('ul.av-playlist-pagination a').each(function(){
+          $(this).removeClass('now-playing');
+          if($(this).attr('data-index') == playerInstance.getPlaylistIndex()) {
+            $(this).addClass('now-playing');
+          }
+        });
+      });
+    <% end %>
+  <% end %>
 
   <% if @derivcount > 1 %>
-    playerInstance.on('ready', function(){
-      $('ul.av-playlist-pagination li a').click(function(e){
-        e.preventDefault();
-        if(!$(this).hasClass("disabled")) {
-          playerInstance.playlistItem($(this).data('index'));
-        }
-      });
-    });
-
-    playerInstance.on('playlistItem', function(){
-      $('ul.av-playlist-pagination a').each(function(){
-        $(this).removeClass('now-playing');
-        if($(this).attr('data-index') == playerInstance.getPlaylistIndex()) {
-          $(this).addClass('now-playing');
-        }
-      });
-    });
+    <nav id="av-playlist-nav">
+      <ul class="pagination pagination-sm av-playlist-pagination">
+        <li class="disabled"><a href="#" class="disabled">Part: </a></li>
+        <% derivatives.each_with_index do |url,index| %>
+          <li><a href="<%= url %>" data-index="<%= index %>"><%= index + 1 %></a></li>
+        <% end %>
+      </ul>
+    </nav>
   <% end %>
-<% end %>
 
-<% if @derivcount > 1 %>
-  <nav id="av-playlist-nav">
-    <ul class="pagination pagination-sm av-playlist-pagination">
-      <li class="disabled"><a href="#" class="disabled">Part: </a></li>
-      <% derivatives.each_with_index do |url,index| %>
-        <li><a href="<%= url %>" data-index="<%= index %>"><%= index + 1 %></a></li>
+  <noscript>
+    <h3>Files for this Item</h3>
+    <ul>
+      <% derivatives.each do |url| %>
+        <% unless url.blank? %>
+          <li><%= link_to url, url %></li>
+        <% end %>
       <% end %>
     </ul>
-  </nav>
-<% end %>
+  </noscript>
 
-<noscript>
-  <h3>Files for this Item</h3>
-  <ul>
-    <% derivatives.each do |url| %>
-      <% unless url.blank? %>
-        <li><%= link_to url, url %></li>
-      <% end %>
-    <% end %>
-  </ul>
-</noscript>
+<% end %>

@@ -5,8 +5,8 @@ class SolrDocument
 
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
-
   include Ddr::Models::SolrDocument
+  include Rails.application.routes.url_helpers # enable url_for method to get stream_url
 
   extend Forwardable
 
@@ -14,6 +14,7 @@ class SolrDocument
                  :derivative_ids,
                  :multires_image_file_paths,
                  :first_multires_image_file_path,
+                 :media_paths,
                  :ordered_component_docs
 
   # self.unique_key = 'id'
@@ -68,6 +69,12 @@ class SolrDocument
 
   def derivative_url_prefixes
     portal_view_config.try(:[], 'derivative_url_prefixes')
+  end
+
+  def stream_url
+    if self.streamable?
+      url_for(id: self.id, controller: "stream", action: "show", only_path: true)
+    end
   end
 
   def related_items

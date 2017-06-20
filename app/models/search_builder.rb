@@ -15,6 +15,11 @@ class SearchBuilder < Blacklight::Solr::SearchBuilder
     solr_parameters[:fq] << "#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Item"
   end
 
+  def exclude_components(solr_parameters)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << "-#{Ddr::Index::Fields::ACTIVE_FEDORA_MODEL}:Component"
+  end
+
   def filter_by_parent_collections(solr_parameters)
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << portal_filters
@@ -28,6 +33,15 @@ class SearchBuilder < Blacklight::Solr::SearchBuilder
     solr_parameters[:policy_q] = [policy_q]
     solr_parameters[:resource_q] = [resource_q]
     solr_parameters
+  end
+
+  def filter_by_related_items(solr_parameters)
+    if blacklight_params[:id_related_items].present?
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << related_item_filters
+      solr_parameters[:related_items_q] = [related_items_q]
+      solr_parameters
+    end
   end
 
 
@@ -47,8 +61,37 @@ class SearchBuilder < Blacklight::Solr::SearchBuilder
     join_query_values(scope.parent_collection_uris)
   end
 
+  def related_items_q
+    join_query_values(related_item_ids)
+  end
+
+  def related_item_ids
+    begin
+      doc = SolrDocument.find(related_item_source_id)
+      doc[related_item_id_source_field]
+    rescue SolrDocument::NotFound
+      []
+    end
+  end
+
+  def related_item_source_id
+    split_related_item_values.first
+  end
+
+  def related_item_id_source_field
+    split_related_item_values[1]
+  end
+
+  def related_item_id_target_field
+    split_related_item_values.last
+  end
+
+  def split_related_item_values
+    @split_related_item_values ||= blacklight_params[:id_related_items].split("|")
+  end
+
   def join_query_values(values)
-    "\"#{values.join('" "')}\""
+    "\"#{values.join('" "')}\"" if values.present?
   end
 
   def current_ability
@@ -71,6 +114,10 @@ class SearchBuilder < Blacklight::Solr::SearchBuilder
 
   def portal_filters
     local_parameter_query(Ddr::Index::Fields::IS_GOVERNED_BY, "portal_q")
+  end
+
+  def related_item_filters
+    local_parameter_query(related_item_id_target_field, "related_items_q")
   end
 
   def local_parameter_query(default_field, param_name)
