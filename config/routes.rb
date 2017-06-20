@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   # DC Collection scoped routes
   constraints(id: id_constraint, collection: id_constraint) do
+    get "dc/:collection/range_limit/", to: "digital_collections#range_limit"
+    get "dc/:collection/facet/:id", to: "digital_collections#facet"
     get "dc/:collection/featured", to: "digital_collections#featured", as: "featured_items"
     get "dc/:collection/about", :to => "digital_collections#about", as: "digital_collections_about"
     get "dc/:collection/:id/media", :to => "digital_collections#media", constraints: { format: 'json' }

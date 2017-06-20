@@ -137,7 +137,7 @@ module CatalogHelper
   def render_search_scope_dropdown params={}
     active_search_scopes = []
 
-    if request.path =~ /^\/dc\/(?!facet).*$/
+    if request.path =~ /^\/dc.*$/ && params[:collection].present?
       active_search_scopes << ["This Collection", digital_collections_url(params[:collection])]
     end
 
@@ -145,7 +145,7 @@ module CatalogHelper
       active_search_scopes << ["Digital Collections", digital_collections_index_portal_url]
     end
 
-    if request.path =~ /^\/portal\/(?!facet).*$/
+    if request.path =~ /^\/portal.*$/ && params[:collection].present?
       active_search_scopes << ["This Portal", portal_url(params[:collection])]
     end
 

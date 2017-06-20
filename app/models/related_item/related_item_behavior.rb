@@ -22,11 +22,6 @@ module RelatedItem::RelatedItemBehavior
     @rel_docs ||= title_sorted_documents
   end
 
-  def solr_query
-    {"f" => { solr_query_field => solr_query_values }, "sort" => sort} if solr_query_values.present?
-  end
-
-
   private
 
   def sort

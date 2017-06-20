@@ -12,7 +12,9 @@ class CatalogController < ApplicationController
   before_action :authenticate_user!, if: :authentication_required?
   before_action :enforce_show_permissions, only: :show
 
-  self.search_params_logic += [:include_only_published, :apply_access_controls]
+  self.search_params_logic += [:include_only_published,
+                               :apply_access_controls,
+                               :filter_by_related_items]
 
   helper_method :repository, :search_builder
 
@@ -257,31 +259,29 @@ class CatalogController < ApplicationController
   def zip_images
     image_list = params[:image_list].split('||')
     itemid = params[:itemid]
+    temp_file = Tempfile.new("ddr-zip-#{Time.now.utc}")
+    zip_filename = "#{itemid}.zip"
 
-    # Combination of these techniques:
-    #   http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
-    #   https://github.com/rubyzip/rubyzip#basic-zip-archive-creation
+    # See http://thinkingeek.com/2013/11/15/create-temporary-zip-file-send-response-rails/
 
-    t = Tempfile.new("temp-ddr-#{Time.now.utc}")
-    Zip::OutputStream.open(t.path) do |z|
-      image_list.each_with_index do |item, index|
-        path = item.to_s
-        ptifname = path.split(".ptif")[0]
-        filename = File.basename(ptifname)
-        z.put_next_entry("#{index+1}-" + filename + ".jpg")
-
-        url1 = item
-        url1_data = open(url1, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
-        z.print IO.read(url1_data)
-
-        # TODO: update a progress bar to indicate status.
-        # TODO: write a test for this feature.
-
+    begin
+      Zip::OutputStream.open(temp_file) { |z| }
+      Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
+        image_list.each_with_index do |img_path, index|
+          filename = "#{itemid}-#{index+1}.jpg"
+          img_data = open(img_path, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE })
+          zipfile.add(filename, img_data)
+        end
       end
 
-      send_file t.path, :type => 'application/zip', :disposition => 'attachment', :filename => itemid+".zip"
-      t.close
+      zip_data = File.read(temp_file.path)
+      send_data(zip_data, type: "application/zip", disposition: "attachment", filename: zip_filename)
+
+    ensure
+      temp_file.close
+      temp_file.unlink
     end
+
   end
 
   def pdf_images
