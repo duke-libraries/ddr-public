@@ -1,7 +1,7 @@
 module EmbedHelper
 
   def embeddable? document
-    (['image','multi_image','folder'].include? document.display_format) && (params[:controller] == 'digital_collections')
+    (['image','multi_image','folder'].include? document.display_format)
   end
 
   def purl_or_doclink document, options = {}
