@@ -91,6 +91,9 @@
             $(this).addClass('now-playing');
           }
         });
+        
+        $('.av-embed-playlist-now-playing').text( playerInstance.getPlaylistIndex() + 1);
+
       });
     <% end %>
   <% end %>

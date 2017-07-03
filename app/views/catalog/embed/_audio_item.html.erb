@@ -1,0 +1,12 @@
+<% cache("embed_audio_#{params[:collection]}_#{params[:id]}", expires_in: 1.day) do %>
+
+  <div class="iframe-embed-audio">
+    <%= render partial: "display_jwplayer", locals: jwplayer_locals({
+        derivatives: stream_urls(document),
+        media_type: 'audio/mpeg',
+        media_mode: 'audio'}) %>
+  </div>
+
+  <%= render partial: "catalog/embed/iframe_titlebar", locals: { document: document, derivatives: stream_urls(document) } %>
+
+<% end %>
