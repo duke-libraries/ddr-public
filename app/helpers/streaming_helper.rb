@@ -14,7 +14,7 @@ module StreamingHelper
   def jwplayer_locals options={}
     case options[:media_mode]
       when 'audio'
-        options[:height] = '30'
+        options[:height] = '40'
       when 'video'
         options[:aspectratio] = '4:3'
     end

@@ -1,7 +1,7 @@
 module EmbedHelper
 
   def embeddable? document
-    (['image','multi_image','folder'].include? document.display_format)
+    (['image','multi_image','folder','audio','video'].include? document.display_format)
   end
 
   def purl_or_doclink document, options = {}
@@ -11,6 +11,15 @@ module EmbedHelper
   def iframe_src_path document, options = {}
     path = purl_or_doclink(document).sub(/^https?:/,'') # make protocol-relative
     path + '?embed=true'
+  end
+
+  def iframe_embed_height document, options = {}
+    case document.display_format
+      when 'audio'
+        125
+      else
+        500
+    end
   end
 
 end
