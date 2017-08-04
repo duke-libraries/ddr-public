@@ -1,7 +1,7 @@
 module EmbedHelper
 
   def embeddable? document
-    (['image','multi_image','folder','audio','video'].include? document.display_format)
+    (['image','folder','audio','video'].include? document.display_format)
   end
 
   def purl_or_doclink document, options = {}

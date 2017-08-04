@@ -85,8 +85,6 @@ class Thumbnail::Default
 
   def display_format_thumbnail
     case document.display_format
-    when 'multi_image'
-      'ddr-icons/image.png'
     when 'image'
       'ddr-icons/image.png'
     when 'video'

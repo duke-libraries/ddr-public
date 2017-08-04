@@ -7,7 +7,7 @@
        <br/>
 
        <%# Playlist indicator %>
-       <% if @derivcount > 1 %>
+       <% if @derivcount.present? and @derivcount > 1 %>
         <span class="small av-embed-playlist-info">
           Part <span class="av-embed-playlist-now-playing">1</span> of <%= @derivcount %>
         </span>
