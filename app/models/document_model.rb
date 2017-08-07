@@ -26,7 +26,7 @@ module DocumentModel
 
   def display_format_icon
     case self.display_format
-    when 'multi_image'
+    when 'image'
       'clone'
     when 'folder'
       'folder-open-o'
