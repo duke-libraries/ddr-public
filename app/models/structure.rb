@@ -21,6 +21,10 @@ class Structure
     @media ||= Structure::Group.new(structure: @structure, type: 'Media')
   end
 
+  def directories
+    @directories ||= Structure::Directory.new(structure: @structure)
+  end
+
   def multires_image_file_paths
     if default.docs.any?
       docs = default.docs

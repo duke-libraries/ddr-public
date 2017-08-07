@@ -969,6 +969,18 @@ dl.document-metadata {
     }
   }
 
+  /* --------------------
+      JS Tree Overrides
+  ----------------------- */
+
+  .jstree-hovered {
+    background-color: #E5E5E5 !important;
+  }
+
+  .jstree-clicked {
+    background-color: #E5E5E5 !important;
+    color: #000 !important;
+  }
 
   /* --------------------
       Homepage Styles

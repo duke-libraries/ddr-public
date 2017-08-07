@@ -6,7 +6,7 @@ gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '~> 2.8.0'
+gem 'ddr-models', github: 'duke-libraries/ddr-models', ref: '7865f049dca50fc151d821a0bd3c521d94a07c0d'
 
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -30,6 +30,7 @@ gem 'nokogiri'
 gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
 gem 'ruby-progressbar'
+gem 'jstree-rails-4', '~> 3.3.4'
 
 # Rails 4.2+
 gem 'responders', '~> 2.0'

@@ -28,16 +28,21 @@ class Thumbnail::Default
   end
 
   def thumbnails
-    [
-      mime_type_thumbnail,
-      display_format_thumbnail,
-      active_fedora_model_thumbnail,
-      fallback_thumbnail
-    ]
+    [single_component_item_thumbnail,
+     mime_type_thumbnail,
+     display_format_thumbnail,
+     active_fedora_model_thumbnail,
+     fallback_thumbnail]
   end
 
-  def mime_type_thumbnail
-    case document.content_type
+  def single_component_item_thumbnail
+    if document.components && document.components.length == 1
+      mime_type_thumbnail(document.components.first)
+    end
+  end
+
+  def mime_type_thumbnail(doc=document)
+    case doc.content_type
     when /^image/
       'ddr-icons/image.png'
     when /^video/
@@ -58,15 +63,15 @@ class Thumbnail::Default
       'ddr-icons/x-sas.png'
     when /^application\/(x-|vnd.)?(ms)?-?excel/
       'ddr-icons/xls.png'
-    when 'application/vnd.openxmlformats-officedocument.spreadsheetml'
+    when /application\/vnd\.openxmlformats-officedocument\.spreadsheetml.?/
       'ddr-icons/xls.png'
     when /^application\/(x-|vnd.)?(ms)?-?powerpoint/
       'ddr-icons/ppt.png'
-    when 'application/vnd.openxmlformats-officedocument.presentationml'
+    when /application\/vnd\.openxmlformats-officedocument\.presentationml.?/
       'ddr-icons/ppt.png'
     when /^application\/msword/
       'ddr-icons/doc.png'
-    when 'application/vnd.openxmlformats-officedocument.wordprocessingml'
+    when /application\/vnd\.openxmlformats-officedocument\.wordprocessingml.?/
       'ddr-icons/doc.png'
     when /^application\/(x-)?pdf/
       'ddr-icons/pdf.png'

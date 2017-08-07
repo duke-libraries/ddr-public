@@ -39,6 +39,14 @@ module DocumentModel
     end
   end
 
+  def parent_directories
+    @parent_directories ||= document_model.try(:parent_directories)
+  end
+
+  def directory_siblings
+    @directory_siblings ||= document_model.try(:directory_siblings)
+  end
+
   def metadata_header
     document_model.try(:metadata_header) || "Item Info"
   end

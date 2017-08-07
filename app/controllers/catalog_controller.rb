@@ -103,7 +103,7 @@ class CatalogController < ApplicationController
     config.add_index_field Ddr::Index::Fields::COLLECTION_URI.to_s, helper_method: 'descendant_of', label: 'Collection'
 
     # partials for show view
-    config.show.partials = [:show_header, :show, :show_children, :show_bottom]
+    config.show.partials = [:show_header, :show, :show_children, :item_directory_tree, :show_bottom]
 
     # deactivate certain tools
     config.show.document_actions.delete(:email)
@@ -179,6 +179,7 @@ class CatalogController < ApplicationController
                 solr_name(:lyricist, :stored_searchable),
                 solr_name(:medium, :stored_searchable),
                 solr_name(:negative_number, :stored_searchable),
+                solr_name(:nested_path_text, :searchable),
                 solr_name(:oclc_number, :stored_searchable),
                 solr_name(:performer, :stored_searchable),
                 solr_name(:placement_company, :stored_searchable),
