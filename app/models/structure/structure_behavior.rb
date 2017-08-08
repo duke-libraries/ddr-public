@@ -91,7 +91,7 @@ module Structure::StructureBehavior
   end
 
   def root_content(type='default')
-    type_root_node(type).present? ? type_root_node(type)['contents'] : {}
+    type_root_node(type).present? && type_root_node(type)['contents'] ? type_root_node(type)['contents'] : {}
   end
 
   def type_root_node(type='default')

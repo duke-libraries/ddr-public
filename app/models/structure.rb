@@ -67,7 +67,6 @@ class Structure
     @derivative_ids ||= default.local_ids.present? ? default.local_ids : local_id_ordered_component_local_ids
   end
 
-
   def local_id_ordered_component_pids
     local_id_ordered_components.map { |c| c.id } if local_id_ordered_components
   end
@@ -79,6 +78,8 @@ class Structure
   def local_id_ordered_components
     if find_solr_document.components.present?
       find_solr_document.components.sort { |a,b| a.local_id.to_s <=> b.local_id.to_s }
+    else
+      []
     end
   end
 
