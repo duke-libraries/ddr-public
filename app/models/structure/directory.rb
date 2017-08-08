@@ -72,7 +72,7 @@ class Structure::Directory < SimpleDelegator
   end
 
   def root_directory
-    if structure
+    if structure && structure["default"] && structure["default"]["contents"]
       structure["default"]["contents"].select { |content| content["type"] == "Directory" }
     else
       []
