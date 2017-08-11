@@ -7,6 +7,12 @@
   min-height:5em !important;
 }
 
+/* Bugfix for JWPlayer */
+/* else CC button doesn't light up green when ON. */
+#jwplayer-element .jw-icon-cc {
+  color: #a1b70d;
+}
+
 .av-playlist-pagination {
   & a.now-playing {
     background-color: $brand-success !important;
