@@ -59,6 +59,19 @@ class Structure
     @media_paths ||= docs.map { |doc| doc.stream_url }.compact
   end
 
+  def captions_urls
+    if default.docs.any?
+      docs = default.docs
+    elsif media.docs.any?
+      docs = media.docs
+    elsif local_id_ordered_components.present?
+      docs = local_id_ordered_components
+    else
+      docs = [] << find_solr_document # for a component
+    end
+    @captions_urls ||= docs.map { |doc| doc.captions_url }.compact
+  end
+
   def ordered_component_docs
    @ordered_component_docs ||= files.docs
   end

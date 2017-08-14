@@ -15,6 +15,7 @@ class SolrDocument
                  :multires_image_file_paths,
                  :first_multires_image_file_path,
                  :media_paths,
+                 :captions_urls,
                  :ordered_component_docs
 
   # self.unique_key = 'id'
@@ -74,6 +75,12 @@ class SolrDocument
   def stream_url
     if self.streamable?
       url_for(id: self.id, controller: "stream", action: "show", only_path: true)
+    end
+  end
+
+  def captions_url
+    if self.captionable?
+      url_for(id: self.id, controller: "captions", action: "show", only_path: true)
     end
   end
 

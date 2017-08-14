@@ -69,6 +69,10 @@ Rails.application.routes.draw do
   # Streamable Media
   get 'stream/:id' => 'stream#show', as: 'stream', constraints: {id: id_constraint}
 
+  # Captions
+  get 'captions/:id' => 'captions#show', as: 'captions', constraints: {id: id_constraint}
+
+
   # Permanent IDs
   get 'id/*permanent_id' => 'permanent_ids#show'
 
