@@ -63,6 +63,12 @@ RSpec.describe Structure do
       {"id"=>"dukechapel_dcrau001201-documents", "type"=>"Documents", "contents"=>[
         {"order"=>"1", "label"=>"Transcript", "contents"=>[{"repo_id"=>"changeme:1905"}]}]}]}}}
 
+    let(:av_component_doc) {
+      SolrDocument.new({
+        'id' => 'changeme:1900',
+        'active_fedora_model_ssi' => 'Component'
+        })}
+
     subject { described_class.new({structure: structure}) }
 
     it "has some pids for media objects" do
@@ -72,6 +78,12 @@ RSpec.describe Structure do
     it "has an id for the media group" do
       expect(subject.media.id).to eq("dukechapel_dcrau001201-media")
     end
+
+    it "finds the first media object (e.g., for av thumb/poster)" do
+      allow(SolrDocument).to receive(:find).with("changeme:1900") { av_component_doc }
+      expect(subject.first_media_doc).to eq(av_component_doc)
+    end
+
   end
 
   context "Object has directory structural metadata" do

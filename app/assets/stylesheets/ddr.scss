@@ -680,6 +680,13 @@ image-based items */
         content: "\f115";
       }
     }
+    &.blacklight-video:not(.thumbnail-icon) .document-thumbnail a:first-child, &.blacklight-video:not(.thumbnail-icon) .thumbnail-wrapper a:first-child {
+      &:before {
+        display: block;
+        content: "\f144";
+      }
+    }
+
   }
 }
 

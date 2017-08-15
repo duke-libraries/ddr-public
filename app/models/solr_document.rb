@@ -15,6 +15,7 @@ class SolrDocument
                  :multires_image_file_paths,
                  :first_multires_image_file_path,
                  :media_paths,
+                 :first_media_doc,
                  :captions_urls,
                  :ordered_component_docs
 

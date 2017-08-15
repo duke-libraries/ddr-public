@@ -59,6 +59,17 @@ class Structure
     @media_paths ||= docs.map { |doc| doc.stream_url }.compact
   end
 
+  def first_media_doc
+    if default.pids.any?
+      pids = default.pids
+    elsif media.pids.any?
+      pids = media.pids
+    else
+      pids = local_id_ordered_component_pids
+    end
+    @first_media_doc ||= SolrDocument.find(pids.first) if pids.present?
+  end
+
   def captions_urls
     if default.docs.any?
       docs = default.docs
