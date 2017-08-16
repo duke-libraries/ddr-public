@@ -15,6 +15,10 @@ module ThumbnailHelper
     end
   end
 
+  def thumbnail_icon? document
+    thumbnail_path(document).start_with?("ddr-icons/")
+  end
+
   def default_thumbnail_path document
     Thumbnail::Default.new({ document: document }).thumbnail_path
   end

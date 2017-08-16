@@ -38,6 +38,15 @@
               <% if local_assigns[:media_type].present? %>
                 type: "<%= media_type %>",
               <% end %>
+
+              <%# Poster Frame %>
+              <% unless thumbnail_icon?(@document) %>
+                <% if index == 0 %>
+                  image: "<%= thumbnail_path(@document) %>",
+                <%- end -%>
+              <%- end -%>
+
+              <%# Captions %>
               <% if @document.captions_urls.present? %>
                 tracks: [
                   {
