@@ -1,0 +1,7 @@
+<% if document[Ddr::Index::Fields::ALEPH_ID].present? %>
+  <div id="view-details-catalog" class="buffer-bottom-40">
+    <%= link_to t('ddr.public.catalog_link'),
+                "#{Ddr::Public.catalog_url}#{document[Ddr::Index::Fields::ALEPH_ID]}",
+                id: 'catalog-link' %>
+  </div>
+<% end %>

@@ -13,7 +13,7 @@ RSpec.describe MetadataDisplayHelper do
             'permanent_url_ssi'=>permanent_url,
             'object_profile_ssm'=>['{"datastreams":{"content":{"dsLabel":"image10.tif","dsVersionID":"content.0","dsCreateDate":"2014-10-22T17:30:02Z","dsState":"A","dsMIME":"image/tiff","dsFormatURI":null,"dsControlGroup":"M","dsSize":69742260,"dsVersionable":true,"dsInfoType":null,"dsLocation":"changeme:10+content+content.0","dsLocationType":"INTERNAL_ID","dsChecksumType":"SHA-256","dsChecksum":"b9eb20b6fb4a27d6bf478bdefb25538bea95740bdf48471ec360d25af622a911"}}}']
             ) }
-    it "should return a link to the permanent URL" do
+    it "returns a link to the permanent URL" do
       expect(helper.permalink({value: permanent_url})).to include(link_to(permanent_url, permanent_url))
     end
   end
@@ -30,14 +30,14 @@ RSpec.describe MetadataDisplayHelper do
     before { allow(helper).to receive(:link_to_document) }
     context "user can read parent" do
       before { allow(helper).to receive(:can?).with(:read, an_instance_of(SolrDocument)).and_return(true) }
-      it "should have a link to the parent" do
+      it "has a link to the parent" do
         expect(helper).to receive(:link_to_document)
         helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])
       end
     end
     context "user cannot read parent" do
       before { allow(helper).to receive(:can?).with(:read, an_instance_of(SolrDocument)).and_return(false) }
-      it "should display the parent title but not have a link to the parent" do
+      it "displays the parent title but not have a link to the parent" do
         expect(helper).to_not receive(:link_to_document)
         helper.descendant_of(value: [ "info:fedora/#{parent_pid}" ])
       end
@@ -48,7 +48,7 @@ RSpec.describe MetadataDisplayHelper do
     let (:display_strings_with_links) {["<a href=\"https://library.duke.edu\">https://library.duke.edu</a>", "this is not a link"]}
     context "field contains some values should be linked and some that should not be linked" do
       let (:metadata_field_values) {['https://library.duke.edu', 'this is not a link']}
-      it "should return an array of values, the first of which is a link" do
+      it "returns an array of values, the first of which is a link" do
         expect(helper.auto_link_values({:value => metadata_field_values})).to match(display_strings_with_links)
       end
     end
@@ -59,8 +59,21 @@ RSpec.describe MetadataDisplayHelper do
     context "field contains a DOI" do
       before { Ddr::Public.doi_resolver = "https://dx.doi.org/"}
       let (:metadata_field_values) {["doi:10.NNNN/NNNNNNNN"]}
-      it "should return an array of linked DOI values" do
+      it "returns an array of linked DOI values" do
         expect(helper.link_to_doi({:value => metadata_field_values})).to match(linked_doi)
+      end
+    end
+  end
+
+  describe "#link_to_catalog" do
+    context "field contains an Aleph ID" do
+      before { Ddr::Public::catalog_url = "https://search.library.duke.edu/search?id=DUKE" }
+      let(:aleph_id_value) { "004531378" }
+      it "returns a link to the record in the catalog" do
+        expect(helper.link_to_catalog({value: aleph_id_value})).to(
+          eq("<a href=\"https://search.library.duke.edu/search?id=DUKE004531378\">"\
+             "https://search.library.duke.edu/search?id=DUKE004531378</a>")
+        )
       end
     end
   end

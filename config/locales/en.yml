@@ -31,6 +31,7 @@ en:
         label: "Help"
       license_title: "Copyright & Use"
       call_to_sponsor: "Sponsor this Digital Collection"
+      catalog_link: "View Details (Catalog)"
       portal:
         digital_collections:
           title: "Duke Digital Collections"
