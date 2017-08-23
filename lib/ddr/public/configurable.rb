@@ -25,6 +25,8 @@ module Ddr
 
         mattr_accessor :research_guides
 
+        mattr_accessor :catalog_url
+
       end
 
       module ClassMethods
