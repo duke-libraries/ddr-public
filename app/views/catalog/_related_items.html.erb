@@ -2,9 +2,9 @@
   <% @document.related_items.each do |related_item| %>
     <% if related_item.related_documents.present? %>
       <% if related_item.related_documents.count > 3 %>
-        <h3><%= link_to("#{related_item.name} (#{related_item.related_documents.count})", search_action_path(related_item.solr_query)) %></h3>
+        <h3><%= link_to("#{related_item.name.pluralize} (#{related_item.related_documents.count})", search_action_path(related_item.solr_query)) %></h3>
       <% else %>
-        <h3><%= related_item.name %></h3>
+        <h3><%= related_item.name.pluralize(related_item.related_documents.count) %></h3>
       <% end %>
       <%= render_document_index_with_view("gallery", related_item.related_documents[0..2]) %>
       <% if related_item.related_documents.count > 3 %>
