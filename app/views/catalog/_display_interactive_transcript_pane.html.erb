@@ -1,0 +1,22 @@
+<div class="tab-pane tr-pane<% if tr_index == 0 %> active<% end %>" id="tr-<%= tr_index %>" data-track="<%= tr_index %>">
+    <table class="table table-condensed captions-table">
+      <% caption_contents(captions_url).cues.each do |cue| %>
+
+        <% cue_lines(cue.text).each_with_index do |line, line_index| %>
+
+          <tr class="tr-cue"<% if line_index == 0 %> id="tr-<%= tr_index %>-cue-<%= cue.start_in_sec.to_i %>"<% end %> data-jump-sec="<%= cue.start_in_sec.to_i %>">
+            <td class="tr-voice"><%= cue_speaker(line) %></td>
+            <td class="tr-text"><%= clean_cue_text(line) %></td>
+            <td class="tr-time">
+              <% if line_index == 0 %>
+                <%= display_time(cue.start_in_sec.to_i) %>
+              <% end %>
+            </td>
+          </tr>
+
+        <% end %>
+      <% end %>
+
+    </table>
+
+</div>

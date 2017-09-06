@@ -8,6 +8,8 @@ before_action :enforce_show_permissions
 
       send_file asset.caption_path,
                 type: asset.caption_type,
+                stream: true,
+                disposition: 'inline',
                 filename: [asset.public_id, asset.caption_extension].join(".")
     else
       render nothing: true, status: 404

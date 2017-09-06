@@ -1,0 +1,31 @@
+<% cache("interactive_transcript_#{@document.id}", expires_in: 1.day) do %>
+
+  <h3 class="feature-head">Transcript</h3>
+  <div class="text-muted small text-right">Transcripts may contain inaccuracies.</div>
+
+  <ul class="nav nav-tabs hidden" id="interactive-transcript-tabs" aria-hidden="true">
+    <% @document.captions_urls.each_with_index do |captions_url, index| %>
+      <li role="presentation"><a href="#tr-<%= index %>"><%= index+1 %></a></li>
+    <% end %>
+  </ul>
+
+  <div id="interactive-transcript" class="collapsed">
+    <div class="tab-content">
+      <% @document.captions_urls.each_with_index do |captions_url, tr_index| %>
+        <% begin %>
+          <%= render partial: 'display_interactive_transcript_pane', locals: { captions_url: captions_url, tr_index: tr_index } %>
+        <% rescue => e %>
+          <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
+          <div class="alert alert-info tab-pane tr-pane<% if tr_index == 0 %> active<% end %>" id="tr-<%= tr_index %>">There was a problem loading the transcript file.</div>
+          <% next %>
+        <% end %>
+
+      <% end %>
+    </div>
+  </div>
+
+  <div id="interactive-transcript-expand" class="text-center">
+    <a class="btn btn-default btn-sm collapsed" href="#" role="button" id="transcript-expand" data-state="collapsed"></a>
+  </div>
+
+<% end %>

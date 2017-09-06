@@ -127,6 +127,12 @@
     </nav>
   <% end %>
 
+
+  <% if @document.captions_urls.present? %>
+    <%= render partial: 'display_interactive_transcript' %>
+  <% end %>
+
+
   <noscript>
     <h3>Files for this Item</h3>
     <ul>

@@ -54,7 +54,6 @@ $(function () {
         }
     });
 
-
     // Popover metadata from Gallery (Grid) View of Related Items
     $('#related-items #documents.gallery .thumbnail-wrapper').popover({
       trigger: 'hover',
