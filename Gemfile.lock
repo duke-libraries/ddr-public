@@ -23,6 +23,13 @@ GIT
       rubydora (~> 2.0)
       virtus (~> 1.0.5)
 
+GIT
+  remote: git://github.com/opencoconut/webvtt-ruby.git
+  revision: d0b696929c540eecc9c040c271fa92822f1f6ae0
+  ref: d0b696929c540eecc9c040c271fa92822f1f6ae0
+  specs:
+    webvtt-ruby (0.3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -589,9 +596,10 @@ DEPENDENCIES
   therubyracer
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
+  webvtt-ruby!
 
 RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.15.0
+   1.15.4

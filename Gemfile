@@ -31,6 +31,7 @@ gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
 gem 'ruby-progressbar'
 gem 'jstree-rails-4', '~> 3.3.4'
+gem 'webvtt-ruby', github: 'opencoconut/webvtt-ruby', ref: 'd0b696929c540eecc9c040c271fa92822f1f6ae0'
 
 # Rails 4.2+
 gem 'responders', '~> 2.0'

@@ -618,6 +618,16 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :label => "$(this).attr('href')",
     :document_listener => true
   },
+  "#interactive-transcript .tr-cue" => {
+    :category => "'audiovisual'",
+    :action => "'interactive transcript: cue click'",
+    :label => "$(this).attr('id')"
+  },
+  "#transcript-expand" => {
+    :category => "'audiovisual'",
+    :action => "'interactive transcript: expand'",
+    :label => "$(this).data('state')"
+  },
 
 }
 

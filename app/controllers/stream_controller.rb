@@ -10,7 +10,7 @@ before_action :enforce_show_permissions
                 type: asset.streamable_media_type,
                 stream: true,
                 disposition: 'inline',
-                filename: asset.public_id + Ddr::Models.preferred_media_types.key(asset.streamable_media_type)
+                filename: [asset.public_id, asset.streamable_media_extension].join(".")
     else
       render nothing: true, status: 404
     end

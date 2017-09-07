@@ -1,0 +1,58 @@
+#interactive-transcript {
+  border: 2px solid #eee;
+  overflow-y: scroll;
+  &.collapsed {
+    height: 300px;
+  }
+}
+
+table.captions-table {
+  & > tbody > tr {
+    &:hover { 
+      background: #eee;
+      cursor: pointer;
+    }
+
+    & > td {
+      border-top: none;
+      padding-left: 15px;
+    } 
+  }
+  & > tbody > tr > td:last-child {
+    text-align: right;
+    padding-right: 1em;
+    color: #aaa;
+  }
+}
+
+table.captions-table > tbody > tr.tr-cue {
+  & > td.tr-voice {
+    font-weight: bold;
+    color: #666;
+  }
+  &.current-cue > td.tr-voice {
+    border-left: 10px solid #a1b70d;
+    padding-left: 10px;
+  }
+}
+
+#transcript-expand {
+  &:before {
+    content: "Collapse";
+  }
+  &:after {
+    padding-left: 0.3em;
+    content: "\f077";
+    font-family: "FontAwesome";
+  }
+  &.collapsed {
+    &:before {
+    content: "Expand";
+  }
+    &:after {
+      padding-left: 0.3em;
+      content: "\f078";
+      font-family: "FontAwesome";
+    }
+  }
+}
