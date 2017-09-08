@@ -50,6 +50,10 @@ class SolrDocument
     Array(self["description_tesim"]).first
   end
 
+  def rights_notes
+    Array(self["rights_note_tesim"])
+  end
+
   def sponsor
     Array(self["sponsor_tesim"]).first
   end

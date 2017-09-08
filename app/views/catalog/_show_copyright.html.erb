@@ -1,0 +1,9 @@
+<% if document.rights_notes.present? %>
+  <h3 class="feature-head" id="copyright">Copyright</h3>
+  <% document.rights_notes.each do |note| %>
+    <%= auto_link(simple_format(note)) %>
+    <% if note != document.rights_notes.last %>
+      <hr/>
+    <% end %>
+  <% end %>
+<% end %>

@@ -35,7 +35,6 @@
     <%# If description already present at top, put finding aid info below the items %>
     <%= render partial: 'show_finding_aid_full', locals: { document: @portal.collection } %>
   <% end %>
+  <%= render partial: 'show_copyright', locals: { document: @portal.collection } %>
   <%= render partial: 'show_blog_posts', locals: { document: @portal.collection } %>
 <% end %>
-
-
