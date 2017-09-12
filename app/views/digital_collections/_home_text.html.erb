@@ -8,7 +8,7 @@
     <% else %>
       <h3 class="feature-head">About the Digital Collection</h3>
     <% end %>
-    <%= simple_format(@portal.description) %>
+    <%= auto_link(simple_format(@portal.description)) %>
 
     <% if lookup_context.exists?('about', 'digital_collections') %>
        <p> <%= link_to raw("Read More &raquo;"), digital_collections_about_path %></p>
