@@ -21,7 +21,7 @@
 <% end -%>
 
 <% unless document.description.blank? %>
-  <div id="about-collection"><%= simple_format(document.description) %></div>
+  <div id="about-collection"><%= auto_link(simple_format(document.description)) %></div>
   <hr/>
 <% end %>
 
