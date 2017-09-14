@@ -6,8 +6,7 @@ gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', github: 'duke-libraries/ddr-models', ref: 'b9085fc0d3ed5bdb827345f0a5d551f023ec63a6'
-
+gem 'ddr-models', '2.9.0.rc1'
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
 gem 'autoprefixer-rails'
