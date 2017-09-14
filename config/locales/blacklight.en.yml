@@ -4,4 +4,10 @@ en:
     welcome: 'Welcome to Duke Digital Repository'
     back_to_search: 'Back to Results'
     search:
+      # i18n key 'title' is deprecated and will be removed in Blacklight 6.0
+      title: '%{application_name} Search Results'
+      page_title:
+        title: '%{constraints} / %{application_name}'
+        constraint: '%{label}: %{value}'
+        many_constraint_values: '%{values} selected'
       start_over: 'New Search'

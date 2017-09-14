@@ -4,6 +4,7 @@ class DocumentModel::Item
   include Blacklight::SearchHelper
   include Ddr::Public::Controller::SolrQueryConstructor
   include DocumentModel::Searcher
+  include DocumentModel::HtmlTitle
 
   attr_accessor :document
 
@@ -40,6 +41,15 @@ class DocumentModel::Item
     if dir_and_sibling_hash_from_collection
       dir_sibling_search.documents.sort { |a,b| a.title <=> b.title }
     end
+  end
+
+  def html_title
+    html_title = []
+    html_title += [ document.title.truncate(150) +
+                    html_title_qualifier(document.title, document.permanent_id ? document.permanent_id : document.public_id),
+                    collection.title.truncate(100),
+                    I18n.t('blacklight.application_name') ]
+    html_title.join(' / ')
   end
 
   private

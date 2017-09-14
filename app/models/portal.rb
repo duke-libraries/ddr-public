@@ -91,8 +91,6 @@ class Portal
     [:add_query_to_solr, :apply_access_controls, :include_only_published]
   end
 
-
-
   def portal_admin_sets
     portal_view_config.try(:[], 'includes').try(:[], 'admin_sets')
   end

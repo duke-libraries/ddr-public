@@ -4,6 +4,7 @@ class DocumentModel::Collection
   include Blacklight::SearchHelper
   include Ddr::Public::Controller::SolrQueryConstructor
   include DocumentModel::Searcher
+  include DocumentModel::HtmlTitle
 
   attr_accessor :document
 
@@ -25,6 +26,16 @@ class DocumentModel::Collection
 
   def metadata_header
     "Collection Info"
+  end
+
+  def html_title
+    html_title = []
+    html_title += [document.title.truncate(150)]
+    if document[Ddr::Index::Fields::ADMIN_SET_TITLE].present?
+      html_title += [document[Ddr::Index::Fields::ADMIN_SET_TITLE].truncate(100)]
+    end
+    html_title += [I18n.t('blacklight.application_name')]
+    html_title.join(' / ')
   end
 
   private
