@@ -656,6 +656,10 @@ image-based items */
 #documents {
   & .document {
 
+    & .document-thumbnail div.caption, & .thumbnail-wrapper div.caption {
+      clear: both;
+    }
+
     & .document-thumbnail a:first-child, & .thumbnail-wrapper a:first-child {
       float: left;
       position: relative;

@@ -129,7 +129,7 @@
 
 
   <% if @document.captions_urls.present? %>
-    <%= render partial: 'display_interactive_transcript' %>
+    <%= render partial: 'display_interactive_transcript' unless is_embed? %>
   <% end %>
 
 
