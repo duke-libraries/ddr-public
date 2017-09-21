@@ -5,6 +5,7 @@
     <div class="col-md-9 col-sm-8">
       <h2>Featured Items</h2>
       <div id="documents" class="row gallery horizontal-gallery">
+        <% @portal.showcase.documents.uniq! { |doc| doc.id } %>
         <% @portal.showcase.documents.each_with_index do |doc, index| %>
           <div class="document highlight col-xs-12 col-sm-6 col-md-4">
             <div class="thumbnail-wrapper">
@@ -27,6 +28,5 @@
   <% end %>
 </div>
 
-<%= content_for :page_title, "Featured Items - " + t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) + " - Duke Libraries" %>
-
+<%= content_for :page_title, ['Featured Items', @portal.html_title_context, 'Digital Collections', application_name].join(' / ') %>
 

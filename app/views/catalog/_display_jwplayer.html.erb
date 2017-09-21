@@ -1,7 +1,9 @@
 <% if derivatives.present? %>
 
-  <%# NOTE: this partial supports both audio or video items.
-  Either can have one or multiple files.  %>
+  <%# NOTE: This partial is used for Items and Components alike.
+    Items can be audio or video, and can include single or multiple
+    Component parts w/AV media. TODO: This is ripe for refactoring
+    and moving some of this logic into a helper. %>
 
   <div id="jwplayer-element">Loading the media player...</div>
 
@@ -21,6 +23,7 @@
         <% if local_assigns[:aspectratio].present? %>
           aspectratio: "<%= aspectratio %>",
         <% end %>
+          nextUpDisplay: false,
 
         skin: {
           name: "seven",
@@ -31,13 +34,28 @@
         playlist: [
           <% derivatives.each_with_index do |url,index| %>
             {
-              file: "<%= url %>",
+                file: "<%= url %>",
               <% if local_assigns[:media_type].present? %>
                 type: "<%= media_type %>",
               <% end %>
-              <% if @derivcount > 1 %>
-              title: "Part <%= index + 1 %> of <%= @derivcount %>"
+
+              <%# Poster Frame %>
+              <% unless thumbnail_icon?(@document) %>
+                <% if index == 0 %>
+                  image: "<%= thumbnail_path(@document) %>",
+                <%- end -%>
+              <%- end -%>
+
+              <%# Captions %>
+              <% if @document.captions_urls.present? %>
+                tracks: [
+                  {
+                    file: "<%= @document.captions_urls[index] %>",
+                    kind: "captions"
+                  }
+                ],
               <% end %>
+                title: "<% if @derivcount > 1 %>Part <%= index + 1 %> of <%= @derivcount %><% end %>"
             }<% unless url == derivatives.last %>,<% end %>
           <% end %>
         ]
@@ -91,6 +109,9 @@
             $(this).addClass('now-playing');
           }
         });
+        
+        $('.av-embed-playlist-now-playing').text( playerInstance.getPlaylistIndex() + 1);
+
       });
     <% end %>
   <% end %>
@@ -105,6 +126,12 @@
       </ul>
     </nav>
   <% end %>
+
+
+  <% if @document.captions_urls.present? %>
+    <%= render partial: 'display_interactive_transcript' unless is_embed? %>
+  <% end %>
+
 
   <noscript>
     <h3>Files for this Item</h3>

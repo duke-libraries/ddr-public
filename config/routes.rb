@@ -8,6 +8,13 @@ Rails.application.routes.draw do
     /[a-zA-Z0-9\/\-_%]+:?[a-zA-Z0-9\/\-_%]*/
   end
 
+  constraints(id: id_constraint) do
+    get "directory_tree/:id/:directory_id", to: "directory_tree#show", as: "directory_tree_node"
+    defaults directory_id: "root" do
+      get "directory_tree/:id", to: "directory_tree#show", as: "directory_tree_root"
+    end
+  end
+
   # Range Limit and Facet routes for DC
   get "dc/range_limit/", to: "digital_collections#range_limit"
   get "dc/facet/:id", to: "digital_collections#facet", as: "digital_collections_facet"
@@ -30,8 +37,6 @@ Rails.application.routes.draw do
 
   # Must exist for facets to work from DC portal
   get "dc" => "digital_collections#index"
-
-
 
   # Range Limit and Facet routes for DC
   get "portal/range_limit/", to: "portal#range_limit"
@@ -63,6 +68,10 @@ Rails.application.routes.draw do
 
   # Streamable Media
   get 'stream/:id' => 'stream#show', as: 'stream', constraints: {id: id_constraint}
+
+  # Captions
+  get 'captions/:id' => 'captions#show', as: 'captions', constraints: {id: id_constraint}
+
 
   # Permanent IDs
   get 'id/*permanent_id' => 'permanent_ids#show'

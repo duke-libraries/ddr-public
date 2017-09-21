@@ -14,6 +14,7 @@
 //= require bootstrap-sprockets
 //= require bootstrap-select
 //= require jquery_ujs
+//= require jstree
 //
 // Required by Blacklight
 //= require blacklight/blacklight

@@ -656,6 +656,10 @@ image-based items */
 #documents {
   & .document {
 
+    & .document-thumbnail div.caption, & .thumbnail-wrapper div.caption {
+      clear: both;
+    }
+
     & .document-thumbnail a:first-child, & .thumbnail-wrapper a:first-child {
       float: left;
       position: relative;
@@ -680,6 +684,13 @@ image-based items */
         content: "\f115";
       }
     }
+    &.blacklight-video:not(.thumbnail-icon) .document-thumbnail a:first-child, &.blacklight-video:not(.thumbnail-icon) .thumbnail-wrapper a:first-child {
+      &:before {
+        display: block;
+        content: "\f144";
+      }
+    }
+
   }
 }
 
@@ -969,6 +980,18 @@ dl.document-metadata {
     }
   }
 
+  /* --------------------
+      JS Tree Overrides
+  ----------------------- */
+
+  .jstree-hovered {
+    background-color: #E5E5E5 !important;
+  }
+
+  .jstree-clicked {
+    background-color: #E5E5E5 !important;
+    color: #000 !important;
+  }
 
   /* --------------------
       Homepage Styles

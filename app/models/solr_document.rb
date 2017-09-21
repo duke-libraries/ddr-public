@@ -15,6 +15,8 @@ class SolrDocument
                  :multires_image_file_paths,
                  :first_multires_image_file_path,
                  :media_paths,
+                 :first_media_doc,
+                 :captions_urls,
                  :ordered_component_docs
 
   # self.unique_key = 'id'
@@ -48,6 +50,10 @@ class SolrDocument
     Array(self["description_tesim"]).first
   end
 
+  def rights_notes
+    Array(self["rights_note_tesim"])
+  end
+
   def sponsor
     Array(self["sponsor_tesim"]).first
   end
@@ -74,6 +80,12 @@ class SolrDocument
   def stream_url
     if self.streamable?
       url_for(id: self.id, controller: "stream", action: "show", only_path: true)
+    end
+  end
+
+  def captions_url
+    if self.captionable?
+      url_for(id: self.id, controller: "captions", action: "show", only_path: true)
     end
   end
 

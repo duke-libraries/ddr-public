@@ -66,6 +66,9 @@ class Portal::DigitalCollections < Portal
     portal_view_config.try(:[], 'alert')
   end
 
+  def html_title_context
+    @html_title_context ||= parent_collection_document.present? ? parent_collection_document.title : 'Digital Collections'
+  end
 
   private
 

@@ -2,17 +2,18 @@
 Styles for embedded media. These apply to media displayed
 within the src of an iframe provided in copyable embed code
 E.g., at:
-https://repository.duke.edu/dc/wdukesons/dscsi03002/embed
+https://repository.duke.edu/dc/wdukesons/dscsi03002?embed=true
 ---------------------------------------------------------- */
 
 .ddr-embed {
 
-  /* Multi-Image (Open Seadragon)          */
+  background-color: #333;
+
+  /* Image Items (Open Seadragon)          */
   /* Extends and revises styles for viewer */
-  /* in use on item show pages
+  /* in use on item show pages             */
   /* ------------------------------------- */
 
-  background-color: #333;
 
   & #image-content {
     height: calc(100vh - 65px) !important;
@@ -118,10 +119,41 @@ https://repository.duke.edu/dc/wdukesons/dscsi03002/embed
 
   }
 
+  /* Audio & Video (JWPlayer)              */
+  /* Extends and revises styles for viewer */
+  /* in use on item show pages             */
+  /* ------------------------------------- */
+
+  & #jwplayer-element:not(.jw-flag-fullscreen) {
+    height: calc(100vh - 65px) !important;
+    max-height: calc(100vh - 65px) !important;
+
+    & .jw-title {
+      display: none;
+    }
+
+  }
+
+
+  & #av-playlist-nav {
+    display: none;
+  }
+  
+  & .av-embed-playlist-info {
+    margin-right: 15px;
+  }
+
+  & .av-embed-playlist-now-playing {
+    color: white;
+    font-weight: bold;
+  }
+
 }
 
-/* Title, Info, Sharing Bar */
-/* ------------------------ */
+
+
+/* Embed Title, Info, Sharing Bar */
+/* ------------------------------- */
 
 #iframe-embed-title-row {
   margin-bottom: 10px;
@@ -130,6 +162,8 @@ https://repository.duke.edu/dc/wdukesons/dscsi03002/embed
 #iframe-embed-titlebar {
   color: #ccc;
   background-color: #222;
+  max-height: 100%;
+  overflow-y: auto;
   padding: 5px;
   & a {
     color: white;

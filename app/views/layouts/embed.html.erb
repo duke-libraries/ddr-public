@@ -15,8 +15,12 @@
 </head>
 <body class="ddr-embed">
   <% case @document.display_format %>
-  <% when /^(image|multi_image|folder)$/ %>
-    <%= render partial: 'embed_image_item', locals: {document: @document} %>
+    <% when /^(image|folder)$/ %>
+      <%= render partial: 'catalog/embed/image_item', locals: {document: @document} %>
+    <% when "video" %>
+      <%= render partial: 'catalog/embed/video_item', locals: {document: @document} %>
+    <% when "audio" %>
+      <%= render partial: 'catalog/embed/audio_item', locals: {document: @document} %>
   <% end %>
 </body>
 </html>

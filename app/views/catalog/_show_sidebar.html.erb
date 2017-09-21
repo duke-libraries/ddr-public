@@ -1,6 +1,7 @@
 <%= render partial: 'show_research_help', locals: { document: @document.collection  }  %>
 <%= render partial: 'document_context' %>
 <%= render partial: 'show_finding_aid', locals: { document: @document } %>
+<%= render partial: 'catalog_link', locals: { document: @document } %>
 
 <% unless @document.more_like_this.empty? %>
   <div class="panel panel-default">

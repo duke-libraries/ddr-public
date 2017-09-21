@@ -26,7 +26,7 @@ module DocumentModel
 
   def display_format_icon
     case self.display_format
-    when 'multi_image'
+    when 'image'
       'clone'
     when 'folder'
       'folder-open-o'
@@ -37,6 +37,18 @@ module DocumentModel
     else
       'file-o'
     end
+  end
+
+  def parent_directories
+    @parent_directories ||= document_model.try(:parent_directories)
+  end
+
+  def directory_siblings
+    @directory_siblings ||= document_model.try(:directory_siblings)
+  end
+
+  def html_title
+    document_model.try(:html_title) || I18n.t('blacklight.application_name')
   end
 
   def metadata_header

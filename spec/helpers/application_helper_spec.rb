@@ -6,7 +6,7 @@ RSpec.describe ApplicationHelper do
 
     context "params contains a search parameter" do
       params = { q: 'foo' }
-      it "should be true" do
+      it "is true" do
         allow(helper).to receive(:params).and_return(params)
         expect(helper.has_search_parameters?).to be_truthy
       end
@@ -14,7 +14,7 @@ RSpec.describe ApplicationHelper do
 
     context "params does not contain a search parameter" do
       params = {}
-      it "should be false" do
+      it "is false" do
         allow(helper).to receive(:params).and_return(params)
         expect(helper.has_search_parameters?).to be_falsey
       end

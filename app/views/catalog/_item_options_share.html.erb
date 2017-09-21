@@ -5,7 +5,7 @@
   <div id="share-menu" class="dropdown-menu">
     <% if embeddable?(@document) %>
       <div class="dropdown-header">Embed Code</div>
-      <div><textarea id="copyable-embed-code" class="form-control" rows="2">&lt;iframe src='<%= iframe_src_path(@document) %>' height='500px' width='100%' frameborder='0' marginwidth='0' marginheight='0' scrolling='no' allowfullscreen&gt;&lt;/iframe&gt;</textarea></div>
+      <%= render partial: "catalog/embed/embed_code_copyable", locals: { document: @document } %>
     <% end %>
     <div class="dropdown-header">Permalink</div>
     <div><textarea id="copyable-permalink" class="form-control" rows="1"><%= purl_or_doclink(@document) %></textarea></div>

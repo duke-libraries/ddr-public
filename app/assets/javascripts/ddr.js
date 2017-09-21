@@ -54,7 +54,6 @@ $(function () {
         }
     });
 
-
     // Popover metadata from Gallery (Grid) View of Related Items
     $('#related-items #documents.gallery .thumbnail-wrapper').popover({
       trigger: 'hover',
@@ -70,6 +69,11 @@ $(function () {
     // Enable popover from Download dropdown menu without closing it
     $(document).on('click', '#download-menu.dropdown-menu', function (e) {
       e.stopPropagation();
+    });
+
+    // Make js tree links active
+    $('.directory-tree').on('activate_node.jstree', function(e,data){
+        window.location.href = data.node.a_attr.href;
     });
 
 });

@@ -1,0 +1,26 @@
+<h1>File Browser</h1>
+<div id="collection-directory-tree" class="directory-tree"></div>
+
+<script type="text/javascript">
+  $(function () {
+    // Enable jstree directory browser on collection pages
+    $('#collection-directory-tree')
+      .on('click', '.jstree-anchor', function (e) {
+        $('#collection-directory-tree').jstree(true).toggle_node(e.target);
+      })
+      .jstree({
+        core: {
+          data: {
+            url: function (node) {
+              directory_tree_service = "<%= url_for directory_tree_root_path(id: document.id, only_path: false) %>"
+              return node.id === '#' ? directory_tree_service
+                                     : directory_tree_service + "/" + node.id;
+            },
+            type: 'GET',
+            dblclick_toggle: false
+          }
+       },
+        plugins: [ "state" ]
+    });
+  });
+</script>

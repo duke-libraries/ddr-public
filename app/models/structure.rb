@@ -21,6 +21,10 @@ class Structure
     @media ||= Structure::Group.new(structure: @structure, type: 'Media')
   end
 
+  def directories
+    @directories ||= Structure::Directory.new(structure: @structure)
+  end
+
   def multires_image_file_paths
     if default.docs.any?
       docs = default.docs
@@ -55,6 +59,30 @@ class Structure
     @media_paths ||= docs.map { |doc| doc.stream_url }.compact
   end
 
+  def first_media_doc
+    if default.pids.any?
+      pids = default.pids
+    elsif media.pids.any?
+      pids = media.pids
+    else
+      pids = local_id_ordered_component_pids
+    end
+    @first_media_doc ||= SolrDocument.find(pids.first) if pids.present?
+  end
+
+  def captions_urls
+    if default.docs.any?
+      docs = default.docs
+    elsif media.docs.any?
+      docs = media.docs
+    elsif local_id_ordered_components.present?
+      docs = local_id_ordered_components
+    else
+      docs = [] << find_solr_document # for a component
+    end
+    @captions_urls ||= docs.map { |doc| doc.captions_url }.compact
+  end
+
   def ordered_component_docs
    @ordered_component_docs ||= files.docs
   end
@@ -62,7 +90,6 @@ class Structure
   def derivative_ids
     @derivative_ids ||= default.local_ids.present? ? default.local_ids : local_id_ordered_component_local_ids
   end
-
 
   def local_id_ordered_component_pids
     local_id_ordered_components.map { |c| c.id } if local_id_ordered_components
@@ -75,6 +102,8 @@ class Structure
   def local_id_ordered_components
     if find_solr_document.components.present?
       find_solr_document.components.sort { |a,b| a.local_id.to_s <=> b.local_id.to_s }
+    else
+      []
     end
   end
 

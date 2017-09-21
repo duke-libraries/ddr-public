@@ -1,0 +1,23 @@
+<% unless document.parent_directories.blank? %>
+  <h3 id="info" class="feature-head">File Browser</h3>
+  <div id="item-directory-tree" class="directory-tree"></div>
+
+  <script type="text/javascript">
+    $(function () {
+      // Enable jstree directory browser on item pages
+      $('#item-directory-tree')
+        .on('click', '.jstree-anchor', function (e) {
+          $('#item-directory-tree').jstree(true).toggle_node(e.target);
+        })
+        .jstree({
+          core: {
+            data: {
+              url: "<%= url_for directory_tree_root_path(id: document.id, only_path: false) %>",
+              type: 'GET',
+              dblclick_toggle: false
+            }
+         }
+      });
+    });
+  </script>
+<% end %>
