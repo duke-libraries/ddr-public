@@ -6,7 +6,7 @@ gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.9.0.rc1'
+gem 'ddr-models', '2.9.0'
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
 gem 'autoprefixer-rails'
@@ -30,7 +30,7 @@ gem 'edtf-humanize', '~> 0.0.7'
 gem 'rails_autolink'
 gem 'ruby-progressbar'
 gem 'jstree-rails-4', '~> 3.3.4'
-gem 'webvtt-ruby', github: 'opencoconut/webvtt-ruby', ref: 'd0b696929c540eecc9c040c271fa92822f1f6ae0'
+gem 'webvtt-ruby', git: 'https://github.com/opencoconut/webvtt-ruby.git', ref: 'd0b696929c540eecc9c040c271fa92822f1f6ae0'
 
 # Rails 4.2+
 gem 'responders', '~> 2.0'
