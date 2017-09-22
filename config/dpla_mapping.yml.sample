@@ -2,7 +2,7 @@ dpla_fields:
   'dcterms:isPartOf':
     - document_helper: :source_collection_title
   'dc:contributor':
-    - solr_field: 
+    - solr_field:
       - :contributor
       - :stored_searchable
   'dc:coverage':
@@ -10,7 +10,7 @@ dpla_fields:
       - :spatial
       - :stored_searchable
   'dc:creator':
-    - solr_field: 
+    - solr_field:
       - :creator
       - :stored_searchable
     - solr_field:
@@ -46,6 +46,9 @@ dpla_fields:
       - :publisher
       - :stored_searchable
   'dc:rights':
+    - solr_field:
+      - :rights
+      - :stored_searchable
     - solr_field:
       - :rights_note
       - :stored_searchable
