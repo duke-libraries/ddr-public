@@ -221,6 +221,71 @@ namespace :ddr_public do
 
   end
 
+
+  # STATIC PAGES -- adapted from ddr-portals:
+  namespace :ddr_static_pages do
+
+    DDR_STATIC_PAGES_REPO = "https://github.com/duke-libraries/ddr-static-pages.git"
+    DDR_STATIC_PAGES_PATH = Rails.root.join('ddr-static-pages')
+    GITFILE = "#{DDR_STATIC_PAGES_PATH}/.git"
+    STATIC_PAGES_VIEW_PATH = Rails.root.join('app','views','ddr-static-pages')
+    STATIC_PAGES_IMAGES_PATH = Rails.root.join('app', 'assets', 'images')
+    STATIC_PAGES_SCSS_PATH = Rails.root.join('app', 'assets', 'stylesheets')
+
+    file GITFILE do
+      sh "git clone #{DDR_STATIC_PAGES_REPO} #{DDR_STATIC_PAGES_PATH}"
+    end
+
+    desc "Pull portal content into #{DDR_STATIC_PAGES_PATH}. Use BRANCH=xxx to check out something other than 'master'"
+    task :pull => [:environment, GITFILE] do
+      branch = ENV["BRANCH"]
+      branch ||= "master"
+
+      sh "cd #{DDR_STATIC_PAGES_PATH} && git fetch && git checkout #{branch} && git pull origin #{branch}"
+    end
+
+    desc 'Sync to the latest version of set-specific content and assets'
+    task :sync => [:pull, :clean_links] do
+      Dir["#{DDR_STATIC_PAGES_PATH}/*"].each do |set_repo_path|
+
+        next unless File.directory?(set_repo_path)
+        next if set_repo_path =~ /^\./
+
+        setname = File.basename(set_repo_path)
+
+        dir = set_repo_path + "/views"
+        sh "ln -s #{dir} #{STATIC_PAGES_VIEW_PATH}/#{setname}" if File.directory?(dir)
+
+        dir = set_repo_path + "/assets/images"
+        sh "cp -r #{dir} #{STATIC_PAGES_IMAGES_PATH}/ddr-static-pages/#{setname}" if File.directory?(dir)
+
+        dir = set_repo_path + "/assets/stylesheets"
+        sh "cp -r #{dir} #{STATIC_PAGES_SCSS_PATH}/ddr-static-pages/#{setname}" if File.directory?(dir)
+
+        if Rails.env.production?
+          Rake::Task["assets:precompile"]
+        end
+
+      end
+    end
+
+    desc "Clean all view symlinks and image directories without removing the git repository"
+    task :clean_links => [STATIC_PAGES_VIEW_PATH, STATIC_PAGES_IMAGES_PATH, STATIC_PAGES_SCSS_PATH] do
+      sh "find #{STATIC_PAGES_VIEW_PATH} -type l -exec rm {} \\;"
+      sh "rm -rf #{STATIC_PAGES_IMAGES_PATH}/ddr-static-pages"
+      sh "mkdir #{STATIC_PAGES_IMAGES_PATH}/ddr-static-pages"
+      sh "rm -rf #{STATIC_PAGES_SCSS_PATH}/ddr-static-pages"
+      sh "mkdir #{STATIC_PAGES_SCSS_PATH}/ddr-static-pages"
+    end
+
+    desc "Clean all static-pages-specific views, including the repository"
+    task :clean => [:environment, :clean_links] do
+      sh "rm -rf #{DDR_STATIC_PAGES_PATH}"
+    end
+
+  end
+
+
   Rake::Task["ddr_public:sitemap:generate"].enhance do
     Rake::Task["ddr_public:sitemap:index"].invoke
   end

@@ -34,16 +34,19 @@
 # Ddr-portals
 /ddr-portals
 /app/views/ddr-portals/*
+/app/assets/images/ddr-portals/*
+
+
+# Ddr-static-pages
+/ddr-static-pages
+/app/views/ddr-static-pages/*
+/app/assets/images/ddr-static-pages/*
+/app/assets/stylesheets/ddr-static-pages/*
 
 # Sitemaps
 /public/sitemaps/*
 
 /public/assets
-
-# Ddr-portals
-/ddr-portals
-/app/views/ddr-portals/*
-/app/assets/images/ddr-portals/*
 
 .sass-cache
 
