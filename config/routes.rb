@@ -79,11 +79,13 @@ Rails.application.routes.draw do
   get '/help', to: redirect(Ddr::Public.help_url)
 
   # Static Pages
+
+# handle with controller, under about/
   get '/styleguide' => 'pages#styleguide'
   get '/copyright' => 'pages#copyright', :as => 'copyright'
+
+
   get '/homepage' => 'pages#homepage'
-
-
   root to: "pages#homepage"
 
 end
