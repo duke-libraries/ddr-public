@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -20,6 +20,12 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <%= content_for(:head) %>
+
+    <meta property="og:site_name" content="<%= og_site_name %>"/>
+    <meta name="twitter:site" content="<%= twitter_handle %>"/>
+    <meta property="og:title" content="<%= render_page_title %>"/>
+    <%= content_for(:twitter_og_meta) %>
+
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
