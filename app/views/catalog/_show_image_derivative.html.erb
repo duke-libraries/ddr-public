@@ -1,3 +1,10 @@
 <div class="image-display">
   <%= iiif_image_tag(image_path, {:size => '!850,850', :alt => 'image'}) %>
 </div>
+
+<%= content_for :twitter_og_meta do %>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:image" content="<%= iiif_image_path(image_path, {:size => '!850,850'}) %>" />
+  <meta property="og:image:alt" content="<%= @document.title %>" />
+  <meta name="twitter:image:alt" content="<%= @document.title %>" />
+<% end %>

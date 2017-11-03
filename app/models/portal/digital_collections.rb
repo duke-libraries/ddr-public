@@ -52,10 +52,12 @@ class Portal::DigitalCollections < Portal
     portal_view_config.try(:[], 'show_items')
   end
 
-  # TODO: combine with features.showcase.documents
-  #       after view/helper is refactored
   def showcase_custom_images
     portal_view_config.try(:[], 'showcase_images').try(:[], 'custom_images') || []
+  end
+
+  def showcase_images_all
+    showcase_custom_images.concat showcase.documents
   end
 
   def blog_posts_url
