@@ -1,5 +1,9 @@
 module MetadataDisplayHelper
 
+  def simple_format_values options={}
+    options[:value].map { |value| simple_format(value) }
+  end
+
   def permalink options={}
     link_to options[:value], options[:value]
   end

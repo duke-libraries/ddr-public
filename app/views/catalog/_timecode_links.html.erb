@@ -1,0 +1,61 @@
+<%= javascript_tag do %>
+  
+  function seconds(s) {
+    var timecode = s.split('\) ').pop();
+    var a = timecode.split(':'); 
+    var sec = Number(a[a.length-1]) + Number(a[a.length-2]) * 60; 
+    if(a.length > 2) { sec+= Number(a[a.length-3]) * 3600; } 
+    return sec;
+  };
+
+  function getpart(s) {
+    var part = s.split('\) ').shift().split('\(Part ').pop();
+    if (!isNaN(part)) {
+      return part
+    } else {
+      return '1'
+    }
+  }
+
+  function timecodelink(match) {
+    return "<a href='#' class='jump-av' data-jump-track='"+getpart(match)+"' data-jump-sec='"+seconds(match)+"'>"+match+"</a>";
+  }
+
+  function partlink(match) {
+    return "<strong>"+match+"</strong>";
+  }
+  
+  $(document).ready(function(){
+    $('#item-info dd.blacklight-description_tesim li').each(function() {
+      var raw_text = $(this).html();
+
+      <%# Some regex from https://stackoverflow.com/a/8318367 %>
+      <%# Matches simple timecodes (w/optional leading zeroes) and %>
+      <%# timecodes pertaining to a specific part (component) %>
+
+      <%# EXAMPLES: %>
+      <%# --------- %>
+      <%# 0:45, 12:34, 00:01:34, 1:31:42 %>
+      <%# (Part 1) 0:32, (Part 1) 1:23:45, (Part 2) 4:37 %>
+
+      var timepart_regex = new RegExp(/(?:(\(Part\s[0-9][0-9]?\)\s)?(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)([0-5]?\d))/g);
+      var new_text = raw_text.replace(timepart_regex, timecodelink);
+
+      $(this).html(new_text);
+    });
+    
+    $(document).on('click', 'a.jump-av', function(e) {
+      e.preventDefault();
+      seconds = $(this).data('jump-sec');
+      cue_track = $(this).data('jump-track');
+      jwplayer().stop;
+      jwplayer().playlistItem(cue_track - 1);
+      jwplayer().seek(seconds);
+      
+      $('html,body').animate({
+          scrollTop: $('#jwplayer-element').offset().top
+      }, 750);
+    });
+    
+  });
+<% end %>
