@@ -3,7 +3,26 @@ require 'rails_helper'
 RSpec.describe MetadataDisplayHelper do
 
   let(:permanent_url) { "http://id.library.duke.edu/ark:/99999/fk4zzz" }
-  
+
+  describe "#simple_format_values" do
+    let (:display_string_with_br) {["<p>0:03 A man riding a bicycle\n<br />0:09 A barking dog</p>", "<p>Another value</p>"]}
+    let (:display_string_with_p) {["<p>The quick brown fox</p>\n\n<p>Jumped over the lazy dog</p>", "<p>Another value</p>"]}
+
+    context "field contains a line break" do
+      let (:metadata_field_values) {["0:03 A man riding a bicycle\n0:09 A barking dog", "Another value"]}
+      it "converts a line break to a <br /> tag" do
+        expect(helper.simple_format_values({:value => metadata_field_values})).to match(display_string_with_br)
+      end
+    end
+    context "field contains a double line break" do
+      let (:metadata_field_values) {["The quick brown fox\n\nJumped over the lazy dog", "Another value"]}
+      it "splits values into paragraphs using <p> tags" do
+        expect(helper.simple_format_values({:value => metadata_field_values})).to match(display_string_with_p)
+      end
+    end
+  end
+
+
   describe "#permalink" do
     let(:document) { SolrDocument.new(
             'id'=>'changeme:10',

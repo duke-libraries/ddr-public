@@ -127,22 +127,27 @@
     </nav>
   <% end %>
 
+  <%# HTML5 <video> or <audio> tag fallback: uses native browser media player without javascript %>
+
+  <noscript>
+    <h3>Files for this Item</h3>
+
+    <% derivatives.each_with_index do |url,index| %>
+      <%= content_tag media_mode, controls: "", width: "100%" do %>
+          <source src="<%= url %>" type="<%= media_type %>" />
+        <% if @document.captions_urls.present? %>
+          <track kind="captions" src="<%= @document.captions_urls[index] %>" label="Captions" default />
+        <% end %>
+      <% end %>
+    <% end %>
+
+  </noscript>
 
   <% if @document.captions_urls.present? %>
     <%= render partial: 'display_interactive_transcript' unless is_embed? %>
   <% end %>
 
-
-  <noscript>
-    <h3>Files for this Item</h3>
-    <ul>
-      <% derivatives.each do |url| %>
-        <% unless url.blank? %>
-          <li><%= link_to url, url %></li>
-        <% end %>
-      <% end %>
-    </ul>
-  </noscript>
+  <%= render partial: 'timecode_links' %>
 
   <%= content_for :twitter_og_meta do %>
     <meta name="twitter:card" content="player" />

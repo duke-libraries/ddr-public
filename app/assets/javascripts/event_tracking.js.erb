@@ -628,6 +628,12 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :action => "'interactive transcript: expand'",
     :label => "$(this).data('state')"
   },
+  ".jump-av" => {
+    :category => "'audiovisual'",
+    :action => "'description timecode: click'",
+    :label => "$(this).data('jump-sec')",
+    :document_listener => true
+  }
 
 }
 
