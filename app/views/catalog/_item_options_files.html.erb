@@ -1,38 +1,23 @@
 <% files_count = @document.structures.files.count %>
 
-<% if @document.structures.files.first[:label] && files_count == 1 %>
-  <li id="file-link" class="file-link">
-    <%= link_to(document_or_object_url(@document.structures.files.first[:doc])) do %>
-      <i class="fa fa-file-o"></i>
-      <% label = @document.structures.files.first[:label] %>
-      <%= files_count > 1 ? label.pluralize : label %>
-    <% end %>
-  </li>
-
-<% else %>
-
-  <li class="dropdown">
-    <a id="file-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-      <% label = @document.structures.files.label || "Document" %>
-      <i class="fa fa-file-o"></i> <%= files_count > 1 ? label.pluralize : label %> <span class="caret"></span>
-    </a>
-    <ul id="file-menu" class="dropdown-menu">
-
-      <% @document.structures.files.each do |file| %>
-        <% if file[:label].present? %>
-          <li class="dropdown-header"><%= file[:label] %></li>
-        <% end %>
-        <li>
-          <%= link_to(document_or_object_url(file[:doc])) do %>
-              <%= image_tag(default_thumbnail_path(file[:doc]), size: "20", alt: file[:doc].content_type) %>
-                <%= truncate(file[:doc].title, length: 60) %>
-          <% end %>
-        </li>
+<li class="dropdown">
+  <a id="file-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+    <% label = document_dropdown_label(@document) %>
+    <i class="fa fa-file-o"></i> <%= files_count > 1 ? label.pluralize : label %> <span class="caret"></span>
+  </a>
+  <ul id="file-menu" class="dropdown-menu">
+    <% @document.structures.files.each do |file| %>
+      <% if file[:doc].format.present? && files_count > 1 %>
+        <li class="dropdown-header"><%= file[:doc].format.join(' ') %></li>
+      <% elsif files_count > 1 %>
+        <li class="dropdown-header"><%= t('ddr.public.document_dropdown') %></li>
       <% end %>
-
-    </ul>
-  </li>
-
-<% end %>
-
-
+      <li>
+        <%= link_to(document_or_object_url(file[:doc])) do %>
+            <%= image_tag(default_thumbnail_path(file[:doc]), size: "20", alt: file[:doc].content_type) %>
+              <%= truncate(file[:doc].title, length: 60) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</li>

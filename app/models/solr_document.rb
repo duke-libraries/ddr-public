@@ -43,19 +43,23 @@ class SolrDocument
   end
 
   def abstract
-    Array(self["abstract_tesim"]).first
+    Array(self[ActiveFedora::SolrService.solr_name(:abstract, :stored_searchable)]).first
   end
 
   def description
-    Array(self["description_tesim"]).first
+    Array(self[ActiveFedora::SolrService.solr_name(:description, :stored_searchable)]).first
   end
 
   def rights_notes
-    Array(self["rights_note_tesim"])
+    Array(self[ActiveFedora::SolrService.solr_name(:rights_note, :stored_searchable)])
+  end
+
+  def format
+    Array(self[ActiveFedora::SolrService.solr_name(:format, :stored_searchable)])
   end
 
   def sponsor
-    Array(self["sponsor_tesim"]).first
+    Array(self[ActiveFedora::SolrService.solr_name(:sponsor, :stored_searchable)]).first
   end
 
   def sponsor_display
