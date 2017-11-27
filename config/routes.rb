@@ -70,8 +70,9 @@ Rails.application.routes.draw do
   get 'stream/:id' => 'stream#show', as: 'stream', constraints: {id: id_constraint}
 
   # Captions
+  get 'captions/:id/txt' => 'captions#text', as: 'captions_txt', constraints: {id: id_constraint}
+  get 'captions/:id/pdf' => 'captions#pdf', as: 'captions_pdf', constraints: {id: id_constraint}
   get 'captions/:id' => 'captions#show', as: 'captions', constraints: {id: id_constraint}
-
 
   # Permanent IDs
   get 'id/*permanent_id' => 'permanent_ids#show'
