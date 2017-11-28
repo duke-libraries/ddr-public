@@ -36,7 +36,7 @@ module CaptionHelper
       # Some transcripts only have <v -> to indicate speaker has changed, but
       # don't indicate speaker's name
       if ["","-"].include? speaker
-        return raw("&mdash;")
+        return "-"
       end
       speaker
     end
@@ -48,6 +48,38 @@ module CaptionHelper
     else
       Time.at(cue_time_sec).utc.strftime("%-H:%M:%S")
     end
+  end
+
+  def caption_text_from_vtt vtt
+    caption_text = ""
+    vtt.cues.each_with_index do |cue, cue_index|
+      cue_lines(cue.text).each_with_index do |line, line_index|
+
+        # keep any intentional line breaks within cues
+        unless line_index == 0
+          caption_text << "\n"
+        end
+
+        # Speaker change (<v>) gets double linebreak except in the very first cue
+        if cue_speaker(line).present?
+          unless cue_index == 0
+            if line_index == 0
+              caption_text << "\n\n"
+            else
+              #already got one linebreak, just need one more
+              caption_text << "\n"
+            end
+          end
+
+          # preface text with {speaker name}: if <v> is identified or just - if <v ->.
+          caption_text << [cue_speaker(line), (cue_speaker(line) != "-" ? ": " : " ")].join("")
+        end
+
+        # combine cues with spaces.
+        caption_text << [clean_cue_text(line)," "].join("")
+      end
+    end
+    caption_text
   end
 
 end
