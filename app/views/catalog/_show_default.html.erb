@@ -18,3 +18,7 @@
 <%= render partial: 'related_items', locals: {document: @document} %>
 
 <% content_for :page_title, document.html_title -%>
+
+<%= content_for :twitter_og_meta do %>
+  <meta property="og:description" content="<%= document.description.truncate(300) %>" />
+<% end %>
