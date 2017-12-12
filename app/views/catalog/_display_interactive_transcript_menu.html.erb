@@ -23,7 +23,7 @@
       <li>
         <a download="" href="<%= @document.captions_urls.first %>">
           <img alt="code icon" src="<%= asset_path 'ddr-icons/code.png' %>" width="20" height="20">
-          WebVTT
+          WebVTT <small class="text-muted">(includes timecodes)</small>
         </a>
       </li>
       <% end %>
@@ -57,7 +57,7 @@
         </li>
 
         <li class="dropdown-submenu">
-          <a href="#"><img alt="code icon" src="<%= asset_path 'ddr-icons/code.png' %>" width="20" height="20"> WebVTT</a>
+          <a href="#"><img alt="code icon" src="<%= asset_path 'ddr-icons/code.png' %>" width="20" height="20"> WebVTT <small class="text-muted">(includes timecodes)</small></a>
           <ul class="dropdown-menu">
             <% @document.captions_urls.each_with_index do |captions_url, index| %>
               <li>

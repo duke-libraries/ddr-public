@@ -260,6 +260,10 @@ class CatalogController < ApplicationController
 
   def show
     super
+    unless @document[Ddr::Index::Fields::WORKFLOW_STATE] == 'published'
+      not_found
+      return # prevent further execution and possible multiple render calls.
+    end
     if is_embed?
       response, @document = fetch(params[:id])
       render layout: "embed"
