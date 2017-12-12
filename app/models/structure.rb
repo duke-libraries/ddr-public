@@ -44,8 +44,13 @@ class Structure
     else
       pids = local_id_ordered_component_pids
     end
-    doc = SolrDocument.find(pids.first) if pids.present?
-    @first_multires_image_file_path ||= doc.present? ? doc.multires_image_file_path : nil
+    docs = []
+    pids[0..9].each do |pid|
+      doc = SolrDocument.find(pid)
+      docs << doc
+      break if doc[Ddr::Index::Fields::WORKFLOW_STATE] == 'published'
+    end
+    @first_multires_image_file_path ||= docs.last.present? ? docs.last.multires_image_file_path : nil
   end
 
   def media_paths

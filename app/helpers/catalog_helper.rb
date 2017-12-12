@@ -235,13 +235,21 @@ module CatalogHelper
     document.try(:research_help).try(:name)
   end
 
-
   def derivative_urls document
     if document.derivative_url_prefixes.present?
       ActiveSupport::Deprecation.warn("Support for external AV derivatives via derivative_urls is deprecated. The method will be removed in DDR-Public v2.8.0.")
       document.derivative_ids.map do |id|
           "#{document.derivative_url_prefixes[document.display_format]}#{id}.#{derivative_file_extension(document)}"
       end
+    end
+  end
+
+  def document_dropdown_label document
+    if document.structures.files.count == 1 &&
+        document.structures.files.first[:doc].format.present?
+      document.structures.files.first[:doc].format.join(' ')
+    else
+      I18n.t('ddr.public.document_dropdown')
     end
   end
 

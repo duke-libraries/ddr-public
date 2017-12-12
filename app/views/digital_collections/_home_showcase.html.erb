@@ -11,22 +11,29 @@
           <p class="collection-abstract">
             <%= @portal.abstract %><%= showcase_abstract_more %>
           </p>
-          <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
-            Browse all <strong><%= number_with_delimiter(@portal.item_count) %></strong> Items
+          <% if @portal.item_count > 1 %>
+            <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
+              Browse all <strong><%= number_with_delimiter(@portal.item_count) %></strong> Items
+            <% end %>
           <% end %>
 
           <%= render partial: "home_showcase_link_list", locals: { document: @portal.collection } %>
         </div>
 
-        <% showcase_images = Array(@portal.showcase_custom_images).concat Array(@portal.showcase.documents) %>
-
-        <% showcase_images.sample(showcase_samples({showcase_layout: @portal.showcase.layout})).each_with_index do |image, index| %>
+        <% @portal.showcase_images_all.sample(showcase_samples({showcase_layout: @portal.showcase.layout})).each_with_index do |image, index| %>
           <%= render partial: "home_showcase_image", locals: home_showcase_locals({index: index, image: image, showcase_layout: @portal.showcase.layout}) %>
         <%- end %>
 
       </div>
     </div>
 
+  <% end %>
+
+  <%= content_for :twitter_og_meta do %>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="<%= og_absolute_url(showcase_image_path(params: params, controller_name: controller_name, locals: home_showcase_locals({ image: @portal.showcase_images_all.first }))) %>" />
+    <meta property="og:image:alt" content='<%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) %>' />
+    <meta name="twitter:image:alt" content='<%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) %>' />
   <% end %>
 
 <%- end %>

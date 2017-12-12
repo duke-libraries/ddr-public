@@ -127,21 +127,43 @@
     </nav>
   <% end %>
 
+  <%# HTML5 <video> or <audio> tag fallback: uses native browser media player without javascript %>
+
+  <noscript>
+    <h3>Files for this Item</h3>
+
+    <% derivatives.each_with_index do |url,index| %>
+      <%= content_tag media_mode, controls: "", width: "100%" do %>
+          <source src="<%= url %>" type="<%= media_type %>" />
+        <% if @document.captions_urls.present? %>
+          <track kind="captions" src="<%= @document.captions_urls[index] %>" label="Captions" default />
+        <% end %>
+      <% end %>
+    <% end %>
+
+  </noscript>
 
   <% if @document.captions_urls.present? %>
     <%= render partial: 'display_interactive_transcript' unless is_embed? %>
   <% end %>
 
+  <%= render partial: 'timecode_links' %>
 
-  <noscript>
-    <h3>Files for this Item</h3>
-    <ul>
-      <% derivatives.each do |url| %>
-        <% unless url.blank? %>
-          <li><%= link_to url, url %></li>
-        <% end %>
-      <% end %>
-    </ul>
-  </noscript>
+  <%= content_for :twitter_og_meta do %>
+    <meta name="twitter:card" content="player" />
+    <% unless thumbnail_icon?(@document) %>
+      <meta property="og:image" content="<%= og_absolute_url(thumbnail_path(@document)) %>" />
+      <meta name="twitter:image:alt" content="<%= @document.title %>" />
+    <% end %>
+    <% if embeddable?(@document) %>
+      <meta name="twitter:player" content="<%= og_absolute_url(iframe_src_path(@document)) %>" />
+    <% end %>
+    <meta name="twitter:player:stream" content="<%= og_absolute_url(derivatives.first) %>" />
+    <meta name="twitter:player:stream:content_type" content="<%= media_type %>" />
+    <meta property="og:<%= media_mode %>" content="<%= og_absolute_url(derivatives.first) %>" />
+    <meta property="og:<%= media_mode %>:type" content="<%= media_type %>" />
+    <meta name="twitter:player:width" content="640" />
+    <meta name="twitter:player:height" content="<%= height || 500 %>" />
+  <% end %>
 
 <% end %>

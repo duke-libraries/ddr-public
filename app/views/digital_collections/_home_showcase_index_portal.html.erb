@@ -46,12 +46,15 @@ collections homepage.  %>
 
         <% end %>
 
-
-
-
       </div>
     </div>
 
   <%- end %>
+
+  <%= content_for :twitter_og_meta do %>
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:description" content='<%= t("ddr.public.portal.#{params[:collection] || controller_name}.about") %>'/>
+  <% end %>
+
 
 <%- end %>

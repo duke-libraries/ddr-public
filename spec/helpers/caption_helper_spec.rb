@@ -37,7 +37,7 @@ RSpec.describe CaptionHelper do
     context "line has a voice tag but no name" do
       let(:line) { "<v>Where did you go to school?</v>" }
       it "should return a dash" do
-        expect(helper.cue_speaker(line)).to eq("&mdash;")
+        expect(helper.cue_speaker(line)).to eq("-")
       end
     end
   end
@@ -55,6 +55,43 @@ RSpec.describe CaptionHelper do
         expect(helper.display_time(cue_time_sec)).to eq("1:03:52")
       end
     end
+  end
+
+  describe "#caption_text_from_vtt" do
+
+    let(:vtt) { WebVTT::File.new( Rails.root.join('spec', 'fixtures','abcd1234.vtt') )}
+
+    context "cues are standard with no voice tags or line breaks" do
+      let(:cue_1) { double("cue", :text => 'First cue.') }
+      let(:cue_2) { double("cue", :text => 'Second cue.') }
+      let(:cue_3) { double("cue", :text => 'Third cue.') }
+
+      before { allow(vtt).to receive(:cues) { [cue_1, cue_2, cue_3] } }
+      it "should render the cues on one line separated by a space" do
+        expect(helper.caption_text_from_vtt(vtt)).to eq("First cue. Second cue. Third cue. ")
+      end
+    end
+
+    context "cues have voice tags with speaker identified" do
+      let(:cue_1) { double("cue", :text => '<v Interviewer>What is your name?</v>') }
+      let(:cue_2) { double("cue", :text => '<v Mary>My name is Mary.</v>') }
+
+      before { allow(vtt).to receive(:cues) { [cue_1, cue_2] } }
+      it "should render double linebreaks between clues prefaced by speaker" do
+        expect(helper.caption_text_from_vtt(vtt)).to eq("Interviewer: What is your name? \n\nMary: My name is Mary. ")
+      end
+    end
+
+    context "cues have blank voice tags" do
+      let(:cue_1) { double("cue", :text => '<v>What is your name?</v>') }
+      let(:cue_2) { double("cue", :text => '<v>My name is Mary.</v>') }
+
+      before { allow(vtt).to receive(:cues) { [cue_1, cue_2] } }
+      it "should render double linebreaks between clues prefaced by dash" do
+        expect(helper.caption_text_from_vtt(vtt)).to eq("- What is your name? \n\n- My name is Mary. ")
+      end
+    end
+
   end
 
 end

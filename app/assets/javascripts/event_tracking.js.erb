@@ -628,6 +628,25 @@ from propagating up to parent elements to prevent unwanted click events. E.g.:
     :action => "'interactive transcript: expand'",
     :label => "$(this).data('state')"
   },
+  ".jump-av" => {
+    :category => "'audiovisual'",
+    :action => "'description timecode: click'",
+    :label => "$(this).data('jump-sec')",
+    :document_listener => true
+  },
+  "#download-transcript-dropdown" => {
+    :category => "'audiovisual'",
+    :action => "'interactive transcript: show download menu'"
+  },
+  "ul.caption-download-menu > li > ul > li > a" => {
+    :category => "'audiovisual'",
+    :action => "'interactive transcript: download'"
+  },
+  "ul.caption-download-menu > li > ul > li.dropdown-submenu > ul > li > a" => {
+    :category => "'audiovisual'",
+    :action => "'interactive transcript: download'",
+    :label => "$(this).closest('ul.dropdown-menu').prev('a').text().trim() + ' ' + $(this).text().trim()"
+  }
 
 }
 

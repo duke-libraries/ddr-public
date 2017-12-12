@@ -1,6 +1,8 @@
 <% cache("interactive_transcript_#{@document.id}", expires_in: 1.day) do %>
 
-  <h3 class="feature-head">Transcript</h3>
+  <h3 class="feature-head" style="float:left;">Transcript</h3>
+  <%= render partial: 'display_interactive_transcript_menu' %>
+
   <div class="text-muted small text-right">Transcripts may contain inaccuracies.</div>
 
   <ul class="nav nav-tabs hidden" id="interactive-transcript-tabs" aria-hidden="true">

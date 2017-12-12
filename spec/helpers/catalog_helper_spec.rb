@@ -208,4 +208,49 @@ RSpec.describe CatalogHelper do
     end
   end
 
+  describe "#document_dropdown_label" do
+    let(:component1) do
+      SolrDocument.new(
+        id: 'changeme:1',
+        format_tesim: 'transcript'
+      )
+    end
+    let(:component2) do
+      SolrDocument.new(
+        id: 'changeme:2',
+      )
+    end
+    let(:document) do
+      SolrDocument.new(
+        id: 'changeme:0',
+      )
+    end
+
+    context "there is a single document and a format" do
+      it "returns the value of format" do
+        allow(document).to receive_message_chain("structures.files") do
+          [{doc: component1, label: nil, order: "1"}]
+        end
+        expect(helper.document_dropdown_label(document)).to eq("transcript")
+      end
+    end
+    context "there is a single document but no format" do
+      it "returns the default translation" do
+        allow(document).to receive_message_chain("structures.files") do
+          [{doc: component2, label: nil, order: "1"}]
+        end
+        expect(helper.document_dropdown_label(document)).to eq("Document")
+      end
+    end
+    context "there is more than one document" do
+      it "returns the default translation" do
+        allow(document).to receive_message_chain("structures.files") do
+          [{doc: component1, label: nil, order: "1"},
+           {doc: component2, label: nil, order: "2"}]
+        end
+        expect(helper.document_dropdown_label(document)).to eq("Document")
+      end
+    end
+  end
+
 end

@@ -1,7 +1,6 @@
 <% if @document[Ddr::Index::Fields::ADMIN_SET_TITLE].present? %>
   <div class="text-muted text-uppercase small">Collection Group</div>
   <strong><%= link_to @document[Ddr::Index::Fields::ADMIN_SET_TITLE], digital_collections_index_portal_path %></strong>
-  <p class="small"><a class="text-muted text-uppercase small" id="more-digital-collections" href="http://library.duke.edu/digitalcollections">More Duke Digital Collections &raquo;</a></p>
   <div class="vertical-model-separator">
     <span class="fa <%= @document[Ddr::Index::Fields::ACTIVE_FEDORA_MODEL] == 'Collection' ? 'fa-map-marker' : 'fa-circle' %>"></span>
   </div>

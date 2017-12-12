@@ -1,0 +1,76 @@
+<ul class="nav nav-pills item-options caption-download-menu">
+  <li class="dropdown">
+    <a id="download-transcript-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+      <span class="glyphicon glyphicon-save"></span><span class="caret"></span>
+    </a>
+    <ul id="download-transcript-menu" class="dropdown-menu multi-level">
+      <li role="presentation" class="disabled"><a href="#">Download transcript as:</a></li>
+
+      <%# Single component show, or single-component item show %>
+      <% if @document.captions_urls.length == 1 %>
+      <li>
+        <a download="" href="<%= File.join(@document.captions_urls.first,'txt') %>">
+          <img alt="text icon" src="<%= asset_path 'ddr-icons/txt.png' %>" width="20" height="20">
+          Text
+        </a>
+      </li>
+      <li>
+        <a download="" href="<%= File.join(@document.captions_urls.first,'pdf') %>">
+          <img alt="pdf icon" src="<%= asset_path 'ddr-icons/pdf.png' %>" width="20" height="20">
+          PDF
+        </a>
+      </li>
+      <li>
+        <a download="" href="<%= @document.captions_urls.first %>">
+          <img alt="code icon" src="<%= asset_path 'ddr-icons/code.png' %>" width="20" height="20">
+          WebVTT <small class="text-muted">(includes timecodes)</small>
+        </a>
+      </li>
+      <% end %>
+      
+      <%# Multi-component item show w/captions, render a different menu %>
+      <% if @document.captions_urls.length > 1 %>
+        <li class="dropdown-submenu">
+          <a href="#"><img alt="code icon" src="<%= asset_path 'ddr-icons/txt.png' %>" width="20" height="20"> Text</a>
+          <ul class="dropdown-menu">
+            <% @document.captions_urls.each_with_index do |captions_url, index| %>
+              <li>
+                <a download="" href="<%= File.join(captions_url,'txt') %>">
+                  Part <%= index+1 %>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+
+        <li class="dropdown-submenu">
+          <a href="#"><img alt="code icon" src="<%= asset_path 'ddr-icons/pdf.png' %>" width="20" height="20"> PDF</a>
+          <ul class="dropdown-menu">
+            <% @document.captions_urls.each_with_index do |captions_url, index| %>
+              <li>
+                <a download="" href="<%= File.join(captions_url,'pdf') %>">
+                  Part <%= index+1 %>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+
+        <li class="dropdown-submenu">
+          <a href="#"><img alt="code icon" src="<%= asset_path 'ddr-icons/code.png' %>" width="20" height="20"> WebVTT <small class="text-muted">(includes timecodes)</small></a>
+          <ul class="dropdown-menu">
+            <% @document.captions_urls.each_with_index do |captions_url, index| %>
+              <li>
+                <a download="" href="<%= captions_url %>">
+                  Part <%= index+1 %>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+
+      <% end %>
+
+    </ul>
+  </li>
+</ul>
