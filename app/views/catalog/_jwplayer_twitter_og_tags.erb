@@ -1,0 +1,18 @@
+<% content_for :twitter_og_meta do %>
+  <% cache("jwplayer_twitter_og_tags_#{params[:collection]}_#{params[:id]}", expires_in: 1.day) do %>
+    <meta name="twitter:card" content="player" />
+    <% unless thumbnail_icon?(@document) %>
+      <meta property="og:image" content="<%= og_absolute_url(thumbnail_path(@document)) %>" />
+      <meta name="twitter:image:alt" content="<%= @document.title %>" />
+    <% end %>
+    <% if embeddable?(@document) %>
+      <meta name="twitter:player" content="<%= og_absolute_url(iframe_src_path(@document)) %>" />
+    <% end %>
+    <meta name="twitter:player:stream" content="<%= og_absolute_url(derivatives.first) %>" />
+    <meta name="twitter:player:stream:content_type" content="<%= media_type %>" />
+    <meta property="og:<%= media_mode %>" content="<%= og_absolute_url(derivatives.first) %>" />
+    <meta property="og:<%= media_mode %>:type" content="<%= media_type %>" />
+    <meta name="twitter:player:width" content="640" />
+    <meta name="twitter:player:height" content="<%= height || 500 %>" />
+  <% end %>
+<% end %>
