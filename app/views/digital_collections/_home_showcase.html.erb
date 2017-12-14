@@ -29,7 +29,7 @@
 
   <% end %>
 
-  <%= content_for :twitter_og_meta do %>
+  <% content_for :twitter_og_meta do %>
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="og:image" content="<%= og_absolute_url(showcase_image_path(params: params, controller_name: controller_name, locals: home_showcase_locals({ image: @portal.showcase_images_all.first }))) %>" />
     <meta property="og:image:alt" content='<%= t("ddr.public.portal.#{params[:collection] || controller_name}.title", :default => @portal.title) %>' />

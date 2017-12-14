@@ -7,3 +7,7 @@
 <% end %>
 
 <%= render partial: "show_default", locals: {document: document} %>
+<%= render partial: "jwplayer_twitter_og_tags", locals: jwplayer_locals({
+    derivatives: stream_urls(document),
+    media_type: 'video/mp4',
+    media_mode: 'video'}) %>
