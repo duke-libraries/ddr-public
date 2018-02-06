@@ -102,7 +102,7 @@ $(document).ready(function(e){
 
     // Update the download options to refer to the currently viewed page
     $('#item-options .download-link-single').each(function(){
-      this.href = this.href.replace(/IIIF=(.*)ptif/,"IIIF=" + currentpagepath);
+      this.href = this.href.replace(/IIIF=(.*)\/full/,["IIIF=",currentpagepath,"/full"].join(""));
     });
 
   });
