@@ -13,6 +13,7 @@ module TwitterOgHelper
   end
 
   def og_absolute_url path
+    path ||= ""
     case
       when path.start_with?('https://')
         path
