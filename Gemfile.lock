@@ -128,6 +128,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    crass (1.0.3)
     daemons (1.2.4)
     database_cleaner (1.5.3)
     ddr-alerts (1.1.0)
@@ -281,7 +282,8 @@ GEM
       sparql-client (~> 1.99)
     log4r (1.1.10)
     logger (1.2.8)
-    loofah (2.0.3)
+    loofah (2.2.2)
+      crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
