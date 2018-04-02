@@ -2,10 +2,9 @@ module CaptionHelper
 
   require 'webvtt'
 
-  def caption_contents caption_url
-    caption_fullurl = File.join(root_url,caption_url)
-    caption_file = open(caption_fullurl,"rb")
-    
+  def caption_contents captions_path
+    caption_file = File.open(captions_path,"r")
+
     if caption_file.is_a?(StringIO)
       # This happens when file is <10KB: it opens as a string. So write it back to a tmp file.
       tmp_vtt_file = Tempfile.new("ddr-vtt-#{Time.now.utc}")

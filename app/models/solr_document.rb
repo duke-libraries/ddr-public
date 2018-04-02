@@ -17,6 +17,7 @@ class SolrDocument
                  :media_paths,
                  :first_media_doc,
                  :captions_urls,
+                 :captions_paths,
                  :ordered_component_docs
 
   # self.unique_key = 'id'

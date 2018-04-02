@@ -13,9 +13,9 @@
 
   <div id="interactive-transcript" class="collapsed">
     <div class="tab-content">
-      <% @document.captions_urls.each_with_index do |captions_url, tr_index| %>
+      <% @document.captions_paths.each_with_index do |captions_path, tr_index| %>
         <% begin %>
-          <%= render partial: 'display_interactive_transcript_pane', locals: { captions_url: captions_url, tr_index: tr_index } %>
+          <%= render partial: 'display_interactive_transcript_pane', locals: { captions_path: captions_path, tr_index: tr_index } %>
         <% rescue => e %>
           <% Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" } %>
           <div class="alert alert-info tab-pane tr-pane<% if tr_index == 0 %> active<% end %>" id="tr-<%= tr_index %>">There was a problem loading the transcript file.</div>
