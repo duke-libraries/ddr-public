@@ -7,9 +7,13 @@
 # Prevent all bots from crawling most facet links.
 # Note that paths with some facet parameters are intentionally
 # permitted to be crawled, e.g., admin_set_title_ssi & active_fedora_model_ssi
+# Also, encoded chars in URL (%5B) might need to be decoded according to:
+# https://www.google.com/webmasters/tools/robots-testing-tool
 User-agent: *
 Disallow: /catalog/facet/*
+Disallow: *f[*_facet_*][]*
 Disallow: *f%5B*_facet_*%5D%5B%5D*
+Disallow: *f[collection_title_ssi][]*
 Disallow: *f%5Bcollection_title_ssi%5D%5B%5D*
 
 # Throttle crawl rate for some bots without blocking them
