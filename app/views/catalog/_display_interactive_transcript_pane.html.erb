@@ -1,6 +1,6 @@
 <div class="tab-pane tr-pane<% if tr_index == 0 %> active<% end %>" id="tr-<%= tr_index %>" data-track="<%= tr_index %>">
     <table class="table table-condensed captions-table">
-      <% caption_contents(captions_url).cues.each do |cue| %>
+      <% caption_contents(captions_path).cues.each do |cue| %>
 
         <% cue_lines(cue.text).each_with_index do |line, line_index| %>
 

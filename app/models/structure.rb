@@ -75,7 +75,7 @@ class Structure
     @first_media_doc ||= SolrDocument.find(pids.first) if pids.present?
   end
 
-  def captions_urls
+  def captions_urls # used by AV player, loaded aynchronously
     if default.docs.any?
       docs = default.docs
     elsif media.docs.any?
@@ -86,6 +86,19 @@ class Structure
       docs = [] << find_solr_document # for a component
     end
     @captions_urls ||= docs.map { |doc| doc.captions_url }.compact
+  end
+
+  def captions_paths # used by interactive transcript parser
+    if default.docs.any?
+      docs = default.docs
+    elsif media.docs.any?
+      docs = media.docs
+    elsif local_id_ordered_components.present?
+      docs = local_id_ordered_components
+    else
+      docs = [] << find_solr_document # for a component
+    end
+    @captions_paths ||= docs.map { |doc| doc.caption_path }.compact
   end
 
   def ordered_component_docs

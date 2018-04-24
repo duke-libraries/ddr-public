@@ -31,10 +31,12 @@ module StreamingHelper
 
   def media_mode mimetype
     case mimetype
-      when 'audio/mpeg','audio/mp4','audio/ogg'
+      when /^(audio\/)/
         'audio'
-      when 'video/mp4','video/webm','video/flv','application/mp4'
+      when 'application/mp4',/^(video\/)/
         'video'
+      else
+        'unknown'
     end
   end
 

@@ -4,4 +4,28 @@
 # User-agent: *
 # Disallow: /
 
+# Prevent all bots from crawling most facet links.
+# Note that paths with some facet parameters are intentionally
+# permitted to be crawled, e.g., admin_set_title_ssi & active_fedora_model_ssi
+# Also, encoded chars in URL (%5B) might need to be decoded according to:
+# https://www.google.com/webmasters/tools/robots-testing-tool
+User-agent: *
+Disallow: /catalog/facet/*
+Disallow: *f[*_facet_*][]*
+Disallow: *f%5B*_facet_*%5D%5B%5D*
+Disallow: *f[collection_title_ssi][]*
+Disallow: *f%5Bcollection_title_ssi%5D%5B%5D*
+
+# Throttle crawl rate for some bots without blocking them
+# Crawl-delay is number of seconds the bot must wait after a crawl action
+User-agent: Baiduspider
+User-agent: Baiduspider-image
+User-agent: Sogou blog
+User-agent: Sogou inst spider
+User-agent: Sogou News Spider
+User-agent: Sogou Orion spider
+User-agent: Sogou spider2
+User-agent: Sogou web spider
+Crawl-delay: 1
+
 Sitemap: https://repository.lib.duke.edu/sitemaps/repository.xml

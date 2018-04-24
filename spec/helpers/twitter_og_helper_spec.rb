@@ -24,5 +24,17 @@ RSpec.describe TwitterOgHelper do
         expect(helper.og_absolute_url(path)).to eq("https://repository.duke.edu/assets/ddr-portals/dukechapel/dukechapel-causeway.jpg")
       end
     end
+    context "a path is an empty string" do
+      let(:path) { "" }
+      it "should return an empty string" do
+        expect(helper.og_absolute_url(path)).to eq("")
+      end
+    end
+    context "a path is nil" do
+      let(:path) { nil }
+      it "should return an empty string" do
+        expect(helper.og_absolute_url(path)).to eq("")
+      end
+    end
   end
 end
