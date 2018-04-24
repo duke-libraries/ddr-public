@@ -1,5 +1,5 @@
 module Ddr
   module Public
-    VERSION = "2.10.0.pre"
+    VERSION = "2.9.3"
   end
 end
