@@ -20,7 +20,7 @@ include CaptionHelper
   def text
     asset = SolrDocument.find(params[:id])
     if asset.captionable?
-      send_data caption_text_from_vtt(caption_contents(asset.captions_url)), filename: [asset.public_id,'txt'].join("."), type: 'text/plain', disposition: 'inline', stream: true
+      send_data caption_text_from_vtt(caption_contents(asset.caption_path)), filename: [asset.public_id,'txt'].join("."), type: 'text/plain', disposition: 'inline', stream: true
     else
       render nothing: true, status: 404
     end
@@ -29,7 +29,7 @@ include CaptionHelper
   def pdf
     asset = SolrDocument.find(params[:id])
     if asset.captionable?
-      alltext = caption_text_from_vtt(caption_contents(asset.captions_url))
+      alltext = caption_text_from_vtt(caption_contents(asset.caption_path))
       permalink = asset.permanent_url
 
       pdf = Prawn::Document.new do
