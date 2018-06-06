@@ -1,4 +1,29 @@
 GIT
+  remote: https://github.com/duke-libraries/ddr-models.git
+  revision: 988d7dc9029c250acad84a78fcd749074aa94876
+  ref: 988d7dc9029c250acad84a78fcd749074aa94876
+  specs:
+    ddr-models (2.11.pre)
+      active-fedora (>= 7.3.1, < 8)
+      activeresource
+      cancancan (~> 1.12)
+      ddr-antivirus (~> 2.1.1)
+      devise (~> 3.4)
+      edtf (~> 3.0)
+      ezid-client (~> 1.6)
+      grouper-rest-client
+      hashie (~> 3.4, < 3.4.4)
+      hydra-core (~> 7.2)
+      hydra-validations (~> 0.5)
+      net-ldap (~> 0.16)
+      omniauth-shibboleth (~> 1.2.0)
+      rails (>= 4.2.7, < 5)
+      rdf-vocab (~> 0.8)
+      resque (~> 1.25)
+      rubydora (~> 2.0)
+      virtus (~> 1.0.5)
+
+GIT
   remote: https://github.com/opencoconut/webvtt-ruby.git
   revision: d0b696929c540eecc9c040c271fa92822f1f6ae0
   ref: d0b696929c540eecc9c040c271fa92822f1f6ae0
@@ -134,25 +159,6 @@ GEM
     ddr-alerts (1.1.0)
       rails (~> 4.2)
     ddr-antivirus (2.1.1)
-    ddr-models (2.10.2)
-      active-fedora (>= 7.3.1, < 8)
-      activeresource
-      cancancan (~> 1.12)
-      ddr-antivirus (~> 2.1.1)
-      devise (~> 3.4)
-      edtf (~> 3.0)
-      ezid-client (~> 1.6)
-      grouper-rest-client
-      hashie (~> 3.4, < 3.4.4)
-      hydra-core (~> 7.2)
-      hydra-validations (~> 0.5)
-      net-ldap (~> 0.16)
-      omniauth-shibboleth (~> 1.2.0)
-      rails (>= 4.2.7, < 5)
-      rdf-vocab (~> 0.8)
-      resque (~> 1.25)
-      rubydora (~> 2.0)
-      virtus (~> 1.0.5)
     debug_inspector (0.0.2)
     deprecation (0.2.2)
       activesupport
@@ -560,7 +566,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.1.0)
-  ddr-models (= 2.10.2)
+  ddr-models!
   devise
   edtf-humanize (~> 0.0.7)
   factory_girl_rails (~> 4.4)
