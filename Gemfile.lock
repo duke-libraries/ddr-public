@@ -128,13 +128,13 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
-    crass (1.0.3)
+    crass (1.0.4)
     daemons (1.2.4)
     database_cleaner (1.5.3)
     ddr-alerts (1.1.0)
       rails (~> 4.2)
     ddr-antivirus (2.1.1)
-    ddr-models (2.10.2)
+    ddr-models (2.11.0)
       active-fedora (>= 7.3.1, < 8)
       activeresource
       cancancan (~> 1.12)
@@ -347,8 +347,8 @@ GEM
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6)
       rails-deprecated_sanitizer (>= 1.0.1)
-    rails-html-sanitizer (1.0.3)
-      loofah (~> 2.0)
+    rails-html-sanitizer (1.0.4)
+      loofah (~> 2.2, >= 2.2.2)
     rails-observers (0.1.5)
       activemodel (>= 4.0)
     rails_autolink (1.1.6)
@@ -560,7 +560,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   database_cleaner
   ddr-alerts (~> 1.1.0)
-  ddr-models (= 2.10.2)
+  ddr-models (= 2.11.0)
   devise
   edtf-humanize (~> 0.0.7)
   factory_girl_rails (~> 4.4)

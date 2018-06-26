@@ -6,7 +6,7 @@ gem 'blacklight', '~> 5.16'
 gem 'hydra-head', '~> 7.2.0'
 gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
-gem 'ddr-models', '2.10.2'
+gem 'ddr-models', '2.11.0'
 gem 'log4r'
 gem 'bootstrap-sass', '~> 3.3.4'
 gem 'autoprefixer-rails'
