@@ -1,4 +1,4 @@
-<% cache("interactive_transcript_#{@document.id}", expires_in: 6.hours) do %>
+<% cache("interactive_transcript_#{@document.id}", expires_in: 30.minutes) do %>
 
   <h3 class="feature-head" style="float:left;">Transcript</h3>
   <%= render partial: 'display_interactive_transcript_menu' %>
