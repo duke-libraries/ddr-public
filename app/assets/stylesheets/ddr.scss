@@ -637,6 +637,14 @@ p + #source-collection {
     & .missing {
       display: none;
     }
+    & .distribution.subsection.chart_js {
+      /* Degrade more gracefully when Javascript errors happen on reflow for the */
+      /* date slider. This bug is fixed in v6.2+ of the blacklight-range-limit   */
+      /* gem, however that will not work until DDR is on Blacklight 6.x.         */
+      /* See https://github.com/projectblacklight/blacklight_range_limit/pull/61 */
+      overflow: auto;
+      padding-right: 10px;
+    }
   }
 }
 
