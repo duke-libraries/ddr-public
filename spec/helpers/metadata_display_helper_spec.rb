@@ -73,6 +73,34 @@ RSpec.describe MetadataDisplayHelper do
     end
   end
 
+  describe "#simple_format_and_auto_link_values" do
+    let (:display_string_with_br_and_link) {["<p>Here is a good website:\n<br><a href=\"https://library.duke.edu\">https://library.duke.edu</a></p>", "<p>Another value</p>"]}
+    let (:display_string_with_link) {["<p>Our research data repository (<a href=\"https://research.repository.duke.edu\">https://research.repository.duke.edu</a>) may contain a dataset of interest.</p>", "<p>Another value</p>"]}
+    let (:display_string_with_no_link_nor_br) {["<p>A dog riding a bicycle.</p>"]}
+
+    context "field contains a line break and link" do
+      let (:metadata_field_values) {["Here is a good website:\nhttps://library.duke.edu", "Another value"]}
+      it "wraps in <p>, converts a line break to a <br /> tag and links the URL" do
+        expect(helper.simple_format_and_auto_link_values({:value => metadata_field_values})).to match(display_string_with_br_and_link)
+      end
+    end
+
+    context "field contains a link but no line breaks" do
+      let (:metadata_field_values) {["Our research data repository (https://research.repository.duke.edu) may contain a dataset of interest.", "Another value"]}
+      it "wraps in <p> and links the URL" do
+        expect(helper.simple_format_and_auto_link_values({:value => metadata_field_values})).to match(display_string_with_link)
+      end
+    end
+
+    context "field contains no links nor line breaks" do
+      let (:metadata_field_values) {["A dog riding a bicycle."]}
+      it "only wraps the value in <p>" do
+        expect(helper.simple_format_and_auto_link_values({:value => metadata_field_values})).to match(display_string_with_no_link_nor_br)
+      end
+    end
+
+  end
+
   describe "#link_to_doi" do
     let(:linked_doi) { ["<a href=\"https://dx.doi.org/doi:10.NNNN/NNNNNNNN\">doi:10.NNNN/NNNNNNNN</a>"] }
     context "field contains a DOI" do
