@@ -189,7 +189,7 @@ GEM
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
     fastimage (2.1.0)
-    ffi (1.9.18)
+    ffi (1.9.25)
     font-awesome-sass (4.6.2)
       sass (>= 3.2)
     globalid (0.4.0)
@@ -282,7 +282,7 @@ GEM
       sparql-client (~> 1.99)
     log4r (1.1.10)
     logger (1.2.8)
-    loofah (2.2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.6)
@@ -298,7 +298,7 @@ GEM
     net-http-persistent (2.9.4)
     net-ldap (0.16.1)
     netrc (0.11.0)
-    nokogiri (1.8.2)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     nom-xml (0.6.0)
       activesupport (>= 3.2.18)
@@ -463,7 +463,7 @@ GEM
       mime-types
       nokogiri
       rest-client
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     sass (3.4.23)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
