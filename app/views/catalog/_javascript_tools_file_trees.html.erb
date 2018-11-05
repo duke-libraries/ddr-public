@@ -1,0 +1,5 @@
+<%# Pull in compiled filetree-specific JS from javascripts/file-trees/index.js %>
+<%# See https://robots.thoughtbot.com/slicing-up-rails-application-js-for-faster-load-times %>
+<% content_for(:head) do %>
+  <%= javascript_include_tag "file-trees.js" %>
+<% end %>

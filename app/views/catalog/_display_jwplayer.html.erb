@@ -5,13 +5,6 @@
     Component parts w/AV media. TODO: This is ripe for refactoring
     and moving some of this logic into a helper. %>
 
-  <%# Pull in compiled AV-specific JS from javascripts/av/index.js %>
-  <%# See https://robots.thoughtbot.com/slicing-up-rails-application-js-for-faster-load-times %>
-  <% content_for(:head) do %>
-    <%= javascript_include_tag "av.js" %>
-  <% end %>
-
-
   <div id="jwplayer-element">Loading the media player...</div>
 
   <% @derivcount = derivatives.count %>
