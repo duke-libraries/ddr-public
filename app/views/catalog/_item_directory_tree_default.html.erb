@@ -2,11 +2,7 @@
   <h3 id="info" class="feature-head">File Browser</h3>
   <div id="item-directory-tree" class="directory-tree"></div>
 
-  <%# Pull in compiled filetree-specific JS from javascripts/file-trees/index.js %>
-  <%# See https://robots.thoughtbot.com/slicing-up-rails-application-js-for-faster-load-times %>
-  <% content_for(:head) do %>
-    <%= javascript_include_tag "file-trees.js" %>
-  <% end %>
+  <%= render partial: "javascript_tools_file_trees" %>
 
   <script type="text/javascript">
     $(function () {
