@@ -1,0 +1,5 @@
+<%# Pull in compiled AV-specific JS from javascripts/av/index.js %>
+<%# See https://robots.thoughtbot.com/slicing-up-rails-application-js-for-faster-load-times %>
+<% content_for(:head) do %>
+  <%= javascript_include_tag "av.js" %>
+<% end %>

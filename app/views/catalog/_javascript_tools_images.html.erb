@@ -1,0 +1,5 @@
+<%# Pull in compiled image-specific JS from javascripts/images/index.js %>
+<%# See https://robots.thoughtbot.com/slicing-up-rails-application-js-for-faster-load-times %>
+<% content_for(:head) do %>
+  <%= javascript_include_tag "images.js" %>
+<% end %>
