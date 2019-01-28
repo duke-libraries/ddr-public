@@ -12,7 +12,8 @@
             <%= @portal.abstract %><%= showcase_abstract_more %>
           </p>
           <% if @portal.item_count > 1 %>
-            <%= link_to(params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
+            <% selected_params = params.slice('controller', 'action', 'collection') %>
+            <%= link_to(selected_params.merge("f[active_fedora_model_ssi][]" => "Item"), :class => "btn btn-primary browse-all", :id => "browse-all-items-btn") do %>
               Browse all <strong><%= number_with_delimiter(@portal.item_count) %></strong> Items
             <% end %>
           <% end %>
