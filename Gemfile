@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.1'
+ruby '2.3.8'
 
 gem 'rails', '4.2.11'
 gem 'blacklight', '~> 5.16'
@@ -8,7 +8,7 @@ gem 'ddr-alerts', '~> 1.1.0'
 gem 'devise' # must be explicitly required
 gem 'ddr-models', '2.11.0'
 gem 'log4r'
-gem 'bootstrap-sass', '~> 3.3.4'
+gem 'bootstrap-sass', '~> 3.4.1'
 gem 'autoprefixer-rails'
 gem 'sass-rails', '~> 5.0.4'
 gem 'uglifier', '>= 1.3.0'
