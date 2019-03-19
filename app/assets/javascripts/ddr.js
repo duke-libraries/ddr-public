@@ -76,6 +76,20 @@ $(function () {
         window.location.href = data.node.a_attr.href;
     });
 
+
+    /* Check if a user has a touchscreen device and has touched it */
+    window.addEventListener('touchstart', function onFirstTouch() {
+
+      /* Turn off tooltips */
+      $('[data-toggle="tooltip"]').tooltip('destroy');
+
+      /* Add touch classes to certain elements for refined styles/scripts */
+      $(".openseadragon-container").addClass('touch-enabled');
+
+      window.removeEventListener('touchstart', onFirstTouch, false);
+    }, false);
+
+
 });
 
 
