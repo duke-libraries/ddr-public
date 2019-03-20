@@ -1,6 +1,7 @@
 <% if @document.multires_image_file_path %>
   <noscript><%= render partial: "show_image_derivative", locals: { image_path: @document.multires_image_file_path } %></noscript>
   <%= render partial: "show_seadragon", locals: { aspectratio: image_component_aspectratio(@document) } %>
+  <%= render partial: "javascript_tools_images" %>
 <%- end %>
 
 <% if @document.streamable? %>

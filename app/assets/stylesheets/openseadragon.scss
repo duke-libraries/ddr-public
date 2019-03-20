@@ -27,7 +27,7 @@
 
   & #image-toolbar {
     visibility:hidden;
-    opacity: 0;		
+    opacity: 0;
     transition: visibility .75s, opacity .75s;
 
     & #image-toolbar-inner {
@@ -211,4 +211,12 @@
     display: none;
   }
 
+}
+
+/* Don't let the controls disappear if on touch device */
+.openseadragon-container.touch-enabled {
+  & #image-toolbar, & .referencestrip {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
 }

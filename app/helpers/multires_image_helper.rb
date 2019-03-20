@@ -73,7 +73,13 @@ module MultiresImageHelper
   end
 
   def image_download_link document, options = {}
-    link_to (options[:linklabel] + ' ' + content_tag(:span, multi_image_download_label(options[:pixels]), :class => "text-muted img-size")).html_safe, iiif_image_path(options[:path], {:size => iiif_image_size_maxpx(options[:pixels])}), class: "download-link-single", download: ""
+    link_to (options[:linklabel] + ' ' + \
+      content_tag(:span, multi_image_download_label(options[:pixels]), \
+      class: "text-muted img-size")).html_safe, \
+         iiif_image_path(options[:path], { \
+           size: iiif_image_size_maxpx(options[:pixels])}), \
+           class: "download-link-single", data: { "item-id": @document.public_id },
+             download: @document.public_id
   end
 
   private
