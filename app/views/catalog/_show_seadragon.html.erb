@@ -92,8 +92,9 @@ $(document).ready(function(e){
 
     $(".referencestrip, .referencestrip .openseadragon-canvas").attr("tabindex","-1");
     // Update the page info indicator to show current page number
-    $("#page-jumper-text").val( parseInt(data.page) + 1 );
-    $("#page-jumper-text").attr("placeholder",( parseInt(data.page) + 1 ));
+    var real_page_num = parseInt(data.page) + 1;
+    $("#page-jumper-text").val( real_page_num );
+    $("#page-jumper-text").attr("placeholder",( real_page_num ));
     $("#page-jumper-text").blur();
 
     // Get currently-viewed multires image path matching position in
@@ -103,6 +104,7 @@ $(document).ready(function(e){
     // Update the download options to refer to the currently viewed page
     $('#item-options .download-link-single').each(function(){
       this.href = this.href.replace(/IIIF=(.*?)\/full/,["IIIF=",currentpagepath,"/full"].join(""));
+      $(this).attr('download',[$(this).data('item-id'),"-",real_page_num].join(""));
     });
 
   });
