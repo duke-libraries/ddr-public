@@ -230,12 +230,21 @@ $(document).ready(function(e){
 
 
   viewer.addViewerInputHook({hooks: [
-    // Disable unintentional zoom via mouse wheel unless you've
-    // already clicked in the viewer - lets you scroll past the viewer
+    // Disable unintentional zoom/pan via mouse wheel or touchmove unless you've
+    // already clicked in the viewer - this lets you scroll past the viewer
 
     {
       tracker: 'viewer',
       handler: 'scrollHandler',
+      hookHandler: function (e) {
+        if (!$('#'+viewer.id).hasClass('scrollwheel-zoomable')) {
+          e.preventDefaultAction = true;
+        }
+      }
+    },
+    {
+      tracker: 'viewer',
+      handler: 'moveHandler',
       hookHandler: function (e) {
         if (!$('#'+viewer.id).hasClass('scrollwheel-zoomable')) {
           e.preventDefaultAction = true;
