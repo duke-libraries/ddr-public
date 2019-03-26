@@ -92,8 +92,9 @@ $(document).ready(function(e){
 
     $(".referencestrip, .referencestrip .openseadragon-canvas").attr("tabindex","-1");
     // Update the page info indicator to show current page number
-    $("#page-jumper-text").val( parseInt(data.page) + 1 );
-    $("#page-jumper-text").attr("placeholder",( parseInt(data.page) + 1 ));
+    var real_page_num = parseInt(data.page) + 1;
+    $("#page-jumper-text").val( real_page_num );
+    $("#page-jumper-text").attr("placeholder",( real_page_num ));
     $("#page-jumper-text").blur();
 
     // Get currently-viewed multires image path matching position in
@@ -102,7 +103,8 @@ $(document).ready(function(e){
 
     // Update the download options to refer to the currently viewed page
     $('#item-options .download-link-single').each(function(){
-      this.href = this.href.replace(/IIIF=(.*)\/full/,["IIIF=",currentpagepath,"/full"].join(""));
+      this.href = this.href.replace(/IIIF=(.*?)\/full/,["IIIF=",currentpagepath,"/full"].join(""));
+      $(this).attr('download',[$(this).data('item-id'),"-",real_page_num].join(""));
     });
 
   });
@@ -150,12 +152,16 @@ $(document).ready(function(e){
   });
 
   // When a user exits the seadragon container area...
-  viewer.addHandler("container-exit", function () { // When the zoom or pan has changed
+  viewer.addHandler("container-exit", function () {
 
     // ...hide the nav toolbar, thumbnail strip, and navigator again
     $('#image-toolbar').css({ 'visibility':'hidden','opacity':0 });
     $('.referencestrip').css({ 'visibility':'hidden','opacity':0 });
     $('.navigator').css({ 'visibility':'hidden','opacity':0 });
+
+    // ... and reset the scrollwheel or touchpad zooming
+    $('#'+viewer.id).removeClass('scrollwheel-zoomable');
+
   });
 
   // When the pan has changed...
@@ -174,6 +180,11 @@ $(document).ready(function(e){
   $('#image-toolbar button, #image-toolbar input').focus(function(e){
     // If tabbed into toolbar...
     viewer.raiseEvent('container-enter');
+  });
+
+  $('#image-toolbar button, #image-toolbar input, #image-content .referencestrip').click(function(e){
+    // If toolbar buttons or thumbs have been clicked, enable scrollwheel zoom
+    $('#'+viewer.id).addClass('scrollwheel-zoomable');
   });
 
   $('#image-toolbar-inner *:disabled').click(function(e){
@@ -217,6 +228,38 @@ $(document).ready(function(e){
     document.getElementById("image-content").querySelector('.openseadragon-canvas').focus();    
   });
 
+
+  viewer.addViewerInputHook({hooks: [
+    // Disable unintentional zoom/pan via mouse wheel or touchmove unless you've
+    // already clicked in the viewer - this lets you scroll past the viewer
+
+    {
+      tracker: 'viewer',
+      handler: 'scrollHandler',
+      hookHandler: function (e) {
+        if (!$('#'+viewer.id).hasClass('scrollwheel-zoomable')) {
+          e.preventDefaultAction = true;
+        }
+      }
+    },
+    {
+      tracker: 'viewer',
+      handler: 'moveHandler',
+      hookHandler: function (e) {
+        if (!$('#'+viewer.id).hasClass('scrollwheel-zoomable')) {
+          e.preventDefaultAction = true;
+        }
+      }
+    },
+    {
+      tracker: 'viewer',
+      handler: 'clickHandler',
+      hookHandler: function (e) {
+        $('#'+viewer.id).addClass('scrollwheel-zoomable');
+      }
+    },
+  ]});
+
   document.getElementById("image-content").querySelector('.openseadragon-canvas').addEventListener('keydown', function (e) {
     if ( !e.preventDefaultAction && !e.ctrl && !e.alt && !e.meta ) {
       switch( e.keyCode ){
@@ -238,7 +281,6 @@ $(document).ready(function(e){
         return true;
     }
   });
-
 
 });
 
