@@ -17,7 +17,11 @@ class RelatedItem::SharedValue
   end
 
   def title_sorted_documents
-    delete_self.sort { |a,b| a.title <=> b.title }
+    @title_sorted_documents ||= delete_self.sort { |a,b| a.title <=> b.title }
+  end
+
+  def document_count
+    title_sorted_documents.count
   end
 
   def delete_self
