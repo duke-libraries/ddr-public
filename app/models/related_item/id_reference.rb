@@ -26,9 +26,16 @@ class RelatedItem::IdReference
   end
 
   def title_sorted_documents
+    solr_response.documents if solr_response
+  end
+
+  def document_count
+    solr_response.total.to_i if solr_response
+  end
+
+  def solr_response
     if document_field_values.present?
-      response = repository.search(search_builder.where(id_field_query).merge(sort: sort))
-      response.documents
+      @solr_response ||= repository.search(search_builder.where(id_field_query).merge(sort: sort))
     end
   end
 
