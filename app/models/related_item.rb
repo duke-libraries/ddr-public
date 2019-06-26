@@ -5,6 +5,7 @@ class RelatedItem
   def_delegators :@related_item,
                  :name,
                  :related_documents,
+                 :related_documents_count,
                  :solr_query
 
   def initialize args={}

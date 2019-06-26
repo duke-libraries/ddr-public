@@ -18,5 +18,6 @@ RSpec.describe RelatedItem::SharedValue do
 
   its(:name) { is_expected.to eq("Related Items") }
   its(:related_documents) { is_expected.to eq([doc2, doc3]) }
+  its(:related_documents_count) { is_expected.to eq(2) }
   its(:solr_query) { is_expected.to eq({"f" => {"series_facet_sim" => ["West Campus", "SNCC and Civil Rights Movement"]}, "sort"=>"title_ssi asc"}) }
 end

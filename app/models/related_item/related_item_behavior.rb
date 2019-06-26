@@ -22,6 +22,10 @@ module RelatedItem::RelatedItemBehavior
     @rel_docs ||= title_sorted_documents
   end
 
+  def related_documents_count
+    @rel_docs_count ||= document_count
+  end
+
   private
 
   def sort
