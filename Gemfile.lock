@@ -331,7 +331,7 @@ GEM
       pdf-core (~> 0.7.0)
       ttfunk (~> 1.5)
     public_suffix (3.0.3)
-    rack (1.6.11)
+    rack (1.6.12)
     rack-protection (1.5.5)
       rack
     rack-test (0.6.3)
